@@ -1,0 +1,39 @@
+plugins {
+    id 'com.gradleup.shadow' version '9.0.0-beta4'
+    id 'java'
+}
+
+group = 'com.lx862'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io/' }
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation 'commons-cli:commons-cli:1.9.0'
+    implementation 'commons-io:commons-io:2.18.0'
+    implementation 'com.formdev:flatlaf:3.5.4'
+    implementation 'com.github.rjeschke:txtmark:0.13'
+    implementation 'com.github.Querz:NBT:6.1'
+    implementation 'com.moandjiezana.toml:toml4j:0.7.2'
+}
+
+jar {
+    manifest {
+        attributes(
+            'Main-Class': 'org.lx862.pwgui.Main'
+        )
+    }
+}
+
+build {
+    dependsOn(shadowJar)
+}
+
+test {
+    useJUnitPlatform()
+}

@@ -94,7 +94,7 @@ public class PackwizMetaPanel extends FileTypePanel {
         JPanel actionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         KButton updateButton = new KButton("Check for update");
         updateButton.setMnemonic(KeyEvent.VK_C);
-        updateButton.addActionListener(actionEvent -> checkForUpdate(context.getParent()));
+        updateButton.addActionListener(actionEvent -> checkForUpdate(getTopLevelAncestor()));
         actionPanel.add(updateButton);
 
         KButton removeButton = new KButton("Remove");

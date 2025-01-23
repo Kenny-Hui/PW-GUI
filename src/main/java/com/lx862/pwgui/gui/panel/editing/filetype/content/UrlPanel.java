@@ -65,7 +65,7 @@ public class UrlPanel extends JPanel {
                 URI url = new URI(urlTextField.getText());
                 if(alternativeForDomain.containsKey(url.getHost())) {
                     String alternativeName = alternativeForDomain.get(url.getHost());
-                    if(JOptionPane.showConfirmDialog(context.getParent(), String.format("Adding content from %s is supported natively in this application.\nBy continuing, you won't get auto-update and other %s-specific features.\nContinue anyway?", alternativeName, alternativeName), Util.withTitlePrefix("Alternative installation method exists"), JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
+                    if(JOptionPane.showConfirmDialog(getTopLevelAncestor(), String.format("Adding content from %s is supported natively in this application.\nBy continuing, you won't get auto-update and other %s-specific features.\nContinue anyway?", alternativeName, alternativeName), Util.withTitlePrefix("Alternative installation method exists"), JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
                         return;
                     }
                 }
@@ -76,7 +76,7 @@ public class UrlPanel extends JPanel {
             ProgramExecution programExecution = Main.packwiz.buildCommand("url", "add", nameTextField.getText(), urlTextField.getText(), "--force"); // We already did a domain check before, so forcibly add it anyway.
             programExecution.whenExit((exitCode) -> {
                if(exitCode == 0) {
-                   JOptionPane.showMessageDialog(context.getParent(), nameTextField.getText() + " has been added!", Util.withTitlePrefix("File added"), JOptionPane.INFORMATION_MESSAGE);
+                   JOptionPane.showMessageDialog(getTopLevelAncestor(), nameTextField.getText() + " has been added!", Util.withTitlePrefix("File added"), JOptionPane.INFORMATION_MESSAGE);
                }
             });
 

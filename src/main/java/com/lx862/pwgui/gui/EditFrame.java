@@ -43,19 +43,19 @@ public class EditFrame extends BaseFrame {
         KMenu fileMenu = new KMenu("File");
 
         KMenuItem saveMenuItem = new KMenuItem("Save selected file");
-        saveMenuItem.addActionListener(actionEvent -> editPanel.saveAllTabs(false));
+        saveMenuItem.addActionListener(actionEvent -> editPanel.fileDetailPanel.saveAllTabs(false));
         fileMenu.add(saveMenuItem);
 
         KMenuItem importMenuItem = new KMenuItem("Import pack...");
         importMenuItem.addActionListener(actionEvent -> {
-            editPanel.saveAllTabs(false);
+            editPanel.fileDetailPanel.saveAllTabs(false);
             new ImportModpackDialog(this).setVisible(true);
         });
         fileMenu.add(importMenuItem);
 
         KMenuItem exportMenuItem = new KMenuItem("Export pack...");
         exportMenuItem.addActionListener(actionEvent -> {
-            editPanel.saveAllTabs(false);
+            editPanel.fileDetailPanel.saveAllTabs(false);
             new ExportModpackDialog(this, modpack).setVisible(true);
         });
         fileMenu.add(exportMenuItem);

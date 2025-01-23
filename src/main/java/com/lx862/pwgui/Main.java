@@ -52,11 +52,16 @@ public class Main {
                     LOGGER.info(String.format("Pack File is specified: %s", modpackPath));
 
                     Modpack modpack = new Modpack(new File(modpackPath).toPath());
-                    EditFrame editFrame = new EditFrame(null, modpack);
-                    editFrame.setVisible(true);
+
+                    SwingUtilities.invokeLater(() -> {
+                        EditFrame editFrame = new EditFrame(null, modpack);
+                        editFrame.setVisible(true);
+                    });
                 } else {
-                    WelcomeFrame welcomeFrame = new WelcomeFrame(null);
-                    welcomeFrame.setVisible(true);
+                    SwingUtilities.invokeLater(() -> {
+                        WelcomeFrame welcomeFrame = new WelcomeFrame(null);
+                        welcomeFrame.setVisible(true);
+                    });
                 }
             }
         } catch (Exception e) {

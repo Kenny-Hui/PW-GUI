@@ -63,9 +63,9 @@ public class FilePanel extends FileTypePanel {
             final boolean shouldDelete;
             if(context.getModpack().isKeyFile(fileEntry.path)) {
                 Object[] options = new String[]{"Yes", "No"};
-                shouldDelete = JOptionPane.showOptionDialog(context.getParent(), "Removing this critical file would render the modpack unusable.\nOnly continue if you know what you are doing!", Util.withTitlePrefix("Delete confirmation"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]) == JOptionPane.YES_OPTION;
+                shouldDelete = JOptionPane.showOptionDialog(getTopLevelAncestor(), "Removing this critical file would render the modpack unusable.\nOnly continue if you know what you are doing!", Util.withTitlePrefix("Delete confirmation"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]) == JOptionPane.YES_OPTION;
             } else {
-                shouldDelete = JOptionPane.showConfirmDialog(context.getParent(), String.format("Are you sure you want to delete \"%s\"?", fileEntry.name), Util.withTitlePrefix("Delete confirmation"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
+                shouldDelete = JOptionPane.showConfirmDialog(getTopLevelAncestor(), String.format("Are you sure you want to delete \"%s\"?", fileEntry.name), Util.withTitlePrefix("Delete confirmation"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
             }
 
             if(shouldDelete) {
@@ -75,7 +75,7 @@ public class FilePanel extends FileTypePanel {
                     Main.packwiz.buildCommand("refresh").execute("File deleted by user");
                 } catch (IOException e) {
                     Main.LOGGER.error(String.format("Failed to deleted file %s due to %s", fileEntry.path, e.getMessage()));
-                    JOptionPane.showMessageDialog(context.getParent(), String.format("Sorry but we are unable to delete the file, error as follows: \n%s\nYou might try doing it from an external file manager.", e.getMessage()));
+                    JOptionPane.showMessageDialog(getTopLevelAncestor(), String.format("Sorry but we are unable to delete the file, error as follows: \n%s\nYou might try doing it from an external file manager.", e.getMessage()));
                 }
             }
         });

@@ -104,7 +104,7 @@ public class ModrinthPanel extends JPanel {
 
             programExecution.whenExit((exitCode) -> {
                if(exitCode == 0) {
-                   JOptionPane.showMessageDialog(context.getParent(), String.format("%s has been added to the modpack!", modName.get()), Util.withTitlePrefix("Project added"), JOptionPane.INFORMATION_MESSAGE);
+                   JOptionPane.showMessageDialog(getTopLevelAncestor(), String.format("%s has been added to the modpack!", modName.get()), Util.withTitlePrefix("Project added"), JOptionPane.INFORMATION_MESSAGE);
                }
             });
 

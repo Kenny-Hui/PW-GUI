@@ -2,7 +2,6 @@ package com.lx862.pwgui.gui.panel.editing.filetype;
 
 import com.lx862.pwgui.data.fileentry.GenericFileEntry;
 import com.lx862.pwgui.gui.base.DocumentChangedListener;
-import com.lx862.pwgui.gui.base.kui.KButton;
 import com.lx862.pwgui.util.Util;
 import com.lx862.pwgui.data.fileentry.PlainTextFileEntry;
 
@@ -21,19 +20,14 @@ public class PlainTextPanel extends FileTypePanel {
         this.fileEntry = fileEntry;
         setLayout(new BorderLayout());
 
-        KButton revertButton = new KButton("Revert...");
         textArea = new JTextArea();
         textArea.setLineWrap(true);
-        textArea.getDocument().addDocumentListener(new DocumentChangedListener(() -> {
-            updateSaveState();
-            revertButton.setEnabled(shouldSave());
-        }));
+        textArea.getDocument().addDocumentListener(new DocumentChangedListener(this::updateSaveState));
 
         try {
             String content = fileEntry.getContent();
             this.initialContent = content;
             textArea.setText(content);
-            revertButton.setEnabled(shouldSave());
         } catch (Exception e) {
             e.printStackTrace();
             textArea.setText(Util.withBracketPrefix(String.format("Error trying to read file: %s", e.getMessage())));
@@ -45,16 +39,7 @@ public class PlainTextPanel extends FileTypePanel {
         jScrollPane.setAlignmentY(BOTTOM_ALIGNMENT);
         add(jScrollPane, BorderLayout.CENTER);
 
-        revertButton.addActionListener(e -> {
-            textArea.setText(initialContent);
-            int oldSelStart = textArea.getSelectionStart();
-            int oldSelEnd = textArea.getSelectionEnd();
-            textArea.select(oldSelStart, oldSelEnd);
-        });
-        revertButton.setAlignmentX(LEFT_ALIGNMENT);
-
         JPanel actionPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
-        actionPanel.add(revertButton);
         actionPanel.setAlignmentX(LEFT_ALIGNMENT);
         add(actionPanel, BorderLayout.SOUTH);
     }

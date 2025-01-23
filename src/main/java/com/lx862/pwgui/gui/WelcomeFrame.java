@@ -24,6 +24,9 @@ public class WelcomeFrame extends BaseFrame {
         setSize(400, 525);
         setLocationRelativeTo(parent);
 
+        JPanel rootPanel = new JPanel();
+        rootPanel.setLayout(new BoxLayout(rootPanel, BoxLayout.PAGE_AXIS));
+
         JLabel logoLabel;
         try {
             logoLabel = new JLabel(new ImageIcon(GUIHelper.convertImage(Util.getAssets("/logo.png"), 250)));
@@ -34,19 +37,18 @@ public class WelcomeFrame extends BaseFrame {
         }
 
         logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        add(Box.createVerticalGlue());
-        getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.PAGE_AXIS));
-        add(logoLabel);
+        rootPanel.add(Box.createVerticalGlue());
+        rootPanel.add(logoLabel);
 
-        add(Box.createRigidArea(new Dimension(0, 8)));
+        rootPanel.add(Box.createRigidArea(new Dimension(0, 8)));
         JLabel versionLabel = new JLabel(String.format("Version %s", Constants.VERSION));
         versionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        add(versionLabel);
-        add(Box.createRigidArea(new Dimension(0, 16)));
+        rootPanel.add(versionLabel);
+        rootPanel.add(Box.createRigidArea(new Dimension(0, 16)));
 
         KButton openPackButton = new KButton("Open modpack...");
         openPackButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        add(openPackButton);
+        rootPanel.add(openPackButton);
 
         openPackButton.addActionListener(actionEvent -> {
             JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
@@ -74,22 +76,24 @@ public class WelcomeFrame extends BaseFrame {
             }
         });
 
-        add(Box.createRigidArea(new Dimension(0, 8)));
+        rootPanel.add(Box.createRigidArea(new Dimension(0, 8)));
 
         KButton createPackButton = new KButton("Create new modpack...");
         createPackButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         createPackButton.addActionListener(actionEvent -> {
             new NewModpackDialog(this, this::openModpack).setVisible(true);
         });
-        add(createPackButton);
+        rootPanel.add(createPackButton);
 
-        add(Box.createRigidArea(new Dimension(0, 8)));
+        rootPanel.add(Box.createRigidArea(new Dimension(0, 8)));
 
         KButton settingsButton = new KButton("Settings");
         settingsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        add(settingsButton);
+        rootPanel.add(settingsButton);
 
-        add(Box.createVerticalGlue());
+        rootPanel.add(Box.createVerticalGlue());
+
+        add(rootPanel);
     }
 
     private void openModpack(Path path) {

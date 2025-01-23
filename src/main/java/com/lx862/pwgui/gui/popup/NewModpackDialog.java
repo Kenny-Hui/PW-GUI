@@ -31,13 +31,13 @@ public class NewModpackDialog extends JDialog {
         setLocationRelativeTo(frame);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        setLayout(new BorderLayout());
-        getRootPane().setBorder(new EmptyBorder(10, 10, 10, 10));
+        JPanel rootPanel = new JPanel(new BorderLayout());
+        rootPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
         JLabel titleLabel = new JLabel("New Modpack...");
         titleLabel.setFont(UIManager.getFont("h1.font"));
         titleLabel.setBorder(new EmptyBorder(0, 0, 10, 0)); // Bottom padding to compensate
-        add(titleLabel, BorderLayout.NORTH);
+        rootPanel.add(titleLabel, BorderLayout.NORTH);
 
         JTabbedPane tab = new JTabbedPane();
 
@@ -77,7 +77,9 @@ public class NewModpackDialog extends JDialog {
 
         tab.add("Create", createPanel);
         tab.add("Import", new ImportModpackDialog.ImportModpackPanel(true, packCreatedCallback));
-        add(tab, BorderLayout.CENTER);
+        rootPanel.add(tab, BorderLayout.CENTER);
+
+        add(rootPanel);
     }
 
     private void createModpack(ModpackInfoPanel modpackInfoPanel, ModpackVersionPanel modpackVersionPanel, Consumer<Path> finishCallback) throws IOException {

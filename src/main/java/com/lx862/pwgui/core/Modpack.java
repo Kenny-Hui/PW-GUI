@@ -10,10 +10,12 @@ import java.nio.file.Path;
 
 public class Modpack {
     private final Path root;
+    private final Path packFilePath;
     public final Cache<PackFile> packFile;
     public final FileIgnoreRules defaultFileIgnoreRules;
 
     public Modpack(Path packFilePath) throws FileNotFoundException {
+        this.packFilePath = packFilePath;
         this.root = packFilePath.getParent();
         this.defaultFileIgnoreRules = new FileIgnoreRules(
             // Sourced from https://github.com/packwiz/packwiz/blob/0626c00149a8d9a5e9f76e5640e7b8b95c064350/core/index.go#L131-L151
@@ -41,13 +43,17 @@ public class Modpack {
         this.packFile = new Cache<>(() -> new PackFile(packFilePath));
     }
 
-    public Path getRoot() {
+    public Path getPackFilePath() {
+        return this.packFilePath;
+    }
+
+    public Path getRootPath() {
         return this.root;
     }
 
     /* The mandatory file required for the pack to function. */
     public boolean isKeyFile(Path path) {
-        return this.packFile.get().getPath().equals(path) || this.packFile.get().getIndexPath().equals(path);
+        return getPackFilePath().equals(path) || this.packFile.get().getIndexPath().equals(path);
     }
 
     public FileIgnoreRules getPackwizIgnore() {

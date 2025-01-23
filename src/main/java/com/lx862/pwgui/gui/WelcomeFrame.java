@@ -2,7 +2,7 @@ package com.lx862.pwgui.gui;
 
 import com.lx862.pwgui.core.Modpack;
 import com.lx862.pwgui.gui.base.kui.KButton;
-import com.lx862.pwgui.gui.dialog.NewModpackDialog;
+import com.lx862.pwgui.gui.popup.NewModpackDialog;
 import com.lx862.pwgui.util.GUIHelper;
 import com.lx862.pwgui.util.Util;
 import com.lx862.pwgui.core.Constants;

@@ -7,7 +7,7 @@ import com.lx862.pwgui.executable.GitExecutable;
 import com.lx862.pwgui.executable.PackwizExecutable;
 import com.lx862.pwgui.gui.EditFrame;
 import com.lx862.pwgui.gui.WelcomeFrame;
-import com.lx862.pwgui.log.Logger;
+import com.lx862.pwgui.core.Logger;
 import org.apache.commons.cli.*;
 
 import javax.swing.*;

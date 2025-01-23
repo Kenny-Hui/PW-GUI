@@ -1,8 +1,8 @@
 package com.lx862.pwgui.data.fileentry;
 
 import com.lx862.pwgui.gui.base.NameTabPair;
-import com.lx862.pwgui.gui.panel.fileentrypane.FileEntryPaneContext;
-import com.lx862.pwgui.gui.panel.fileentrypane.PlainTextPanel;
+import com.lx862.pwgui.gui.panel.editing.filetype.FileEntryPaneContext;
+import com.lx862.pwgui.gui.panel.editing.filetype.PlainTextPanel;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,6 +25,6 @@ public class PlainTextFileEntry extends GenericFileEntry {
 
     @Override
     public List<NameTabPair> getInspectPanels(FileEntryPaneContext context) {
-        return addToList(super.getInspectPanels(context), new NameTabPair("Plain Text", new PlainTextPanel(this)));
+        return addToList(super.getInspectPanels(context), new NameTabPair("Plain Text", new PlainTextPanel(this, context)));
     }
 }

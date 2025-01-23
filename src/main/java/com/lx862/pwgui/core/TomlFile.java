@@ -17,11 +17,6 @@ public abstract class TomlFile {
         this.toml = new Toml().read(path.toFile());
     }
 
-    public TomlFile(Path path, String tomlString) {
-        this.path = path;
-        this.toml = new Toml().read(tomlString);
-    }
-
     public Path getPath() {
         return this.path;
     }

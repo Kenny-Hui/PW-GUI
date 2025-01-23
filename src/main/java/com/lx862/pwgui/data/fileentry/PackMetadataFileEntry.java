@@ -2,8 +2,8 @@ package com.lx862.pwgui.data.fileentry;
 
 import com.lx862.pwgui.gui.base.NameTabPair;
 import com.lx862.pwgui.core.PackwizMetaFile;
-import com.lx862.pwgui.gui.panel.fileentrypane.FileEntryPaneContext;
-import com.lx862.pwgui.gui.panel.fileentrypane.PackwizMetaPanel;
+import com.lx862.pwgui.gui.panel.editing.filetype.FileEntryPaneContext;
+import com.lx862.pwgui.gui.panel.editing.filetype.PackwizMetaPanel;
 
 import java.io.File;
 import java.io.IOException;

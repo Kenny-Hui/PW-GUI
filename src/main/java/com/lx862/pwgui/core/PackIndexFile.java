@@ -4,6 +4,7 @@ import com.moandjiezana.toml.Toml;
 import com.moandjiezana.toml.TomlWriter;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
@@ -13,6 +14,7 @@ public class PackIndexFile extends TomlFile {
 
     public PackIndexFile(Path path) {
         super(path);
+
         this.fileEntries = new ArrayList<>();
         this.hashFormat = toml.getString("hash-format");
 

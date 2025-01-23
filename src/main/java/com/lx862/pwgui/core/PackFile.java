@@ -64,11 +64,6 @@ public class PackFile extends TomlFile {
         this.packIndexFile = new Cache<>(() -> new PackIndexFile(getIndexPath()));
     }
 
-    @Override
-    public void write() throws IOException {
-
-    }
-
     public List<PackComponentVersion> getComponents() {
         List<PackComponentVersion> list = new ArrayList<>();
         list.add(new PackComponentVersion(PackComponent.MINECRAFT, versionsMinecraft));
@@ -101,5 +96,10 @@ public class PackFile extends TomlFile {
 
     public String getModloaderVersion() {
         return versionsFabric != null ? versionsFabric : versionsForge != null ? versionsForge : versionsNeoforge != null ? versionsNeoforge : versionsLiteloader != null ? versionsLiteloader : "Unknown";
+    }
+
+    @Override
+    public void write() throws IOException {
+
     }
 }

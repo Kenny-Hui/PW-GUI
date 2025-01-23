@@ -3,21 +3,23 @@ package com.lx862.pwgui.gui;
 import com.lx862.pwgui.core.Modpack;
 import com.lx862.pwgui.gui.base.kui.KMenu;
 import com.lx862.pwgui.gui.base.kui.KMenuItem;
+import com.lx862.pwgui.gui.popup.ConsoleDialog;
 import com.lx862.pwgui.gui.dialog.ExportModpackDialog;
+import com.lx862.pwgui.gui.popup.DevServerFrame;
+import com.lx862.pwgui.gui.popup.ViewLogDialog;
+import com.lx862.pwgui.util.GoUtil;
 import com.lx862.pwgui.util.Util;
 import org.apache.commons.io.FileUtils;
 import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.Main;
-import com.lx862.pwgui.gui.dialog.ImportModpackDialog;
+import com.lx862.pwgui.gui.popup.ImportModpackDialog;
 import com.lx862.pwgui.gui.base.BaseFrame;
-import com.lx862.pwgui.gui.panel.EditPanel;
+import com.lx862.pwgui.gui.panel.editing.EditPanel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Locale;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class EditFrame extends BaseFrame {
@@ -25,12 +27,12 @@ public class EditFrame extends BaseFrame {
 
     public EditFrame(Component parent, Modpack modpack) {
         super(Util.withTitlePrefix(String.format("Editing %s", modpack.packFile.get().name)));
-        Main.packwiz.setPackFileLocation(modpack.getRoot().relativize(modpack.packFile.get().getPath()).toString());
+        Main.packwiz.setPackFileLocation(modpack.getRootPath().relativize(modpack.getPackFilePath()).toString());
 
         setSize(900, 650);
         setLocationRelativeTo(parent);
 
-        Main.packwiz.changeWorkingDirectory(modpack.getRoot());
+        Main.packwiz.changeWorkingDirectory(modpack.getRootPath());
 
         editPanel = new EditPanel(modpack);
         add(editPanel);
@@ -41,19 +43,19 @@ public class EditFrame extends BaseFrame {
         KMenu fileMenu = new KMenu("File");
 
         KMenuItem saveMenuItem = new KMenuItem("Save selected file");
-        saveMenuItem.addActionListener(actionEvent -> editPanel.saveAllTabs());
+        saveMenuItem.addActionListener(actionEvent -> editPanel.saveAllTabs(false));
         fileMenu.add(saveMenuItem);
 
         KMenuItem importMenuItem = new KMenuItem("Import pack...");
         importMenuItem.addActionListener(actionEvent -> {
-            editPanel.saveAllTabs();
+            editPanel.saveAllTabs(false);
             new ImportModpackDialog(this).setVisible(true);
         });
         fileMenu.add(importMenuItem);
 
         KMenuItem exportMenuItem = new KMenuItem("Export pack...");
         exportMenuItem.addActionListener(actionEvent -> {
-            editPanel.saveAllTabs();
+            editPanel.saveAllTabs(false);
             new ExportModpackDialog(this, modpack).setVisible(true);
         });
         fileMenu.add(exportMenuItem);
@@ -98,7 +100,7 @@ public class EditFrame extends BaseFrame {
         KMenuItem pwConsoleMenuItem = new KMenuItem("Open Packwiz Console");
         toolMenu.add(pwConsoleMenuItem);
         pwConsoleMenuItem.addActionListener(actionEvent -> {
-            ConsoleFrame frame = new ConsoleFrame(Main.packwiz, this);
+            ConsoleDialog frame = new ConsoleDialog(Main.packwiz, this);
             frame.setVisible(true);
         });
 
@@ -113,7 +115,7 @@ public class EditFrame extends BaseFrame {
         KMenuItem viewLogMenuItem = new KMenuItem("View Log");
         helpMenu.add(viewLogMenuItem);
         viewLogMenuItem.addActionListener(actionEvent -> {
-            ViewLogFrame logViewer = new ViewLogFrame(this);
+            ViewLogDialog logViewer = new ViewLogDialog(this);
             logViewer.setVisible(true);
         });
 
@@ -127,7 +129,7 @@ public class EditFrame extends BaseFrame {
 
     private void clearPackwizCache() {
         if(JOptionPane.showConfirmDialog(this, "Are you sure you want to clear packwiz cache?\nThis is generally not necessary unless you are running out of disk space or encountered some corruption.", Util.withTitlePrefix("Clear Packwiz Cache?"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-            Path packwizCacheDir = getCacheDir().resolve("packwiz");
+            Path packwizCacheDir = GoUtil.getCacheDir().resolve("packwiz");
             if(!packwizCacheDir.toFile().exists()) {
                 JOptionPane.showMessageDialog(this, "There are currently no packwiz cache yet, nothing to clear~", Util.withTitlePrefix("No Packwiz cache found"), JOptionPane.INFORMATION_MESSAGE);
             } else {
@@ -138,26 +140,6 @@ public class EditFrame extends BaseFrame {
                     e.printStackTrace();
                     JOptionPane.showMessageDialog(this, String.format("Failed to clear packwiz cache:\n%s", e.getMessage()), Util.withTitlePrefix("Error while clearing Packwiz cache"), JOptionPane.ERROR_MESSAGE);
                 }
-            }
-        }
-    }
-
-
-    // https://github.com/golang/go/blob/40b3c0e58a0ae8dec4684a009bf3806769e0fc41/src/os/file.go#L474-L485
-    /** A reimplementation of Go's getCacheDir, which is used by packwiz to determine the cache location */
-    private Path getCacheDir() {
-        String osName = System.getProperty("os.name").toLowerCase(Locale.ROOT);
-        if(osName.contains("windows")) {
-            return Paths.get(System.getenv("LocalAppData"));
-        } else if(osName.contains("mac")) {
-            return Paths.get(System.getenv("HOME") + "/Library/Caches");
-        } else {
-            String cacheDir = System.getenv("XDG_CACHE_HOME");
-            if(cacheDir != null) {
-                return Paths.get(cacheDir);
-            } else {
-                String home = System.getenv("HOME");
-                return Paths.get(home).resolve(".cache");
             }
         }
     }

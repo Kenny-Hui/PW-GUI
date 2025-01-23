@@ -1,8 +1,8 @@
 package com.lx862.pwgui.data.fileentry;
 
 import com.lx862.pwgui.gui.base.NameTabPair;
-import com.lx862.pwgui.gui.panel.fileentrypane.FileEntryPaneContext;
-import com.lx862.pwgui.gui.panel.fileentrypane.LicenseFilePanel;
+import com.lx862.pwgui.gui.panel.editing.filetype.FileEntryPaneContext;
+import com.lx862.pwgui.gui.panel.editing.filetype.LicenseFilePanel;
 
 import java.io.File;
 import java.util.List;
@@ -14,6 +14,6 @@ public class LicenseFileEntry extends PlainTextFileEntry {
 
     @Override
     public List<NameTabPair> getInspectPanels(FileEntryPaneContext context) {
-        return addToList(super.getInspectPanels(context), new NameTabPair("License", new LicenseFilePanel(this)));
+        return addToList(super.getInspectPanels(context), new NameTabPair("License", new LicenseFilePanel(context, this)));
     }
 }

@@ -4,7 +4,7 @@ import com.lx862.pwgui.data.PackComponent;
 import com.lx862.pwgui.core.PackFile;
 import com.lx862.pwgui.gui.base.kui.KButton;
 import com.lx862.pwgui.gui.base.kui.KGridBagLayoutPanel;
-import com.lx862.pwgui.gui.dialog.ChangeAcceptableGameVersionDialog;
+import com.lx862.pwgui.gui.popup.ChangeAcceptableGameVersionDialog;
 
 import javax.swing.*;
 import java.awt.*;

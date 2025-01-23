@@ -1,0 +1,120 @@
+package com.lx862.pwgui.gui.panel.editing.filetype;
+
+import com.lx862.pwgui.Main;
+import com.lx862.pwgui.core.PackIndexFile;
+import com.lx862.pwgui.data.fileentry.GenericFileEntry;
+import com.lx862.pwgui.gui.base.kui.KButton;
+import com.lx862.pwgui.util.Util;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.text.DecimalFormat;
+
+public class FilePanel extends FileTypePanel {
+    private static final DecimalFormat sizeFormat = new DecimalFormat("####.#");
+    private final PackIndexFile indexFile;
+    private final PackIndexFile.FileEntry indexEntry;
+    private JCheckBox preserveCheckBox;
+    private boolean initialPreserve;
+
+    public FilePanel(FileEntryPaneContext context, GenericFileEntry fileEntry) {
+        super(context);
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        JLabel fileNameLabel = new JLabel(String.format("File name: %s", fileEntry.name));
+        fileNameLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        add(fileNameLabel);
+
+        JLabel fileSizeLabel = new JLabel(String.format("File size: %s", formatFileSize(fileEntry.fileSize)));
+        fileSizeLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        add(fileSizeLabel);
+
+        this.indexFile = context.getModpack().packFile.get().packIndexFile.get();
+        this.indexEntry = context.getModpack().packFile.get().packIndexFile.get().getEntryByPath(fileEntry.path);
+
+        if(indexEntry != null) {
+            JLabel hashLabel = new JLabel(String.format("Hash (%s): %s", indexEntry.hashFormat, indexEntry.hash));
+            hashLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+            add(hashLabel);
+
+            initialPreserve = indexEntry.preserve;
+            preserveCheckBox = new JCheckBox("Preserve changes made by player");
+            preserveCheckBox.addActionListener(e -> updateSaveState());
+            preserveCheckBox.setSelected(indexEntry.preserve);
+            preserveCheckBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+            add(preserveCheckBox);
+        }
+
+        JPanel actionButtons = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        actionButtons.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        KButton openFileButton = new KButton("Open file");
+        openFileButton.setMnemonic(KeyEvent.VK_O);
+        openFileButton.addActionListener(actionEvent -> {
+            Util.tryOpenFile(fileEntry.path.toFile());
+        });
+        actionButtons.add(openFileButton);
+
+        KButton removeFileButton = new KButton("Remove file");
+        removeFileButton.setMnemonic(KeyEvent.VK_R);
+        removeFileButton.addActionListener(actionEvent -> {
+            final boolean shouldDelete;
+            if(context.getModpack().isKeyFile(fileEntry.path)) {
+                Object[] options = new String[]{"Yes", "No"};
+                shouldDelete = JOptionPane.showOptionDialog(context.getParent(), "Removing this critical file would render the modpack unusable.\nOnly continue if you know what you are doing!", Util.withTitlePrefix("Delete confirmation"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]) == JOptionPane.YES_OPTION;
+            } else {
+                shouldDelete = JOptionPane.showConfirmDialog(context.getParent(), String.format("Are you sure you want to delete \"%s\"?", fileEntry.name), Util.withTitlePrefix("Delete confirmation"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
+            }
+
+            if(shouldDelete) {
+                try {
+                    Files.delete(fileEntry.path);
+                    Main.LOGGER.info(String.format("Deleted file %s", fileEntry.path));
+                    Main.packwiz.buildCommand("refresh").execute("File deleted by user");
+                } catch (IOException e) {
+                    Main.LOGGER.error(String.format("Failed to deleted file %s due to %s", fileEntry.path, e.getMessage()));
+                    JOptionPane.showMessageDialog(context.getParent(), String.format("Sorry but we are unable to delete the file, error as follows: \n%s\nYou might try doing it from an external file manager.", e.getMessage()));
+                }
+            }
+        });
+        actionButtons.add(removeFileButton);
+
+        add(actionButtons);
+    }
+
+    @Override
+    public boolean savable() {
+        return preserveCheckBox != null;
+    }
+
+    @Override
+    public boolean shouldSave() {
+        return preserveCheckBox != null && initialPreserve != preserveCheckBox.isSelected();
+    }
+
+    @Override
+    public void save(Component parent) throws IOException {
+        if(indexEntry != null) {
+            super.save(parent);
+            indexEntry.preserve = preserveCheckBox.isSelected();
+            indexFile.updateEntry(indexEntry);
+            indexFile.write();
+            initialPreserve = indexEntry.preserve;
+        }
+    }
+
+    public static String formatFileSize(long bytes) {
+        if(bytes <= 0) return "0";
+        if(bytes < 1024) return bytes + " B";
+
+        double kib = bytes / 1024.0;
+        if(kib < 1024) return sizeFormat.format(kib) + " KiB";
+        double mib = kib / 1024.0;
+        if(mib < 1024) return sizeFormat.format(mib) + " MiB";
+
+        double gib = mib / 1024.0;
+        return sizeFormat.format(gib) + "GiB";
+    }
+}

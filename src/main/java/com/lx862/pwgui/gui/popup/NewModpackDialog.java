@@ -137,9 +137,9 @@ public class NewModpackDialog extends JDialog {
             copyToPath("README.md", path);
             copyToPath("gitattributes", ".gitattributes", path);
             copyToPath("gitignore", ".gitignore", path);
+            copyToPath("_LICENSE", "LICENSE", path);
             copyToPath(".packwizignore", path);
         } catch (IOException e) {
-            e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Failed to copy additional files to the modpack.\nYou may need to manually create the \"mods\" and \"config\" folder if you want to install mods.", Util.withTitlePrefix("Create Modpack"), JOptionPane.ERROR_MESSAGE);
         }
     }

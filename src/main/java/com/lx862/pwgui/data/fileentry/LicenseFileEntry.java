@@ -16,4 +16,14 @@ public class LicenseFileEntry extends PlainTextFileEntry {
     public List<NameTabPair> getInspectPanels(FileEntryPaneContext context) {
         return addToList(super.getInspectPanels(context), new NameTabPair("License", new LicenseFilePanel(context, this)));
     }
+
+    @Override
+    public String getTreeDisplayName() {
+        return "License File";
+    }
+
+    @Override
+    public boolean isNameModified() {
+        return true;
+    }
 }

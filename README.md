@@ -20,7 +20,6 @@
 - gitignore and packwizignore preview
 
 ### What still needs to be done
-- Include LICENSE Template
 - Modifying existing pack.toml
 - Download packwiz executable & Config
 - Datapack support

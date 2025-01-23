@@ -36,6 +36,8 @@ public class FilePanel extends FileTypePanel {
 
         if(indexEntry != null) {
             JLabel hashLabel = new JLabel(String.format("Hash (%s): %s", indexEntry.hashFormat, indexEntry.hash));
+            hashLabel.setToolTipText(indexEntry.hash);
+            hashLabel.setMinimumSize(new Dimension(1, 1)); // Hash is too long
             hashLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
             add(hashLabel);
 

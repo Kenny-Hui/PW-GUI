@@ -21,12 +21,12 @@ class HeaderPanel extends JPanel {
 
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-        JLabel modpackNameLabel = new JLabel(packFile.name);
+        JLabel modpackNameLabel = new JLabel(packFile.getName());
         modpackNameLabel.setFont(UIManager.getFont("h2.font"));
         leftPanel.add(modpackNameLabel);
 
         JLabel modpackVersionAuthorLabel = new JLabel();
-        if (packFile.author != null) {
+        if (!packFile.author.isEmpty()) {
             modpackVersionAuthorLabel.setText(packFile.version + " by " + packFile.author);
         } else {
             modpackVersionAuthorLabel.setText(packFile.version);
@@ -40,7 +40,7 @@ class HeaderPanel extends JPanel {
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
 
         for (PackComponentVersion packComponentVersion : packFile.getComponents()) {
-            final JLabel componentLabel = new JLabel(packComponentVersion.component.iconName.name + " version: " + packComponentVersion.version, new ImageIcon(GUIHelper.resizeImage(packComponentVersion.component.iconName.image, 20)), SwingConstants.LEFT);
+            final JLabel componentLabel = new JLabel(packComponentVersion.getComponent().iconName.name + " version: " + packComponentVersion.getVersion(), new ImageIcon(GUIHelper.resizeImage(packComponentVersion.getComponent().iconName.image, 20)), SwingConstants.LEFT);
             componentLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
             rightPanel.add(componentLabel);
         }

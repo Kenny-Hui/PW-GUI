@@ -39,7 +39,7 @@ public class PackwizMetaPanel extends FileTypePanel {
     public PackwizMetaPanel(FileEntryPaneContext context, PackMetadataFileEntry fileEntry) throws IOException {
         super(context);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        packwizMetaFile = new PackwizMetaFile(fileEntry.path);
+        this.packwizMetaFile = new PackwizMetaFile(fileEntry.getPackMetadata().getPath(), fileEntry.getPackMetadata().getToml());
         this.initialDescription = packwizMetaFile.optionDescription;
         this.initialOptional = packwizMetaFile.optionOptional;
         this.initialSide = packwizMetaFile.side == null ? "both" : packwizMetaFile.side;

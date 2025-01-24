@@ -50,8 +50,8 @@ public class NewModpackDialog extends JDialog {
         desc.setAlignmentX(Component.CENTER_ALIGNMENT);
         createFormPanel.add(desc);
 
-        ModpackInfoPanel modpackInfoPanel = new ModpackInfoPanel(null);
-        ModpackVersionPanel modpackVersionPanel = new ModpackVersionPanel(null);
+        ModpackInfoPanel modpackInfoPanel = new ModpackInfoPanel(null, () -> {});
+        ModpackVersionPanel modpackVersionPanel = new ModpackVersionPanel(null, () -> {});
         createFormPanel.add(modpackInfoPanel);
         createFormPanel.add(new KSeparator());
         createFormPanel.add(modpackVersionPanel);

@@ -1,11 +1,28 @@
 package com.lx862.pwgui.data;
 
 public class PackComponentVersion {
-    public final PackComponent component;
-    public final String version;
+    private final PackComponent component;
+    private final String version;
 
     public PackComponentVersion(PackComponent packComponent, String version) {
         this.component = packComponent;
         this.version = version;
+    }
+
+    public PackComponent getComponent() {
+        return this.component;
+    }
+
+    public String getVersion() {
+        return this.version;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o == this) return true;
+        if(!(o instanceof PackComponentVersion)) return false;
+
+        PackComponentVersion other = ((PackComponentVersion)o);
+        return other.version.equals(this.version) && other.component.equals(this.component);
     }
 }

@@ -12,13 +12,17 @@ public abstract class TomlFile {
     protected final Path path;
     protected final Toml toml;
 
-    public TomlFile(Path path) {
+    public TomlFile(Path path, Toml toml) {
         this.path = path;
-        this.toml = new Toml().read(path.toFile());
+        this.toml = new Toml().read(toml);
     }
 
     public Path getPath() {
         return this.path;
+    }
+
+    public Toml getToml() {
+        return this.toml;
     }
 
     public abstract void write() throws IOException;

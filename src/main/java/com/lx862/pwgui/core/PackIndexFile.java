@@ -13,7 +13,11 @@ public class PackIndexFile extends TomlFile {
     public final String hashFormat;
 
     public PackIndexFile(Path path) {
-        super(path);
+        this(path, new Toml().read(path.toFile()));
+    }
+
+    public PackIndexFile(Path path, Toml toml) {
+        super(path, toml);
 
         this.fileEntries = new ArrayList<>();
         this.hashFormat = toml.getString("hash-format");

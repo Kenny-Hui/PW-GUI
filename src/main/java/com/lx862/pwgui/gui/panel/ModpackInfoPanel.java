@@ -1,5 +1,6 @@
 package com.lx862.pwgui.gui.panel;
 
+import com.lx862.pwgui.gui.base.DocumentChangedListener;
 import com.lx862.pwgui.gui.base.kui.KGridBagLayoutPanel;
 import com.lx862.pwgui.core.PackFile;
 import com.lx862.pwgui.gui.base.kui.KTextField;
@@ -10,36 +11,57 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ModpackInfoPanel extends KGridBagLayoutPanel {
-    private boolean modified = false;
     private final KTextField nameTextField;
     private final KTextField authorTextField;
     private final KTextField versionTextField;
 
-    public ModpackInfoPanel(PackFile existingFile) {
+    private String initialName;
+    private String initialAuthor;
+    private String initialVersion;
+
+    public ModpackInfoPanel(PackFile existingFile, Runnable updateSaveState) {
         super(3, 2);
+        this.initialName = existingFile == null ? "My Epic Modpack" : existingFile.name;
+        this.initialAuthor = existingFile == null ? "Me!" : existingFile.author;
+        this.initialVersion = existingFile == null ? "1.0.0" : existingFile.version;
 
         nameTextField = new KTextField();
-        nameTextField.setText(existingFile == null ? "My Epic Modpack" : existingFile.name);
+        nameTextField.setText(this.initialName);
+        nameTextField.getDocument().addDocumentListener(new DocumentChangedListener(() -> {
+            if(existingFile != null) {
+                existingFile.name = nameTextField.getText();
+                updateSaveState.run();
+            }
+        }));
         addRow(1, new JLabel("Name: "), nameTextField);
 
         authorTextField = new KTextField();
-        authorTextField.setText(existingFile == null ? "Me!" : existingFile.author);
+        authorTextField.setText(this.initialAuthor);
+        authorTextField.getDocument().addDocumentListener(new DocumentChangedListener(() -> {
+            if(existingFile != null) {
+                existingFile.author = authorTextField.getText();
+                updateSaveState.run();
+            }
+        }));
         addRow(1, new JLabel("Author: "), authorTextField);
 
         versionTextField = new KTextField();
-        versionTextField.setText(existingFile == null ? "1.0.0" : existingFile.version);
+        versionTextField.setText(this.initialVersion);
+        versionTextField.getDocument().addDocumentListener(new DocumentChangedListener(() -> {
+            if(existingFile != null) {
+                existingFile.version = versionTextField.getText();
+                updateSaveState.run();
+            }
+        }));
         addRow(1, new JLabel("Version: "), versionTextField);
-    }
-
-    @Override
-    public Dimension getMaximumSize() {
-        Dimension size = getPreferredSize();
-        size.width = Short.MAX_VALUE;
-        return size;
     }
 
     public String getModpackName() {
         return nameTextField.getText();
+    }
+
+    public boolean shouldSave() {
+        return !initialVersion.equals(versionTextField.getText()) || !initialName.equals(nameTextField.getText()) || !initialAuthor.equals(authorTextField.getText());
     }
 
     public List<String> getInitArguments() {
@@ -56,5 +78,12 @@ public class ModpackInfoPanel extends KGridBagLayoutPanel {
         st.add("--version");
         st.add(versionTextField.getText());
         return st;
+    }
+
+    @Override
+    public Dimension getMaximumSize() {
+        Dimension size = getPreferredSize();
+        size.width = Short.MAX_VALUE;
+        return size;
     }
 }

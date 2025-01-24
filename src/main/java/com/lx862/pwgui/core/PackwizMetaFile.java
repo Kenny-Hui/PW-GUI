@@ -1,6 +1,7 @@
 package com.lx862.pwgui.core;
 
 import com.lx862.pwgui.data.exception.MissingKeyPropertyException;
+import com.moandjiezana.toml.Toml;
 import com.moandjiezana.toml.TomlWriter;
 
 import java.io.IOException;
@@ -37,8 +38,12 @@ public class PackwizMetaFile extends TomlFile {
 
     private String slug; // The file name without .pw.toml
 
-    public PackwizMetaFile(Path path) throws MissingKeyPropertyException {
-        super(path);
+    public PackwizMetaFile(Path path) {
+        this(path, new Toml().read(path.toFile()));
+    }
+
+    public PackwizMetaFile(Path path, Toml toml) throws MissingKeyPropertyException {
+        super(path, toml);
 
         this.slug = path.toFile().getName().replace(".pw.toml", "");
 

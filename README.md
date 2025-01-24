@@ -20,7 +20,6 @@
 - gitignore and packwizignore preview
 
 ### What still needs to be done
-- Modifying existing pack.toml
 - Download packwiz executable & Config
 - Datapack support
 - Add new contents from GitHub

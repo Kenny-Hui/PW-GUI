@@ -1,6 +1,7 @@
 package com.lx862.pwgui.gui;
 
 import com.lx862.pwgui.core.Modpack;
+import com.lx862.pwgui.gui.action.UpdateAllAction;
 import com.lx862.pwgui.gui.base.kui.KMenu;
 import com.lx862.pwgui.gui.base.kui.KMenuItem;
 import com.lx862.pwgui.gui.popup.ConsoleDialog;
@@ -90,6 +91,9 @@ public class EditFrame extends BaseFrame {
                 .execute(Constants.REASON_TRIGGERED_BY_USER);
         }));
 
+        KMenuItem updateAllMenuItem = new KMenuItem(new UpdateAllAction(this));
+        toolMenu.add(updateAllMenuItem);
+
         KMenuItem devServerMenuItem = new KMenuItem("Run Development Server...");
         toolMenu.add(devServerMenuItem);
         devServerMenuItem.addActionListener(actionEvent -> {
@@ -99,10 +103,7 @@ public class EditFrame extends BaseFrame {
 
         KMenuItem pwConsoleMenuItem = new KMenuItem("Open Packwiz Console");
         toolMenu.add(pwConsoleMenuItem);
-        pwConsoleMenuItem.addActionListener(actionEvent -> {
-            ConsoleDialog frame = new ConsoleDialog(Main.packwiz, this);
-            frame.setVisible(true);
-        });
+        pwConsoleMenuItem.addActionListener(actionEvent -> openPackwizConsole());
 
         /* ---------- Help Menu ---------- */
 
@@ -125,6 +126,11 @@ public class EditFrame extends BaseFrame {
         this.jMenuBar.add(fileMenu);
         this.jMenuBar.add(toolMenu);
         this.jMenuBar.add(helpMenu);
+    }
+
+    private void openPackwizConsole() {
+        ConsoleDialog frame = new ConsoleDialog(Main.packwiz, this);
+        frame.setVisible(true);
     }
 
     private void clearPackwizCache() {

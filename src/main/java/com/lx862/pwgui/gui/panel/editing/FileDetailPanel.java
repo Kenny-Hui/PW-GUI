@@ -90,7 +90,7 @@ public class FileDetailPanel extends JPanel {
     private void saveTab(FileTypePanel fileTypePanel, boolean shouldRefresh) {
         if(fileTypePanel.shouldSave()) {
             try {
-                fileTypePanel.save(this);
+                fileTypePanel.save();
             } catch (IOException e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(this, "Failed to save file!\n" + e.getMessage(), Util.withTitlePrefix("Save error"), JOptionPane.ERROR_MESSAGE);

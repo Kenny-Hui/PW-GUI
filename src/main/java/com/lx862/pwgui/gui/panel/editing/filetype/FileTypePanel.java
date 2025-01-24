@@ -26,7 +26,7 @@ public abstract class FileTypePanel extends JPanel {
         context.setShouldSave(shouldSave());
     }
     
-    public void save(Component parent) throws IOException {
+    public void save() throws IOException {
         context.setShouldSave(false);
     }
 }

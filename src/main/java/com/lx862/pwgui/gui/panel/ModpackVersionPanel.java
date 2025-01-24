@@ -210,6 +210,10 @@ public class ModpackVersionPanel extends KGridBagLayoutPanel {
         }
     }
 
+    public boolean minecraftVersionChanged() {
+        return !Objects.equals(initialMinecraft, getMinecraft());
+    }
+
     public boolean shouldSave() {
         return !Objects.equals(getMinecraft(), this.initialMinecraft) || !Objects.equals(getModloader(), this.initialModloader);
     }

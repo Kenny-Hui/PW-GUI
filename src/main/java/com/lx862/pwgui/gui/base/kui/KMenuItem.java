@@ -9,4 +9,9 @@ public class KMenuItem extends JMenuItem {
         super(description);
         setMargin(new Insets(5, 10, 5, 10));
     }
+
+    public KMenuItem(Action action) {
+        super(action);
+        setMargin(new Insets(5, 10, 5, 10));
+    }
 }

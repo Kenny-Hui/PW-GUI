@@ -55,8 +55,8 @@ public class GitIgnorePanel extends FileTypePanel {
     }
 
     @Override
-    public void save(Component parent) throws IOException {
-        super.save(parent);
+    public void save() throws IOException {
+        super.save();
         try(FileWriter fw = new FileWriter(fileEntry.path.toFile())) {
             fw.write(textArea.getText());
         }

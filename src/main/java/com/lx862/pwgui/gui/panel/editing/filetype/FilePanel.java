@@ -97,9 +97,9 @@ public class FilePanel extends FileTypePanel {
     }
 
     @Override
-    public void save(Component parent) throws IOException {
+    public void save() throws IOException {
         if(indexEntry != null) {
-            super.save(parent);
+            super.save();
             indexEntry.preserve = preserveCheckBox.isSelected();
             indexFile.updateEntry(indexEntry);
             indexFile.write();

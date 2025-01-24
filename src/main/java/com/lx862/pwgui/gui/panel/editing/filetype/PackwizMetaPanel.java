@@ -168,8 +168,8 @@ public class PackwizMetaPanel extends FileTypePanel {
     }
 
     @Override
-    public void save(Component parent) throws IOException {
-        super.save(parent);
+    public void save() throws IOException {
+        super.save();
         packwizMetaFile.optionOptional = optionalCheckbox.isSelected();
         packwizMetaFile.pinned = pinnedCheckbox.isSelected();
         packwizMetaFile.side = !serverCheckbox.isSelected() && !clientCheckbox.isSelected() ? "both" : serverCheckbox.isSelected() && clientCheckbox.isSelected() ? "both" : serverCheckbox.isSelected() ? "server" : "client";

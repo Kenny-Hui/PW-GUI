@@ -56,15 +56,13 @@ public class ModpackVersionPanel extends KGridBagLayoutPanel {
         if(this.initialMinecraft != null) mcVersionComboBox.setSelectedItem(this.initialMinecraft.getVersion());
         if(this.initialModloader != null) modloaderVersionComboBox.setSelectedItem(initialModloader.getVersion());
 
-        fetchComponentDatas(PackComponent.MINECRAFT, () -> {
-            fillComboBoxes(null, mcVersionComboBox, PackComponent.MINECRAFT, false);
-            // We add event listener after we fill the combobox, as we don't want the fill update to be triggered
-            mcVersionComboBox.setAction(null);
-            mcVersionComboBox.addActionListener(actionEvent -> {
-                updateModloaderUI(selectedModloader);
-            });
-        });
+        updateMinecraftUI(false);
+
         addRow(1, new JLabel("Minecraft Version: ", new ImageIcon(GUIHelper.resizeImage(IconNamePair.MINECRAFT.image, 20)), SwingConstants.LEFT), mcVersionComboBox);
+
+        JCheckBox showSnapshotCheckBox = new JCheckBox("Show Snapshot");
+        showSnapshotCheckBox.addActionListener(actionEvent -> updateMinecraftUI(showSnapshotCheckBox.isSelected()));
+        addRow(1, null, showSnapshotCheckBox);
 
         JPanel modloaderChoicePanel = new JPanel(new WrapLayout(FlowLayout.LEFT, 0, 0));
 
@@ -104,6 +102,17 @@ public class ModpackVersionPanel extends KGridBagLayoutPanel {
         addRow(1, modloaderVersionLabel, modloaderVersionComboBox);
 
         updateModloaderUI(this.initialModloader == null ? null : this.initialModloader.getComponent());
+    }
+
+    private void updateMinecraftUI(boolean showSnapshot) {
+        fetchComponentDatas(PackComponent.MINECRAFT, () -> {
+            fillComboBoxes(null, mcVersionComboBox, PackComponent.MINECRAFT, showSnapshot);
+            // We add event listener after we fill the combobox, as we don't want the fill update to be triggered
+            mcVersionComboBox.setAction(null);
+            mcVersionComboBox.addActionListener(actionEvent -> {
+                updateModloaderUI(selectedModloader);
+            });
+        });
     }
 
     private void updateModloaderUI(PackComponent modloader) {

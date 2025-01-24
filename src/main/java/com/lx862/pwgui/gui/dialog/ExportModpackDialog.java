@@ -1,7 +1,6 @@
 package com.lx862.pwgui.gui.dialog;
 
 import com.lx862.pwgui.core.Modpack;
-import com.lx862.pwgui.data.ManualModInfo;
 import com.lx862.pwgui.gui.base.kui.KButton;
 import com.lx862.pwgui.util.GUIHelper;
 import com.lx862.pwgui.core.Constants;
@@ -16,15 +15,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 public class ExportModpackDialog extends JDialog {
@@ -86,61 +78,19 @@ public class ExportModpackDialog extends JDialog {
         programRefresh.whenExit(refreshExitCode -> {
             if(refreshExitCode != 0) return;
 
-            List<ManualModInfo> manualDownloadMod = new ArrayList<>();
-            AtomicBoolean captureManualDownloadMod = new AtomicBoolean();
-            AtomicReference<String> cachePath = new AtomicReference<>();
-
             ProgramExecution program = Main.packwiz.buildCommand(args.toArray(new String[0]));
-            program.whenStdout((line) -> {
-               if(line.contains("and must be manually downloaded")) {
-                   captureManualDownloadMod.set(true);
-               } else if(line.contains("Once you have done so, place")) {
-                   cachePath.set(line.split(", place these files in ")[1].split(" and re-run")[0]);
-                   new ManualDownloadDialog(this, manualDownloadMod, (path) -> {
-                       moveManualDownloadToCache(manualDownloadMod, path, Paths.get(cachePath.get()));
-                       exportModpack(parentFrame, args, destination);
-                   }).setVisible(true);
-               } else if(captureManualDownloadMod.get()) {
-                   // Format: Mod Display Name (mod_file_name.jar) from https://example.com
-
-                   String[] split = line.split(" from http");
-                   String[] splitForTheRest = split[0].split(" ");
-                   String fileName = "pwgui_cannot_parse_filename.jar";
-                   for(String word : splitForTheRest) {
-                       if(word.startsWith("(") && word.endsWith(")")) { // We will take a blind shot that jar file don't have spaces...
-                           fileName = word.substring(1, word.length()-1);
-                           break;
-                       }
-                   }
-                   String name = line.substring(0, line.indexOf(fileName)-2);
-                   String url = "http" + split[1];
-
-                   manualDownloadMod.add(new ManualModInfo(name, fileName, url));
-               }
+            ExecutableProgressDialog dialog = new ExecutableProgressDialog(parentFrame, "Exporting modpack", Constants.REASON_TRIGGERED_BY_USER, program);
+            Util.addManualDownloadPrompt(this, program, dialog, () -> {
+                exportModpack(parentFrame, args, destination);
             });
             program.whenExit(exitCode -> {
                 if(exitCode == 0) {
                     new FileSavedDialog(this, "Modpack exported!", destination).setVisible(true);
                 }
             });
-            ExecutableProgressDialog dialog = new ExecutableProgressDialog(parentFrame, "Exporting modpack", Constants.REASON_TRIGGERED_BY_USER, program);
-            dialog.whenProgramErrored(() -> !captureManualDownloadMod.get()); // Mute exit code 1 error pop up if it's about manual download
             dialog.setVisible(true);
         });
         new ExecutableProgressDialog(parentFrame, "Refreshing modpack...", "Refresh before export to ensure consistency.", programRefresh).setVisible(true);
-    }
-
-    private void moveManualDownloadToCache(List<ManualModInfo> modList, Path sourceDirectory, Path cacheDirectory) {
-        for(ManualModInfo modInfo : modList) {
-            Path sourcePath = sourceDirectory.resolve(modInfo.fileName);
-            Path destinationPath = cacheDirectory.resolve(modInfo.fileName);
-            try {
-                Main.LOGGER.info(String.format("Moving manually downloaded file from \"%s\" to \"%s\"", sourcePath, destinationPath));
-                Files.move(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(this, String.format("An error occured while moving manually downloaded files:\n%s\nPlease move %s manually to %s", e.getMessage(), modInfo.fileName, cacheDirectory), Util.withTitlePrefix("Failed to handle manually installed mods"), JOptionPane.ERROR_MESSAGE);
-            }
-        }
     }
 
     private void setExportButtonState(boolean active) {

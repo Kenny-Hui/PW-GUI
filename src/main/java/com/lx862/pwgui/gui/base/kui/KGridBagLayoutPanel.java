@@ -25,7 +25,7 @@ public class KGridBagLayoutPanel extends JPanel {
             c.gridy = y;
             c.weightx = i == maxWidthSpan-1 ? 1 : 0; // Fill last row
             c.gridwidth = widthSpan;
-            add(components[i], c);
+            if(components[i] != null) add(components[i], c);
             x++;
         }
         y++;

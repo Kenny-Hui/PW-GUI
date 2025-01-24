@@ -45,17 +45,13 @@ public class Util {
         }
     }
 
-    public static void tryEditFile(String uri) {
+    public static void tryBrowse(String uri) {
         try {
             Desktop.getDesktop().browse(new URI(uri));
         } catch (URISyntaxException | IOException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, String.format("Failed to open link \"%s\":\n%s", uri, e.getMessage()), withTitlePrefix("Open External Link"), JOptionPane.ERROR_MESSAGE);
         }
-    }
-
-    public static String getSystemUserName() {
-        return System.getProperty("user.name");
     }
 
     public static void addManualDownloadPrompt(JDialog parentDialog, ProgramExecution programExecution, ExecutableProgressDialog executableProgressDialog, Runnable callback) {

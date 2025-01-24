@@ -2,7 +2,6 @@ package com.lx862.pwgui.core;
 
 import com.lx862.pwgui.data.exception.MissingKeyPropertyException;
 import com.moandjiezana.toml.Toml;
-import com.moandjiezana.toml.TomlWriter;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -126,6 +125,6 @@ public class PackwizMetaFile extends TomlFile {
             map.put("option", values);
         }
 
-        writeToFilesystem(new TomlWriter().write(map));
+        writeToFilesystem(map);
     }
 }

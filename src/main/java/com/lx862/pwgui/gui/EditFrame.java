@@ -135,7 +135,7 @@ public class EditFrame extends BaseFrame {
 
     private void clearPackwizCache() {
         if(JOptionPane.showConfirmDialog(this, "Are you sure you want to clear packwiz cache?\nThis is generally not necessary unless you are running out of disk space or encountered some corruption.", Util.withTitlePrefix("Clear Packwiz Cache?"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-            Path packwizCacheDir = GoUtil.getCacheDir().resolve("packwiz");
+            Path packwizCacheDir = GoUtil.userCacheDir().resolve("packwiz");
             if(!packwizCacheDir.toFile().exists()) {
                 JOptionPane.showMessageDialog(this, "There are currently no packwiz cache yet, nothing to clear~", Util.withTitlePrefix("No Packwiz cache found"), JOptionPane.INFORMATION_MESSAGE);
             } else {

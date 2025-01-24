@@ -8,6 +8,7 @@
 
 ## Roadmap
 ### What works
+- Download packwiz Executable if not found
 - Create new modpack from scratch (All supported modloaders by packwiz)
 - Open an existing modpack
 - Export modpack to Modrinth (.mrpack) / CurseForge (.zip)
@@ -20,7 +21,6 @@
 - gitignore and packwizignore preview
 
 ### What still needs to be done
-- Download packwiz executable & Config
 - Datapack support
 - Add new contents from GitHub
 - Content browser for Modrinth/CurseForge

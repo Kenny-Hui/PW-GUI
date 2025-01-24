@@ -7,7 +7,7 @@ import java.util.Locale;
 public class GoUtil {
     // https://github.com/golang/go/blob/40b3c0e58a0ae8dec4684a009bf3806769e0fc41/src/os/file.go#L474-L485
     /** A reimplementation of Go's getCacheDir, which is used by packwiz to determine the cache location */
-    public static Path getCacheDir() {
+    public static Path userCacheDir() {
         String osName = System.getProperty("os.name").toLowerCase(Locale.ROOT);
         if(osName.contains("windows")) {
             return Paths.get(System.getenv("LocalAppData"));
@@ -20,6 +20,23 @@ public class GoUtil {
             } else {
                 String home = System.getenv("HOME");
                 return Paths.get(home).resolve(".cache");
+            }
+        }
+    }
+
+    public static Path userConfigDir() {
+        String osName = System.getProperty("os.name").toLowerCase(Locale.ROOT);
+        if(osName.contains("windows")) {
+            return Paths.get(System.getenv("AppData"));
+        } else if(osName.contains("mac")) {
+            return Paths.get(System.getenv("HOME") + "/Library/Application Support");
+        } else {
+            String dir = System.getenv("XDG_CONFIG_HOME");
+            if(dir != null) {
+                return Paths.get(dir);
+            } else {
+                String home = System.getenv("HOME");
+                return Paths.get(home).resolve(".config");
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.lx862.pwgui.executable;
 
+import com.lx862.pwgui.Main;
 import com.lx862.pwgui.util.Util;
 
 public class PackwizExecutable extends Executable {
@@ -11,7 +12,7 @@ public class PackwizExecutable extends Executable {
         keywords.add("Use \"packwiz [command] --help\" for more information about a command.");
 
         potentialPaths.add("packwiz"); // Added in PATH
-        potentialPaths.add("/etc/profiles/per-user/" + Util.getSystemUserName() + "/bin/packwiz"); // NixOS
+        potentialPaths.add("/etc/profiles/per-user/" + System.getProperty("user.name") + "/bin/packwiz"); // NixOS
     }
 
     @Override
@@ -26,6 +27,18 @@ public class PackwizExecutable extends Executable {
         args[args.length-1] = packFileLocation;
 
         return super.buildCommand(args);
+    }
+
+    @Override
+    public boolean locate(String override) {
+        if(Main.config.packwizExecutablePath != null) {
+            if(isOurIntendedProgram(Main.config.packwizExecutablePath.toString())) {
+                Main.LOGGER.info(String.format("%s executable configured at %s", programName, Main.config.packwizExecutablePath));
+                executableLocation = Main.config.packwizExecutablePath.toString();
+                return true;
+            }
+        }
+        return super.locate(override);
     }
 
     public void setPackFileLocation(String str) {

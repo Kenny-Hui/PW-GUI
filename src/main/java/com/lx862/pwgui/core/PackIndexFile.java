@@ -48,7 +48,7 @@ public class PackIndexFile extends TomlFile {
             entries.add(entryMap);
         }
         map.put("files", entries);
-        writeToFilesystem(new TomlWriter().write(map));
+        writeToFilesystem(map);
     }
 
     public FileEntry getEntryByPath(Path path) {

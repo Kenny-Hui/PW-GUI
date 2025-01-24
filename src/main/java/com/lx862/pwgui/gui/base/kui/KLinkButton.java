@@ -8,17 +8,23 @@ import java.awt.*;
 /* A button disguised as a clickable hyperlink */
 public class KLinkButton extends JButton {
     public KLinkButton(String url) {
+        this(url, url);
+    }
+
+    public KLinkButton(String name, String url) {
         super();
-        setText(String.format("<html><a href=\"%s\">%s</a></html>", url, url));
+        setText(String.format("<html><a href=\"%s\">%s</a></html>", url == null ? "https://example.com" : url, name));
         setHorizontalAlignment(LEFT);
         setBorderPainted(false);
         setContentAreaFilled(false);
         setOpaque(false);
         setToolTipText(url);
         setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        addActionListener(actionEvent -> {
-            Util.tryEditFile(url);
-        });
+        if(url != null) {
+            addActionListener(actionEvent -> {
+                Util.tryBrowse(url);
+            });
+        }
         setBorder(null);
     }
 }

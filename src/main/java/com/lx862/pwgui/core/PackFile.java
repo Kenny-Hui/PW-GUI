@@ -5,7 +5,6 @@ import com.lx862.pwgui.data.PackComponentVersion;
 import com.lx862.pwgui.data.Cache;
 import com.lx862.pwgui.data.exception.MissingKeyPropertyException;
 import com.moandjiezana.toml.Toml;
-import com.moandjiezana.toml.TomlWriter;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -135,6 +134,6 @@ public class PackFile extends TomlFile {
         optionsMap.put("acceptable-game-versions", getOptionAcceptableGameVersion(false));
         map.put("options", optionsMap);
 
-        writeToFilesystem(new TomlWriter().write(map));
+        writeToFilesystem(map);
     }
 }

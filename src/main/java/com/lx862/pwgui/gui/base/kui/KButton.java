@@ -13,4 +13,9 @@ public class KButton extends JButton {
     public KButton(String description) {
         this(description, null);
     }
+
+    public KButton(Action action) {
+        super(action);
+        setMargin(new Insets(5, 15, 5, 15));
+    }
 }

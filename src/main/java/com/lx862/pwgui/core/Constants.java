@@ -1,7 +1,10 @@
 package com.lx862.pwgui.core;
 
-public interface Constants {
-    String PROGRAM_NAME = "PW-GUI";
-    String VERSION = "0.8.0";
-    String REASON_TRIGGERED_BY_USER = "Requested by user";
+public final class Constants {
+    public static final String PROGRAM_NAME = "PW-GUI";
+    public static final String VERSION = "0.8.0";
+    public static final String REASON_TRIGGERED_BY_USER = "Requested by user";
+
+    public static final String LINK_GITHUB = "https://github.com/Kenny-Hui/PW-GUI";
+    public static final String LINK_DC = "https://discord.gg/jzbhWEBFPx";
 }

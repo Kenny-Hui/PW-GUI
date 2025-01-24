@@ -2,6 +2,7 @@ package com.lx862.pwgui.core;
 
 import com.moandjiezana.toml.Toml;
 import com.lx862.pwgui.Main;
+import com.moandjiezana.toml.TomlWriter;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -27,8 +28,8 @@ public abstract class TomlFile {
 
     public abstract void write() throws IOException;
 
-    protected void writeToFilesystem(String str) throws IOException {
-        Files.write(path, str.getBytes(StandardCharsets.UTF_8));
+    protected void writeToFilesystem(Object o) throws IOException {
+        new TomlWriter().write(o, path.toFile());
         Main.LOGGER.info(String.format("Wrote TOML file to %s", path));
     }
 }

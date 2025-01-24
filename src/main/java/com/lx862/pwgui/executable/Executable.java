@@ -50,7 +50,7 @@ public abstract class Executable {
             }
         }
 
-        Main.LOGGER.info(Util.withBracketPrefix(String.format("Cannot probe %s executable!", programName)));
+        Main.LOGGER.info(String.format("Cannot probe %s executable!", programName));
         return false;
     }
 

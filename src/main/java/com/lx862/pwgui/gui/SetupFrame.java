@@ -1,0 +1,82 @@
+package com.lx862.pwgui.gui;
+
+import com.lx862.pwgui.Main;
+import com.lx862.pwgui.core.Constants;
+import com.lx862.pwgui.gui.action.DownloadPackwizAction;
+import com.lx862.pwgui.gui.action.LocatePackwizAction;
+import com.lx862.pwgui.gui.base.BaseFrame;
+import com.lx862.pwgui.gui.base.kui.KButton;
+import com.lx862.pwgui.gui.base.kui.KFileChooser;
+import com.lx862.pwgui.gui.base.kui.KSeparator;
+import com.lx862.pwgui.util.GUIHelper;
+import com.lx862.pwgui.util.Util;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileFilter;
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+
+public class SetupFrame extends BaseFrame {
+    public SetupFrame(Component parent) {
+        super(String.format("Welcome to %s!", Constants.PROGRAM_NAME));
+
+        setSize(400, 550);
+        setLocationRelativeTo(parent);
+
+        JPanel rootPanel = new JPanel();
+        rootPanel.setBorder(new EmptyBorder(10, 20, 10, 20));
+        rootPanel.setLayout(new BoxLayout(rootPanel, BoxLayout.PAGE_AXIS));
+
+        JLabel logoLabel;
+        try {
+            logoLabel = new JLabel(new ImageIcon(GUIHelper.convertImage(Util.getAssets("/logo.png"), 200)));
+        } catch (Exception e) {
+            logoLabel = new JLabel(Constants.PROGRAM_NAME);
+            logoLabel.setFont(UIManager.getFont("h1.font"));
+            e.printStackTrace();
+        }
+
+        logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        rootPanel.add(Box.createVerticalGlue());
+        rootPanel.add(logoLabel);
+
+        rootPanel.add(Box.createRigidArea(new Dimension(0, 8)));
+        JLabel titleLabel = new JLabel(String.format("Heya! Welcome to %s!", Constants.PROGRAM_NAME));
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        titleLabel.setFont(UIManager.getFont("h2.font"));
+        rootPanel.add(titleLabel);
+
+        rootPanel.add(Box.createRigidArea(new Dimension(0, 8)));
+
+        JLabel descriptionLabel = new JLabel("<html><div style=\"text-align:center\">PW-GUI aims to simplify modpack management by providing a GUI around the command-line program packwiz.</div></html>", SwingConstants.CENTER);
+        descriptionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        rootPanel.add(descriptionLabel);
+        rootPanel.add(Box.createRigidArea(new Dimension(0, 12)));
+
+        rootPanel.add(new KSeparator());
+        rootPanel.add(Box.createRigidArea(new Dimension(0, 12)));
+
+        JLabel secondaryDescriptionLabel = new JLabel("<html><p style=\"text-align:center\">Don't have packwiz yet? Just click the download button below and we'll take care of it!</p><p style=\"margin-top:7px;text-align:center;\">Otherwise, please give me a favor by pointing me to the packwiz executable~</p></html>", SwingConstants.CENTER);
+        secondaryDescriptionLabel.setAlignmentY(Component.TOP_ALIGNMENT);
+        secondaryDescriptionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        rootPanel.add(secondaryDescriptionLabel);
+        rootPanel.add(Box.createRigidArea(new Dimension(0, 16)));
+
+
+        KButton downloadButton = new KButton(new DownloadPackwizAction(this));
+        downloadButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        rootPanel.add(downloadButton);
+
+        rootPanel.add(Box.createRigidArea(new Dimension(0, 8)));
+
+        KButton locateButton = new KButton(new LocatePackwizAction(this));
+        locateButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        rootPanel.add(locateButton);
+
+        rootPanel.add(Box.createVerticalGlue());
+
+        add(rootPanel);
+    }
+}

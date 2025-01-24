@@ -2,6 +2,7 @@ package com.lx862.pwgui.gui;
 
 import com.lx862.pwgui.core.Modpack;
 import com.lx862.pwgui.gui.base.kui.KButton;
+import com.lx862.pwgui.gui.base.kui.KLinkButton;
 import com.lx862.pwgui.gui.popup.NewModpackDialog;
 import com.lx862.pwgui.util.GUIHelper;
 import com.lx862.pwgui.util.Util;
@@ -10,8 +11,10 @@ import com.lx862.pwgui.Main;
 import com.lx862.pwgui.gui.base.BaseFrame;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileFilter;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -24,8 +27,10 @@ public class WelcomeFrame extends BaseFrame {
         setSize(400, 525);
         setLocationRelativeTo(parent);
 
-        JPanel rootPanel = new JPanel();
-        rootPanel.setLayout(new BoxLayout(rootPanel, BoxLayout.PAGE_AXIS));
+        JPanel rootPanel = new JPanel(new BorderLayout());
+        rootPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
 
         JLabel logoLabel;
         try {
@@ -37,18 +42,19 @@ public class WelcomeFrame extends BaseFrame {
         }
 
         logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        rootPanel.add(Box.createVerticalGlue());
-        rootPanel.add(logoLabel);
+        mainPanel.add(Box.createVerticalGlue());
+        mainPanel.add(logoLabel);
 
-        rootPanel.add(Box.createRigidArea(new Dimension(0, 8)));
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 8)));
         JLabel versionLabel = new JLabel(String.format("Version %s", Constants.VERSION));
         versionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        rootPanel.add(versionLabel);
-        rootPanel.add(Box.createRigidArea(new Dimension(0, 16)));
+        mainPanel.add(versionLabel);
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 16)));
 
         KButton openPackButton = new KButton("Open modpack...");
+        openPackButton.setMnemonic(KeyEvent.VK_O);
         openPackButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        rootPanel.add(openPackButton);
+        mainPanel.add(openPackButton);
 
         openPackButton.addActionListener(actionEvent -> {
             JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
@@ -76,22 +82,31 @@ public class WelcomeFrame extends BaseFrame {
             }
         });
 
-        rootPanel.add(Box.createRigidArea(new Dimension(0, 8)));
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 8)));
 
         KButton createPackButton = new KButton("Create new modpack...");
+        createPackButton.setMnemonic(KeyEvent.VK_C);
         createPackButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         createPackButton.addActionListener(actionEvent -> {
             new NewModpackDialog(this, this::openModpack).setVisible(true);
         });
-        rootPanel.add(createPackButton);
+        mainPanel.add(createPackButton);
 
-        rootPanel.add(Box.createRigidArea(new Dimension(0, 8)));
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 8)));
 
         KButton settingsButton = new KButton("Settings");
+        settingsButton.setMnemonic(KeyEvent.VK_S);
         settingsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        rootPanel.add(settingsButton);
+        mainPanel.add(settingsButton);
 
-        rootPanel.add(Box.createVerticalGlue());
+        mainPanel.add(Box.createVerticalGlue());
+
+        rootPanel.add(mainPanel, BorderLayout.CENTER);
+
+        JPanel actionRowPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        actionRowPanel.add(new KLinkButton("Discord", Constants.LINK_DC));
+        actionRowPanel.add(new KLinkButton("GitHub", Constants.LINK_GITHUB));
+        rootPanel.add(actionRowPanel, BorderLayout.SOUTH);
 
         add(rootPanel);
     }
@@ -99,9 +114,9 @@ public class WelcomeFrame extends BaseFrame {
     private void openModpack(Path path) {
         try {
             Modpack modpack = new Modpack(path);
-            dispose();
             EditFrame editFrame = new EditFrame(this, modpack);
             editFrame.setVisible(true);
+            dispose();
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, String.format("Failed to open modpack: %s", e.getMessage()), Util.withTitlePrefix("Open modpack"), JOptionPane.ERROR_MESSAGE);

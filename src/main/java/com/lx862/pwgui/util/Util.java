@@ -48,7 +48,7 @@ public class Util {
         try {
             Desktop.getDesktop().open(file);
         } catch (IOException e) {
-            e.printStackTrace();
+            Main.LOGGER.exception(e);
             JOptionPane.showMessageDialog(null, String.format("Failed to open file \"%s\":\n%s", file.getName(), e.getMessage()), withTitlePrefix("Open External Application"), JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -57,7 +57,7 @@ public class Util {
         try {
             Desktop.getDesktop().browse(new URI(uri));
         } catch (URISyntaxException | IOException e) {
-            e.printStackTrace();
+            Main.LOGGER.exception(e);
             JOptionPane.showMessageDialog(null, String.format("Failed to open link \"%s\":\n%s", uri, e.getMessage()), withTitlePrefix("Open External Link"), JOptionPane.ERROR_MESSAGE);
         }
     }

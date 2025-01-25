@@ -1,5 +1,6 @@
 package com.lx862.pwgui.data.fileentry;
 
+import com.lx862.pwgui.Main;
 import com.lx862.pwgui.gui.components.NameTabPair;
 import com.lx862.pwgui.core.PackwizMetaFile;
 import com.lx862.pwgui.gui.panel.editing.filetype.FileEntryPaneContext;
@@ -18,7 +19,7 @@ public class PackMetadataFileEntry extends PlainTextFileEntry {
         try {
             packwizMetaFile = new PackwizMetaFile(file.toPath());
         } catch (Exception e) {
-            e.printStackTrace();
+            Main.LOGGER.exception(e);
         }
     }
 
@@ -27,7 +28,7 @@ public class PackMetadataFileEntry extends PlainTextFileEntry {
         try {
             return addToList(super.getInspectPanels(context), new NameTabPair("Packwiz Meta File", new PackwizMetaPanel(context, this)));
         } catch (IOException e) {
-            e.printStackTrace();
+            Main.LOGGER.exception(e);
             return super.getInspectPanels(context);
         }
     }

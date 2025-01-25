@@ -1,5 +1,6 @@
 package com.lx862.pwgui.gui.panel.editing.filetype;
 
+import com.lx862.pwgui.Main;
 import com.lx862.pwgui.util.Util;
 import com.lx862.pwgui.data.fileentry.PlainTextFileEntry;
 
@@ -18,7 +19,7 @@ public class LicenseFilePanel extends FileTypePanel {
             String content = fileEntry.getContent();
             textArea.setText(content);
         } catch (Exception e) {
-            e.printStackTrace();
+            Main.LOGGER.exception(e);
             textArea.setText(Util.withBracketPrefix("Error trying to read file: " + e.getMessage()));
         }
         textArea.select(0, 0);

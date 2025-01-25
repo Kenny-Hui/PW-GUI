@@ -40,7 +40,7 @@ public class WelcomeFrame extends BaseFrame {
         } catch (Exception e) {
             logoLabel = new JLabel(Constants.PROGRAM_NAME);
             logoLabel.setFont(UIManager.getFont("h1.font"));
-            e.printStackTrace();
+            Main.LOGGER.exception(e);
         }
         logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -120,7 +120,7 @@ public class WelcomeFrame extends BaseFrame {
             editFrame.setVisible(true);
             dispose();
         } catch (Exception e) {
-            e.printStackTrace();
+            Main.LOGGER.exception(e);
             JOptionPane.showMessageDialog(this, String.format("Failed to open modpack:\n%s", e.getMessage()), Util.withTitlePrefix("Open modpack"), JOptionPane.ERROR_MESSAGE);
         }
     }

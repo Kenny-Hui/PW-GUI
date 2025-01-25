@@ -92,7 +92,7 @@ public class FileDetailPanel extends JPanel {
             try {
                 fileTypePanel.save();
             } catch (IOException e) {
-                e.printStackTrace();
+                Main.LOGGER.exception(e);
                 JOptionPane.showMessageDialog(this, "Failed to save file!\n" + e.getMessage(), Util.withTitlePrefix("Save error"), JOptionPane.ERROR_MESSAGE);
             }
             if(shouldRefresh) Main.packwiz.buildCommand("refresh").execute("File modified by " + Constants.PROGRAM_NAME);

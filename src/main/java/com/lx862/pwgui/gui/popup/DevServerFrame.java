@@ -68,7 +68,7 @@ public class DevServerFrame extends JDialog {
         try {
             packwizServeProgram.execute("Launched by user", serverExecutor);
         } catch (Exception e) {
-            e.printStackTrace();
+            Main.LOGGER.exception(e);
             logTextArea.append(Util.withBracketPrefix(String.format("ERROR: %s", e.getMessage())));
         }
     }

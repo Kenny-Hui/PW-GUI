@@ -1,6 +1,7 @@
 package com.lx862.pwgui.gui.panel.editing.filetype;
 
 import com.github.rjeschke.txtmark.Processor;
+import com.lx862.pwgui.Main;
 import com.lx862.pwgui.util.Util;
 import com.lx862.pwgui.data.fileentry.MarkdownFileEntry;
 
@@ -27,7 +28,7 @@ public class MarkdownPanel extends FileTypePanel {
             editorPane.setContentType("text/html");
             editorPane.setText("<html>" + html + "</html>");
         } catch (Exception e) {
-            e.printStackTrace();
+            Main.LOGGER.exception(e);
             editorPane.setText(Util.withBracketPrefix("Error trying to read file: " + e.getMessage()));
         }
 

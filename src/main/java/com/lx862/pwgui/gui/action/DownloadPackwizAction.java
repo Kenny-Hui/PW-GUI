@@ -67,7 +67,7 @@ public class DownloadPackwizAction extends AbstractAction {
                         }
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    Main.LOGGER.exception(e);
                     JOptionPane.showMessageDialog(parent, String.format("Failed to extract packwiz from zip file:\n%s", e.getMessage()), Util.withTitlePrefix("Setup failed"), JOptionPane.ERROR_MESSAGE);
                 }
 
@@ -135,7 +135,7 @@ public class DownloadPackwizAction extends AbstractAction {
 
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
+            Main.LOGGER.exception(e);
             JOptionPane.showMessageDialog(parent, "Failed to write config file!", Util.withTitlePrefix("Setup failed"), JOptionPane.INFORMATION_MESSAGE);
             return false;
         }

@@ -40,7 +40,7 @@ public class Main {
                 config = new Config();
             } catch (Exception e) {
                 if(!(e.getCause() instanceof FileNotFoundException)) { // Missing file is expected on first launch, nothing notable that needs logging
-                    e.printStackTrace();
+                    Main.LOGGER.exception(e);
                     Main.LOGGER.error("Failed to read config file!");
                 }
                 config = new Config(new Toml());
@@ -82,7 +82,7 @@ public class Main {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Main.LOGGER.exception(e);
             System.exit(1);
         }
     }

@@ -1,5 +1,6 @@
 package com.lx862.pwgui.gui.panel.editing.filetype;
 
+import com.lx862.pwgui.Main;
 import com.lx862.pwgui.data.fileentry.GenericFileEntry;
 import com.lx862.pwgui.gui.components.DocumentChangedListener;
 import com.lx862.pwgui.util.Util;
@@ -29,7 +30,7 @@ public class PlainTextPanel extends FileTypePanel {
             this.initialContent = content;
             textArea.setText(content);
         } catch (Exception e) {
-            e.printStackTrace();
+            Main.LOGGER.exception(e);
             textArea.setText(Util.withBracketPrefix(String.format("Error trying to read file: %s", e.getMessage())));
         }
         textArea.select(0, 0); // Jump cursor to start

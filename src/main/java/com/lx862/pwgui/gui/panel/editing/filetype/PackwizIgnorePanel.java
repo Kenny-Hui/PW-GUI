@@ -1,5 +1,7 @@
 package com.lx862.pwgui.gui.panel.editing.filetype;
 
+import com.lx862.pwgui.Main;
+import com.lx862.pwgui.core.Modpack;
 import com.lx862.pwgui.data.GitIgnoreRules;
 import com.lx862.pwgui.gui.components.DocumentChangedListener;
 import com.lx862.pwgui.data.fileentry.GenericFileEntry;
@@ -34,7 +36,7 @@ public class PackwizIgnorePanel extends FileTypePanel {
             this.initialContent = content;
             textArea.setText(content);
         } catch (Exception e) {
-            e.printStackTrace();
+            Main.LOGGER.exception(e);
         }
         textArea.getDocument().addDocumentListener(new DocumentChangedListener(() -> {
             updateIgnore(textArea.getText());
@@ -45,7 +47,7 @@ public class PackwizIgnorePanel extends FileTypePanel {
     }
 
     private void updateIgnore(String content) {
-        GitIgnoreRules gitIgnoreRules = context.getModpack().defaultFileIgnoreRules.overlay(new GitIgnoreRules(content));
+        GitIgnoreRules gitIgnoreRules = Modpack.defaultFileIgnoreRules.overlay(new GitIgnoreRules(content));
         context.invokeSetTreeIgnorePattern(gitIgnoreRules);
     }
 

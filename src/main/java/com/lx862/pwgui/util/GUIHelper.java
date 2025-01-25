@@ -1,5 +1,7 @@
 package com.lx862.pwgui.util;
 
+import com.lx862.pwgui.Main;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -44,7 +46,7 @@ public class GUIHelper {
         try {
             return ImageIO.read(is);
         } catch (Exception e) {
-            e.printStackTrace();
+            Main.LOGGER.exception(e);
             return null;
         }
     }

@@ -1,5 +1,6 @@
 package com.lx862.pwgui.gui.panel.editing.filetype;
 
+import com.lx862.pwgui.Main;
 import com.lx862.pwgui.util.Util;
 import com.lx862.pwgui.data.fileentry.MinecraftOptionsFileEntry;
 
@@ -21,7 +22,7 @@ public class MinecraftOptionPanel extends FileTypePanel {
             String content = fileEntry.getContent();
             textPane.setText(syntaxHighlighting(content));
         } catch (Exception e) {
-            e.printStackTrace();
+            Main.LOGGER.exception(e);
             textPane.setText(Util.withBracketPrefix("Error trying to read file: " + e.getMessage()));
         }
         textPane.select(0, 0);

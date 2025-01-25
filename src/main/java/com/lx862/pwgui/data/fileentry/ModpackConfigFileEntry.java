@@ -1,5 +1,6 @@
 package com.lx862.pwgui.data.fileentry;
 
+import com.lx862.pwgui.Main;
 import com.lx862.pwgui.gui.panel.editing.filetype.ModpackConfigPanel;
 import com.lx862.pwgui.gui.components.NameTabPair;
 import com.lx862.pwgui.core.PackFile;
@@ -17,7 +18,7 @@ public class ModpackConfigFileEntry extends GenericFileEntry {
         try {
             packFile = new PackFile(file.toPath());
         } catch (Exception e) {
-            e.printStackTrace();
+            Main.LOGGER.exception(e);
         }
     }
 
@@ -26,7 +27,7 @@ public class ModpackConfigFileEntry extends GenericFileEntry {
         try {
             return addToList(super.getInspectPanels(context), new NameTabPair("Modpack Config", new ModpackConfigPanel(context, this)));
         } catch (IOException e) {
-            e.printStackTrace();
+            Main.LOGGER.exception(e);
             return super.getInspectPanels(context);
         }
     }

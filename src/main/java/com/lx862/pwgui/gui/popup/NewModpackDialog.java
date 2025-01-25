@@ -123,7 +123,7 @@ public class NewModpackDialog extends JDialog {
                 new ExecutableProgressDialog(null, "Creating Modpack...", "Requested by user", processExecution).setVisible(true);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Main.LOGGER.exception(e);
             JOptionPane.showMessageDialog(null, "Failed to create modpack:\n" + e.getMessage(), Util.withTitlePrefix("Create Modpack"), JOptionPane.ERROR_MESSAGE);
         }
     }

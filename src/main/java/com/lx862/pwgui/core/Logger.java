@@ -1,5 +1,7 @@
 package com.lx862.pwgui.core;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -32,6 +34,12 @@ public class Logger {
 
     public void error(String prefix, String str) {
         log(prefix + " [ERROR]", str);
+    }
+
+    public void exception(Throwable t) {
+        StringWriter sw = new StringWriter();
+        t.printStackTrace(new PrintWriter(sw)); // Only in Java (TM)
+        error(sw.toString());
     }
 
     public void info(String str) {

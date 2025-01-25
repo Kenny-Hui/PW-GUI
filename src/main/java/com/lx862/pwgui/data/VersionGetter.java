@@ -3,6 +3,7 @@ package com.lx862.pwgui.data;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.lx862.pwgui.Main;
 import com.lx862.pwgui.util.NetworkHelper;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -40,7 +41,7 @@ public interface VersionGetter {
                 callback.accept(metadatas);
             } catch (IOException e) {
                 callback.accept(null);
-                e.printStackTrace();
+                Main.LOGGER.exception(e);
             }
         });
     }
@@ -76,7 +77,7 @@ public interface VersionGetter {
                 }
                 callback.accept(metadatas);
             } catch (Exception e) {
-                e.printStackTrace();
+                Main.LOGGER.exception(e);
                 callback.accept(null);
             }
         });
@@ -101,7 +102,7 @@ public interface VersionGetter {
                 }
                 callback.accept(metadatas);
             } catch (Exception e) {
-                e.printStackTrace();
+                Main.LOGGER.exception(e);
                 callback.accept(null);
             }
         });
@@ -118,7 +119,7 @@ public interface VersionGetter {
                     callback.accept(metadatas);
                 }, false);
             } catch (MalformedURLException e) {
-                e.printStackTrace();
+                Main.LOGGER.exception(e);
                 callback.accept(null);
             }
         }, true);
@@ -150,7 +151,7 @@ public interface VersionGetter {
                 }
                 callback.accept(metadatas);
             } catch (Exception e) {
-                e.printStackTrace();
+                Main.LOGGER.exception(e);
                 callback.accept(null);
             }
         });

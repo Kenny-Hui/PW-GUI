@@ -73,7 +73,7 @@ public class ProgramExecution {
                 int exitValue = this.process.exitValue();
                 callExitListeners(exitValue);
             } catch (IOException e) {
-                e.printStackTrace();
+                Main.LOGGER.exception(e);
                 callStdoutListeners(Util.withBracketPrefix(String.format("Failed to execute %s:\n%s", programDisplayName, e.getMessage())));
                 callExitListeners(-2);
             } catch (InterruptedException ignored) {

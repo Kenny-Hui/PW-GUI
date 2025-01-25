@@ -1,5 +1,6 @@
 package com.lx862.pwgui.gui.frame;
 
+import com.lx862.pwgui.Main;
 import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.gui.action.DownloadPackwizAction;
 import com.lx862.pwgui.gui.action.LocatePackwizAction;
@@ -30,7 +31,7 @@ public class SetupFrame extends BaseFrame {
         } catch (Exception e) {
             logoLabel = new JLabel(Constants.PROGRAM_NAME);
             logoLabel.setFont(UIManager.getFont("h1.font"));
-            e.printStackTrace();
+            Main.LOGGER.exception(e);
         }
 
         logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);

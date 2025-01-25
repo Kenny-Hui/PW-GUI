@@ -84,7 +84,7 @@ public class FileDetailPanel extends JPanel {
         }
 
         // Refresh packwiz after saving file
-        Main.packwiz.buildCommand("refresh").execute("File modified by " + Constants.PROGRAM_NAME);
+        Main.packwiz.buildCommand("refresh").execute(String.format("File modified by %s", Constants.PROGRAM_NAME));
     }
 
     private void saveTab(FileTypePanel fileTypePanel, boolean shouldRefresh) {
@@ -93,9 +93,9 @@ public class FileDetailPanel extends JPanel {
                 fileTypePanel.save();
             } catch (IOException e) {
                 Main.LOGGER.exception(e);
-                JOptionPane.showMessageDialog(this, "Failed to save file!\n" + e.getMessage(), Util.withTitlePrefix("Save error"), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, String.format("Failed to save file!\n%s", e.getMessage()), Util.withTitlePrefix("Save error"), JOptionPane.ERROR_MESSAGE);
             }
-            if(shouldRefresh) Main.packwiz.buildCommand("refresh").execute("File modified by " + Constants.PROGRAM_NAME);
+            if(shouldRefresh) Main.packwiz.buildCommand("refresh").execute(String.format("File modified by %s", Constants.PROGRAM_NAME));
         }
     }
 }

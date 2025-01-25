@@ -30,7 +30,7 @@ public class ExecutableProgressDialog extends ProgressDialog {
                 JOptionPane.showMessageDialog(this, formattedMessage, Util.withTitlePrefix(programExecution.getProgramDisplayName()), JOptionPane.ERROR_MESSAGE);
             }
         });
-        setStatus("Waiting for " + programExecution.getProgramDisplayName() + "...");
+        setStatus(String.format("Waiting for %s...", programExecution.getProgramDisplayName()));
         programExecution.execute(executionReason);
     }
 

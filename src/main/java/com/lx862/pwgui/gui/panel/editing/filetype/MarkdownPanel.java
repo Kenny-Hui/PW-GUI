@@ -29,7 +29,7 @@ public class MarkdownPanel extends FileTypePanel {
             editorPane.setText("<html>" + html + "</html>");
         } catch (Exception e) {
             Main.LOGGER.exception(e);
-            editorPane.setText(Util.withBracketPrefix("Error trying to read file: " + e.getMessage()));
+            editorPane.setText(Util.withBracketPrefix(String.format("Error trying to read file: %s", e.getMessage())));
         }
 
         add(new JScrollPane(editorPane));

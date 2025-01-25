@@ -54,6 +54,7 @@ public class DownloadProgressDialog extends ProgressDialog {
             protected void done() {
                 try {
                     get();
+                    Main.LOGGER.info(String.format("Finished downloading %s", itemName));
                     callback.run();
                 } catch (Exception e) {
                     Main.LOGGER.exception(e);

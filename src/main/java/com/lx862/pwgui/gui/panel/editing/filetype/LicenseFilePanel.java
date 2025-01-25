@@ -20,7 +20,7 @@ public class LicenseFilePanel extends FileTypePanel {
             textArea.setText(content);
         } catch (Exception e) {
             Main.LOGGER.exception(e);
-            textArea.setText(Util.withBracketPrefix("Error trying to read file: " + e.getMessage()));
+            textArea.setText(Util.withBracketPrefix(String.format("Error trying to read file: %s", e.getMessage())));
         }
         textArea.select(0, 0);
 

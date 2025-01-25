@@ -1,7 +1,5 @@
 package com.lx862.pwgui;
 
-import com.formdev.flatlaf.FlatIntelliJLaf;
-import com.formdev.flatlaf.FlatLaf;
 import com.google.gson.JsonObject;
 import com.lx862.pwgui.core.Config;
 import com.lx862.pwgui.core.Modpack;
@@ -11,6 +9,7 @@ import com.lx862.pwgui.gui.frame.EditFrame;
 import com.lx862.pwgui.gui.frame.SetupFrame;
 import com.lx862.pwgui.gui.frame.WelcomeFrame;
 import com.lx862.pwgui.core.Logger;
+import com.lx862.pwgui.util.GUIHelper;
 import org.apache.commons.cli.*;
 
 import javax.swing.*;
@@ -49,37 +48,29 @@ public class Main {
             final boolean packwizLocated = packwiz.locate(execPath);
             final boolean gitLocated = git.locate(null);
 
-            FlatLaf.setup(new FlatIntelliJLaf());
-            //FlatLaf.setup(new FlatDarculaLaf()); // TODO: Theme switching
+            GUIHelper.setupApplicationTheme(); // Initialize FlatLaf and it's config
 
-            UIManager.put("Component.focusWidth", 1);
-            UIManager.put("ScrollBar.showButtons", true);
-            UIManager.put("ScrollBar.width", 14);
-            UIManager.put("TabbedPane.showTabSeparators", true);
-            UIManager.put("Button.arc", 9);
-            UIManager.put("Component.hideMnemonics", false);
-
-            if(!packwizLocated) {
+            if(!packwizLocated) { // No packwiz, show setup wizard
                 SwingUtilities.invokeLater(() -> {
                     SetupFrame setupFrame = new SetupFrame(null);
                     setupFrame.setVisible(true);
                 });
+                return;
+            }
+
+            if(modpackPath != null) { // Modpack specified via CLI
+                LOGGER.info(String.format("Pack File is specified at: %s", modpackPath));
+
+                Modpack modpack = new Modpack(new File(modpackPath).toPath());
+                SwingUtilities.invokeLater(() -> {
+                    EditFrame editFrame = new EditFrame(null, modpack);
+                    editFrame.setVisible(true);
+                });
             } else {
-                if(modpackPath != null) {
-                    LOGGER.info(String.format("Pack File is specified at: %s", modpackPath));
-
-                    Modpack modpack = new Modpack(new File(modpackPath).toPath());
-
-                    SwingUtilities.invokeLater(() -> {
-                        EditFrame editFrame = new EditFrame(null, modpack);
-                        editFrame.setVisible(true);
-                    });
-                } else {
-                    SwingUtilities.invokeLater(() -> {
-                        WelcomeFrame welcomeFrame = new WelcomeFrame(null);
-                        welcomeFrame.setVisible(true);
-                    });
-                }
+                SwingUtilities.invokeLater(() -> {
+                    WelcomeFrame welcomeFrame = new WelcomeFrame(null);
+                    welcomeFrame.setVisible(true);
+                });
             }
         } catch (Exception e) {
             Main.LOGGER.exception(e);

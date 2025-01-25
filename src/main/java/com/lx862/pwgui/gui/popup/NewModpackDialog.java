@@ -89,12 +89,12 @@ public class NewModpackDialog extends JDialog {
 
                 if(Files.exists(modpackDirectory.toPath())) {
                     if(modpackDirectory.isFile()) {
-                        JOptionPane.showMessageDialog(this, "A file with name \"" + modpackDirectory.getName() + "\" already exists!\nConsider removing/renaming the file.", Util.withTitlePrefix("Create Modpack"), JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(this, String.format("A file with name \"%s\" already exists!\nConsider removing/renaming the file.", modpackDirectory.getName()), Util.withTitlePrefix("Create Modpack"), JOptionPane.ERROR_MESSAGE);
                         createModpack(modpackInfoPanel, modpackVersionPanel, finishCallback);
                         return;
                     } else if(modpackDirectory.list().length > 0) {
                         // Note: We use "folder already exists" because it's easier to get by. If a user have an empty directory, this won't prompt because no data will be loss.
-                        if(JOptionPane.showConfirmDialog(this, "\"" + modpackDirectory.getName() + "\" folder already exists!\nDo you want to use that folder for your Modpack anyway?\nWARNING: This would remove EVERYTHING within the folder!", Util.withTitlePrefix("Create Modpack"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                        if(JOptionPane.showConfirmDialog(this, String.format("\"%s\" folder already exists!\nDo you want to use that folder for your Modpack anyway?\nWARNING: This would remove EVERYTHING within the folder!", modpackDirectory.getName()), Util.withTitlePrefix("Create Modpack"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                             FileUtils.deleteDirectory(modpackDirectory);
                         } else {
                             createModpack(modpackInfoPanel, modpackVersionPanel, finishCallback);
@@ -124,7 +124,7 @@ public class NewModpackDialog extends JDialog {
             }
         } catch (Exception e) {
             Main.LOGGER.exception(e);
-            JOptionPane.showMessageDialog(null, "Failed to create modpack:\n" + e.getMessage(), Util.withTitlePrefix("Create Modpack"), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, String.format("Failed to create modpack:\n%s", e.getMessage()), Util.withTitlePrefix("Create Modpack"), JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -142,7 +142,7 @@ public class NewModpackDialog extends JDialog {
             Util.copyAssetsToPath("/new_modpack_structure/_LICENSE", "LICENSE", path);
             Util.copyAssetsToPath("/new_modpack_structure/.packwizignore", ".packwizignore", path);
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Failed to copy additional files to the modpack.\nYou may need to manually create the \"mods\" and \"config\" folder if you want to install mods.", Util.withTitlePrefix("Create Modpack"), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Failed to copy additional files to the modpack.\nYou may need to manually create the \"mods\" and \"config\" folder if you want to install mods.", Util.withTitlePrefix("Create Modpack"), JOptionPane.ERROR_MESSAGE);
         }
     }
 }

@@ -23,7 +23,7 @@ public class MinecraftOptionPanel extends FileTypePanel {
             textPane.setText(syntaxHighlighting(content));
         } catch (Exception e) {
             Main.LOGGER.exception(e);
-            textPane.setText(Util.withBracketPrefix("Error trying to read file: " + e.getMessage()));
+            textPane.setText(Util.withBracketPrefix(String.format("Error trying to read file: %s", e.getMessage())));
         }
         textPane.select(0, 0);
         textPane.setEditable(false);

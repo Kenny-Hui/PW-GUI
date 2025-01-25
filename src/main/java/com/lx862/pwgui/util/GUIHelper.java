@@ -1,13 +1,28 @@
 package com.lx862.pwgui.util;
 
+import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.formdev.flatlaf.FlatLaf;
 import com.lx862.pwgui.Main;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
 
 public class GUIHelper {
+    public static void setupApplicationTheme() {
+        FlatLaf.setup(new FlatIntelliJLaf());
+        //FlatLaf.setup(new FlatDarculaLaf()); // TODO: Theme switching
+
+        UIManager.put("Component.focusWidth", 1);
+        UIManager.put("ScrollBar.showButtons", true);
+        UIManager.put("ScrollBar.width", 14);
+        UIManager.put("TabbedPane.showTabSeparators", true);
+        UIManager.put("Button.arc", 9);
+        UIManager.put("Component.hideMnemonics", false);
+    }
+
     public static Image resizeImage(Image img, int size) {
         double imgWidth = img.getWidth(null);
         double imgHeight = img.getHeight(null);

@@ -102,7 +102,7 @@ public class ManualDownloadDialog extends JDialog {
     }
 
     private void startWatchDirectory(Path path) {
-        Main.LOGGER.info("Watching for manually downloaded mods in " + path);
+        Main.LOGGER.info(String.format("Watching for manually downloaded mods in %s", path));
         if(this.fileWatcherThread != null) {
             this.fileWatcherThread.interrupt();
         }

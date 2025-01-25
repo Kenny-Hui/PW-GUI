@@ -1,36 +1,41 @@
 package com.lx862.pwgui.core;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.stream.JsonReader;
 import com.lx862.pwgui.util.GoUtil;
-import com.moandjiezana.toml.Toml;
 
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class Config extends TomlFile {
+public class Config {
     public static final Path CONFIG_DIR_PATH = GoUtil.userConfigDir().resolve("pwgui");
     public final Map<String, Path> fileChooserLastPath;
     private Path packwizExecutablePath;
 
-    public Config() {
-        this(new Toml().read(CONFIG_DIR_PATH.resolve("config.toml").toFile()));
+    public Config() throws FileNotFoundException {
+        this(new Gson().fromJson(new JsonReader(new FileReader(CONFIG_DIR_PATH.resolve("config.json").toFile())), JsonObject.class));
     }
 
-    public Config(Toml toml) {
-        super(CONFIG_DIR_PATH.resolve("config.toml"), toml);
+    public Config(JsonObject jsonObject) {
         this.fileChooserLastPath = new HashMap<>();
-        this.packwizExecutablePath = toml.contains("executables.packwiz") ? Paths.get(toml.getString("executables.packwiz")) : null;
-        if(toml.contains("last-picked-files")) {
-            List<Object> lastPickedFiles = toml.getList("last-picked-files");
-            for(Object o : lastPickedFiles) {
-                if(!(o instanceof List)) continue;
-                List<String> pair = ((List<String>)o);
-                String contextName = pair.get(0);
-                String path = pair.get(1);
+        if(jsonObject.has("executables")) {
+            JsonObject executableObject = jsonObject.getAsJsonObject("executables");
+            this.packwizExecutablePath = Paths.get(executableObject.get("packwiz").getAsString());
+        }
+
+        if(jsonObject.has("lastPickedFiles")) {
+            JsonArray lastPickedFiles = jsonObject.getAsJsonArray("lastPickedFiles");
+
+            for(int i = 0; i < lastPickedFiles.size(); i++) {
+                JsonObject entry = lastPickedFiles.get(i).getAsJsonObject();
+                String contextName = entry.get("context").getAsString();
+                String path = entry.get("path").getAsString();
                 fileChooserLastPath.put(contextName, Paths.get(path));
             }
         }
@@ -44,25 +49,26 @@ public class Config extends TomlFile {
         this.packwizExecutablePath = newPath;
     }
 
-    @Override
     public void write() throws IOException {
         CONFIG_DIR_PATH.toFile().mkdirs();
-        Map<String, Object> map = toml.toMap();
-        Map<String, Object> executableMap = (Map<String, Object>) map.getOrDefault("executables", new HashMap<>());
-        executableMap.put("packwiz", packwizExecutablePath.toString());
 
-        map.put("executables", executableMap);
+        JsonObject jsonObject = new JsonObject();
+        JsonObject executableJsonObject = new JsonObject();
+        executableJsonObject.addProperty("packwiz", packwizExecutablePath.toString());
+        jsonObject.add("executables", executableJsonObject);
 
-        List<List<String>> lastPickedFilesList = new ArrayList<>();
+        JsonArray lastPickedFilesJsonArray = new JsonArray();
         for(Map.Entry<String, Path> entry : fileChooserLastPath.entrySet()) {
-            List<String> entryToml = new ArrayList<>();
-            entryToml.add(entry.getKey());
-            entryToml.add(entry.getValue().toString());
-            lastPickedFilesList.add(entryToml);
+            JsonObject entryJsonObject = new JsonObject();
+            entryJsonObject.addProperty("context", entry.getKey());
+            entryJsonObject.addProperty("path", entry.getValue().toString());
+            lastPickedFilesJsonArray.add(entryJsonObject);
         }
+        jsonObject.add("lastPickedFiles", lastPickedFilesJsonArray);
 
-        map.put("last-picked-files", lastPickedFilesList);
-        writeToFilesystem(map);
+        try(Writer writer = new FileWriter(CONFIG_DIR_PATH.resolve("config.json").toFile())) {
+            new GsonBuilder().setPrettyPrinting().create().toJson(jsonObject, writer);
+        }
     }
 }
 

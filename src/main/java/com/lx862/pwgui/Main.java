@@ -2,6 +2,7 @@ package com.lx862.pwgui;
 
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLaf;
+import com.google.gson.JsonObject;
 import com.lx862.pwgui.core.Config;
 import com.lx862.pwgui.core.Modpack;
 import com.lx862.pwgui.executable.GitExecutable;
@@ -10,7 +11,6 @@ import com.lx862.pwgui.gui.frame.EditFrame;
 import com.lx862.pwgui.gui.frame.SetupFrame;
 import com.lx862.pwgui.gui.frame.WelcomeFrame;
 import com.lx862.pwgui.core.Logger;
-import com.moandjiezana.toml.Toml;
 import org.apache.commons.cli.*;
 
 import javax.swing.*;
@@ -39,11 +39,11 @@ public class Main {
             try {
                 config = new Config();
             } catch (Exception e) {
-                if(!(e.getCause() instanceof FileNotFoundException)) { // Missing file is expected on first launch, nothing notable that needs logging
+                if(!(e instanceof FileNotFoundException)) { // Missing file is expected on first launch, nothing notable that needs logging
                     Main.LOGGER.exception(e);
                     Main.LOGGER.error("Failed to read config file!");
                 }
-                config = new Config(new Toml());
+                config = new Config(new JsonObject());
             }
 
             final boolean packwizLocated = packwiz.locate(execPath);

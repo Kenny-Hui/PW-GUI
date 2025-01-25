@@ -132,7 +132,7 @@ public class ChangeAcceptableGameVersionDialog extends JDialog {
         }
         boolean allowSnapshot = snapshotCheckBox.isSelected();
 
-        DefaultListModel<String> listModel = (DefaultListModel)jList.getModel();
+        DefaultListModel<String> listModel = (DefaultListModel<String>)jList.getModel();
         listModel.removeAllElements();
 
         List<Integer> selectedIndexes = new ArrayList<>();

@@ -2,9 +2,9 @@ package com.lx862.pwgui.gui.panel.editing;
 
 import com.lx862.pwgui.core.Modpack;
 import com.lx862.pwgui.data.fileentry.*;
-import com.lx862.pwgui.gui.base.fstree.FileSystemTree;
-import com.lx862.pwgui.gui.base.kui.KButton;
-import com.lx862.pwgui.gui.base.kui.KTreeCellRenderer;
+import com.lx862.pwgui.gui.components.fstree.FileSystemTree;
+import com.lx862.pwgui.gui.components.kui.KButton;
+import com.lx862.pwgui.gui.components.kui.KTreeCellRenderer;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
@@ -27,14 +27,14 @@ class FileBrowserPanel extends JPanel {
         gbc.weighty = 1.0;
         add(new JScrollPane(fileBrowserTree), gbc);
 
-        KButton openFolderButton = new KButton("Open Containing Folder...", UIManager.getIcon("FileView.directoryIcon"));
-        openFolderButton.addActionListener(actionEvent -> {
+        KButton openDirectoryButton = new KButton("Open Containing Folder...", UIManager.getIcon("FileView.directoryIcon"));
+        openDirectoryButton.addActionListener(actionEvent -> {
             fileBrowserTree.repaint();
             Util.tryOpenFile(modpack.getRootPath().toFile());
         });
 
         gbc.weighty = 0.0;
-        add(openFolderButton, gbc);
+        add(openDirectoryButton, gbc);
     }
 
     private static FileSystemEntityEntry getFileType(Modpack modpack, File file) {
@@ -61,9 +61,9 @@ class FileBrowserPanel extends JPanel {
         } else if (file.getName().endsWith(".png") || file.getName().endsWith(".jpg") || file.getName().endsWith(".jpeg")) {
             return new ImageFileEntry(file);
         } else if (modpack.getRootPath().resolve("config").equals(file.toPath())) {
-            return new ConfigFolderEntry(file);
+            return new ConfigDirectoryEntry(file);
         } else if (modpack.getRootPath().resolve("mods").equals(file.toPath()) || modpack.getRootPath().resolve("resourcepacks").equals(file.toPath()) || modpack.getRootPath().resolve("shaderpacks").equals(file.toPath()) || modpack.getRootPath().resolve("plugins").equals(file.toPath())) {
-            return new ContentManagementFolderFileEntry(file);
+            return new ContentDirectoryEntry(file);
         } else if (file.isFile()) {
             return new GenericFileEntry(file);
         } else {

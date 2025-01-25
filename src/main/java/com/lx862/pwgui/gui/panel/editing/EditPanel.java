@@ -3,12 +3,12 @@ package com.lx862.pwgui.gui.panel.editing;
 import com.lx862.pwgui.core.Modpack;
 import com.lx862.pwgui.core.PackFile;
 import com.lx862.pwgui.data.fileentry.*;
-import com.lx862.pwgui.gui.base.fstree.FileSystemTree;
-import com.lx862.pwgui.gui.base.fstree.FileSystemWatcher;
-import com.lx862.pwgui.gui.base.kui.KSplitPane;
+import com.lx862.pwgui.gui.components.fstree.FileSystemTree;
+import com.lx862.pwgui.gui.components.fstree.FileSystemWatcher;
+import com.lx862.pwgui.gui.components.kui.KSplitPane;
 import com.lx862.pwgui.gui.panel.editing.filetype.FileEntryPaneContext;
-import com.lx862.pwgui.gui.base.NameTabPair;
-import com.lx862.pwgui.gui.base.fstree.FileSystemSortedTreeNode;
+import com.lx862.pwgui.gui.components.NameTabPair;
+import com.lx862.pwgui.gui.components.fstree.FileSystemSortedTreeNode;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

@@ -10,6 +10,7 @@ public class MinecraftOptionPanel extends FileTypePanel {
     public MinecraftOptionPanel(FileEntryPaneContext context, MinecraftOptionsFileEntry fileEntry) {
         super(context);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
         JLabel descriptionLabel = new JLabel("<html>This file contains the in-game settings managed by Minecraft.</html>");
         descriptionLabel.setAlignmentX(CENTER_ALIGNMENT);
         add(descriptionLabel);

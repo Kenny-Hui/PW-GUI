@@ -1,16 +1,16 @@
 package com.lx862.pwgui.gui.panel.editing.filetype;
 
 import com.lx862.pwgui.data.fileentry.PackMetadataFileEntry;
-import com.lx862.pwgui.gui.base.DocumentChangedListener;
-import com.lx862.pwgui.gui.base.kui.KButton;
+import com.lx862.pwgui.gui.components.DocumentChangedListener;
+import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.util.GUIHelper;
 import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.Main;
 import com.lx862.pwgui.executable.ProgramExecution;
 import com.lx862.pwgui.core.PackwizMetaFile;
-import com.lx862.pwgui.gui.base.kui.KGridBagLayoutPanel;
-import com.lx862.pwgui.gui.base.kui.KSeparator;
-import com.lx862.pwgui.gui.base.kui.KTextField;
+import com.lx862.pwgui.gui.components.kui.KGridBagLayoutPanel;
+import com.lx862.pwgui.gui.components.kui.KSeparator;
+import com.lx862.pwgui.gui.components.kui.KTextField;
 import com.lx862.pwgui.gui.dialog.ExecutableProgressDialog;
 import com.lx862.pwgui.util.Util;
 
@@ -119,14 +119,14 @@ public class PackwizMetaPanel extends FileTypePanel {
     }
 
     private void removeMod() {
-        if(JOptionPane.showConfirmDialog(GUIHelper.getRootFrame(this), String.format("Are you sure you want to remove %s?", packwizMetaFile.name), Util.withTitlePrefix("Remove confirmation"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+        if(JOptionPane.showConfirmDialog(getTopLevelAncestor(), String.format("Are you sure you want to remove %s?", packwizMetaFile.name), Util.withTitlePrefix("Remove confirmation"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             Main.packwiz.buildCommand("remove", packwizMetaFile.getSlug()).execute(Constants.REASON_TRIGGERED_BY_USER);
         }
     }
 
     private void checkForUpdate(Component parent) {
         ProgramExecution programExecution = Main.packwiz.buildCommand("update", packwizMetaFile.getSlug());
-        ExecutableProgressDialog dialog = new ExecutableProgressDialog(GUIHelper.getRootFrame(this), String.format("Updating %s...", packwizMetaFile.name), Constants.REASON_TRIGGERED_BY_USER, programExecution);
+        ExecutableProgressDialog dialog = new ExecutableProgressDialog((JFrame)getTopLevelAncestor(), String.format("Updating %s...", packwizMetaFile.name), Constants.REASON_TRIGGERED_BY_USER, programExecution);
 
         AtomicReference<String> updateString = new AtomicReference<>(null);
         programExecution.whenStdout((line) -> {

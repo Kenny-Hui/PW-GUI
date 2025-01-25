@@ -5,8 +5,6 @@ import com.lx862.pwgui.Main;
 import com.moandjiezana.toml.TomlWriter;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 public abstract class TomlFile {

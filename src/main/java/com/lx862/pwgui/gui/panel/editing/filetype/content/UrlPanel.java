@@ -1,12 +1,12 @@
 package com.lx862.pwgui.gui.panel.editing.filetype.content;
 
-import com.lx862.pwgui.gui.base.kui.KButton;
+import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.Main;
-import com.lx862.pwgui.gui.base.DocumentChangedListener;
-import com.lx862.pwgui.data.fileentry.ContentManagementFolderFileEntry;
+import com.lx862.pwgui.gui.components.DocumentChangedListener;
+import com.lx862.pwgui.data.fileentry.ContentDirectoryEntry;
 import com.lx862.pwgui.executable.ProgramExecution;
-import com.lx862.pwgui.gui.base.kui.KGridBagLayoutPanel;
-import com.lx862.pwgui.gui.base.kui.KTextField;
+import com.lx862.pwgui.gui.components.kui.KGridBagLayoutPanel;
+import com.lx862.pwgui.gui.components.kui.KTextField;
 import com.lx862.pwgui.gui.dialog.ExecutableProgressDialog;
 import com.lx862.pwgui.gui.panel.editing.filetype.FileEntryPaneContext;
 import com.lx862.pwgui.util.Util;
@@ -23,15 +23,16 @@ public class UrlPanel extends JPanel {
 
     static {
         alternativeForDomain.put("modrinth.com", "Modrinth");
-        //alternativeForDomain.put("github.com", "GitHub"); // Doesn't seems finished
+        //alternativeForDomain.put("github.com", "GitHub"); // Doesn't seems finished?
         alternativeForDomain.put("curseforge.com", "Curseforge");
         alternativeForDomain.put("forgecdn.net", "Curseforge");
     }
 
-    public UrlPanel(FileEntryPaneContext context, ContentManagementFolderFileEntry fileEntry) {
+    public UrlPanel(FileEntryPaneContext context, ContentDirectoryEntry fileEntry) {
         setLayout(new BorderLayout());
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+
+        JPanel rootPanel = new JPanel();
+        rootPanel.setLayout(new BoxLayout(rootPanel, BoxLayout.PAGE_AXIS));
 
         KGridBagLayoutPanel formPanel = new KGridBagLayoutPanel(3, 2);
         formPanel.setAlignmentX(LEFT_ALIGNMENT);
@@ -83,8 +84,8 @@ public class UrlPanel extends JPanel {
             new ExecutableProgressDialog(null, "Adding mod...", "Triggered by user", programExecution).setVisible(true);
         });
 
-        panel.add(formPanel);
-        add(panel, BorderLayout.CENTER);
+        rootPanel.add(formPanel);
+        add(rootPanel, BorderLayout.CENTER);
     }
 
     private void updateInstallButtonState(JButton addButton, KTextField nameTextField, KTextField urlTextField, JLabel urlInvalidLabel) {

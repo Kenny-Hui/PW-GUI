@@ -1,13 +1,12 @@
 package com.lx862.pwgui.gui.panel.editing.filetype;
 
-import com.lx862.pwgui.gui.base.DocumentChangedListener;
+import com.lx862.pwgui.gui.components.DocumentChangedListener;
 import com.lx862.pwgui.util.Util;
-import com.lx862.pwgui.data.FileIgnoreRules;
+import com.lx862.pwgui.data.GitIgnoreRules;
 import com.lx862.pwgui.data.fileentry.GenericFileEntry;
 import com.lx862.pwgui.data.fileentry.GitIgnoreFileEntry;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -31,8 +30,8 @@ public class GitIgnorePanel extends FileTypePanel {
 
         try {
             String content = fileEntry.getContent();
-            FileIgnoreRules fileIgnoreRules = new FileIgnoreRules(content);
-            context.invokeSetTreeIgnorePattern(fileIgnoreRules);
+            GitIgnoreRules gitIgnoreRules = new GitIgnoreRules(content);
+            context.invokeSetTreeIgnorePattern(gitIgnoreRules);
 
             this.initialContent = content;
             this.textArea.setText(content);

@@ -1,16 +1,16 @@
 package com.lx862.pwgui.gui.panel.editing.filetype;
 
 import com.lx862.pwgui.core.Modpack;
-import com.lx862.pwgui.data.FileIgnoreRules;
+import com.lx862.pwgui.data.GitIgnoreRules;
 
 import java.util.function.Consumer;
 
 public class FileEntryPaneContext {
     private final Modpack modpack;
-    private final Consumer<FileIgnoreRules> setTreeIgnorePattern;
+    private final Consumer<GitIgnoreRules> setTreeIgnorePattern;
     private final Consumer<Boolean> shouldSave;
 
-    public FileEntryPaneContext(Modpack modpack, Consumer<FileIgnoreRules> setTreeIgnorePattern, Consumer<Boolean> setSaveCallback) {
+    public FileEntryPaneContext(Modpack modpack, Consumer<GitIgnoreRules> setTreeIgnorePattern, Consumer<Boolean> setSaveCallback) {
         this.modpack = modpack;
         this.setTreeIgnorePattern = setTreeIgnorePattern;
         this.shouldSave = setSaveCallback;
@@ -20,7 +20,7 @@ public class FileEntryPaneContext {
         return this.modpack;
     }
 
-    public void invokeSetTreeIgnorePattern(FileIgnoreRules ignore) {
+    public void invokeSetTreeIgnorePattern(GitIgnoreRules ignore) {
         setTreeIgnorePattern.accept(ignore);
     }
 

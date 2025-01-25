@@ -1,12 +1,12 @@
 package com.lx862.pwgui.gui.dialog;
 
 import com.lx862.pwgui.core.Modpack;
-import com.lx862.pwgui.gui.base.kui.KButton;
+import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.util.GUIHelper;
 import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.Main;
 import com.lx862.pwgui.data.IconNamePair;
-import com.lx862.pwgui.gui.base.kui.KFileChooser;
+import com.lx862.pwgui.gui.components.kui.KFileChooser;
 import com.lx862.pwgui.executable.ProgramExecution;
 import com.lx862.pwgui.util.Util;
 
@@ -24,30 +24,31 @@ public class ExportModpackDialog extends JDialog {
 
     public ExportModpackDialog(JFrame parentFrame, Modpack modpack) {
         super(parentFrame, Util.withTitlePrefix("Export Modpack"), true);
+
         setSize(380, 300);
         setLocationRelativeTo(parentFrame);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        JPanel rootPanel = new JPanel(new BorderLayout());
+        rootPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
         JLabel titleLabel = new JLabel("Export Modpack");
         titleLabel.setFont(UIManager.getFont("h2.font"));
-        panel.add(titleLabel, BorderLayout.NORTH);
+        rootPanel.add(titleLabel, BorderLayout.NORTH);
 
-        JTabbedPane tab = new JTabbedPane();
-        tab.setBorder(new EmptyBorder(10, 0, 10, 0));
-        tab.addTab(IconNamePair.MODRINTH.name, new ImageIcon(GUIHelper.resizeImage(IconNamePair.MODRINTH.image, 20)), new ModrinthExportPanel());
-        tab.addTab(IconNamePair.CURSEFORGE.name, new ImageIcon(GUIHelper.resizeImage(IconNamePair.CURSEFORGE.image, 20)), new CurseforgeExportPanel(this::setExportButtonState));
+        JTabbedPane formatTabPane = new JTabbedPane();
+        formatTabPane.setBorder(new EmptyBorder(10, 0, 10, 0));
+        formatTabPane.addTab(IconNamePair.MODRINTH.name, new ImageIcon(GUIHelper.resizeImage(IconNamePair.MODRINTH.image, 20)), new ModrinthExportPanel());
+        formatTabPane.addTab(IconNamePair.CURSEFORGE.name, new ImageIcon(GUIHelper.resizeImage(IconNamePair.CURSEFORGE.image, 20)), new CurseforgeExportPanel(this::setExportButtonState));
 
-        tab.addChangeListener(changeEvent -> {
-            ExportPanel selectedTab = (ExportPanel)tab.getComponentAt(tab.getSelectedIndex());
-            setExportButtonState(selectedTab.exportable());
+        formatTabPane.addChangeListener(changeEvent -> {
+            ExportPanel selectedTab = (ExportPanel)formatTabPane.getComponentAt(formatTabPane.getSelectedIndex());
+            setExportButtonState(selectedTab.canExport());
         });
 
         exportButton = new KButton("Export!");
         exportButton.addActionListener(actionEvent -> {
-            ExportPanel selectedTab = (ExportPanel)tab.getComponentAt(tab.getSelectedIndex());
+            ExportPanel selectedTab = (ExportPanel)formatTabPane.getComponentAt(formatTabPane.getSelectedIndex());
 
             KFileChooser fileChooser = new KFileChooser();
             fileChooser.setFileFilter(new FileNameExtensionFilter("Modpack file", selectedTab.getExtension().substring(1)));
@@ -67,10 +68,10 @@ public class ExportModpackDialog extends JDialog {
         JPanel actionRow = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         actionRow.add(exportButton);
 
-        panel.add(actionRow, BorderLayout.SOUTH);
+        rootPanel.add(actionRow, BorderLayout.SOUTH);
 
-        panel.add(tab);
-        add(panel);
+        rootPanel.add(formatTabPane);
+        add(rootPanel);
     }
 
     private void exportModpack(JFrame parentFrame, List<String> args, File destination) {
@@ -123,7 +124,7 @@ class ModrinthExportPanel extends ExportPanel {
     }
 
     @Override
-    public boolean exportable() {
+    public boolean canExport() {
         return true;
     }
 
@@ -141,39 +142,39 @@ class CurseforgeExportPanel extends ExportPanel {
     public CurseforgeExportPanel(Consumer<Boolean> setExportButtonState) {
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         this.setExportButtonState = setExportButtonState;
+
         JLabel formatLabel = new JLabel("<html>Format: <b>" + getExtension() + "</b></html>");
         formatLabel.setBorder(new EmptyBorder(4, 0, 4, 0));
         formatLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         add(formatLabel);
 
-        JLabel sideLabel = new JLabel("Sides:");
-        sideLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        JPanel sidesPanel = new JPanel();
+        sidesPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        sidesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        JPanel sidePanel = new JPanel();
-        sidePanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        sidePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        JLabel sidesLabel = new JLabel("Sides:");
+        sidesLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        sidesPanel.add(sidesLabel);
 
         exportClientCheckBox = new JCheckBox("Client");
         exportClientCheckBox.addActionListener(actionEvent -> updateExportButtonState());
         exportClientCheckBox.setSelected(true);
+        sidesPanel.add(exportClientCheckBox);
 
         exportServerCheckBox = new JCheckBox("Server");
         exportServerCheckBox.addActionListener(actionEvent -> updateExportButtonState());
         exportServerCheckBox.setSelected(false);
+        sidesPanel.add(exportServerCheckBox);
 
-        sidePanel.add(sideLabel);
-        sidePanel.add(exportClientCheckBox);
-        sidePanel.add(exportServerCheckBox);
-
-        add(sidePanel);
+        add(sidesPanel);
     }
 
     private void updateExportButtonState() {
-        setExportButtonState.accept(exportable());
+        setExportButtonState.accept(canExport());
     }
 
     @Override
-    public boolean exportable() {
+    public boolean canExport() {
         return exportClientCheckBox.isSelected() || exportServerCheckBox.isSelected();
     }
 
@@ -200,7 +201,7 @@ class CurseforgeExportPanel extends ExportPanel {
 }
 
 abstract class ExportPanel extends JPanel {
-    public abstract boolean exportable();
+    public abstract boolean canExport();
     public abstract String getExtension();
     public abstract List<String> getArguments();
 }

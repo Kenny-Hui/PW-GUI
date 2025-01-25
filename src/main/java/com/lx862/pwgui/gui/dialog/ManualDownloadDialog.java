@@ -1,11 +1,11 @@
 package com.lx862.pwgui.gui.dialog;
 
 import com.lx862.pwgui.Main;
-import com.lx862.pwgui.data.ManualModEntry;
+import com.lx862.pwgui.gui.components.ManualModEntryPanel;
 import com.lx862.pwgui.data.ManualModInfo;
-import com.lx862.pwgui.gui.base.fstree.FileSystemWatcher;
-import com.lx862.pwgui.gui.base.kui.KButton;
-import com.lx862.pwgui.gui.base.kui.KGridBagLayoutPanel;
+import com.lx862.pwgui.gui.components.fstree.FileSystemWatcher;
+import com.lx862.pwgui.gui.components.kui.KButton;
+import com.lx862.pwgui.gui.components.kui.KGridBagLayoutPanel;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
@@ -80,11 +80,11 @@ public class ManualDownloadDialog extends JDialog {
         JPanel actionRowPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         actionRowPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         this.okButton = new KButton("OK");
+        this.okButton.setMnemonic(KeyEvent.VK_O);
         this.okButton.addActionListener(actionEvent -> {
             dispose();
             finishCallback.accept(watchingPath);
         });
-        this.okButton.setMnemonic(KeyEvent.VK_O);
         actionRowPanel.add(this.okButton);
 
         KButton cancelButton = new KButton("Cancel");
@@ -97,7 +97,7 @@ public class ManualDownloadDialog extends JDialog {
         rootPanel.add(actionRowPanel);
         add(rootPanel);
 
-        startWatchDirectory(getDefaultDownloadFolder());
+        startWatchDirectory(getDefaultDownloadDirectory());
     }
 
     private void startWatchDirectory(Path path) {
@@ -125,13 +125,13 @@ public class ManualDownloadDialog extends JDialog {
         for(ManualModInfo manualModInfo : this.modList) {
             boolean modExists = this.watchingPath.resolve(manualModInfo.fileName).toFile().exists();
             if(!modExists) allModFound = false;
-            this.modListPanel.add(new ManualModEntry(manualModInfo, modExists));
+            this.modListPanel.add(new ManualModEntryPanel(manualModInfo, modExists));
         }
         this.okButton.setEnabled(allModFound);
         this.modListPanel.updateUI();
     }
 
-    private Path getDefaultDownloadFolder() {
+    private static Path getDefaultDownloadDirectory() {
         return Paths.get(System.getProperty("user.home")).resolve("Downloads");
     }
 

@@ -3,7 +3,7 @@ package com.lx862.pwgui.gui.panel.editing.filetype;
 import com.lx862.pwgui.Main;
 import com.lx862.pwgui.core.PackIndexFile;
 import com.lx862.pwgui.data.fileentry.GenericFileEntry;
-import com.lx862.pwgui.gui.base.kui.KButton;
+import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
@@ -14,7 +14,7 @@ import java.nio.file.Files;
 import java.text.DecimalFormat;
 
 public class FilePanel extends FileTypePanel {
-    private static final DecimalFormat sizeFormat = new DecimalFormat("####.#");
+    private static final DecimalFormat SIZE_FORMAT = new DecimalFormat("####.#");
     private final PackIndexFile indexFile;
     private final PackIndexFile.FileEntry indexEntry;
     private JCheckBox preserveCheckBox;
@@ -42,6 +42,7 @@ public class FilePanel extends FileTypePanel {
             add(hashLabel);
 
             initialPreserve = indexEntry.preserve;
+
             preserveCheckBox = new JCheckBox("Preserve changes made by player");
             preserveCheckBox.addActionListener(e -> updateSaveState());
             preserveCheckBox.setSelected(indexEntry.preserve);
@@ -57,6 +58,7 @@ public class FilePanel extends FileTypePanel {
         openFileButton.addActionListener(actionEvent -> {
             Util.tryOpenFile(fileEntry.path.toFile());
         });
+
         actionButtons.add(openFileButton);
 
         KButton removeFileButton = new KButton("Remove file");
@@ -112,11 +114,11 @@ public class FilePanel extends FileTypePanel {
         if(bytes < 1024) return bytes + " B";
 
         double kib = bytes / 1024.0;
-        if(kib < 1024) return sizeFormat.format(kib) + " KiB";
+        if(kib < 1024) return SIZE_FORMAT.format(kib) + " KiB";
         double mib = kib / 1024.0;
-        if(mib < 1024) return sizeFormat.format(mib) + " MiB";
+        if(mib < 1024) return SIZE_FORMAT.format(mib) + " MiB";
 
         double gib = mib / 1024.0;
-        return sizeFormat.format(gib) + "GiB";
+        return SIZE_FORMAT.format(gib) + "GiB";
     }
 }

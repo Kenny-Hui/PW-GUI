@@ -2,7 +2,7 @@ package com.lx862.pwgui.data;
 
 import java.util.function.Supplier;
 
-/* Represents a cached object. The supplier is executed when the content need to be obtained the first time. After that it's stored to memory for quicker retrieval*/
+/** Represents a cached object. The supplier is executed when the content need to be obtained the first time. After that it's stored to memory for quicker retrieval */
 public class Cache<T> {
     private final Supplier<T> supplier;
     private T value;

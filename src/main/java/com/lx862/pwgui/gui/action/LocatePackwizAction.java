@@ -1,8 +1,8 @@
 package com.lx862.pwgui.gui.action;
 
 import com.lx862.pwgui.Main;
-import com.lx862.pwgui.gui.WelcomeFrame;
-import com.lx862.pwgui.gui.base.kui.KFileChooser;
+import com.lx862.pwgui.gui.frame.WelcomeFrame;
+import com.lx862.pwgui.gui.components.kui.KFileChooser;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
@@ -16,7 +16,7 @@ public class LocatePackwizAction extends AbstractAction {
     private final JFrame parent;
 
     public LocatePackwizAction(JFrame parent) {
-        super("Locate packwiz");
+        super("Locate packwiz...");
         this.parent = parent;
         putValue(MNEMONIC_KEY, KeyEvent.VK_L);
     }
@@ -36,14 +36,14 @@ public class LocatePackwizAction extends AbstractAction {
             }
         });
 
-        if(fileChooser.openOpenDialog(parent, false) == JFileChooser.APPROVE_OPTION) {
+        if(fileChooser.showOpenDialog(parent) == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
             if(!selectedFile.canExecute()) {
                 JOptionPane.showMessageDialog(parent, "The selected file is not executable!\nConsider adding the executable (x) permission to the file.", Util.withTitlePrefix("File non-excutable"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            Main.config.packwizExecutablePath = selectedFile.toPath();
+            Main.config.setPackwizExecutablePath(selectedFile.toPath());
             Main.packwiz.locate(null);
             if(!Main.packwiz.usable()) {
                 JOptionPane.showMessageDialog(parent, "The selected executable is not valid!\nAre you sure you can run the executable?", Util.withTitlePrefix("Invalid executable"), JOptionPane.ERROR_MESSAGE);

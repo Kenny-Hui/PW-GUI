@@ -6,19 +6,24 @@ import java.util.function.Consumer;
 
 /* The main logger used for this program */
 public class Logger {
-    private Consumer<String> logListener;
+    private final List<Consumer<String>> logListeners;
     public final List<String> lines;
 
     public Logger() {
         this.lines = new ArrayList<>();
+        this.logListeners = new ArrayList<>();
     }
 
-    public void listen(Consumer<String> logListener) {
-        this.logListener = logListener;
+    public void addListener(Consumer<String> logListener) {
+        this.logListeners.add(logListener);
 
         for(String line : lines) {
             logListener.accept(line);
         }
+    }
+
+    public void removeListener(Consumer<String> logListener) {
+        this.logListeners.remove(logListener);
     }
 
     public void error(String str) {
@@ -41,6 +46,8 @@ public class Logger {
         String finalMessage = prefix + " " + str;
         lines.add(finalMessage);
         System.out.println(finalMessage);
-        if(this.logListener != null) this.logListener.accept(finalMessage);
+        for(Consumer<String> logListener : logListeners) {
+            logListener.accept(finalMessage);
+        }
     }
 }

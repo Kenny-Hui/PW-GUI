@@ -1,6 +1,5 @@
 package com.lx862.pwgui.executable;
 
-import com.lx862.pwgui.util.Util;
 import com.lx862.pwgui.Main;
 
 import java.io.BufferedReader;

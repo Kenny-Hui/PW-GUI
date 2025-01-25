@@ -13,6 +13,7 @@ public class BatchedProgramExecution {
         this.programExecutions = new ArrayList<>();
     }
 
+    /** Add another program to queued for execution */
     public void add(ProgramExecution exec) {
         this.programExecutions.add(exec);
     }

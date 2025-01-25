@@ -9,6 +9,8 @@ import com.lx862.pwgui.gui.dialog.ManualDownloadDialog;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,6 +36,12 @@ public class Util {
 
     public static InputStream getAssets(String path) {
         return Main.class.getResourceAsStream(path);
+    }
+
+    public static void copyToClipboard(String str) {
+        StringSelection stringSelection = new StringSelection(str);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(stringSelection, null);
     }
 
     public static void tryOpenFile(File file) {
@@ -102,6 +110,12 @@ public class Util {
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(parent, String.format("An error occured while moving manually downloaded files:\n%s\nPlease move %s manually to %s", e.getMessage(), modInfo.fileName, cacheDirectory), Util.withTitlePrefix("Failed to handle manually installed mods"), JOptionPane.ERROR_MESSAGE);
             }
+        }
+    }
+
+    public static void copyAssetsToPath(String assetsPath, String outputName, Path path) throws IOException {
+        try(InputStream is = getAssets(assetsPath)) {
+            Files.copy(is, path.resolve(outputName), StandardCopyOption.REPLACE_EXISTING);
         }
     }
 }

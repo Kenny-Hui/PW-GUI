@@ -1,9 +1,9 @@
 package com.lx862.pwgui.gui.panel;
 
-import com.lx862.pwgui.gui.base.DocumentChangedListener;
-import com.lx862.pwgui.gui.base.kui.KGridBagLayoutPanel;
+import com.lx862.pwgui.gui.components.DocumentChangedListener;
+import com.lx862.pwgui.gui.components.kui.KGridBagLayoutPanel;
 import com.lx862.pwgui.core.PackFile;
-import com.lx862.pwgui.gui.base.kui.KTextField;
+import com.lx862.pwgui.gui.components.kui.KTextField;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,9 +15,9 @@ public class ModpackInfoPanel extends KGridBagLayoutPanel {
     private final KTextField authorTextField;
     private final KTextField versionTextField;
 
-    private String initialName;
-    private String initialAuthor;
-    private String initialVersion;
+    private final String initialName;
+    private final String initialAuthor;
+    private final String initialVersion;
 
     public ModpackInfoPanel(PackFile existingFile, Runnable updateSaveState) {
         super(3, 2);

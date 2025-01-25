@@ -6,5 +6,5 @@ public final class Constants {
     public static final String REASON_TRIGGERED_BY_USER = "Requested by user";
 
     public static final String LINK_GITHUB = "https://github.com/Kenny-Hui/PW-GUI";
-    public static final String LINK_DC = "https://discord.gg/jzbhWEBFPx";
+    public static final String LINK_DISCORD = "https://discord.gg/jzbhWEBFPx";
 }

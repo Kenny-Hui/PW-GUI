@@ -3,8 +3,8 @@ package com.lx862.pwgui.gui.popup;
 import com.lx862.pwgui.Main;
 import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.executable.ProgramExecution;
-import com.lx862.pwgui.gui.base.kui.KButton;
-import com.lx862.pwgui.gui.base.kui.KFileChooser;
+import com.lx862.pwgui.gui.components.kui.KButton;
+import com.lx862.pwgui.gui.components.kui.KFileChooser;
 import com.lx862.pwgui.gui.dialog.ExecutableProgressDialog;
 import com.lx862.pwgui.util.Util;
 
@@ -21,18 +21,17 @@ public class ImportModpackDialog extends JDialog {
 
         setSize(300, 400);
         setLocationRelativeTo(parentFrame);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        add(new ImportModpackPanel(false, (path) -> {
+        ImportModpackPanel importModpackPanel = new ImportModpackPanel(false, (path) -> {
             JOptionPane.showMessageDialog(this, "Modpack imported successfully!", Util.withTitlePrefix("Modpack imported"), JOptionPane.INFORMATION_MESSAGE);
-        }));
+        });
+
+        add(importModpackPanel);
     }
 
     public static class ImportModpackPanel extends JPanel {
-        private final Consumer<Path> importCallback;
-
         public ImportModpackPanel(boolean isCreate, Consumer<Path> importCallback) {
-            this.importCallback = importCallback;
-
             setBorder(new EmptyBorder(10, 10, 10, 10));
             setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
@@ -66,12 +65,12 @@ public class ImportModpackDialog extends JDialog {
             add(description);
 
             KButton importButton = new KButton("Import...");
-            importButton.addActionListener(actionEvent -> importModpack(isCreate));
+            importButton.addActionListener(actionEvent -> importModpack(importCallback, isCreate));
             importButton.setAlignmentX(CENTER_ALIGNMENT);
             add(importButton);
         }
 
-        private void importModpack(boolean isCreate) {
+        private void importModpack(Consumer<Path> importCallback, boolean isCreate) {
             KFileChooser cfModpackFileChooser = new KFileChooser();
             cfModpackFileChooser.setFileFilter(new FileFilter() {
                 @Override
@@ -94,9 +93,9 @@ public class ImportModpackDialog extends JDialog {
 
                     KFileChooser modpackFileChooser = new KFileChooser();
                     modpackFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                    if(modpackFileChooser.openOpenDialog(this, true) == JFileChooser.APPROVE_OPTION) {
+                    if(modpackFileChooser.openSaveDirectoryDialog(this) == JFileChooser.APPROVE_OPTION) {
                         File destinationPath = modpackFileChooser.getSelectedFile();
-                        Main.packwiz.changeWorkingDirectory(destinationPath.toPath()); // Change directory to new folder
+                        Main.packwiz.changeWorkingDirectory(destinationPath.toPath());
 
                         runImportCommand(file, () -> {
                             importCallback.accept(destinationPath.toPath().resolve("pack.toml"));

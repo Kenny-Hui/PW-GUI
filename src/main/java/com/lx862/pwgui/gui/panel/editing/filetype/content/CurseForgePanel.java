@@ -2,15 +2,15 @@ package com.lx862.pwgui.gui.panel.editing.filetype.content;
 
 import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.Main;
-import com.lx862.pwgui.gui.base.DocumentChangedListener;
+import com.lx862.pwgui.gui.components.DocumentChangedListener;
 import com.lx862.pwgui.data.ManualModInfo;
-import com.lx862.pwgui.data.fileentry.ContentManagementFolderFileEntry;
+import com.lx862.pwgui.data.fileentry.ContentDirectoryEntry;
 import com.lx862.pwgui.executable.ProgramExecution;
-import com.lx862.pwgui.gui.base.kui.KButton;
-import com.lx862.pwgui.gui.base.kui.KGridBagLayoutPanel;
-import com.lx862.pwgui.gui.base.kui.KTextField;
+import com.lx862.pwgui.gui.components.kui.KButton;
+import com.lx862.pwgui.gui.components.kui.KGridBagLayoutPanel;
+import com.lx862.pwgui.gui.components.kui.KTextField;
 import com.lx862.pwgui.gui.dialog.ExecutableProgressDialog;
-import com.lx862.pwgui.gui.dialog.ModSelectionDialog;
+import com.lx862.pwgui.gui.dialog.NumericSelectionDialog;
 import com.lx862.pwgui.gui.panel.editing.filetype.FileEntryPaneContext;
 import com.lx862.pwgui.util.Util;
 
@@ -24,10 +24,11 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 public class CurseForgePanel extends JPanel {
-    public CurseForgePanel(FileEntryPaneContext context, ContentManagementFolderFileEntry fileEntry) {
+    public CurseForgePanel(FileEntryPaneContext context, ContentDirectoryEntry fileEntry) {
         setLayout(new BorderLayout());
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+
+        JPanel rootPanel = new JPanel();
+        rootPanel.setLayout(new BoxLayout(rootPanel, BoxLayout.PAGE_AXIS));
 
         KGridBagLayoutPanel formPanel = new KGridBagLayoutPanel(3, 2);
         formPanel.setAlignmentX(LEFT_ALIGNMENT);
@@ -71,7 +72,7 @@ public class CurseForgePanel extends JPanel {
 
                 if(line.startsWith("Choose a number:")) {
                     recordOutput.set(false);
-                    new ModSelectionDialog(dialog, "Select mod", recordedOutputs, (selectIdx) -> {
+                    new NumericSelectionDialog(dialog, "Select mod", recordedOutputs, (selectIdx) -> {
                        if(selectIdx == -1) {
                            programExecution.enterInput("0");
                        } else {
@@ -113,8 +114,8 @@ public class CurseForgePanel extends JPanel {
             dialog.setVisible(true);
         });
 
-        panel.add(formPanel);
-        add(panel, BorderLayout.CENTER);
+        rootPanel.add(formPanel);
+        add(rootPanel, BorderLayout.CENTER);
     }
 
     private void updateAddProjectButtonState(JButton addButton, KTextField urlTextField) {

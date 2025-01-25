@@ -4,9 +4,6 @@ import com.lx862.pwgui.Main;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
 import java.io.BufferedInputStream;
 import java.io.FileOutputStream;
 import java.net.URL;
@@ -15,11 +12,9 @@ import java.nio.file.Path;
 import java.util.List;
 
 public class DownloadProgressDialog extends ProgressDialog {
-    private final URL url;
 
     public DownloadProgressDialog(JFrame frame, String title, String itemName, URL url, Path destination, Runnable callback) {
         super(frame, title);
-        this.url = url;
         Main.LOGGER.info(String.format("Downloading %s from %s", itemName, url));
         setStatus(String.format("Downloading %s...", itemName));
 
@@ -63,9 +58,7 @@ public class DownloadProgressDialog extends ProgressDialog {
                     String[] options = new String[]{"Copy URL", "OK"};
                     int result = JOptionPane.showOptionDialog(DownloadProgressDialog.this, String.format("An error occured while downloading %s:\n%s", itemName, e.getMessage()), Util.withTitlePrefix("Download failed"), JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[1]);
                     if(result == 0) {
-                        StringSelection stringSelection = new StringSelection(url.toString());
-                        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-                        clipboard.setContents(stringSelection, null);
+                        Util.copyToClipboard(url.toString());
                     }
                 }
 

@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class Config extends TomlFile {
     public static final Path CONFIG_DIR_PATH = GoUtil.userConfigDir().resolve("pwgui");
-    public Path packwizExecutablePath;
+    private Path packwizExecutablePath;
 
     public Config() {
         this(new Toml().read(CONFIG_DIR_PATH.resolve("config.toml").toFile()));
@@ -20,6 +20,14 @@ public class Config extends TomlFile {
     public Config(Toml toml) {
         super(CONFIG_DIR_PATH.resolve("config.toml"), toml);
         this.packwizExecutablePath = toml.contains("executables.packwiz") ? Paths.get(toml.getString("executables.packwiz")) : null;
+    }
+
+    public Path getPackwizExecutablePath() {
+        return this.packwizExecutablePath;
+    }
+
+    public void setPackwizExecutablePath(Path newPath) {
+        this.packwizExecutablePath = newPath;
     }
 
     @Override

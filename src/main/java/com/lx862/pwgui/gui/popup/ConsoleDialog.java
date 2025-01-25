@@ -4,34 +4,35 @@ import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.Main;
 import com.lx862.pwgui.executable.Executable;
 import com.lx862.pwgui.executable.ProgramExecution;
-import com.lx862.pwgui.gui.base.kui.KButton;
-import com.lx862.pwgui.gui.base.kui.KGridBagLayoutPanel;
-import com.lx862.pwgui.gui.base.kui.KTextField;
+import com.lx862.pwgui.gui.components.kui.KButton;
+import com.lx862.pwgui.gui.components.kui.KGridBagLayoutPanel;
+import com.lx862.pwgui.gui.components.kui.KTextField;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
 public class ConsoleDialog extends JDialog {
-    private final List<String> commandHistory;
+    private final List<String> commandHistory; // TODO: Up/Down arrow for command history
     private final Executable executable;
     private final JTextArea logTextArea;
     private ProgramExecution currentExecution;
 
     public ConsoleDialog(Executable executable, JFrame frame) {
         super(frame, Util.withTitlePrefix(String.format("%s Console", executable.getProgramName())));
-        this.commandHistory = new ArrayList<>();
-        this.executable = executable;
 
         setSize(600, 450);
         setLocationRelativeTo(frame);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        this.commandHistory = new ArrayList<>();
+        this.executable = executable;
 
         JLabel description = new JLabel(String.format("Here you can directly run %s commands.", executable.getProgramName()));
-        add(description);
+        add(description, BorderLayout.NORTH);
 
         logTextArea = new JTextArea();
         logTextArea.setEditable(false);
@@ -51,15 +52,6 @@ public class ConsoleDialog extends JDialog {
         });
 
         inputArea.addRow(1, 1, new JLabel(executable.getProgramName()), inputField, sendButton);
-
-        JPanel actionButtons = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-
-        KButton closeButton = new KButton("Close");
-        closeButton.setMnemonic(KeyEvent.VK_S);
-        closeButton.addActionListener(actionEvent -> {
-            dispose();
-        });
-        actionButtons.add(closeButton);
 
         add(inputArea, BorderLayout.PAGE_END);
         executeCommand("", true);
@@ -96,7 +88,6 @@ public class ConsoleDialog extends JDialog {
                 }
                 currentExecution = null;
             });
-//            programExecution.useRuntime();
             programExecution.execute(helpMessage ? "Display help message" : Constants.REASON_TRIGGERED_BY_USER);
         }
     }

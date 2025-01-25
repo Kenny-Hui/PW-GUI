@@ -1,7 +1,7 @@
 package com.lx862.pwgui.gui.panel.editing.filetype;
 
 import com.lx862.pwgui.data.fileentry.GenericFileEntry;
-import com.lx862.pwgui.gui.base.DocumentChangedListener;
+import com.lx862.pwgui.gui.components.DocumentChangedListener;
 import com.lx862.pwgui.util.Util;
 import com.lx862.pwgui.data.fileentry.PlainTextFileEntry;
 

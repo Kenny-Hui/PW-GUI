@@ -6,15 +6,16 @@ import com.lx862.pwgui.core.Config;
 import com.lx862.pwgui.core.Modpack;
 import com.lx862.pwgui.executable.GitExecutable;
 import com.lx862.pwgui.executable.PackwizExecutable;
-import com.lx862.pwgui.gui.EditFrame;
-import com.lx862.pwgui.gui.SetupFrame;
-import com.lx862.pwgui.gui.WelcomeFrame;
+import com.lx862.pwgui.gui.frame.EditFrame;
+import com.lx862.pwgui.gui.frame.SetupFrame;
+import com.lx862.pwgui.gui.frame.WelcomeFrame;
 import com.lx862.pwgui.core.Logger;
 import com.moandjiezana.toml.Toml;
 import org.apache.commons.cli.*;
 
 import javax.swing.*;
 import java.io.File;
+import java.io.FileNotFoundException;
 
 public class Main {
     public static final Logger LOGGER = new Logger();
@@ -38,8 +39,10 @@ public class Main {
             try {
                 config = new Config();
             } catch (Exception e) {
-                e.printStackTrace();
-                Main.LOGGER.error("Failed to read config file!");
+                if(!(e.getCause() instanceof FileNotFoundException)) { // Missing file is expected on first launch, nothing notable that needs logging
+                    e.printStackTrace();
+                    Main.LOGGER.error("Failed to read config file!");
+                }
                 config = new Config(new Toml());
             }
 
@@ -63,7 +66,7 @@ public class Main {
                 });
             } else {
                 if(modpackPath != null) {
-                    LOGGER.info(String.format("Pack File is specified: %s", modpackPath));
+                    LOGGER.info(String.format("Pack File is specified at: %s", modpackPath));
 
                     Modpack modpack = new Modpack(new File(modpackPath).toPath());
 

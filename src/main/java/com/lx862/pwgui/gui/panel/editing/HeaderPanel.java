@@ -19,11 +19,12 @@ class HeaderPanel extends JPanel {
     public void initialize(PackFile packFile) {
         removeAll();
 
-        JPanel leftPanel = new JPanel();
-        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+
         JLabel modpackNameLabel = new JLabel(packFile.getName());
         modpackNameLabel.setFont(UIManager.getFont("h2.font"));
-        leftPanel.add(modpackNameLabel);
+        infoPanel.add(modpackNameLabel);
 
         JLabel modpackVersionAuthorLabel = new JLabel();
         if (!packFile.author.isEmpty()) {
@@ -31,21 +32,21 @@ class HeaderPanel extends JPanel {
         } else {
             modpackVersionAuthorLabel.setText(packFile.version);
         }
-        leftPanel.add(modpackVersionAuthorLabel);
+        infoPanel.add(modpackVersionAuthorLabel);
+        add(infoPanel);
 
-        add(leftPanel);
         add(Box.createHorizontalGlue());
 
-        JPanel rightPanel = new JPanel();
-        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+        JPanel componentsPanel = new JPanel();
+        componentsPanel.setLayout(new BoxLayout(componentsPanel, BoxLayout.Y_AXIS));
 
         for (PackComponentVersion packComponentVersion : packFile.getComponents()) {
-            final JLabel componentLabel = new JLabel(packComponentVersion.getComponent().iconName.name + " version: " + packComponentVersion.getVersion(), new ImageIcon(GUIHelper.resizeImage(packComponentVersion.getComponent().iconName.image, 20)), SwingConstants.LEFT);
+            JLabel componentLabel = new JLabel(packComponentVersion.getComponent().iconName.name + " version: " + packComponentVersion.getVersion(), new ImageIcon(GUIHelper.resizeImage(packComponentVersion.getComponent().iconName.image, 20)), SwingConstants.LEFT);
             componentLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
-            rightPanel.add(componentLabel);
+            componentsPanel.add(componentLabel);
         }
 
-        add(rightPanel);
+        add(componentsPanel);
         revalidate();
         repaint();
     }

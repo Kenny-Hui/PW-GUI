@@ -1,13 +1,11 @@
 package com.lx862.pwgui.gui.dialog;
 
-import com.lx862.pwgui.gui.base.kui.KButton;
+import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.io.File;
 
@@ -15,23 +13,23 @@ public class FileSavedDialog extends JDialog {
     public FileSavedDialog(JDialog parentDialog, String title, File file) {
         super(parentDialog, Util.withTitlePrefix(title), true);
 
-        JPanel panel = new JPanel();
-        panel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        JPanel rootPanel = new JPanel();
+        rootPanel.setLayout(new BoxLayout(rootPanel, BoxLayout.PAGE_AXIS));
+        rootPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
-        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
         JLabel titleLabel = new JLabel(title);
         titleLabel.setFont(UIManager.getFont("h3.font"));
         titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        panel.add(titleLabel);
+        rootPanel.add(titleLabel);
 
         JLabel descriptionLabel = new JLabel("Your file is saved under:");
         descriptionLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        panel.add(descriptionLabel);
+        rootPanel.add(descriptionLabel);
 
         JLabel pathLabel = new JLabel(file.toPath().toString());
         pathLabel.setFont(getFont().deriveFont(Font.BOLD));
         pathLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        panel.add(pathLabel);
+        rootPanel.add(pathLabel);
 
         JPanel actionRowPanel = new JPanel();
         actionRowPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -47,21 +45,19 @@ public class FileSavedDialog extends JDialog {
             actionRowPanel.add(openFileButton);
         }
 
-        KButton openFolderButton = new KButton("Open Folder");
-        openFolderButton.setMnemonic(KeyEvent.VK_F);
-        openFolderButton.addActionListener(actionEvent -> {
-            File fileOrFolder = file.isDirectory() ? file : file.getParentFile();
-            Util.tryOpenFile(fileOrFolder);
+        KButton openDirectoryButton = new KButton("Open Folder");
+        openDirectoryButton.setMnemonic(KeyEvent.VK_F);
+        openDirectoryButton.addActionListener(actionEvent -> {
+            File containingDirectory = file.isDirectory() ? file : file.getParentFile();
+            Util.tryOpenFile(containingDirectory);
             dispose();
         });
-        actionRowPanel.add(openFolderButton);
+        actionRowPanel.add(openDirectoryButton);
 
         KButton copyPathButton = new KButton("Copy Path");
         copyPathButton.setMnemonic(KeyEvent.VK_C);
         copyPathButton.addActionListener(actionEvent -> {
-            StringSelection stringSelection = new StringSelection(file.toPath().toString());
-            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-            clipboard.setContents(stringSelection, null);
+            Util.copyToClipboard(file.toPath().toString());
             dispose();
         });
         actionRowPanel.add(copyPathButton);
@@ -73,10 +69,10 @@ public class FileSavedDialog extends JDialog {
         });
         actionRowPanel.add(finishButton);
 
-        panel.add(actionRowPanel);
-        add(panel);
+        rootPanel.add(actionRowPanel);
+        add(rootPanel);
         pack();
-        finishButton.requestFocusInWindow(); // Default to focus on the finish button
         setLocationRelativeTo(parentDialog);
+        finishButton.requestFocusInWindow(); // Default to focus on the finish button
     }
 }

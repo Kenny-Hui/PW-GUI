@@ -86,10 +86,12 @@ public class ProgramExecution {
     }
 
     public void enterInput(String input) {
-        PrintWriter pw = new PrintWriter(process.getOutputStream());
-        pw.write(input + "\n");
-        pw.flush();
-        Main.LOGGER.info(String.format("Input %s to %s", input, programDisplayName));
+        if(this.process != null) {
+            PrintWriter pw = new PrintWriter(process.getOutputStream());
+            pw.write(input + "\n");
+            pw.flush();
+            Main.LOGGER.info(String.format("Input %s to %s", input, programDisplayName));
+        }
     }
 
     public void stop() {

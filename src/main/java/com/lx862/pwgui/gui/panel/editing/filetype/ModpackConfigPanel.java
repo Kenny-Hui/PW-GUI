@@ -6,11 +6,10 @@ import com.lx862.pwgui.gui.panel.ModpackExtraSettingPanel;
 import com.lx862.pwgui.gui.panel.ModpackInfoPanel;
 import com.lx862.pwgui.gui.panel.ModpackVersionPanel;
 import com.lx862.pwgui.data.fileentry.ModpackConfigFileEntry;
-import com.lx862.pwgui.gui.base.kui.KSeparator;
+import com.lx862.pwgui.gui.components.kui.KSeparator;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 

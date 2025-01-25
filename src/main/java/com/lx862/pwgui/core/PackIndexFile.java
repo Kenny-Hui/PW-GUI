@@ -1,16 +1,14 @@
 package com.lx862.pwgui.core;
 
 import com.moandjiezana.toml.Toml;
-import com.moandjiezana.toml.TomlWriter;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
 public class PackIndexFile extends TomlFile {
     private final List<FileEntry> fileEntries;
-    public final String hashFormat;
+    private final String hashFormat;
 
     public PackIndexFile(Path path) {
         this(path, new Toml().read(path.toFile()));
@@ -33,7 +31,6 @@ public class PackIndexFile extends TomlFile {
     public void write() throws IOException {
         Map<String, Object> map = toml.toMap();
         map.put("hash-format", this.hashFormat);
-
 
         List<Map<String, Object>> entries = new ArrayList<>();
         for(FileEntry entry : fileEntries) {

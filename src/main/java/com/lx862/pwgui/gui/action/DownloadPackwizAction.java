@@ -2,7 +2,7 @@ package com.lx862.pwgui.gui.action;
 
 import com.lx862.pwgui.Main;
 import com.lx862.pwgui.core.Config;
-import com.lx862.pwgui.gui.WelcomeFrame;
+import com.lx862.pwgui.gui.frame.WelcomeFrame;
 import com.lx862.pwgui.gui.dialog.DownloadProgressDialog;
 import com.lx862.pwgui.util.Util;
 
@@ -37,7 +37,7 @@ public class DownloadPackwizAction extends AbstractAction {
         try {
             tempDirectory = Files.createTempDirectory("pwgui");
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(parent, "Failed to create temporary directory!", Util.withTitlePrefix("Download failed"), JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(parent, "Failed to create temp folder!", Util.withTitlePrefix("Download failed"), JOptionPane.INFORMATION_MESSAGE);
             return;
         }
 
@@ -117,7 +117,7 @@ public class DownloadPackwizAction extends AbstractAction {
     }
 
     private boolean configurePackwiz(Path path) {
-        Main.config.packwizExecutablePath = path;
+        Main.config.setPackwizExecutablePath(path);
 
         try {
             try { // We want executable permission on *nix

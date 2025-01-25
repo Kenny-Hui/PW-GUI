@@ -1,7 +1,6 @@
 package com.lx862.pwgui.util;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
@@ -23,7 +22,8 @@ public class GUIHelper {
         return img.getScaledInstance((int)(imgWidth * minRatio), (int)(imgHeight * minRatio), Image.SCALE_SMOOTH);
     }
 
-    public static Image fadeImage(Image image, float opacity) {
+    /* Returns a new image with the specified opacity */
+    public static Image imageOpacity(Image image, float opacity) {
         BufferedImage newImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = (Graphics2D)newImage.getGraphics();
         g2d.setComposite(AlphaComposite.SrcOver.derive(opacity));
@@ -38,10 +38,6 @@ public class GUIHelper {
             return resizeImage(img, size);
         }
         return null;
-    }
-
-    public static JFrame getRootFrame(Component component) {
-        return (JFrame) SwingUtilities.getWindowAncestor(component);
     }
 
     public static Image convertImage(InputStream is) {

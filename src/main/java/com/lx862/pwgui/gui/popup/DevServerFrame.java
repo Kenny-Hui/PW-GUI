@@ -1,6 +1,6 @@
 package com.lx862.pwgui.gui.popup;
 
-import com.lx862.pwgui.gui.base.kui.KButton;
+import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.util.Util;
 import com.lx862.pwgui.Main;
 import com.lx862.pwgui.executable.ProgramExecution;
@@ -18,10 +18,12 @@ public class DevServerFrame extends JDialog {
 
     public DevServerFrame(JFrame frame) {
         super(frame, Util.withTitlePrefix("Packwiz Serve"));
-        this.serverExecutor = Executors.newSingleThreadExecutor();
 
         setSize(400, 400);
         setLocationRelativeTo(frame);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        this.serverExecutor = Executors.newSingleThreadExecutor();
 
         JLabel description = new JLabel("This runs a local HTTP server for development, allowing packwiz-installer to reference a local pack.");
         add(description);

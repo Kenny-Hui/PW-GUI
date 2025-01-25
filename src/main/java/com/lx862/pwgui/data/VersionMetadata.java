@@ -13,26 +13,26 @@ public class VersionMetadata {
     }
 
     public String getVersionName() {
-        return versionName;
+        return this.versionName;
     }
 
     /* Returns either the Minecraft version this version is designed for, or null if the version is agnostic to MC versions. */
     public String getMinecraftVersion() {
-        return minecraftVersion;
+        return this.minecraftVersion;
     }
 
     public State getState() {
-        return state;
+        return this.state;
+    }
+
+    @Override
+    public String toString() {
+        return this.versionName;
     }
 
     public enum State {
         RELEASE,
         BETA,
         ALPHA
-    }
-
-    @Override
-    public String toString() {
-        return versionName;
     }
 }

@@ -6,9 +6,10 @@ import com.lx862.pwgui.Main;
 import com.lx862.pwgui.data.PackComponent;
 import com.lx862.pwgui.data.VersionMetadata;
 import com.lx862.pwgui.executable.BatchedProgramExecution;
-import com.lx862.pwgui.gui.base.ToggleListSelectionModel;
-import com.lx862.pwgui.gui.base.kui.KButton;
-import com.lx862.pwgui.gui.base.kui.KListCellRenderer;
+import com.lx862.pwgui.gui.action.CloseWindowAction;
+import com.lx862.pwgui.gui.components.ToggleListSelectionModel;
+import com.lx862.pwgui.gui.components.kui.KButton;
+import com.lx862.pwgui.gui.components.kui.KListCellRenderer;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
@@ -22,14 +23,15 @@ import java.util.stream.Collectors;
 
 public class ChangeAcceptableGameVersionDialog extends JDialog {
     private final List<VersionMetadata> versions;
-    private final JCheckBox snapshotCheckBox;
 
     public ChangeAcceptableGameVersionDialog(JFrame parentFrame, String requiredVersion, List<String> preSelectedVersions) {
         super(parentFrame, Util.withTitlePrefix("Change Acceptable Version"), true);
-        this.versions = new ArrayList<>();
 
         setSize(420, 400);
         setLocationRelativeTo(parentFrame);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        this.versions = new ArrayList<>();
 
         JPanel rootPanel = new JPanel();
         rootPanel.setLayout(new BoxLayout(rootPanel, BoxLayout.PAGE_AXIS));
@@ -49,7 +51,7 @@ public class ChangeAcceptableGameVersionDialog extends JDialog {
         KButton okButton = new KButton("OK");
         okButton.setMnemonic(KeyEvent.VK_O);
 
-        snapshotCheckBox = new JCheckBox("Show Snapshot");
+        JCheckBox snapshotCheckBox = new JCheckBox("Show Snapshot");
 
         JList<String> versionList = new JList<>(new DefaultListModel<>());
         versionList.setCellRenderer(new KListCellRenderer());
@@ -67,12 +69,12 @@ public class ChangeAcceptableGameVersionDialog extends JDialog {
         Caches.getVersionMetadata(PackComponent.MINECRAFT, (versions) -> {
             this.versions.clear();
             this.versions.addAll(versions);
-            refreshVersionList(versionList, preSelectedVersions);
+            refreshVersionList(versionList, preSelectedVersions, snapshotCheckBox);
         });
 
 
         snapshotCheckBox.addActionListener(actionEvent -> {
-            refreshVersionList(versionList, versionList.getSelectedValuesList());
+            refreshVersionList(versionList, versionList.getSelectedValuesList(), snapshotCheckBox);
         });
         rootPanel.add(snapshotCheckBox);
         rootPanel.add(selectedVersionLabel);
@@ -93,14 +95,10 @@ public class ChangeAcceptableGameVersionDialog extends JDialog {
         });
         actionRowPanel.add(okButton);
 
-        KButton cancelButton = new KButton("Cancel");
-        cancelButton.setMnemonic(KeyEvent.VK_I);
-        cancelButton.addActionListener(actionEvent -> {
-            dispose();
-        });
+        KButton cancelButton = new KButton(new CloseWindowAction(this, true));
         actionRowPanel.add(cancelButton);
-
         rootPanel.add(actionRowPanel);
+
         add(rootPanel);
     }
 
@@ -128,7 +126,7 @@ public class ChangeAcceptableGameVersionDialog extends JDialog {
         batchedProgramExecution.run(Constants.REASON_TRIGGERED_BY_USER, callback);
     }
 
-    private void refreshVersionList(JList<String> jList, List<String> selected) {
+    private void refreshVersionList(JList<String> jList, List<String> selected, JCheckBox snapshotCheckBox) {
         if(!snapshotCheckBox.isSelected() && containsSnapshot(selected, versions)){
             snapshotCheckBox.setSelected(true);
         }

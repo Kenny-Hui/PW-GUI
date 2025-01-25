@@ -1,6 +1,6 @@
 package com.lx862.pwgui.gui.panel.editing.filetype;
 
-import com.lx862.pwgui.gui.base.kui.KImageDisplayPanel;
+import com.lx862.pwgui.gui.components.kui.KImageDisplayPanel;
 import com.lx862.pwgui.data.fileentry.GenericFileEntry;
 
 import javax.swing.*;

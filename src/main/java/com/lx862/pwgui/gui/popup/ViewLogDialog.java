@@ -1,7 +1,8 @@
 package com.lx862.pwgui.gui.popup;
 
-import com.lx862.pwgui.gui.base.kui.KButton;
-import com.lx862.pwgui.gui.base.kui.KFileChooser;
+import com.lx862.pwgui.gui.action.CloseWindowAction;
+import com.lx862.pwgui.gui.components.kui.KButton;
+import com.lx862.pwgui.gui.components.kui.KFileChooser;
 import com.lx862.pwgui.util.Util;
 import com.lx862.pwgui.Main;
 
@@ -11,26 +12,34 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.function.Consumer;
 
 public class ViewLogDialog extends JDialog {
+    private final Consumer<String> appendLogCallback;
+
     public ViewLogDialog(JFrame frame) {
         super(frame, Util.withTitlePrefix("View Program Log"));
+
         setSize(600, 400);
         setLocationRelativeTo(frame);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         JTextArea logTextArea = new JTextArea();
         logTextArea.setEditable(false);
-        JScrollPane scrollPane = new JScrollPane(logTextArea);
-        add(scrollPane);
+        JScrollPane logTextAreaScrollPane = new JScrollPane(logTextArea);
+        add(logTextAreaScrollPane);
 
-        Main.LOGGER.listen(line -> {
+        this.appendLogCallback = line -> {
             logTextArea.append(line + "\n");
-            scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
-        });
+            logTextAreaScrollPane.getVerticalScrollBar().setValue(logTextAreaScrollPane.getVerticalScrollBar().getMaximum()); // Jump to bottom
+        };
+
+        Main.LOGGER.addListener(appendLogCallback);
 
         JPanel actionRowPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
         KButton saveAsButton = new KButton("Save As...");
+        saveAsButton.setMnemonic(KeyEvent.VK_S);
         saveAsButton.addActionListener(actionEvent -> {
             KFileChooser fileChooser = new KFileChooser();
             if (fileChooser.openSaveAsDialog(this) == JFileChooser.APPROVE_OPTION) {
@@ -44,14 +53,17 @@ public class ViewLogDialog extends JDialog {
                 }
             }
         });
-        saveAsButton.setMnemonic(KeyEvent.VK_S);
         actionRowPanel.add(saveAsButton);
 
-        KButton closeButton = new KButton("Close");
-        closeButton.setMnemonic(KeyEvent.VK_C);
-        closeButton.addActionListener(actionEvent -> dispose());
+        KButton closeButton = new KButton(new CloseWindowAction(this, false));
         actionRowPanel.add(closeButton);
 
         add(actionRowPanel, BorderLayout.PAGE_END);
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        Main.LOGGER.removeListener(appendLogCallback);
     }
 }

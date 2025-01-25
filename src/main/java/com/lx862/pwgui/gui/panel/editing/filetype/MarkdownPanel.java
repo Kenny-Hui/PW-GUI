@@ -5,6 +5,7 @@ import com.lx862.pwgui.util.Util;
 import com.lx862.pwgui.data.fileentry.MarkdownFileEntry;
 
 import javax.swing.*;
+import javax.swing.event.HyperlinkEvent;
 
 public class MarkdownPanel extends FileTypePanel {
 
@@ -14,6 +15,11 @@ public class MarkdownPanel extends FileTypePanel {
 
         JEditorPane editorPane = new JEditorPane();
         editorPane.setEditable(false);
+        editorPane.addHyperlinkListener(e -> {
+            if (HyperlinkEvent.EventType.ACTIVATED.equals(e.getEventType())) {
+                Util.tryBrowse(e.getURL().toString());
+            }
+        });
 
         try {
             String content = fileEntry.getContent();

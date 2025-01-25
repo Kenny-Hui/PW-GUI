@@ -38,6 +38,8 @@ public class Main {
             try {
                 config = new Config();
             } catch (Exception e) {
+                e.printStackTrace();
+                Main.LOGGER.error("Failed to read config file!");
                 config = new Config(new Toml());
             }
 

@@ -45,10 +45,10 @@ public class WelcomeFrame extends BaseFrame {
         mainPanel.add(Box.createVerticalGlue());
         mainPanel.add(logoLabel);
 
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 8)));
         JLabel versionLabel = new JLabel(String.format("Version %s", Constants.VERSION));
         versionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(versionLabel);
+
         mainPanel.add(Box.createRigidArea(new Dimension(0, 16)));
 
         KButton openPackButton = new KButton("Open modpack...");
@@ -119,7 +119,7 @@ public class WelcomeFrame extends BaseFrame {
             dispose();
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, String.format("Failed to open modpack: %s", e.getMessage()), Util.withTitlePrefix("Open modpack"), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, String.format("Failed to open modpack:\n%s", e.getMessage()), Util.withTitlePrefix("Open modpack"), JOptionPane.ERROR_MESSAGE);
         }
     }
 

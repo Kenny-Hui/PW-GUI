@@ -19,7 +19,7 @@ public class Config extends TomlFile {
 
     public Config(Toml toml) {
         super(CONFIG_DIR_PATH.resolve("config.toml"), toml);
-        packwizExecutablePath = toml.contains("executables.packwiz") ? Paths.get(toml.getString("executables.packwiz")) : null;
+        this.packwizExecutablePath = toml.contains("executables.packwiz") ? Paths.get(toml.getString("executables.packwiz")) : null;
     }
 
     @Override
@@ -28,7 +28,9 @@ public class Config extends TomlFile {
         Map<String, Object> map = toml.toMap();
         Map<String, Object> executableMap = (Map<String, Object>) map.getOrDefault("executables", new HashMap<>());
         executableMap.put("packwiz", packwizExecutablePath.toString());
+
         map.put("executables", executableMap);
         writeToFilesystem(map);
     }
 }
+

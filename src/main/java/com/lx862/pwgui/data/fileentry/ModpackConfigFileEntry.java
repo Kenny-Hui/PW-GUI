@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-public class ModpackConfigFileEntry extends GenericFileEntry {
+public class ModpackConfigFileEntry extends PlainTextFileEntry {
     public PackFile packFile;
 
     public ModpackConfigFileEntry(File file) {

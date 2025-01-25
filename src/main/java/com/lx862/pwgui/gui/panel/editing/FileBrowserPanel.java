@@ -67,7 +67,7 @@ class FileBrowserPanel extends JPanel {
         } else if (file.isFile()) {
             return new GenericFileEntry(file);
         } else {
-            return new FileSystemEntityEntry(file); // Directory
+            return new DirectoryEntry(file);
         }
     }
 }

@@ -8,7 +8,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
-public class ContentDirectoryEntry extends FileSystemEntityEntry {
+public class ContentDirectoryEntry extends DirectoryEntry {
     private static final HashMap<String, String> directoryToNameMap = new HashMap<>();
 
     static {

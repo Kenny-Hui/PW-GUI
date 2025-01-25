@@ -70,27 +70,24 @@ public class EditPanel extends JPanel {
     private void startWatchFile(Modpack modpack, FileSystemTree watchTree) {
         this.fileWatcherThread = new Thread(() -> {
             FileSystemWatcher watcher = new FileSystemWatcher(modpack.getRootPath(), true, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
-            watcher.startWatching((watchKey -> {
-                for (WatchEvent<?> e : watchKey.pollEvents())
-                {
-                    Path directory = (Path)watchKey.watchable();
-                    WatchEvent.Kind<?> kind = e.kind();
-                    final Path filePath = directory.resolve(((WatchEvent<Path>)e).context());
+            watcher.startWatching((watchKey, e) -> {
+                Path directory = (Path)watchKey.watchable();
+                WatchEvent.Kind<?> kind = e.kind();
+                final Path filePath = directory.resolve(((WatchEvent<Path>)e).context());
 
-                    SwingUtilities.invokeLater(() -> {
-                        watchTree.onFileChange(kind, filePath);
+                SwingUtilities.invokeLater(() -> {
+                    watchTree.onFileChange(kind, filePath);
 
-                        if(kind == ENTRY_CREATE || kind == ENTRY_MODIFY) {
-                            if(filePath.equals(modpack.getPackFilePath())) {
-                                modpack.packFile.clearCache();
-                                headerBarPanel.initialize(modpack.packFile.get()); // Update header with new info
-                            } else if(filePath.equals(modpack.packFile.get().getIndexPath())) {
-                                modpack.packFile.get().packIndexFile.clearCache();
-                            }
+                    if(kind == ENTRY_CREATE || kind == ENTRY_MODIFY) {
+                        if(filePath.equals(modpack.getPackFilePath())) {
+                            modpack.packFile.clearCache();
+                            headerBarPanel.initialize(modpack.packFile.get()); // Update header with new info
+                        } else if(filePath.equals(modpack.packFile.get().getIndexPath())) {
+                            modpack.packFile.get().packIndexFile.clearCache();
                         }
-                    });
-                }
-            }));
+                    }
+                });
+            });
         });
         this.fileWatcherThread.start();
     }

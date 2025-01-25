@@ -108,8 +108,7 @@ public class ManualDownloadDialog extends JDialog {
         }
 
         this.fileWatcherThread = new Thread(() -> {
-            new FileSystemWatcher(path, false, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_DELETE).startWatching(wk -> {
-                wk.pollEvents();
+            new FileSystemWatcher(path, false, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_DELETE).startWatching((wk, e) -> {
                 SwingUtilities.invokeLater(this::refreshMissingModList);
             });
         });

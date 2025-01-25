@@ -3,7 +3,9 @@ package com.lx862.pwgui.gui.components.fstree;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
+
+import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 
 public class FileSystemWatcher {
     private final Path path;
@@ -17,7 +19,7 @@ public class FileSystemWatcher {
         this.watchKinds = watchKinds;
     }
 
-    public void startWatching(Consumer<WatchKey> callback) {
+    public void startWatching(BiConsumer<WatchKey, WatchEvent<?>> callback) {
         FileSystem fs = FileSystems.getDefault();
         try {
             this.ws = fs.newWatchService();
@@ -38,7 +40,23 @@ public class FileSystemWatcher {
 
             while(true) {
                 WatchKey wk = ws.take();
-                callback.accept(wk);
+                try {
+                    Thread.sleep(40); // A bit of a hack since some files may not have finished writing by other programs.
+                } catch (InterruptedException ignored) {}
+
+                for (WatchEvent<?> e : wk.pollEvents())
+                {
+                    Path directory = (Path)wk.watchable();
+                    WatchEvent.Kind<?> kind = e.kind();
+                    if(recursive && kind == ENTRY_CREATE) {
+                        final Path filePath = directory.resolve(((WatchEvent<Path>)e).context());
+                        if(Files.isDirectory(filePath)) {
+                            filePath.register(ws, watchKinds); // Watch for our new folder
+                        }
+                    }
+
+                    callback.accept(wk, e);
+                }
                 wk.reset();
             }
         } catch (IOException e) {

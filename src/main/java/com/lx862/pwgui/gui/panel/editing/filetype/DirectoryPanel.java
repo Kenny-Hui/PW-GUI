@@ -5,6 +5,7 @@ import com.lx862.pwgui.data.fileentry.DirectoryEntry;
 import com.lx862.pwgui.data.fileentry.GenericFileEntry;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.util.Util;
+import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -43,7 +44,7 @@ public class DirectoryPanel extends FileTypePanel {
 
             if(shouldDelete) {
                 try {
-                    Files.delete(fileEntry.path);
+                    FileUtils.deleteDirectory(fileEntry.path.toFile());
                     Main.LOGGER.info(String.format("Deleted folder %s", fileEntry.path));
                     Main.packwiz.buildCommand("refresh").execute("Folder deleted by user");
                 } catch (IOException e) {

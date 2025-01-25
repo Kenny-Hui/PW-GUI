@@ -56,6 +56,15 @@ public class Util {
     public static void tryBrowse(String uri) {
         try {
             Desktop.getDesktop().browse(new URI(uri));
+        } catch (UnsupportedOperationException e) {
+            // Linux fallback
+            try {
+                Process process = Runtime.getRuntime().exec(new String[]{"xdg-open", uri});
+                process.waitFor();
+            } catch (Exception ex) {
+                Main.LOGGER.exception(e);
+                JOptionPane.showMessageDialog(null, String.format("Failed to open link \"%s\" with xdg-open:\n%s", uri, e.getMessage()), withTitlePrefix("Open External Link"), JOptionPane.ERROR_MESSAGE);
+            }
         } catch (URISyntaxException | IOException e) {
             Main.LOGGER.exception(e);
             JOptionPane.showMessageDialog(null, String.format("Failed to open link \"%s\":\n%s", uri, e.getMessage()), withTitlePrefix("Open External Link"), JOptionPane.ERROR_MESSAGE);

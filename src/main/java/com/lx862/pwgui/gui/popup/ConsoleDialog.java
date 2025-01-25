@@ -10,6 +10,7 @@ import com.lx862.pwgui.gui.components.kui.KTextField;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,12 +32,15 @@ public class ConsoleDialog extends JDialog {
         this.commandHistory = new ArrayList<>();
         this.executable = executable;
 
+        JPanel rootPanel = new JPanel(new BorderLayout());
+        rootPanel.setBorder(new EmptyBorder(4, 10, 4, 10));
+
         JLabel description = new JLabel(String.format("Here you can directly run %s commands.", executable.getProgramName()));
-        add(description, BorderLayout.NORTH);
+        rootPanel.add(description, BorderLayout.NORTH);
 
         logTextArea = new JTextArea();
         logTextArea.setEditable(false);
-        add(new JScrollPane(logTextArea));
+        rootPanel.add(new JScrollPane(logTextArea));
 
         KGridBagLayoutPanel inputArea = new KGridBagLayoutPanel(4, 3);
         KTextField inputField = new KTextField("help");
@@ -53,8 +57,10 @@ public class ConsoleDialog extends JDialog {
 
         inputArea.addRow(1, 1, new JLabel(executable.getProgramName()), inputField, sendButton);
 
-        add(inputArea, BorderLayout.PAGE_END);
+        rootPanel.add(inputArea, BorderLayout.PAGE_END);
         executeCommand("", true);
+
+        add(rootPanel, BorderLayout.CENTER);
     }
 
     private void executeCommand(String args, boolean helpMessage) {

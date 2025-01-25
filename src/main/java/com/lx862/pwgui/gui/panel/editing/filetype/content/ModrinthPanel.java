@@ -55,11 +55,11 @@ public class ModrinthPanel extends JPanel {
             List<String> recordedOutputs = new ArrayList<>();
 
             AtomicReference<String> modName = new AtomicReference<>(null);
-            AtomicBoolean startRecordOutput = new AtomicBoolean();
+            AtomicBoolean recordOutput = new AtomicBoolean();
             programExecution.whenStdout((line) -> {
                 if(line.startsWith("Searching Modrinth...") || line.startsWith("Dependencies found:")) {
                     recordedOutputs.clear();
-                    startRecordOutput.set(true);
+                    recordOutput.set(true);
                     return;
                 }
 
@@ -68,7 +68,7 @@ public class ModrinthPanel extends JPanel {
                 }
 
                 if(line.startsWith("Choose a number:")) {
-                    startRecordOutput.set(false);
+                    recordOutput.set(false);
                     new NumericSelectionDialog(dialog, "Select mod", recordedOutputs, (selectIdx) -> {
                        if(selectIdx == -1) {
                            programExecution.enterInput("0");
@@ -96,7 +96,7 @@ public class ModrinthPanel extends JPanel {
                 }
 
                 // Record log
-                if(startRecordOutput.get()) {
+                if(recordOutput.get()) {
                     boolean isNumericChoice = line.contains(") ");
                     String processedLine =  isNumericChoice ? line.substring(line.indexOf(") ")+2) : line;
                     recordedOutputs.add(processedLine);

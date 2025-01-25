@@ -3,7 +3,6 @@ package com.lx862.pwgui.gui.panel.editing.filetype.content;
 import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.Main;
 import com.lx862.pwgui.gui.components.DocumentChangedListener;
-import com.lx862.pwgui.data.ManualModInfo;
 import com.lx862.pwgui.data.fileentry.ContentDirectoryEntry;
 import com.lx862.pwgui.executable.ProgramExecution;
 import com.lx862.pwgui.gui.components.kui.KButton;
@@ -58,7 +57,6 @@ public class CurseForgePanel extends JPanel {
             AtomicReference<String> modName = new AtomicReference<>(null);
             AtomicBoolean recordOutput = new AtomicBoolean();
 
-            List<ManualModInfo> manualModInfos = new ArrayList<>();
             programExecution.whenStdout((line) -> {
                 if(line.startsWith("Searching CurseForge...") || line.startsWith("Dependencies found:")) {
                     recordedOutputs.clear();
@@ -100,8 +98,9 @@ public class CurseForgePanel extends JPanel {
 
                 // Record log
                 if(recordOutput.get()) {
-                    String choice = line.substring(line.indexOf(") ")+2);
-                    recordedOutputs.add(choice);
+                    boolean isNumericChoice = line.contains(") ");
+                    String processedLine =  isNumericChoice ? line.substring(line.indexOf(") ")+2) : line;
+                    recordedOutputs.add(processedLine);
                 }
             });
 

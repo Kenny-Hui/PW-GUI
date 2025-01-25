@@ -74,7 +74,7 @@ public class UrlPanel extends JPanel {
                 throw new RuntimeException(e);
             }
 
-            ProgramExecution programExecution = Main.packwiz.buildCommand("url", "add", nameTextField.getText(), urlTextField.getText(), "--force"); // We already did a domain check before, so forcibly add it anyway.
+            ProgramExecution programExecution = Main.packwiz.buildCommand("url", "add", nameTextField.getText(), urlTextField.getText(), "--meta-folder", context.getModpack().getRootPath().relativize(fileEntry.path).toString(), "--force"); // We already did a domain check before, so forcibly add it anyway.
             programExecution.whenExit((exitCode) -> {
                if(exitCode == 0) {
                    JOptionPane.showMessageDialog(getTopLevelAncestor(), nameTextField.getText() + " has been added!", Util.withTitlePrefix("File added"), JOptionPane.INFORMATION_MESSAGE);

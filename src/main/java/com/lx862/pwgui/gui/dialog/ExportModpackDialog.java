@@ -61,7 +61,7 @@ public class ExportModpackDialog extends JDialog {
                 args.add("--output");
                 args.add(file.getPath());
 
-                exportModpack(parentFrame, args, file);
+                exportModpack(args, file);
             }
         });
 
@@ -74,15 +74,15 @@ public class ExportModpackDialog extends JDialog {
         add(rootPanel);
     }
 
-    private void exportModpack(JFrame parentFrame, List<String> args, File destination) {
+    private void exportModpack(List<String> args, File destination) {
         ProgramExecution programRefresh = Main.packwiz.buildCommand("refresh");
         programRefresh.whenExit(refreshExitCode -> {
             if(refreshExitCode != 0) return;
 
             ProgramExecution program = Main.packwiz.buildCommand(args.toArray(new String[0]));
-            ExecutableProgressDialog dialog = new ExecutableProgressDialog(parentFrame, "Exporting modpack", Constants.REASON_TRIGGERED_BY_USER, program);
+            ExecutableProgressDialog dialog = new ExecutableProgressDialog(this, "Exporting modpack...", Constants.REASON_TRIGGERED_BY_USER, program);
             Util.addManualDownloadPrompt(this, program, dialog, () -> {
-                exportModpack(parentFrame, args, destination);
+                exportModpack(args, destination);
             });
             program.whenExit(exitCode -> {
                 if(exitCode == 0) {
@@ -91,7 +91,7 @@ public class ExportModpackDialog extends JDialog {
             });
             dialog.setVisible(true);
         });
-        new ExecutableProgressDialog(parentFrame, "Refreshing modpack...", "Refresh before export to ensure consistency.", programRefresh).setVisible(true);
+        new ExecutableProgressDialog(this, "Refreshing modpack...", "Refresh before export to ensure consistency.", programRefresh).setVisible(true);
     }
 
     private void setExportButtonState(boolean active) {

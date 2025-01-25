@@ -3,7 +3,6 @@ package com.lx862.pwgui.gui.panel.editing.filetype;
 import com.lx862.pwgui.data.fileentry.PackMetadataFileEntry;
 import com.lx862.pwgui.gui.components.DocumentChangedListener;
 import com.lx862.pwgui.gui.components.kui.KButton;
-import com.lx862.pwgui.util.GUIHelper;
 import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.Main;
 import com.lx862.pwgui.executable.ProgramExecution;
@@ -126,7 +125,7 @@ public class PackwizMetaPanel extends FileTypePanel {
 
     private void checkForUpdate(Component parent) {
         ProgramExecution programExecution = Main.packwiz.buildCommand("update", packwizMetaFile.getSlug());
-        ExecutableProgressDialog dialog = new ExecutableProgressDialog((JFrame)getTopLevelAncestor(), String.format("Updating %s...", packwizMetaFile.name), Constants.REASON_TRIGGERED_BY_USER, programExecution);
+        ExecutableProgressDialog dialog = new ExecutableProgressDialog((Window)getTopLevelAncestor(), String.format("Updating %s...", packwizMetaFile.name), Constants.REASON_TRIGGERED_BY_USER, programExecution);
 
         AtomicReference<String> updateString = new AtomicReference<>(null);
         programExecution.whenStdout((line) -> {

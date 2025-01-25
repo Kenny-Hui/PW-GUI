@@ -50,7 +50,7 @@ public class CurseForgePanel extends JPanel {
 
         addButton.addActionListener(actionEvent -> {
             ProgramExecution programExecution = Main.packwiz.buildCommand("curseforge", "add", contentTextField.getText());
-            ExecutableProgressDialog dialog = new ExecutableProgressDialog(null, "Adding mod...", Constants.REASON_TRIGGERED_BY_USER, programExecution);
+            ExecutableProgressDialog dialog = new ExecutableProgressDialog((Window)getTopLevelAncestor(), "Adding mod...", Constants.REASON_TRIGGERED_BY_USER, programExecution);
 
             List<String> recordedOutputs = new ArrayList<>();
 

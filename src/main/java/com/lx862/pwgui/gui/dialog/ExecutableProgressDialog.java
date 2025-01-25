@@ -4,6 +4,7 @@ import com.lx862.pwgui.executable.ProgramExecution;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
@@ -11,8 +12,8 @@ public class ExecutableProgressDialog extends ProgressDialog {
     private final ProgramExecution programExecution;
     private Supplier<Boolean> programErroredSupplier;
 
-    public ExecutableProgressDialog(JFrame frame, String title, String executionReason, ProgramExecution programExecution) {
-        super(frame, title);
+    public ExecutableProgressDialog(Window window, String title, String executionReason, ProgramExecution programExecution) {
+        super(window, title);
         this.programExecution = programExecution;
 
         AtomicReference<String> lastOutput = new AtomicReference<>();

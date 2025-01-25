@@ -70,7 +70,7 @@ public class NewModpackDialog extends JDialog {
         createPanel.add(actionRowPanel, BorderLayout.SOUTH);
 
         createImportTabPane.add("Create", createPanel);
-        createImportTabPane.add("Import", new ImportModpackDialog.ImportModpackPanel(true, packCreatedCallback));
+        createImportTabPane.add("Import", new ImportModpackDialog.ImportModpackPanel(this,true, packCreatedCallback));
         rootPanel.add(createImportTabPane, BorderLayout.CENTER);
 
         add(rootPanel);
@@ -120,7 +120,7 @@ public class NewModpackDialog extends JDialog {
                         if(finishCallback != null) finishCallback.accept(modpackDirectory.toPath());
                     }
                 });
-                new ExecutableProgressDialog(null, "Creating Modpack...", "Requested by user", processExecution).setVisible(true);
+                new ExecutableProgressDialog(this, "Creating Modpack...", "Requested by user", processExecution).setVisible(true);
             }
         } catch (Exception e) {
             Main.LOGGER.exception(e);

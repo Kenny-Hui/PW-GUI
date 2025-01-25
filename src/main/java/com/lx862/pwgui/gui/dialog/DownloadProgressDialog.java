@@ -4,6 +4,7 @@ import com.lx862.pwgui.Main;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.BufferedInputStream;
 import java.io.FileOutputStream;
 import java.net.URL;
@@ -13,8 +14,9 @@ import java.util.List;
 
 public class DownloadProgressDialog extends ProgressDialog {
 
-    public DownloadProgressDialog(JFrame frame, String title, String itemName, URL url, Path destination, Runnable callback) {
-        super(frame, title);
+    public DownloadProgressDialog(Window window, String title, String itemName, URL url, Path destination, Runnable callback) {
+        super(window, title);
+
         Main.LOGGER.info(String.format("Downloading %s from %s", itemName, url));
         setStatus(String.format("Downloading %s...", itemName));
 

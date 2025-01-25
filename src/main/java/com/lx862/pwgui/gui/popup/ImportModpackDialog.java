@@ -11,6 +11,7 @@ import com.lx862.pwgui.util.Util;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileFilter;
+import java.awt.*;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.function.Consumer;
@@ -23,7 +24,7 @@ public class ImportModpackDialog extends JDialog {
         setLocationRelativeTo(parentFrame);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        ImportModpackPanel importModpackPanel = new ImportModpackPanel(false, (path) -> {
+        ImportModpackPanel importModpackPanel = new ImportModpackPanel(this,false, (path) -> {
             JOptionPane.showMessageDialog(this, "Modpack imported successfully!", Util.withTitlePrefix("Modpack imported"), JOptionPane.INFORMATION_MESSAGE);
         });
 
@@ -31,9 +32,13 @@ public class ImportModpackDialog extends JDialog {
     }
 
     public static class ImportModpackPanel extends JPanel {
-        public ImportModpackPanel(boolean isCreate, Consumer<Path> importCallback) {
+        private final Window parent;
+
+        public ImportModpackPanel(Window parent, boolean isCreate, Consumer<Path> importCallback) {
             setBorder(new EmptyBorder(10, 10, 10, 10));
             setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+
+            this.parent = parent;
 
             JLabel title = new JLabel("Import from CurseForge", SwingConstants.CENTER);
             title.setFont(UIManager.getFont("h2.font"));
@@ -115,7 +120,7 @@ public class ImportModpackDialog extends JDialog {
                 }
             });
 
-            new ExecutableProgressDialog(null, "Importing Modpack...", Constants.REASON_TRIGGERED_BY_USER, programExecution).setVisible(true);
+            new ExecutableProgressDialog(parent, "Importing Modpack...", Constants.REASON_TRIGGERED_BY_USER, programExecution).setVisible(true);
         }
     }
 }

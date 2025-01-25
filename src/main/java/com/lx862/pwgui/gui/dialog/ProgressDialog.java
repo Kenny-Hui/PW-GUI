@@ -12,11 +12,11 @@ public abstract class ProgressDialog extends JDialog {
     private final JLabel statusLabel;
     private final JTextArea logTextArea;
 
-    public ProgressDialog(JFrame frame, String title) {
-        super(frame, Util.withTitlePrefix(title), true);
+    public ProgressDialog(Window window, String title) {
+        super(window, Util.withTitlePrefix(title), ModalityType.DOCUMENT_MODAL);
 
         setSize(450, 160);
-        setLocationRelativeTo(frame);
+        setLocationRelativeTo(window);
 
         JPanel rootPanel = new JPanel();
         rootPanel.setBorder(new EmptyBorder(10, 10, 10, 10));

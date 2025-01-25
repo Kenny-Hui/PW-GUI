@@ -81,7 +81,7 @@ public class UrlPanel extends JPanel {
                }
             });
 
-            new ExecutableProgressDialog(null, "Adding mod...", "Triggered by user", programExecution).setVisible(true);
+            new ExecutableProgressDialog((Window)getTopLevelAncestor(), "Adding mod...", "Triggered by user", programExecution).setVisible(true);
         });
 
         rootPanel.add(formPanel);

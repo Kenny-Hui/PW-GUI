@@ -71,7 +71,7 @@ public class ImportModpackDialog extends JDialog {
         }
 
         private void importModpack(Consumer<Path> importCallback, boolean isCreate) {
-            KFileChooser cfModpackFileChooser = new KFileChooser();
+            KFileChooser cfModpackFileChooser = new KFileChooser("choose-cf-modpack-import");
             cfModpackFileChooser.setFileFilter(new FileFilter() {
                 @Override
                 public boolean accept(File file) {
@@ -91,7 +91,7 @@ public class ImportModpackDialog extends JDialog {
                     String[] selection = new String[]{"Continue"};
                     JOptionPane.showOptionDialog(this, "Good! Now let's create a folder you want your modpack to be saved to.", Util.withTitlePrefix("Choose Save Folder"), JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, selection, selection[0]);
 
-                    KFileChooser modpackFileChooser = new KFileChooser();
+                    KFileChooser modpackFileChooser = new KFileChooser("import-modpack");
                     modpackFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                     if(modpackFileChooser.openSaveDirectoryDialog(this) == JFileChooser.APPROVE_OPTION) {
                         File destinationPath = modpackFileChooser.getSelectedFile();

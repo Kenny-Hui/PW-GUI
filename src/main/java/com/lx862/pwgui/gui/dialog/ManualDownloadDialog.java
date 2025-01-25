@@ -5,6 +5,7 @@ import com.lx862.pwgui.gui.components.ManualModEntryPanel;
 import com.lx862.pwgui.data.ManualModInfo;
 import com.lx862.pwgui.gui.components.fstree.FileSystemWatcher;
 import com.lx862.pwgui.gui.components.kui.KButton;
+import com.lx862.pwgui.gui.components.kui.KFileChooser;
 import com.lx862.pwgui.gui.components.kui.KGridBagLayoutPanel;
 import com.lx862.pwgui.util.Util;
 
@@ -63,10 +64,10 @@ public class ManualDownloadDialog extends JDialog {
 
         KButton changeWatchPathButton = new KButton("Change...");
         changeWatchPathButton.addActionListener(actionEvent -> {
-            JFileChooser jFileChooser = new JFileChooser();
-            jFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            if(jFileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-                startWatchDirectory(jFileChooser.getSelectedFile().toPath());
+            KFileChooser fileChooser = new KFileChooser("manual-dl-watcher");
+            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            if(fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                startWatchDirectory(fileChooser.getSelectedFile().toPath());
             }
         });
         monitorLocationPanel.addRow(1, 0, watchingPathLabel, changeWatchPathButton);

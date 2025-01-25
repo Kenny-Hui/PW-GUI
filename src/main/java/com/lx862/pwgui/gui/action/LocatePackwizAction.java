@@ -23,7 +23,7 @@ public class LocatePackwizAction extends AbstractAction {
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-        KFileChooser fileChooser = new KFileChooser();
+        KFileChooser fileChooser = new KFileChooser("locate-pw");
         fileChooser.setFileFilter(new FileFilter() {
             @Override
             public boolean accept(File f) {
@@ -43,7 +43,7 @@ public class LocatePackwizAction extends AbstractAction {
                 return;
             }
 
-            Main.config.setPackwizExecutablePath(selectedFile.toPath());
+            Main.getConfig().setPackwizExecutablePath(selectedFile.toPath());
             Main.packwiz.locate(null);
             if(!Main.packwiz.usable()) {
                 JOptionPane.showMessageDialog(parent, "The selected executable is not valid!\nAre you sure you can run the executable?", Util.withTitlePrefix("Invalid executable"), JOptionPane.ERROR_MESSAGE);
@@ -51,7 +51,7 @@ public class LocatePackwizAction extends AbstractAction {
             }
 
             try {
-                Main.config.write();
+                Main.getConfig().write();
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(parent, String.format("Failed to write configuration file:\n%s", e.getMessage()), Util.withTitlePrefix("Failed to write config"), JOptionPane.ERROR_MESSAGE);
                 return;

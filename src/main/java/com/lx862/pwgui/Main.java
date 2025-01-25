@@ -18,10 +18,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 public class Main {
+    private static Config config;
     public static final Logger LOGGER = new Logger();
     public static final PackwizExecutable packwiz = new PackwizExecutable();
     public static final GitExecutable git = new GitExecutable();
-    public static Config config;
 
     public static void main(String[] args) {
         Options options = new Options();
@@ -85,5 +85,9 @@ public class Main {
             Main.LOGGER.exception(e);
             System.exit(1);
         }
+    }
+
+    public static Config getConfig() {
+        return config;
     }
 }

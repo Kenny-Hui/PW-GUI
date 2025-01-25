@@ -41,7 +41,7 @@ public class ViewLogDialog extends JDialog {
         KButton saveAsButton = new KButton("Save As...");
         saveAsButton.setMnemonic(KeyEvent.VK_S);
         saveAsButton.addActionListener(actionEvent -> {
-            KFileChooser fileChooser = new KFileChooser();
+            KFileChooser fileChooser = new KFileChooser("save-log");
             if (fileChooser.openSaveAsDialog(this) == JFileChooser.APPROVE_OPTION) {
                 File file = fileChooser.getSelectedFile();
                 try(FileWriter fw = new FileWriter(file)) {

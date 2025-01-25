@@ -1,6 +1,7 @@
 package com.lx862.pwgui.gui.popup;
 
 import com.lx862.pwgui.gui.components.kui.KButton;
+import com.lx862.pwgui.gui.components.kui.KFileChooser;
 import com.lx862.pwgui.gui.dialog.ExecutableProgressDialog;
 import com.lx862.pwgui.gui.panel.ModpackInfoPanel;
 import com.lx862.pwgui.gui.panel.ModpackVersionPanel;
@@ -77,15 +78,14 @@ public class NewModpackDialog extends JDialog {
 
     private void createModpack(ModpackInfoPanel modpackInfoPanel, ModpackVersionPanel modpackVersionPanel, Consumer<Path> finishCallback) {
         try {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        fileChooser.setDialogTitle("Choose a folder to store your modpack in...");
+            KFileChooser fileChooser = new KFileChooser("new-modpack");
+            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            fileChooser.setDialogTitle("Choose a folder to store your modpack in...");
 
-        if(fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            File directory = fileChooser.getSelectedFile();
-            String cleanFilesystemName = modpackInfoPanel.getModpackName().replaceAll("(?U)[^\\w\\._]+", "_"); // https://stackoverflow.com/questions/1155107/is-there-a-cross-platform-java-method-to-remove-filename-special-chars
-            File modpackDirectory = directory.toPath().resolve(cleanFilesystemName).toFile();
-
+            if(fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                File directory = fileChooser.getSelectedFile();
+                String cleanFilesystemName = modpackInfoPanel.getModpackName().replaceAll("(?U)[^\\w\\._]+", "_"); // https://stackoverflow.com/questions/1155107/is-there-a-cross-platform-java-method-to-remove-filename-special-chars
+                File modpackDirectory = directory.toPath().resolve(cleanFilesystemName).toFile();
 
                 if(Files.exists(modpackDirectory.toPath())) {
                     if(modpackDirectory.isFile()) {

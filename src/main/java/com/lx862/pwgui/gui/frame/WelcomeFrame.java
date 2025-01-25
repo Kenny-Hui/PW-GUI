@@ -2,6 +2,7 @@ package com.lx862.pwgui.gui.frame;
 
 import com.lx862.pwgui.core.Modpack;
 import com.lx862.pwgui.gui.components.kui.KButton;
+import com.lx862.pwgui.gui.components.kui.KFileChooser;
 import com.lx862.pwgui.gui.components.kui.KLinkButton;
 import com.lx862.pwgui.gui.popup.NewModpackDialog;
 import com.lx862.pwgui.util.GUIHelper;
@@ -58,7 +59,7 @@ public class WelcomeFrame extends BaseFrame {
         mainPanel.add(openPackButton);
 
         openPackButton.addActionListener(actionEvent -> {
-            JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
+            KFileChooser fileChooser = new KFileChooser("open-modpack");
             fileChooser.setFileFilter(new FileFilter() {
                 @Override
                 public boolean accept(File file) {

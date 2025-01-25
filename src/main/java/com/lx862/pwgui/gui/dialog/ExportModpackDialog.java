@@ -50,7 +50,7 @@ public class ExportModpackDialog extends JDialog {
         exportButton.addActionListener(actionEvent -> {
             ExportPanel selectedTab = (ExportPanel)formatTabPane.getComponentAt(formatTabPane.getSelectedIndex());
 
-            KFileChooser fileChooser = new KFileChooser();
+            KFileChooser fileChooser = new KFileChooser("export-modpack");
             fileChooser.setFileFilter(new FileNameExtensionFilter("Modpack file", selectedTab.getExtension().substring(1)));
             fileChooser.setDialogTitle("Choose Modpack Saving Location");
             fileChooser.setSelectedFile(new File(modpack.packFile.get().name + selectedTab.getExtension()));

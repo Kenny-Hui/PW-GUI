@@ -21,7 +21,7 @@ public class KCollapsibleToggle extends JCheckBox {
     }
 
     private void updateToggle() {
-        setIcon(new ImageIcon(GUIHelper.convertImage(Util.getAssets(isSelected() ? "/ui/up_arrow.png" : "/ui/down_arrow.png"), 10)));
+        setIcon(new ImageIcon(GUIHelper.convertImage(Util.getAssets(isSelected() ? "/ui/up_arrow.png" : "/ui/down_arrow.png"), getFont().getSize())));
         setText(isSelected() ? expandedText : collapsedText);
     }
 }

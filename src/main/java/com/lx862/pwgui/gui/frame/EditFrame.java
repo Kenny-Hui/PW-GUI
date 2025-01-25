@@ -9,7 +9,6 @@ import com.lx862.pwgui.gui.components.kui.KMenuItem;
 import com.lx862.pwgui.gui.popup.ConsoleDialog;
 import com.lx862.pwgui.gui.dialog.ExportModpackDialog;
 import com.lx862.pwgui.gui.popup.DevServerFrame;
-import com.lx862.pwgui.gui.popup.ViewLogDialog;
 import com.lx862.pwgui.util.Util;
 import com.lx862.pwgui.Main;
 import com.lx862.pwgui.gui.popup.ImportModpackDialog;
@@ -66,9 +65,9 @@ public class EditFrame extends BaseFrame {
         quitMenuItem.setMnemonic(KeyEvent.VK_Q);
 
         quitMenuItem.addActionListener(actionEvent -> {
-            dispose();
             WelcomeFrame welcomeFrame = new WelcomeFrame(this);
             welcomeFrame.setVisible(true);
+            dispose();
         });
         fileMenu.add(quitMenuItem);
 

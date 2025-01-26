@@ -1,5 +1,6 @@
 package com.lx862.pwgui.gui.dialog;
 
+import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.gui.components.kui.KGridBagLayoutPanel;
 import com.lx862.pwgui.gui.components.kui.KListCellRenderer;
@@ -28,7 +29,7 @@ public class NumericSelectionDialog extends JDialog {
         panel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
         JLabel titleLabel = new JLabel(title);
-        titleLabel.setFont(UIManager.getFont("h2.font"));
+        titleLabel.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h2.font")));
         titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         panel.addRow(1, titleLabel);
         panel.addRow(1, new JLabel("<html>Multiple projects were found based on your search term<br>Please select which one you'd like to choose</html>"));

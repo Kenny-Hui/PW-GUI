@@ -17,7 +17,7 @@ public class KTreeCellRenderer extends DefaultTreeCellRenderer {
     @Override
     public Component getTreeCellRendererComponent(JTree jTree, Object o, boolean selected, boolean expanded, boolean leaf, int row, boolean b3) {
         super.getTreeCellRendererComponent(jTree, o, selected, expanded, leaf, row, b3);
-        setBorder(new EmptyBorder(KGUIConstants.LIST_PADDING, 0, KGUIConstants.LIST_PADDING, 0));
+        setBorder(new EmptyBorder(KGUIConstants.TREE_VIEW_PADDING, 0, KGUIConstants.TREE_VIEW_PADDING, 0));
 
         if(o instanceof FileSystemSortedTreeNode) {
             FileSystemEntityEntry fileInfo = (FileSystemEntityEntry)((FileSystemSortedTreeNode)o).getUserObject();

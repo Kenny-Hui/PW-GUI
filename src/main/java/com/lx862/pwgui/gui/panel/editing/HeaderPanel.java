@@ -1,5 +1,6 @@
 package com.lx862.pwgui.gui.panel.editing;
 
+import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.core.PackFile;
 import com.lx862.pwgui.data.PackComponentVersion;
 import com.lx862.pwgui.util.GUIHelper;
@@ -23,7 +24,7 @@ class HeaderPanel extends JPanel {
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
 
         JLabel modpackNameLabel = new JLabel(packFile.getName());
-        modpackNameLabel.setFont(UIManager.getFont("h2.font"));
+        modpackNameLabel.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h2.font")));
         infoPanel.add(modpackNameLabel);
 
         JLabel modpackVersionAuthorLabel = new JLabel();

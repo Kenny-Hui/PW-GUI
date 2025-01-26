@@ -1,5 +1,6 @@
 package com.lx862.pwgui.gui.popup;
 
+import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.gui.components.kui.KFileChooser;
 import com.lx862.pwgui.gui.dialog.ExecutableProgressDialog;
@@ -34,7 +35,7 @@ public class NewModpackDialog extends JDialog {
         rootPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
         JLabel titleLabel = new JLabel("New Modpack...");
-        titleLabel.setFont(UIManager.getFont("h1.font"));
+        titleLabel.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h2.font")));
         titleLabel.setBorder(new EmptyBorder(0, 0, 10, 0)); // Bottom padding to compensate
         rootPanel.add(titleLabel, BorderLayout.NORTH);
 

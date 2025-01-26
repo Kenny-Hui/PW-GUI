@@ -2,6 +2,7 @@ package com.lx862.pwgui.core;
 
 import com.google.gson.*;
 import com.lx862.pwgui.Main;
+import com.lx862.pwgui.data.ApplicationTheme;
 import com.lx862.pwgui.util.GoUtil;
 
 import java.io.*;
@@ -18,6 +19,7 @@ public class Config extends WritableFile {
     public final Map<String, Path> fileChooserLastPath;
     private Path packwizExecutablePath;
     private Path lastModpackPath;
+    private ApplicationTheme applicationTheme = ApplicationTheme.LIGHT;
     private boolean openLastModpackOnLaunch;
 
     public Config() throws FileNotFoundException {
@@ -49,15 +51,20 @@ public class Config extends WritableFile {
         if(jsonObject.has("openLastModpackOnLaunch")) {
             this.openLastModpackOnLaunch = jsonObject.get("openLastModpackOnLaunch").getAsBoolean();
         }
+
+        if(jsonObject.has("applicationTheme")) {
+            try {
+                this.applicationTheme = ApplicationTheme.valueOf(jsonObject.get("applicationTheme").getAsString());
+            } catch (IllegalArgumentException e) {
+                Main.LOGGER.exception(e);
+            }
+        }
     }
 
     public void write(String reason) throws IOException {
         CONFIG_DIR_PATH.toFile().mkdirs();
 
         JsonObject jsonObject = new JsonObject();
-        JsonObject executableJsonObject = new JsonObject();
-        executableJsonObject.addProperty("packwiz", packwizExecutablePath.toString());
-        jsonObject.add("executables", executableJsonObject);
 
         JsonArray lastPickedFilesJsonArray = new JsonArray();
         for(Map.Entry<String, Path> entry : fileChooserLastPath.entrySet()) {
@@ -69,6 +76,11 @@ public class Config extends WritableFile {
         jsonObject.add("lastPickedFiles", lastPickedFilesJsonArray);
         if(lastModpackPath != null) jsonObject.addProperty("lastModpackPath", lastModpackPath.toString());
         jsonObject.addProperty("openLastModpackOnLaunch", openLastModpackOnLaunch);
+        jsonObject.addProperty("applicationTheme", applicationTheme.name());
+
+        JsonObject executableJsonObject = new JsonObject();
+        executableJsonObject.addProperty("packwiz", packwizExecutablePath.toString());
+        jsonObject.add("executables", executableJsonObject);
 
         try(Writer writer = new FileWriter(CONFIG_PATH.toFile())) {
             new GsonBuilder().setPrettyPrinting().create().toJson(jsonObject, writer);
@@ -80,31 +92,39 @@ public class Config extends WritableFile {
         return this.packwizExecutablePath;
     }
 
-    public void setPackwizExecutablePath(Path newPath) {
-        this.packwizExecutablePath = newPath;
-    }
-
     public Path getLastModpackPath() {
         return this.lastModpackPath;
     }
 
-    public void setLastModpackPath(Path newPath) {
-        if(!Objects.equals(newPath, this.lastModpackPath)) {
-            this.lastModpackPath = newPath;
-            try { // Write if changed
-                write("Save last opened modpack path");
-            } catch (IOException e) {
-                Main.LOGGER.exception(e);
-            }
-        }
+    public ApplicationTheme getApplicationTheme() {
+        return this.applicationTheme;
     }
 
     public boolean openLastModpackOnLaunch() {
         return this.openLastModpackOnLaunch;
     }
 
-    public void setOpenLastModpackOnLaunch(boolean value) {
-        this.openLastModpackOnLaunch = value;
+    public void setApplicationTheme(ApplicationTheme newValue) {
+        this.applicationTheme = newValue;
+    }
+
+    public void setPackwizExecutablePath(Path newValue) {
+        this.packwizExecutablePath = newValue;
+    }
+
+    public void setOpenLastModpackOnLaunch(boolean newValue) {
+        this.openLastModpackOnLaunch = newValue;
+    }
+
+    public void setLastModpackPath(Path newValue) {
+        if(!Objects.equals(newValue, this.lastModpackPath)) {
+            this.lastModpackPath = newValue;
+            try { // Write if changed
+                write("Save last opened modpack path");
+            } catch (IOException e) {
+                Main.LOGGER.exception(e);
+            }
+        }
     }
 }
 

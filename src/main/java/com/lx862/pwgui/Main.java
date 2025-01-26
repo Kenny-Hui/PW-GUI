@@ -52,7 +52,7 @@ public class Main {
             final boolean packwizLocated = packwiz.updateExecutableLocation(execPath);
             // final boolean gitLocated = git.updateExecutableLocation(null); // We don't have git support yet
 
-            GUIHelper.setupApplicationTheme(); // Initialize FlatLaf and it's config
+            GUIHelper.setupApplicationTheme(Main.getConfig().getApplicationTheme(), null); // Initialize FlatLaf and it's config
             launchGUI(packwizLocated, modpackPath);
         } catch (Exception e) {
             Main.LOGGER.exception(e);

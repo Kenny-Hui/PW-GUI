@@ -1,12 +1,13 @@
 package com.lx862.pwgui.gui.popup;
 
+import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.Main;
 import com.lx862.pwgui.core.Constants;
+import com.lx862.pwgui.data.ApplicationTheme;
 import com.lx862.pwgui.gui.action.ResetProgramAction;
 import com.lx862.pwgui.gui.components.filters.PackwizExecutableFileFilter;
-import com.lx862.pwgui.gui.components.kui.KButton;
-import com.lx862.pwgui.gui.components.kui.KFileChooser;
-import com.lx862.pwgui.gui.components.kui.KGridBagLayoutPanel;
+import com.lx862.pwgui.gui.components.kui.*;
+import com.lx862.pwgui.util.GUIHelper;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
@@ -19,14 +20,19 @@ import java.nio.file.Path;
 public class SettingsDialog extends JDialog {
     private final JCheckBox relaunchModpackCheckbox;
     private final JLabel packwizLocationLabel;
+    private final ApplicationTheme initialTheme;
+    private final KComboBox<ApplicationTheme> themeComboBox;
     private Path packwizLocationPath;
+    private boolean saved;
 
     public SettingsDialog(Window parent) {
         super(parent, Util.withTitlePrefix("Settings"), ModalityType.DOCUMENT_MODAL);
 
+        this.initialTheme = Main.getConfig().getApplicationTheme();
+
         setSize(400, 500);
         setLocationRelativeTo(parent);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         JPanel rootPanel = new JPanel(new BorderLayout());
         rootPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -34,7 +40,7 @@ public class SettingsDialog extends JDialog {
         KGridBagLayoutPanel settingsPanel = new KGridBagLayoutPanel(0, 1);
 
         JLabel titleLabel = new JLabel("Settings");
-        titleLabel.setFont(UIManager.getFont("h2.font"));
+        titleLabel.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h2.font")));
         titleLabel.setBorder(new EmptyBorder(0, 0, 10, 0)); // Bottom padding to compensate
         rootPanel.add(titleLabel, BorderLayout.NORTH);
 
@@ -44,9 +50,34 @@ public class SettingsDialog extends JDialog {
 
         this.relaunchModpackCheckbox = new JCheckBox("Open last modpack on launch");
         this.relaunchModpackCheckbox.setSelected(Main.getConfig().openLastModpackOnLaunch());
+        this.relaunchModpackCheckbox.setAlignmentX(Component.LEFT_ALIGNMENT);
         programPanel.add(relaunchModpackCheckbox);
 
+        programPanel.add(GUIHelper.createVerticalPadding(4));
+
+        JPanel themePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 0));
+        themePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        themePanel.add(new JLabel("Theme:"));
+
+
+        this.themeComboBox = new KComboBox<>();
+        this.themeComboBox.setRenderer(new KListCellRenderer());
+        for(ApplicationTheme applicationTheme : ApplicationTheme.values()) {
+            themeComboBox.addItem(applicationTheme);
+        }
+        themeComboBox.setSelectedItem(initialTheme);
+
+        themeComboBox.addItemListener(actionEvent -> {
+            ApplicationTheme t = (ApplicationTheme)themeComboBox.getSelectedItem();
+            GUIHelper.setupApplicationTheme(t, this);
+        });
+        themePanel.add(themeComboBox);
+        programPanel.add(themePanel);
+
+        programPanel.add(GUIHelper.createVerticalPadding(4));
+
         KButton resetButton = new KButton(new ResetProgramAction(this, parent));
+        resetButton.setAlignmentX(Component.LEFT_ALIGNMENT);
         programPanel.add(resetButton);
 
         JPanel packwizPanel = new JPanel();
@@ -105,8 +136,10 @@ public class SettingsDialog extends JDialog {
     }
 
     private void save() {
+        this.saved = true;
         Main.getConfig().setOpenLastModpackOnLaunch(relaunchModpackCheckbox.isSelected());
         Main.getConfig().setPackwizExecutablePath(packwizLocationPath);
+        Main.getConfig().setApplicationTheme((ApplicationTheme) themeComboBox.getSelectedItem());
         Main.packwiz.updateExecutableLocation(null);
 
         try {
@@ -116,5 +149,15 @@ public class SettingsDialog extends JDialog {
             Main.LOGGER.exception(e);
             JOptionPane.showMessageDialog(this, String.format("Failed to save config:\n%s", e.getMessage()), Util.withTitlePrefix("Config Saving Failed!"), JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    @Override
+    public void dispose() {
+        if(!saved) {
+            GUIHelper.setupApplicationTheme(initialTheme, null);
+        } else {
+            GUIHelper.setupApplicationTheme((ApplicationTheme) themeComboBox.getSelectedItem(), null);
+        }
+        super.dispose();
     }
 }

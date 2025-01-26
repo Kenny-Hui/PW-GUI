@@ -1,5 +1,6 @@
 package com.lx862.pwgui.gui.dialog;
 
+import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.core.Modpack;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.util.GUIHelper;
@@ -33,7 +34,7 @@ public class ExportModpackDialog extends JDialog {
         rootPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
         JLabel titleLabel = new JLabel("Export Modpack");
-        titleLabel.setFont(UIManager.getFont("h2.font"));
+        titleLabel.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h2.font")));
         rootPanel.add(titleLabel, BorderLayout.NORTH);
 
         JTabbedPane formatTabPane = new JTabbedPane();

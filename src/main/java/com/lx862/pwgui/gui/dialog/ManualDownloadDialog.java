@@ -1,5 +1,6 @@
 package com.lx862.pwgui.gui.dialog;
 
+import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.Main;
 import com.lx862.pwgui.gui.components.ManualModEntryPanel;
 import com.lx862.pwgui.data.ManualModInfo;
@@ -37,7 +38,7 @@ public class ManualDownloadDialog extends JDialog {
         rootPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
         JLabel titleLabel = new JLabel(String.format("%d file(s) to be manually downloaded", modList.size()));
-        titleLabel.setFont(UIManager.getFont("h3.font"));
+        titleLabel.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h3.font")));
         titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         rootPanel.add(titleLabel);
 

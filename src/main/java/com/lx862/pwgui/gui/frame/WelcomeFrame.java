@@ -1,5 +1,6 @@
 package com.lx862.pwgui.gui.frame;
 
+import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.core.Modpack;
 import com.lx862.pwgui.gui.action.SettingsAction;
 import com.lx862.pwgui.gui.components.kui.KButton;
@@ -41,7 +42,7 @@ public class WelcomeFrame extends BaseFrame {
             logoLabel = new JLabel(new ImageIcon(GUIHelper.convertImage(Util.getAssets("/logo.png"), 250)));
         } catch (Exception e) {
             logoLabel = new JLabel(Constants.PROGRAM_NAME);
-            logoLabel.setFont(UIManager.getFont("h1.font"));
+            logoLabel.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h1.font")));
             Main.LOGGER.exception(e);
         }
         logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -52,7 +53,7 @@ public class WelcomeFrame extends BaseFrame {
         versionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(versionLabel);
 
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 16)));
+        mainPanel.add(GUIHelper.createVerticalPadding(16));
 
         KButton openPackButton = new KButton("Open modpack...");
         openPackButton.setMnemonic(KeyEvent.VK_O);
@@ -84,7 +85,7 @@ public class WelcomeFrame extends BaseFrame {
             }
         });
 
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 8)));
+        mainPanel.add(GUIHelper.createVerticalPadding(8));
 
         KButton createPackButton = new KButton("Create new modpack...");
         createPackButton.setMnemonic(KeyEvent.VK_C);
@@ -92,7 +93,7 @@ public class WelcomeFrame extends BaseFrame {
         createPackButton.addActionListener(actionEvent -> showNewModpackDialog());
         mainPanel.add(createPackButton);
 
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 8)));
+        mainPanel.add(GUIHelper.createVerticalPadding(8));
 
         KButton settingsButton = new KButton(new SettingsAction(this));
         settingsButton.setAlignmentX(Component.CENTER_ALIGNMENT);

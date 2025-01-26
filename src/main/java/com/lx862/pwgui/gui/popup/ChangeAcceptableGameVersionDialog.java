@@ -1,5 +1,6 @@
 package com.lx862.pwgui.gui.popup;
 
+import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.data.Caches;
 import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.Main;
@@ -40,7 +41,7 @@ public class ChangeAcceptableGameVersionDialog extends JDialog {
         JLabel selectedVersionLabel = new JLabel("Selected version(s): ???");
 
         JLabel titleLabel = new JLabel("Change Acceptable Version");
-        titleLabel.setFont(UIManager.getFont("h3.font"));
+        titleLabel.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h3.font")));
         titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         rootPanel.add(titleLabel);
 

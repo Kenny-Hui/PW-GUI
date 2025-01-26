@@ -8,5 +8,6 @@ import javax.swing.border.EmptyBorder;
 public class KComboBox<T> extends JComboBox<T> {
     public KComboBox() {
         setBorder(new CompoundBorder(getBorder(), new EmptyBorder(KGUIConstants.COMBO_BOX_PADDING, KGUIConstants.COMBO_BOX_PADDING, KGUIConstants.COMBO_BOX_PADDING, KGUIConstants.COMBO_BOX_PADDING)));
+        setRenderer(new KListCellRenderer());
     }
 }

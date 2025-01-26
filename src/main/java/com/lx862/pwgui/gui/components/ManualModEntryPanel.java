@@ -1,5 +1,6 @@
 package com.lx862.pwgui.gui.components;
 
+import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.data.ManualModInfo;
 import com.lx862.pwgui.gui.components.kui.KLinkButton;
 
@@ -15,7 +16,7 @@ public class ManualModEntryPanel extends JPanel {
         add(new JSeparator());
 
         JLabel title = new JLabel(String.format("<html><b>%s</b> <span style=\"color:green\">%s</span></html>", info.name, exists ? "(Found!)" : ""));
-        title.setFont(UIManager.getFont("h4.font"));
+        title.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h4.font")));
         add(title);
 
         add(new JLabel(info.fileName));

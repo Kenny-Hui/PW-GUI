@@ -1,5 +1,6 @@
 package com.lx862.pwgui.gui.panel.editing.filetype;
 
+import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.data.fileentry.PackMetadataFileEntry;
 import com.lx862.pwgui.gui.components.DocumentChangedListener;
 import com.lx862.pwgui.gui.components.kui.KButton;
@@ -45,11 +46,11 @@ public class PackwizMetaPanel extends FileTypePanel {
         this.initialPinned = packwizMetaFile.pinned;
 
         JLabel titleLabel = new JLabel(packwizMetaFile.name);
-        titleLabel.setFont(UIManager.getFont("h2.font"));
+        titleLabel.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h2.font")));
         add(titleLabel);
 
         JLabel fileNameLabel = new JLabel(packwizMetaFile.fileName);
-        fileNameLabel.setFont(UIManager.getFont("small.font"));
+        fileNameLabel.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("small.font")));
         add(fileNameLabel);
 
         add(new KSeparator());

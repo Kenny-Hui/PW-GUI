@@ -1,5 +1,6 @@
 package com.lx862.pwgui.gui.frame;
 
+import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.Main;
 import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.gui.action.DownloadPackwizAction;
@@ -30,7 +31,7 @@ public class SetupFrame extends BaseFrame {
             logoLabel = new JLabel(new ImageIcon(GUIHelper.convertImage(Util.getAssets("/logo.png"), 200)));
         } catch (Exception e) {
             logoLabel = new JLabel(Constants.PROGRAM_NAME);
-            logoLabel.setFont(UIManager.getFont("h1.font"));
+            logoLabel.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h1.font")));
             Main.LOGGER.exception(e);
         }
 
@@ -38,21 +39,24 @@ public class SetupFrame extends BaseFrame {
         rootPanel.add(Box.createVerticalGlue());
         rootPanel.add(logoLabel);
 
-        rootPanel.add(Box.createRigidArea(new Dimension(0, 8)));
+        GUIHelper.createVerticalPadding(8);
+
         JLabel titleLabel = new JLabel(String.format("Heya! Welcome to %s!", Constants.PROGRAM_NAME));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        titleLabel.setFont(UIManager.getFont("h2.font"));
+        titleLabel.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h2.font")));
         rootPanel.add(titleLabel);
 
-        rootPanel.add(Box.createRigidArea(new Dimension(0, 8)));
+        GUIHelper.createVerticalPadding(8);
 
         JLabel descriptionLabel = new JLabel("<html><div style=\"text-align:center\">PW-GUI aims to simplify modpack management by providing a GUI around the command-line program packwiz.</div></html>", SwingConstants.CENTER);
         descriptionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         rootPanel.add(descriptionLabel);
-        rootPanel.add(Box.createRigidArea(new Dimension(0, 12)));
+
+        GUIHelper.createVerticalPadding(12);
 
         rootPanel.add(new KSeparator());
-        rootPanel.add(Box.createRigidArea(new Dimension(0, 12)));
+
+        GUIHelper.createVerticalPadding(12);
 
         JLabel whatToDoNextDescriptionLabel = new JLabel("<html><p style=\"text-align:center\">Don't have packwiz yet? Just click the download button below and we'll take care of it!</p><p style=\"margin-top:7px;text-align:center;\">Otherwise, please give me a favor by pointing me to the packwiz executable~</p></html>", SwingConstants.CENTER);
         whatToDoNextDescriptionLabel.setAlignmentY(Component.TOP_ALIGNMENT);

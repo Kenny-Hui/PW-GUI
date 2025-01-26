@@ -1,5 +1,6 @@
 package com.lx862.pwgui.gui.popup;
 
+import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.Main;
 import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.executable.ProgramExecution;
@@ -41,7 +42,7 @@ public class ImportModpackDialog extends JDialog {
             this.parent = parent;
 
             JLabel title = new JLabel("Import from CurseForge", SwingConstants.CENTER);
-            title.setFont(UIManager.getFont("h2.font"));
+            title.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h2.font")));
             title.setAlignmentX(CENTER_ALIGNMENT);
             add(title);
 

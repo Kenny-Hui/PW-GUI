@@ -1,6 +1,8 @@
 package com.lx862.pwgui.gui.dialog;
 
+import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.gui.components.kui.KCollapsibleToggle;
+import com.lx862.pwgui.util.GUIHelper;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
@@ -23,7 +25,7 @@ public abstract class ProgressDialog extends JDialog {
         rootPanel.setLayout(new BoxLayout(rootPanel, BoxLayout.Y_AXIS));
 
         JLabel titleLabel = new JLabel(title);
-        titleLabel.setFont(UIManager.getFont("h2.font"));
+        titleLabel.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h2.font")));
         titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         rootPanel.add(titleLabel);
 
@@ -34,12 +36,14 @@ public abstract class ProgressDialog extends JDialog {
         progressBar.setAlignmentX(Component.LEFT_ALIGNMENT);
         rootPanel.add(progressBar);
 
-        rootPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        rootPanel.add(GUIHelper.createVerticalPadding(10));
+
         statusLabel = new JLabel("Status text");
         statusLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         rootPanel.add(statusLabel);
 
-        rootPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        rootPanel.add(GUIHelper.createVerticalPadding(10));
+
         logTextArea = new JTextArea(10, 0);
         logTextArea.setEditable(false);
         logTextArea.setAlignmentX(Component.LEFT_ALIGNMENT);

@@ -1,9 +1,9 @@
 package com.lx862.pwgui.gui.panel.editing.filetype.content;
 
 import com.lx862.pwgui.core.Constants;
-import com.lx862.pwgui.Main;
+import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.gui.components.DocumentChangedListener;
-import com.lx862.pwgui.data.fileentry.ContentDirectoryEntry;
+import com.lx862.pwgui.data.model.file.ContentDirectoryModel;
 import com.lx862.pwgui.executable.ProgramExecution;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.gui.components.kui.KGridBagLayoutPanel;
@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 public class CurseForgePanel extends JPanel {
-    public CurseForgePanel(FileEntryPaneContext context, ContentDirectoryEntry fileEntry) {
+    public CurseForgePanel(FileEntryPaneContext context, ContentDirectoryModel fileEntry) {
         setLayout(new BorderLayout());
 
         JPanel rootPanel = new JPanel();
@@ -59,7 +59,7 @@ public class CurseForgePanel extends JPanel {
     }
 
     private void addProject(String content) {
-        ProgramExecution programExecution = Main.packwiz.buildCommand("curseforge", "add", content);
+        ProgramExecution programExecution = Executables.packwiz.buildCommand("curseforge", "add", content);
         ExecutableProgressDialog dialog = new ExecutableProgressDialog((Window)getTopLevelAncestor(), "Adding mod...", Constants.REASON_TRIGGERED_BY_USER, programExecution);
 
         List<String> recordedOutputs = new ArrayList<>();

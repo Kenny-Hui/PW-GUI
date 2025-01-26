@@ -2,12 +2,12 @@ package com.lx862.pwgui.gui.panel.editing.filetype;
 
 import com.lx862.pwgui.Main;
 import com.lx862.pwgui.util.Util;
-import com.lx862.pwgui.data.fileentry.PlainTextFileEntry;
+import com.lx862.pwgui.data.model.file.PlainTextFileModel;
 
 import javax.swing.*;
 
 public class LicenseFilePanel extends FileTypePanel {
-    public LicenseFilePanel(FileEntryPaneContext context, PlainTextFileEntry fileEntry) {
+    public LicenseFilePanel(FileEntryPaneContext context, PlainTextFileModel fileEntry) {
         super(context);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 

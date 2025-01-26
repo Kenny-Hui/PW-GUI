@@ -3,8 +3,7 @@ package com.lx862.pwgui;
 import com.google.gson.JsonObject;
 import com.lx862.pwgui.core.Config;
 import com.lx862.pwgui.core.Modpack;
-import com.lx862.pwgui.executable.GitExecutable;
-import com.lx862.pwgui.executable.PackwizExecutable;
+import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.gui.frame.EditFrame;
 import com.lx862.pwgui.gui.frame.SetupFrame;
 import com.lx862.pwgui.gui.frame.WelcomeFrame;
@@ -19,8 +18,6 @@ import java.io.FileNotFoundException;
 public class Main {
     private static Config config;
     public static final Logger LOGGER = new Logger();
-    public static final PackwizExecutable packwiz = new PackwizExecutable();
-    public static final GitExecutable git = new GitExecutable();
 
     public static void main(String[] args) {
         Options options = new Options();
@@ -49,10 +46,9 @@ public class Main {
                 modpackPath = config.getLastModpackPath() == null ? null : config.getLastModpackPath().toString();
             }
 
-            final boolean packwizLocated = packwiz.updateExecutableLocation(execPath);
+            final boolean packwizLocated = Executables.packwiz.updateExecutableLocation(execPath);
             // final boolean gitLocated = git.updateExecutableLocation(null); // We don't have git support yet
 
-            GUIHelper.setupApplicationTheme(Main.getConfig().getApplicationTheme(), null); // Initialize FlatLaf and it's config
             launchGUI(packwizLocated, modpackPath);
         } catch (Exception e) {
             Main.LOGGER.exception(e);
@@ -61,6 +57,8 @@ public class Main {
     }
 
     private static void launchGUI(boolean packwizLocated, String packFilePath) {
+        GUIHelper.setupApplicationTheme(Main.getConfig().getApplicationTheme(), null); // Initialize FlatLaf and it's config
+
         if(!packwizLocated) { // No packwiz, show setup wizard
             SwingUtilities.invokeLater(() -> {
                 SetupFrame setupFrame = new SetupFrame(null);

@@ -2,10 +2,10 @@ package com.lx862.pwgui.gui.dialog;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.core.Modpack;
+import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.util.GUIHelper;
 import com.lx862.pwgui.core.Constants;
-import com.lx862.pwgui.Main;
 import com.lx862.pwgui.data.IconNamePair;
 import com.lx862.pwgui.gui.components.kui.KFileChooser;
 import com.lx862.pwgui.executable.ProgramExecution;
@@ -76,11 +76,11 @@ public class ExportModpackDialog extends JDialog {
     }
 
     private void exportModpack(List<String> args, File destination) {
-        ProgramExecution programRefresh = Main.packwiz.buildCommand("refresh");
+        ProgramExecution programRefresh = Executables.packwiz.buildCommand("refresh");
         programRefresh.whenExit(refreshExitCode -> {
             if(refreshExitCode != 0) return;
 
-            ProgramExecution program = Main.packwiz.buildCommand(args.toArray(new String[0]));
+            ProgramExecution program = Executables.packwiz.buildCommand(args.toArray(new String[0]));
             ExecutableProgressDialog dialog = new ExecutableProgressDialog(this, "Exporting modpack...", Constants.REASON_TRIGGERED_BY_USER, program);
             Util.addManualDownloadPrompt(this, program, dialog, () -> {
                 exportModpack(args, destination);

@@ -1,8 +1,8 @@
 package com.lx862.pwgui.gui.popup;
 
 import com.lx862.pwgui.core.Constants;
-import com.lx862.pwgui.Main;
 import com.lx862.pwgui.executable.Executable;
+import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.executable.ProgramExecution;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.gui.components.kui.KGridBagLayoutPanel;
@@ -80,7 +80,7 @@ public class ConsoleDialog extends JDialog {
                 splitArgs[i] = argsTokenizer.nextToken();
             }
 
-            ProgramExecution programExecution = Main.packwiz.buildCommand(splitArgs);
+            ProgramExecution programExecution = Executables.packwiz.buildCommand(splitArgs);
             currentExecution = programExecution;
             programExecution.whenStdout(line -> {
                 logTextArea.append(line + "\n");

@@ -3,20 +3,20 @@ package com.lx862.pwgui.gui.panel.editing.filetype;
 import com.lx862.pwgui.Main;
 import com.lx862.pwgui.gui.components.DocumentChangedListener;
 import com.lx862.pwgui.util.Util;
-import com.lx862.pwgui.data.GitIgnoreRules;
-import com.lx862.pwgui.data.fileentry.GenericFileEntry;
-import com.lx862.pwgui.data.fileentry.GitIgnoreFileEntry;
+import com.lx862.pwgui.data.model.GitIgnoreRules;
+import com.lx862.pwgui.data.model.file.GenericFileModel;
+import com.lx862.pwgui.data.model.file.GitIgnoreFileModel;
 
 import javax.swing.*;
 import java.io.FileWriter;
 import java.io.IOException;
 
 public class GitIgnorePanel extends FileTypePanel {
-    private final GenericFileEntry fileEntry;
+    private final GenericFileModel fileEntry;
     private final JTextArea textArea;
     private String initialContent;
 
-    public GitIgnorePanel(FileEntryPaneContext context, GitIgnoreFileEntry fileEntry) {
+    public GitIgnorePanel(FileEntryPaneContext context, GitIgnoreFileModel fileEntry) {
         super(context);
         this.fileEntry = fileEntry;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

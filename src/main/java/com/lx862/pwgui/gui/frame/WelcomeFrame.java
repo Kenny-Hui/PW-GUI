@@ -2,6 +2,7 @@ package com.lx862.pwgui.gui.frame;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.core.Modpack;
+import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.gui.action.SettingsAction;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.gui.components.kui.KFileChooser;
@@ -25,7 +26,7 @@ import java.nio.file.Path;
 public class WelcomeFrame extends BaseFrame {
     public WelcomeFrame(Component parent) {
         super(String.format("Welcome to %s!", Constants.PROGRAM_NAME));
-        Main.packwiz.setPackFileLocation(null);
+        Executables.packwiz.setPackFileLocation(null);
 
         setSize(400, 525);
         setLocationRelativeTo(parent);
@@ -134,7 +135,7 @@ public class WelcomeFrame extends BaseFrame {
     @Override
     public void dispose() {
         super.dispose();
-        Main.packwiz.dispose();
-        Main.git.dispose();
+        Executables.packwiz.dispose();
+        Executables.git.dispose();
     }
 }

@@ -1,7 +1,7 @@
 package com.lx862.pwgui.gui.components.fstree;
 
-import com.lx862.pwgui.data.GitIgnoreRules;
-import com.lx862.pwgui.data.fileentry.FileSystemEntityEntry;
+import com.lx862.pwgui.data.model.GitIgnoreRules;
+import com.lx862.pwgui.data.model.file.FileSystemEntityModel;
 
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
@@ -17,11 +17,11 @@ import static java.nio.file.StandardWatchEventKinds.*;
 
 /* A JTree representing a directory view/file browser. */
 public class FileSystemTree extends JTree {
-    private final Function<File, FileSystemEntityEntry> getFileEntry;
+    private final Function<File, FileSystemEntityModel> getFileEntry;
     private GitIgnoreRules ignorePattern;
     public boolean fsLock; // A slight hack to signal to others when a file is changed
 
-    public FileSystemTree(Path root, Function<File, FileSystemEntityEntry> getFileEntry) {
+    public FileSystemTree(Path root, Function<File, FileSystemEntityModel> getFileEntry) {
         super();
         this.getFileEntry = getFileEntry;
         setModel(new DefaultTreeModel(generateRecursiveTree(root), false));
@@ -47,11 +47,11 @@ public class FileSystemTree extends JTree {
 
         for(File file : files) {
             if(file.isDirectory() && !file.getName().equals(".git")) {
-                FileSystemEntityEntry child = getFileEntry.apply(file);
+                FileSystemEntityModel child = getFileEntry.apply(file);
                 FileSystemSortedTreeNode node = generateRecursiveTree(new FileSystemSortedTreeNode(child));
                 rootNode.add(node);
             } else {
-                FileSystemEntityEntry child = getFileEntry.apply(file);
+                FileSystemEntityModel child = getFileEntry.apply(file);
                 rootNode.add(new FileSystemSortedTreeNode(child));
             }
         }
@@ -64,7 +64,7 @@ public class FileSystemTree extends JTree {
         if(kind == ENTRY_CREATE) {
             addNode(filePath);
         } else if(kind == ENTRY_MODIFY) {
-            FileSystemEntityEntry newNode = getFileEntry.apply(filePath.toFile());
+            FileSystemEntityModel newNode = getFileEntry.apply(filePath.toFile());
             modifyNode(filePath, newNode);
         } else {
             removeNode(filePath);
@@ -84,7 +84,7 @@ public class FileSystemTree extends JTree {
         });
     }
 
-    private void modifyNode(Path target, FileSystemEntityEntry newFileType) {
+    private void modifyNode(Path target, FileSystemEntityModel newFileType) {
         iterateTree((node) -> {
             if(node.path.equals(target)) {
                 TreePath treePath = new TreePath(node.getPath());

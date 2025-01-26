@@ -1,4 +1,4 @@
-package com.lx862.pwgui.data;
+package com.lx862.pwgui.data.model;
 
 import java.nio.file.FileSystems;
 import java.nio.file.Path;

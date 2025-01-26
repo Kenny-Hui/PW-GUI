@@ -1,7 +1,7 @@
 package com.lx862.pwgui.gui.components;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
-import com.lx862.pwgui.data.ManualModInfo;
+import com.lx862.pwgui.data.model.ManualModInfo;
 import com.lx862.pwgui.gui.components.kui.KLinkButton;
 
 import javax.swing.*;

@@ -2,7 +2,7 @@ package com.lx862.pwgui.util;
 
 import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.Main;
-import com.lx862.pwgui.data.ManualModInfo;
+import com.lx862.pwgui.data.model.ManualModInfo;
 import com.lx862.pwgui.executable.ProgramExecution;
 import com.lx862.pwgui.gui.dialog.ExecutableProgressDialog;
 import com.lx862.pwgui.gui.dialog.ManualDownloadDialog;
@@ -26,18 +26,29 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Util {
+    /** Returns a String with the format PROGRAM_NAME - TEXT */
     public static String withTitlePrefix(String str) {
         return String.format("%s - %s", Constants.PROGRAM_NAME, str);
     }
 
+    /** Returns a String with the format [PROGRAM_NAME] TEXT */
     public static String withBracketPrefix(String str) {
         return String.format("[%s] %s", Constants.PROGRAM_NAME, str);
     }
 
+    /** Get resources from jar */
     public static InputStream getAssets(String path) {
         return Main.class.getResourceAsStream(path);
     }
 
+    /** Copy resources from within a jar to a file in a directory */
+    public static void copyAssetsToPath(String assetsPath, String outputName, Path path) throws IOException {
+        try(InputStream is = getAssets(assetsPath)) {
+            Files.copy(is, path.resolve(outputName), StandardCopyOption.REPLACE_EXISTING);
+        }
+    }
+
+    /** Copy a string to a system clipboard */
     public static void copyToClipboard(String str) {
         StringSelection stringSelection = new StringSelection(str);
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -119,12 +130,6 @@ public class Util {
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(parent, String.format("An error occured while moving manually downloaded files:\n%s\nPlease move %s manually to %s", e.getMessage(), modInfo.fileName, cacheDirectory), Util.withTitlePrefix("Failed to Move Files!"), JOptionPane.ERROR_MESSAGE);
             }
-        }
-    }
-
-    public static void copyAssetsToPath(String assetsPath, String outputName, Path path) throws IOException {
-        try(InputStream is = getAssets(assetsPath)) {
-            Files.copy(is, path.resolve(outputName), StandardCopyOption.REPLACE_EXISTING);
         }
     }
 }

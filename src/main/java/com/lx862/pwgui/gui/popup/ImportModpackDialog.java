@@ -1,8 +1,8 @@
 package com.lx862.pwgui.gui.popup;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
-import com.lx862.pwgui.Main;
 import com.lx862.pwgui.core.Constants;
+import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.executable.ProgramExecution;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.gui.components.kui.KFileChooser;
@@ -101,7 +101,7 @@ public class ImportModpackDialog extends JDialog {
                     modpackFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                     if(modpackFileChooser.openSaveDirectoryDialog(this) == JFileChooser.APPROVE_OPTION) {
                         File destinationPath = modpackFileChooser.getSelectedFile();
-                        Main.packwiz.changeWorkingDirectory(destinationPath.toPath());
+                        Executables.packwiz.changeWorkingDirectory(destinationPath.toPath());
 
                         runImportCommand(file, () -> {
                             importCallback.accept(destinationPath.toPath().resolve("pack.toml"));
@@ -114,7 +114,7 @@ public class ImportModpackDialog extends JDialog {
         }
 
         private void runImportCommand(File sourceFile, Runnable callback) {
-            ProgramExecution programExecution = Main.packwiz.buildCommand("curseforge", "import", sourceFile.toString());
+            ProgramExecution programExecution = Executables.packwiz.buildCommand("curseforge", "import", sourceFile.toString());
             programExecution.whenExit(exitCode -> {
                 if(exitCode == 0) {
                     callback.run();

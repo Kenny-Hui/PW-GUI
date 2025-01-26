@@ -3,7 +3,8 @@ package com.lx862.pwgui.gui.panel.editing.filetype;
 import com.lx862.pwgui.Main;
 import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.core.PackIndexFile;
-import com.lx862.pwgui.data.fileentry.GenericFileEntry;
+import com.lx862.pwgui.data.model.file.GenericFileModel;
+import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.util.Util;
 
@@ -21,7 +22,7 @@ public class FilePanel extends FileTypePanel {
     private JCheckBox preserveCheckBox;
     private boolean initialPreserve;
 
-    public FilePanel(FileEntryPaneContext context, GenericFileEntry fileEntry) {
+    public FilePanel(FileEntryPaneContext context, GenericFileModel fileEntry) {
         super(context);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         JLabel fileNameLabel = new JLabel(String.format("File name: %s", fileEntry.name));
@@ -75,7 +76,7 @@ public class FilePanel extends FileTypePanel {
                 try {
                     Files.delete(fileEntry.path);
                     Main.LOGGER.info(String.format("Deleted file %s", fileEntry.path));
-                    Main.packwiz.buildCommand("refresh").execute("File deleted by user");
+                    Executables.packwiz.buildCommand("refresh").execute("File deleted by user");
                 } catch (IOException e) {
                     Main.LOGGER.error(String.format("Failed to deleted file %s due to %s", fileEntry.path, e.getMessage()));
                     JOptionPane.showMessageDialog(getTopLevelAncestor(), String.format("Sorry but we are unable to delete the file, error as follows: \n%s\nYou might try doing it from an external file manager.", e.getMessage()));

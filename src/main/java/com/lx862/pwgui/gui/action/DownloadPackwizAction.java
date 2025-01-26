@@ -2,6 +2,7 @@ package com.lx862.pwgui.gui.action;
 
 import com.lx862.pwgui.Main;
 import com.lx862.pwgui.core.Config;
+import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.gui.frame.WelcomeFrame;
 import com.lx862.pwgui.gui.dialog.DownloadProgressDialog;
 import com.lx862.pwgui.util.Util;
@@ -126,8 +127,8 @@ public class DownloadPackwizAction extends AbstractAction {
             } catch (UnsupportedOperationException ignored) {
             }
 
-            Main.packwiz.updateExecutableLocation(null);
-            if(!Main.packwiz.usable()) {
+            Executables.packwiz.updateExecutableLocation(null);
+            if(!Executables.packwiz.usable()) {
                 JOptionPane.showMessageDialog(parent, "Packwiz executable is not valid :(\nPlease try manually downloading packwiz and locating it.", Util.withTitlePrefix("Invalid Executable"), JOptionPane.ERROR_MESSAGE);
                 return false;
             }

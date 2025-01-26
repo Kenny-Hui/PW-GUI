@@ -1,13 +1,13 @@
 package com.lx862.pwgui.gui.panel.editing.filetype;
 
 import com.lx862.pwgui.gui.components.kui.KImageDisplayPanel;
-import com.lx862.pwgui.data.fileentry.GenericFileEntry;
+import com.lx862.pwgui.data.model.file.GenericFileModel;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 
 public class ImagePanel extends FileTypePanel {
-    public ImagePanel(FileEntryPaneContext context, GenericFileEntry fileEntry) {
+    public ImagePanel(FileEntryPaneContext context, GenericFileModel fileEntry) {
         super(context);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 

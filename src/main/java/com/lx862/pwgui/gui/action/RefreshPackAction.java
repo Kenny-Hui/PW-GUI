@@ -1,7 +1,7 @@
 package com.lx862.pwgui.gui.action;
 
-import com.lx862.pwgui.Main;
 import com.lx862.pwgui.core.Constants;
+import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
@@ -23,7 +23,7 @@ public class RefreshPackAction extends AbstractAction {
     public void actionPerformed(ActionEvent e) {
         AtomicReference<String> lastLine = new AtomicReference<>();
 
-        Main.packwiz.buildCommand("refresh")
+        Executables.packwiz.buildCommand("refresh")
                 .whenStdout(lastLine::set)
                 .whenExit(exitCode -> {
                     if(exitCode == 0) {

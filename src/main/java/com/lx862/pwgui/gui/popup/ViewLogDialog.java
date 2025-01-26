@@ -14,6 +14,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.function.Consumer;
 
+/** Dialog to view the program's log */
 public class ViewLogDialog extends JDialog {
     private final Consumer<String> appendLogCallback;
 

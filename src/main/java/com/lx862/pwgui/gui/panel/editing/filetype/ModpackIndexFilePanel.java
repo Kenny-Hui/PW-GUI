@@ -1,14 +1,14 @@
 package com.lx862.pwgui.gui.panel.editing.filetype;
 
+import com.lx862.pwgui.data.model.file.ModpackIndexFileModel;
 import com.lx862.pwgui.gui.action.RefreshPackAction;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.util.GUIHelper;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class ModpackIndexFilePanel extends FileTypePanel {
-    public ModpackIndexFilePanel(FileEntryPaneContext context) {
+    public ModpackIndexFilePanel(FileEntryPaneContext context, ModpackIndexFileModel fileEntry) {
         super(context);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         

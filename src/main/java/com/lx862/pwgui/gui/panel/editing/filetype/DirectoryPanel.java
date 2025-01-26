@@ -1,8 +1,8 @@
 package com.lx862.pwgui.gui.panel.editing.filetype;
 
 import com.lx862.pwgui.Main;
-import com.lx862.pwgui.data.fileentry.DirectoryEntry;
-import com.lx862.pwgui.data.fileentry.GenericFileEntry;
+import com.lx862.pwgui.data.model.file.DirectoryModel;
+import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.util.Util;
 import org.apache.commons.io.FileUtils;
@@ -11,11 +11,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.nio.file.Files;
 
 public class DirectoryPanel extends FileTypePanel {
 
-    public DirectoryPanel(FileEntryPaneContext context, DirectoryEntry fileEntry) {
+    public DirectoryPanel(FileEntryPaneContext context, DirectoryModel fileEntry) {
         super(context);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         JLabel fileNameLabel = new JLabel(String.format("Folder name: %s", fileEntry.name));
@@ -46,7 +45,7 @@ public class DirectoryPanel extends FileTypePanel {
                 try {
                     FileUtils.deleteDirectory(fileEntry.path.toFile());
                     Main.LOGGER.info(String.format("Deleted folder %s", fileEntry.path));
-                    Main.packwiz.buildCommand("refresh").execute("Folder deleted by user");
+                    Executables.packwiz.buildCommand("refresh").execute("Folder deleted by user");
                 } catch (IOException e) {
                     Main.LOGGER.error(String.format("Failed to deleted folder %s due to %s", fileEntry.path, e.getMessage()));
                     JOptionPane.showMessageDialog(getTopLevelAncestor(), String.format("Sorry but we are unable to delete the folder, error as follows: \n%s\nYou might try doing it from an external file manager.", e.getMessage()));

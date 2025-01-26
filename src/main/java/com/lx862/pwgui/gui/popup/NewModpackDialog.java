@@ -1,6 +1,7 @@
 package com.lx862.pwgui.gui.popup;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.gui.components.kui.KFileChooser;
 import com.lx862.pwgui.gui.dialog.ExecutableProgressDialog;
@@ -113,9 +114,9 @@ public class NewModpackDialog extends JDialog {
 
                 String[] argsStr = arguments.toArray(new String[0]);
 
-                Main.packwiz.changeWorkingDirectory(modpackDirectory.toPath());
+                Executables.packwiz.changeWorkingDirectory(modpackDirectory.toPath());
 
-                ProgramExecution processExecution = Main.packwiz.buildCommand(argsStr).whenExit(exitCode -> {
+                ProgramExecution processExecution = Executables.packwiz.buildCommand(argsStr).whenExit(exitCode -> {
                     if(exitCode == 0) {
                         dispose();
                         if(finishCallback != null) finishCallback.accept(modpackDirectory.toPath());

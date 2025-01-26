@@ -1,6 +1,7 @@
 package com.lx862.pwgui.gui.frame;
 
 import com.lx862.pwgui.core.Modpack;
+import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.gui.action.RefreshPackAction;
 import com.lx862.pwgui.gui.action.SettingsAction;
 import com.lx862.pwgui.gui.action.UpdateAllAction;
@@ -8,7 +9,7 @@ import com.lx862.pwgui.gui.components.kui.KMenu;
 import com.lx862.pwgui.gui.components.kui.KMenuItem;
 import com.lx862.pwgui.gui.popup.ConsoleDialog;
 import com.lx862.pwgui.gui.dialog.ExportModpackDialog;
-import com.lx862.pwgui.gui.popup.DevServerFrame;
+import com.lx862.pwgui.gui.popup.DevServerDialog;
 import com.lx862.pwgui.util.Util;
 import com.lx862.pwgui.Main;
 import com.lx862.pwgui.gui.popup.ImportModpackDialog;
@@ -31,8 +32,8 @@ public class EditFrame extends BaseFrame {
         setSize(900, 650);
         setLocationRelativeTo(parent);
 
-        Main.packwiz.setPackFileLocation(modpack.getRootPath().relativize(modpack.getPackFilePath()).toString());
-        Main.packwiz.changeWorkingDirectory(modpack.getRootPath());
+        Executables.packwiz.setPackFileLocation(modpack.getRootPath().relativize(modpack.getPackFilePath()).toString());
+        Executables.packwiz.changeWorkingDirectory(modpack.getRootPath());
 
         Main.getConfig().setLastModpackPath(modpack.getPackFilePath());
 
@@ -127,7 +128,7 @@ public class EditFrame extends BaseFrame {
         devServerMenuItem.setMnemonic(KeyEvent.VK_D);
         toolMenu.add(devServerMenuItem);
         devServerMenuItem.addActionListener(actionEvent -> {
-            DevServerFrame frame = new DevServerFrame(this);
+            DevServerDialog frame = new DevServerDialog(this);
             frame.setVisible(true);
         });
 
@@ -140,7 +141,7 @@ public class EditFrame extends BaseFrame {
     }
 
     private void openPackwizConsole() {
-        ConsoleDialog frame = new ConsoleDialog(Main.packwiz, this);
+        ConsoleDialog frame = new ConsoleDialog(Executables.packwiz, this);
         frame.setVisible(true);
     }
 
@@ -163,7 +164,7 @@ public class EditFrame extends BaseFrame {
     public void dispose() {
         super.dispose();
         editPanel.dispose();
-        Main.packwiz.dispose();
-        Main.git.dispose();
+        Executables.packwiz.dispose();
+        Executables.git.dispose();
     }
 }

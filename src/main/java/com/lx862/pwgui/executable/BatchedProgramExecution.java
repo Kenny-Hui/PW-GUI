@@ -15,11 +15,11 @@ public class BatchedProgramExecution {
 
     /** Add another program to queued for execution */
     public void add(ProgramExecution exec) {
-        this.programExecutions.add(exec);
+        programExecutions.add(exec);
     }
 
     public void run(String reason, Consumer<Boolean> callback) {
-        if(programExecutions.isEmpty()) callback.accept(true);
+        if(programExecutions.isEmpty()) callback.accept(true); // Nothing to run
 
         AtomicInteger erroredCommands = new AtomicInteger();
         AtomicInteger executedCommands = new AtomicInteger();

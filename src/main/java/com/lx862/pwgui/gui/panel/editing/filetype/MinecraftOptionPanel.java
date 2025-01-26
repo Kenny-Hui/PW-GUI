@@ -2,13 +2,13 @@ package com.lx862.pwgui.gui.panel.editing.filetype;
 
 import com.lx862.pwgui.Main;
 import com.lx862.pwgui.util.Util;
-import com.lx862.pwgui.data.fileentry.MinecraftOptionsFileEntry;
+import com.lx862.pwgui.data.model.file.MinecraftOptionsFileModel;
 
 import javax.swing.*;
 
 public class MinecraftOptionPanel extends FileTypePanel {
 
-    public MinecraftOptionPanel(FileEntryPaneContext context, MinecraftOptionsFileEntry fileEntry) {
+    public MinecraftOptionPanel(FileEntryPaneContext context, MinecraftOptionsFileModel fileEntry) {
         super(context);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 

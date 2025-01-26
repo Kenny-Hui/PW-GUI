@@ -1,9 +1,9 @@
 package com.lx862.pwgui.gui.panel.editing.filetype.content;
 
+import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.gui.components.kui.KButton;
-import com.lx862.pwgui.Main;
 import com.lx862.pwgui.gui.components.DocumentChangedListener;
-import com.lx862.pwgui.data.fileentry.ContentDirectoryEntry;
+import com.lx862.pwgui.data.model.file.ContentDirectoryModel;
 import com.lx862.pwgui.executable.ProgramExecution;
 import com.lx862.pwgui.gui.components.kui.KGridBagLayoutPanel;
 import com.lx862.pwgui.gui.components.kui.KTextField;
@@ -28,7 +28,7 @@ public class UrlPanel extends JPanel {
         alternativeForDomain.put("forgecdn.net", "Curseforge");
     }
 
-    public UrlPanel(FileEntryPaneContext context, ContentDirectoryEntry fileEntry) {
+    public UrlPanel(FileEntryPaneContext context, ContentDirectoryModel fileEntry) {
         setLayout(new BorderLayout());
 
         JPanel rootPanel = new JPanel();
@@ -72,7 +72,7 @@ public class UrlPanel extends JPanel {
         add(rootPanel, BorderLayout.CENTER);
     }
 
-    private void addProject(FileEntryPaneContext context, ContentDirectoryEntry fileEntry, String name, String urlString) {
+    private void addProject(FileEntryPaneContext context, ContentDirectoryModel fileEntry, String name, String urlString) {
         try {
             URI url = new URI(urlString);
             if(alternativeForDomain.containsKey(url.getHost())) {
@@ -84,7 +84,7 @@ public class UrlPanel extends JPanel {
         } catch (URISyntaxException ignored) {
         }
 
-        ProgramExecution programExecution = Main.packwiz.buildCommand("url", "add", name, urlString, "--meta-folder", context.getModpack().getRootPath().relativize(fileEntry.path).toString(), "--force"); // We already did a domain check before, so forcibly add it anyway.
+        ProgramExecution programExecution = Executables.packwiz.buildCommand("url", "add", name, urlString, "--meta-folder", context.getModpack().getRootPath().relativize(fileEntry.path).toString(), "--force"); // We already did a domain check before, so forcibly add it anyway.
         programExecution.whenExit((exitCode) -> {
             if(exitCode == 0) {
                 JOptionPane.showMessageDialog(getTopLevelAncestor(), String.format("%s has been added!", name), Util.withTitlePrefix("Item Added!"), JOptionPane.INFORMATION_MESSAGE);

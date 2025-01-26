@@ -1,9 +1,11 @@
 package com.lx862.pwgui.gui.panel.editing.filetype;
 
+import com.lx862.pwgui.data.model.file.DirectoryModel;
+
 import javax.swing.*;
 
 public class ConfigDirectoryPanel extends FileTypePanel {
-    public ConfigDirectoryPanel(FileEntryPaneContext context) {
+    public ConfigDirectoryPanel(FileEntryPaneContext context, DirectoryModel fileEntry) {
         super(context);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 

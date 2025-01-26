@@ -53,7 +53,7 @@ public class GUIHelper {
         return img.getScaledInstance((int)(imgWidth * minRatio), (int)(imgHeight * minRatio), Image.SCALE_SMOOTH);
     }
 
-    /* Returns a new image with the specified opacity */
+    /** Returns a new image with the specified opacity */
     public static Image imageOpacity(Image image, float opacity) {
         BufferedImage newImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = (Graphics2D)newImage.getGraphics();

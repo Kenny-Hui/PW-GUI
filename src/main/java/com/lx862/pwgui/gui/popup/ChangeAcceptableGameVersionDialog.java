@@ -3,10 +3,10 @@ package com.lx862.pwgui.gui.popup;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.data.Caches;
 import com.lx862.pwgui.core.Constants;
-import com.lx862.pwgui.Main;
 import com.lx862.pwgui.data.PackComponent;
 import com.lx862.pwgui.data.VersionMetadata;
 import com.lx862.pwgui.executable.BatchedProgramExecution;
+import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.gui.action.CloseWindowAction;
 import com.lx862.pwgui.gui.components.ToggleListSelectionModel;
 import com.lx862.pwgui.gui.components.kui.KButton;
@@ -118,10 +118,10 @@ public class ChangeAcceptableGameVersionDialog extends JDialog {
         BatchedProgramExecution batchedProgramExecution = new BatchedProgramExecution();
 
         for(String version : toBeRemoved) {
-            batchedProgramExecution.add(Main.packwiz.buildCommand("settings", "acceptable-versions", "--remove", version));
+            batchedProgramExecution.add(Executables.packwiz.buildCommand("settings", "acceptable-versions", "--remove", version));
         }
         for(String version : toBeAdded) {
-            batchedProgramExecution.add(Main.packwiz.buildCommand("settings", "acceptable-versions", "--add", version));
+            batchedProgramExecution.add(Executables.packwiz.buildCommand("settings", "acceptable-versions", "--add", version));
         }
 
         batchedProgramExecution.run(Constants.REASON_TRIGGERED_BY_USER, callback);

@@ -17,7 +17,7 @@ public abstract class Executable {
     protected final List<String> keywords;
     protected final List<String> potentialPaths;
     protected final String programName;
-    protected String executableLocation = null;
+    protected String executableLocation;
 
     public Executable(String programName) {
         this.workingDirectory = Paths.get(System.getProperty("user.dir"));
@@ -25,6 +25,7 @@ public abstract class Executable {
         this.keywords = new ArrayList<>();
         this.potentialPaths = new ArrayList<>();
         this.programName = programName;
+        this.executableLocation = null;
     }
 
     public boolean updateExecutableLocation(String executableOverride) {

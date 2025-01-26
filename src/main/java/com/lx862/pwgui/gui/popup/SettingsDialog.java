@@ -4,6 +4,7 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.Main;
 import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.data.ApplicationTheme;
+import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.gui.action.ResetProgramAction;
 import com.lx862.pwgui.gui.components.filters.PackwizExecutableFileFilter;
 import com.lx862.pwgui.gui.components.kui.*;
@@ -123,7 +124,7 @@ public class SettingsDialog extends JDialog {
         Path oldPath = Main.getConfig().getPackwizExecutablePath();
 
         Main.getConfig().setPackwizExecutablePath(newPath);
-        boolean located = Main.packwiz.probe(null) != null;
+        boolean located = Executables.packwiz.probe(null) != null;
         Main.getConfig().setPackwizExecutablePath(oldPath); // restore
 
         if(!located) {
@@ -140,7 +141,7 @@ public class SettingsDialog extends JDialog {
         Main.getConfig().setOpenLastModpackOnLaunch(relaunchModpackCheckbox.isSelected());
         Main.getConfig().setPackwizExecutablePath(packwizLocationPath);
         Main.getConfig().setApplicationTheme((ApplicationTheme) themeComboBox.getSelectedItem());
-        Main.packwiz.updateExecutableLocation(null);
+        Executables.packwiz.updateExecutableLocation(null);
 
         try {
             Main.getConfig().write(Constants.REASON_TRIGGERED_BY_USER);

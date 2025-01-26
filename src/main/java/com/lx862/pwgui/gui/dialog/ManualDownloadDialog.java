@@ -3,7 +3,7 @@ package com.lx862.pwgui.gui.dialog;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.Main;
 import com.lx862.pwgui.gui.components.ManualModEntryPanel;
-import com.lx862.pwgui.data.ManualModInfo;
+import com.lx862.pwgui.data.model.ManualModInfo;
 import com.lx862.pwgui.gui.components.fstree.FileSystemWatcher;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.gui.components.kui.KFileChooser;

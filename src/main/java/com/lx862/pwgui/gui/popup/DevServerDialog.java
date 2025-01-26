@@ -1,5 +1,6 @@
 package com.lx862.pwgui.gui.popup;
 
+import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.util.Util;
 import com.lx862.pwgui.Main;
@@ -11,12 +12,12 @@ import java.awt.event.KeyEvent;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class DevServerFrame extends JDialog {
+public class DevServerDialog extends JDialog {
     private final JTextArea logTextArea;
     private final ExecutorService serverExecutor;
     private ProgramExecution packwizServeProgram;
 
-    public DevServerFrame(JFrame frame) {
+    public DevServerDialog(JFrame frame) {
         super(frame, Util.withTitlePrefix("Packwiz Serve"));
 
         setSize(400, 400);
@@ -60,7 +61,7 @@ public class DevServerFrame extends JDialog {
 
     private void startServer() {
         logTextArea.append("----- Development Server Started -----\n");
-        packwizServeProgram = Main.packwiz.buildCommand("serve")
+        packwizServeProgram = Executables.packwiz.buildCommand("serve")
             .whenStdout((line) -> {
                 logTextArea.append(line + "\n");
             });

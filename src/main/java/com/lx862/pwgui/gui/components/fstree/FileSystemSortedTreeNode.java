@@ -1,6 +1,6 @@
 package com.lx862.pwgui.gui.components.fstree;
 
-import com.lx862.pwgui.data.fileentry.FileSystemEntityEntry;
+import com.lx862.pwgui.data.model.file.FileSystemEntityModel;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
@@ -12,7 +12,7 @@ public class FileSystemSortedTreeNode extends DefaultMutableTreeNode implements 
     public final String name;
     public final Path path;
 
-    public FileSystemSortedTreeNode(FileSystemEntityEntry node) {
+    public FileSystemSortedTreeNode(FileSystemEntityModel node) {
         this.path = node.path;
         this.name = node.name;
         setUserObject(node);

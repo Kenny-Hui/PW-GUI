@@ -1,4 +1,4 @@
-package com.lx862.pwgui.data;
+package com.lx862.pwgui.data.model;
 
 public class ManualModInfo {
     public final String name;

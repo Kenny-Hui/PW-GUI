@@ -4,14 +4,14 @@ import com.lx862.pwgui.gui.panel.editing.filetype.FileEntryPaneContext;
 import com.lx862.pwgui.gui.panel.editing.filetype.FileTypePanel;
 import com.lx862.pwgui.util.GUIHelper;
 import com.lx862.pwgui.data.IconNamePair;
-import com.lx862.pwgui.data.fileentry.ContentDirectoryEntry;
+import com.lx862.pwgui.data.model.file.ContentDirectoryModel;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class AddContentPanel extends FileTypePanel {
-    public AddContentPanel(FileEntryPaneContext context, ContentDirectoryEntry fileEntry) {
+    public AddContentPanel(FileEntryPaneContext context, ContentDirectoryModel fileEntry) {
         super(context);
         setLayout(new BorderLayout());
 

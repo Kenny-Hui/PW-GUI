@@ -2,22 +2,22 @@ package com.lx862.pwgui.gui.panel.editing.filetype;
 
 import com.lx862.pwgui.Main;
 import com.lx862.pwgui.core.Modpack;
-import com.lx862.pwgui.data.GitIgnoreRules;
+import com.lx862.pwgui.data.model.GitIgnoreRules;
 import com.lx862.pwgui.gui.components.DocumentChangedListener;
-import com.lx862.pwgui.data.fileentry.GenericFileEntry;
-import com.lx862.pwgui.data.fileentry.PackwizIgnoreFileEntry;
+import com.lx862.pwgui.data.model.file.GenericFileModel;
+import com.lx862.pwgui.data.model.file.PackwizIgnoreFileModel;
 
 import javax.swing.*;
 import java.io.FileWriter;
 import java.io.IOException;
 
 public class PackwizIgnorePanel extends FileTypePanel {
-    private final GenericFileEntry fileEntry;
+    private final GenericFileModel fileEntry;
     private final JTextArea textArea;
     private final FileEntryPaneContext context;
     private String initialContent;
 
-    public PackwizIgnorePanel(FileEntryPaneContext context, PackwizIgnoreFileEntry fileEntry) {
+    public PackwizIgnorePanel(FileEntryPaneContext context, PackwizIgnoreFileModel fileEntry) {
         super(context);
         this.context = context;
         this.fileEntry = fileEntry;

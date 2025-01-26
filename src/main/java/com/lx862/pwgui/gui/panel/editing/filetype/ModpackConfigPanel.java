@@ -6,7 +6,7 @@ import com.lx862.pwgui.gui.action.UpdateAllAction;
 import com.lx862.pwgui.gui.panel.ModpackExtraSettingPanel;
 import com.lx862.pwgui.gui.panel.ModpackInfoPanel;
 import com.lx862.pwgui.gui.panel.ModpackVersionPanel;
-import com.lx862.pwgui.data.fileentry.ModpackConfigFileEntry;
+import com.lx862.pwgui.data.model.file.ModpackConfigFileModel;
 import com.lx862.pwgui.gui.components.kui.KSeparator;
 import com.lx862.pwgui.util.Util;
 
@@ -20,7 +20,7 @@ public class ModpackConfigPanel extends FileTypePanel {
     private final ModpackExtraSettingPanel modpackExtraSettingPanel;
     private final PackFile packFile;
 
-    public ModpackConfigPanel(FileEntryPaneContext context, ModpackConfigFileEntry fileEntry) throws IOException {
+    public ModpackConfigPanel(FileEntryPaneContext context, ModpackConfigFileModel fileEntry) throws IOException {
         super(context);
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 

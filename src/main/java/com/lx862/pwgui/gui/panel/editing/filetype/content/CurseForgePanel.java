@@ -39,7 +39,12 @@ public class CurseForgePanel extends JPanel {
         KTextField contentTextField = new KTextField("Cloth Config API");
         formPanel.addRow(1, new JLabel("URL/Search Term: "), contentTextField);
 
+        contentTextField.addActionListener(actionEvent -> {
+            if(!contentTextField.getText().isEmpty()) addProject(contentTextField.getText());
+        });
+
         KButton addButton = new KButton("Add Project");
+        addButton.addActionListener(actionEvent -> addProject(contentTextField.getText()));
         addButton.setMnemonic(KeyEvent.VK_A);
         addButton.setAlignmentX(LEFT_ALIGNMENT);
         formPanel.addRow(2, addButton);
@@ -48,7 +53,6 @@ public class CurseForgePanel extends JPanel {
 
         updateAddProjectButtonState(addButton, contentTextField);
 
-        addButton.addActionListener(actionEvent -> addProject(contentTextField.getText()));
 
         rootPanel.add(formPanel);
         add(rootPanel, BorderLayout.CENTER);

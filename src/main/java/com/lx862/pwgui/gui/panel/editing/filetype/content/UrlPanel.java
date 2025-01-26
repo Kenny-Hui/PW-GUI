@@ -45,6 +45,11 @@ public class UrlPanel extends JPanel {
         formPanel.addRow(1, new JLabel("Name: "), nameTextField);
 
         KTextField urlTextField = new KTextField("https://example.com");
+        urlTextField.addActionListener(actionEvent -> {
+            if(!nameTextField.getText().isEmpty() && !urlTextField.getText().isEmpty()) {
+                addProject(context, fileEntry, nameTextField.getText(), urlTextField.getText());
+            }
+        });
         formPanel.addRow(1, new JLabel("URL: "), urlTextField);
 
         JLabel invalidUrlLabel = new JLabel("Please enter a valid URL!");
@@ -61,30 +66,32 @@ public class UrlPanel extends JPanel {
 
         updateInstallButtonState(addButton, nameTextField, urlTextField, invalidUrlLabel);
 
-        addButton.addActionListener(actionEvent -> {
-            try {
-                URI url = new URI(urlTextField.getText());
-                if(alternativeForDomain.containsKey(url.getHost())) {
-                    String alternativeName = alternativeForDomain.get(url.getHost());
-                    if(JOptionPane.showConfirmDialog(getTopLevelAncestor(), String.format("Adding content from %s is supported natively in this application.\nBy continuing, you won't get auto-update and other %s-specific features.\nContinue anyway?", alternativeName, alternativeName), Util.withTitlePrefix("Use Alternate Installation Method?"), JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
-                        return;
-                    }
-                }
-            } catch (URISyntaxException ignored) {
-            }
-
-            ProgramExecution programExecution = Main.packwiz.buildCommand("url", "add", nameTextField.getText(), urlTextField.getText(), "--meta-folder", context.getModpack().getRootPath().relativize(fileEntry.path).toString(), "--force"); // We already did a domain check before, so forcibly add it anyway.
-            programExecution.whenExit((exitCode) -> {
-               if(exitCode == 0) {
-                   JOptionPane.showMessageDialog(getTopLevelAncestor(), nameTextField.getText() + " has been added!", Util.withTitlePrefix("Item Added!"), JOptionPane.INFORMATION_MESSAGE);
-               }
-            });
-
-            new ExecutableProgressDialog((Window)getTopLevelAncestor(), "Adding item...", "Triggered by user", programExecution).setVisible(true);
-        });
+        addButton.addActionListener(actionEvent -> addProject(context, fileEntry, nameTextField.getText(), urlTextField.getText()));
 
         rootPanel.add(formPanel);
         add(rootPanel, BorderLayout.CENTER);
+    }
+
+    private void addProject(FileEntryPaneContext context, ContentDirectoryEntry fileEntry, String name, String urlString) {
+        try {
+            URI url = new URI(urlString);
+            if(alternativeForDomain.containsKey(url.getHost())) {
+                String alternativeName = alternativeForDomain.get(url.getHost());
+                if(JOptionPane.showConfirmDialog(getTopLevelAncestor(), String.format("Adding content from %s is supported natively in this application.\nBy continuing, you won't get auto-update and other %s-specific features.\nContinue anyway?", alternativeName, alternativeName), Util.withTitlePrefix("Use Alternate Installation Method?"), JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
+                    return;
+                }
+            }
+        } catch (URISyntaxException ignored) {
+        }
+
+        ProgramExecution programExecution = Main.packwiz.buildCommand("url", "add", name, urlString, "--meta-folder", context.getModpack().getRootPath().relativize(fileEntry.path).toString(), "--force"); // We already did a domain check before, so forcibly add it anyway.
+        programExecution.whenExit((exitCode) -> {
+            if(exitCode == 0) {
+                JOptionPane.showMessageDialog(getTopLevelAncestor(), String.format("%s has been added!", name), Util.withTitlePrefix("Item Added!"), JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+
+        new ExecutableProgressDialog((Window)getTopLevelAncestor(), "Adding item...", "Triggered by user", programExecution).setVisible(true);
     }
 
     private void updateInstallButtonState(JButton addButton, KTextField nameTextField, KTextField urlTextField, JLabel urlInvalidLabel) {

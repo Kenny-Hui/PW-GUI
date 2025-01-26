@@ -39,24 +39,24 @@ public class SetupFrame extends BaseFrame {
         rootPanel.add(Box.createVerticalGlue());
         rootPanel.add(logoLabel);
 
-        GUIHelper.createVerticalPadding(8);
+        rootPanel.add(GUIHelper.createVerticalPadding(8));
 
         JLabel titleLabel = new JLabel(String.format("Heya! Welcome to %s!", Constants.PROGRAM_NAME));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         titleLabel.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h2.font")));
         rootPanel.add(titleLabel);
 
-        GUIHelper.createVerticalPadding(8);
+        rootPanel.add(GUIHelper.createVerticalPadding(8));
 
         JLabel descriptionLabel = new JLabel("<html><div style=\"text-align:center\">PW-GUI aims to simplify modpack management by providing a GUI around the command-line program packwiz.</div></html>", SwingConstants.CENTER);
         descriptionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         rootPanel.add(descriptionLabel);
 
-        GUIHelper.createVerticalPadding(12);
+        rootPanel.add(GUIHelper.createVerticalPadding(10));
 
         rootPanel.add(new KSeparator());
 
-        GUIHelper.createVerticalPadding(12);
+        rootPanel.add(GUIHelper.createVerticalPadding(10));
 
         JLabel whatToDoNextDescriptionLabel = new JLabel("<html><p style=\"text-align:center\">Don't have packwiz yet? Just click the download button below and we'll take care of it!</p><p style=\"margin-top:7px;text-align:center;\">Otherwise, please give me a favor by pointing me to the packwiz executable~</p></html>", SwingConstants.CENTER);
         whatToDoNextDescriptionLabel.setAlignmentY(Component.TOP_ALIGNMENT);

@@ -79,7 +79,7 @@ public class Config extends WritableFile {
         jsonObject.addProperty("applicationTheme", applicationTheme.name());
 
         JsonObject executableJsonObject = new JsonObject();
-        executableJsonObject.addProperty("packwiz", packwizExecutablePath.toString());
+        if(packwizExecutablePath != null) executableJsonObject.addProperty("packwiz", packwizExecutablePath.toString());
         jsonObject.add("executables", executableJsonObject);
 
         try(Writer writer = new FileWriter(CONFIG_PATH.toFile())) {

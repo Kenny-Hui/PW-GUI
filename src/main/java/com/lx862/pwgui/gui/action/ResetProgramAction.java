@@ -4,6 +4,7 @@ import com.lx862.pwgui.Main;
 import com.lx862.pwgui.core.Config;
 import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.gui.frame.SetupFrame;
+import com.lx862.pwgui.util.GUIHelper;
 import com.lx862.pwgui.util.Util;
 import org.apache.commons.io.FileUtils;
 
@@ -31,6 +32,7 @@ public class ResetProgramAction extends AbstractAction {
                 Main.LOGGER.exception(e);
                 JOptionPane.showMessageDialog(parents[0], String.format("Failed to delete folder %s!\nCannot reset program!", Config.CONFIG_DIR_PATH), Util.withTitlePrefix("Reset Failed!"), JOptionPane.ERROR_MESSAGE);
             }
+
             SetupFrame setupFrame = new SetupFrame(parents[0]);
             setupFrame.setVisible(true);
 

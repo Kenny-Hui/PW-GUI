@@ -69,11 +69,11 @@ public class UpdateAllAction extends AbstractAction {
         programExecution.whenExit(exitCode -> {
             if(exitCode == 0) {
                 if(alreadyUpToDate.get()) {
-                    JOptionPane.showMessageDialog(parent, "All files are already up to date!", Util.withTitlePrefix("Already up to date"), JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(parent, "All files are already up to date!", Util.withTitlePrefix("Up to Date!"), JOptionPane.INFORMATION_MESSAGE);
                 } else if(modsUpdated.get()) {
-                    JOptionPane.showMessageDialog(parent, "All files have been updated!", Util.withTitlePrefix("Update successful"), JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(parent, "All files have been updated!", Util.withTitlePrefix("Update Successful!"), JOptionPane.INFORMATION_MESSAGE);
                 } else {
-                    JOptionPane.showMessageDialog(parent, "Update cancelled!", Util.withTitlePrefix("Update cancelled"), JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(parent, "Update cancelled, no changes has been made.", Util.withTitlePrefix("Update Cancelled!"), JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         });

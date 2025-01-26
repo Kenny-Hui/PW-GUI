@@ -59,7 +59,7 @@ public class DownloadProgressDialog extends ProgressDialog {
                 } catch (Exception e) {
                     Main.LOGGER.exception(e);
                     String[] options = new String[]{"Copy URL", "OK"};
-                    int result = JOptionPane.showOptionDialog(DownloadProgressDialog.this, String.format("An error occured while downloading %s:\n%s", itemName, e.getMessage()), Util.withTitlePrefix("Download failed"), JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[1]);
+                    int result = JOptionPane.showOptionDialog(DownloadProgressDialog.this, String.format("An error occured while downloading %s:\n%s", itemName, e.getMessage()), Util.withTitlePrefix("Download Failed!"), JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[1]);
                     if(result == 0) {
                         Util.copyToClipboard(url.toString());
                     }

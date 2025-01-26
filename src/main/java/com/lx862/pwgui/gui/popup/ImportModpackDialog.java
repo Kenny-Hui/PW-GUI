@@ -25,7 +25,7 @@ public class ImportModpackDialog extends JDialog {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         ImportModpackPanel importModpackPanel = new ImportModpackPanel(this,false, (path) -> {
-            JOptionPane.showMessageDialog(this, "Modpack imported successfully!", Util.withTitlePrefix("Modpack imported"), JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Modpack imported successfully!", Util.withTitlePrefix("Import Successful!"), JOptionPane.INFORMATION_MESSAGE);
         });
 
         add(importModpackPanel);

@@ -26,7 +26,7 @@ public class ManualDownloadDialog extends JDialog {
     private Thread fileWatcherThread;
 
     public ManualDownloadDialog(JDialog parentDialog, List<ManualModInfo> modList, Consumer<Path> finishCallback) {
-        super(parentDialog, Util.withTitlePrefix("Manual download"), true);
+        super(parentDialog, Util.withTitlePrefix("Manual Download"), true);
         this.modList = modList;
 
         setSize(560, 400);

@@ -81,8 +81,6 @@ public class EditFrame extends BaseFrame {
         return fileMenu;
     }
 
-    // TODO: Add missing folder "Edit" menu
-
     private KMenu getEditMenu(Modpack modpack) {
         KMenu editMenu = new KMenu("Edit");
         KMenu addMissingMenu = new KMenu("Add Missing...");
@@ -145,7 +143,7 @@ public class EditFrame extends BaseFrame {
     private void makeFolder(Path path, String dir) {
         Path finalPath = path.resolve(dir);
         if(finalPath.toFile().exists()) {
-            JOptionPane.showMessageDialog(this, String.format("Folder \"%s\" already exists!", dir), Util.withTitlePrefix("Folder Already Exists"), JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, String.format("Folder \"%s\" already exists!", dir), Util.withTitlePrefix("Folder Already Exists!"), JOptionPane.INFORMATION_MESSAGE);
         } else {
             try {
                 Files.createDirectory(finalPath);

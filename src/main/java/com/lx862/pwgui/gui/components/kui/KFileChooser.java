@@ -33,7 +33,7 @@ public class KFileChooser extends JFileChooser {
         int showDialogResult = showSaveDialog(component);
         if(showDialogResult == APPROVE_OPTION) {
             if(Files.exists(getSelectedFile().toPath())) {
-                int replaceResult = JOptionPane.showConfirmDialog(component, String.format("File \"%s\" already exist,\nAre you sure you want to replace the file?", getSelectedFile().getName()), Util.withTitlePrefix("Replace file?"), JOptionPane.YES_NO_OPTION);
+                int replaceResult = JOptionPane.showConfirmDialog(component, String.format("File \"%s\" already exist,\nAre you sure you want to replace the file?", getSelectedFile().getName()), Util.withTitlePrefix("Replace File?"), JOptionPane.YES_NO_OPTION);
                 if(replaceResult == JOptionPane.YES_OPTION) {
                     return APPROVE_OPTION;
                 } else {
@@ -52,7 +52,7 @@ public class KFileChooser extends JFileChooser {
         int showDialogResult = showSaveDialog(component);
         if(showDialogResult == APPROVE_OPTION) {
             if(getSelectedFile().list().length > 0) {
-                int replaceResult = JOptionPane.showConfirmDialog(component, "Hmm folder is not empty, are you sure this is what you want?\nAll operations that follows will be performed directly in the folder you chose.\nIf that's not your intent, click \"No\" and create a new folder.", Util.withTitlePrefix("Replace file?"), JOptionPane.YES_NO_OPTION);
+                int replaceResult = JOptionPane.showConfirmDialog(component, "Hmm folder is not empty, are you sure this is what you want?\nAll operations that follows will be performed directly in the folder you chose.\nIf that's not your intent, click \"No\" and create a new folder.", Util.withTitlePrefix("Replace File?"), JOptionPane.YES_NO_OPTION);
                 if(replaceResult != JOptionPane.YES_OPTION) {
                     return openSaveDirectoryDialog(component);
                 }

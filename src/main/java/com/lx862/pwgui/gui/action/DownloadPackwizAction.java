@@ -37,7 +37,7 @@ public class DownloadPackwizAction extends AbstractAction {
         try {
             tempDirectory = Files.createTempDirectory("pwgui");
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(parent, "Failed to create temp folder!", Util.withTitlePrefix("Download failed"), JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(parent, "Failed to create temp folder!", Util.withTitlePrefix("Download Failed"), JOptionPane.INFORMATION_MESSAGE);
             return;
         }
 
@@ -68,7 +68,7 @@ public class DownloadPackwizAction extends AbstractAction {
                     }
                 } catch (Exception e) {
                     Main.LOGGER.exception(e);
-                    JOptionPane.showMessageDialog(parent, String.format("Failed to extract packwiz from zip file:\n%s", e.getMessage()), Util.withTitlePrefix("Setup failed"), JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(parent, String.format("Failed to extract packwiz from zip file:\n%s", e.getMessage()), Util.withTitlePrefix("Setup Failed"), JOptionPane.ERROR_MESSAGE);
                 }
 
                 try {
@@ -79,7 +79,7 @@ public class DownloadPackwizAction extends AbstractAction {
 
                 boolean configureSuccessful = configurePackwiz(packwizBinaryDestination.get());
                 if(configureSuccessful) {
-                    JOptionPane.showMessageDialog(parent, "Download successful!", Util.withTitlePrefix("Download success!"), JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(parent, "Packwiz has been downloaded and configured!", Util.withTitlePrefix("Download Success!"), JOptionPane.INFORMATION_MESSAGE);
                     WelcomeFrame welcomeFrame = new WelcomeFrame(parent);
                     welcomeFrame.setVisible(true);
                     parent.dispose();
@@ -127,7 +127,7 @@ public class DownloadPackwizAction extends AbstractAction {
 
             Main.packwiz.locate(null);
             if(!Main.packwiz.usable()) {
-                JOptionPane.showMessageDialog(parent, "Packwiz executable is not valid :(\nPlease try manually downloading packwiz and locating it.", Util.withTitlePrefix("Invalid executable"), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(parent, "Packwiz executable is not valid :(\nPlease try manually downloading packwiz and locating it.", Util.withTitlePrefix("Invalid Executable"), JOptionPane.ERROR_MESSAGE);
                 return false;
             }
 
@@ -136,7 +136,7 @@ public class DownloadPackwizAction extends AbstractAction {
             return true;
         } catch (IOException e) {
             Main.LOGGER.exception(e);
-            JOptionPane.showMessageDialog(parent, "Failed to write config file!", Util.withTitlePrefix("Setup failed"), JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(parent, "Failed to write config file!", Util.withTitlePrefix("Setup Failed"), JOptionPane.INFORMATION_MESSAGE);
             return false;
         }
     }

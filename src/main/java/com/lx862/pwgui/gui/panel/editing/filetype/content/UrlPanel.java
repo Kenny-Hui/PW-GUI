@@ -37,7 +37,7 @@ public class UrlPanel extends JPanel {
         KGridBagLayoutPanel formPanel = new KGridBagLayoutPanel(3, 2);
         formPanel.setAlignmentX(LEFT_ALIGNMENT);
 
-        JLabel descriptionLabel = new JLabel("You can add file to packwiz based on a direct URL link.");
+        JLabel descriptionLabel = new JLabel("You can add any arbitrary file to packwiz based on a direct URL link.");
         descriptionLabel.setAlignmentX(LEFT_ALIGNMENT);
         formPanel.addRow(2, descriptionLabel);
 
@@ -51,7 +51,7 @@ public class UrlPanel extends JPanel {
         invalidUrlLabel.setForeground(Color.RED);
         formPanel.addRow(2, invalidUrlLabel);
 
-        KButton addButton = new KButton("Add File");
+        KButton addButton = new KButton("Add Item");
         addButton.setMnemonic(KeyEvent.VK_A);
         addButton.setAlignmentX(LEFT_ALIGNMENT);
         formPanel.addRow(2, addButton);
@@ -66,7 +66,7 @@ public class UrlPanel extends JPanel {
                 URI url = new URI(urlTextField.getText());
                 if(alternativeForDomain.containsKey(url.getHost())) {
                     String alternativeName = alternativeForDomain.get(url.getHost());
-                    if(JOptionPane.showConfirmDialog(getTopLevelAncestor(), String.format("Adding content from %s is supported natively in this application.\nBy continuing, you won't get auto-update and other %s-specific features.\nContinue anyway?", alternativeName, alternativeName), Util.withTitlePrefix("Alternative installation method exists"), JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
+                    if(JOptionPane.showConfirmDialog(getTopLevelAncestor(), String.format("Adding content from %s is supported natively in this application.\nBy continuing, you won't get auto-update and other %s-specific features.\nContinue anyway?", alternativeName, alternativeName), Util.withTitlePrefix("Use Alternate Installation Method?"), JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
                         return;
                     }
                 }
@@ -77,11 +77,11 @@ public class UrlPanel extends JPanel {
             ProgramExecution programExecution = Main.packwiz.buildCommand("url", "add", nameTextField.getText(), urlTextField.getText(), "--meta-folder", context.getModpack().getRootPath().relativize(fileEntry.path).toString(), "--force"); // We already did a domain check before, so forcibly add it anyway.
             programExecution.whenExit((exitCode) -> {
                if(exitCode == 0) {
-                   JOptionPane.showMessageDialog(getTopLevelAncestor(), nameTextField.getText() + " has been added!", Util.withTitlePrefix("File added"), JOptionPane.INFORMATION_MESSAGE);
+                   JOptionPane.showMessageDialog(getTopLevelAncestor(), nameTextField.getText() + " has been added!", Util.withTitlePrefix("Item Added!"), JOptionPane.INFORMATION_MESSAGE);
                }
             });
 
-            new ExecutableProgressDialog((Window)getTopLevelAncestor(), "Adding mod...", "Triggered by user", programExecution).setVisible(true);
+            new ExecutableProgressDialog((Window)getTopLevelAncestor(), "Adding item...", "Triggered by user", programExecution).setVisible(true);
         });
 
         rootPanel.add(formPanel);

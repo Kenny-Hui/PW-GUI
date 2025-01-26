@@ -70,7 +70,7 @@ public class CurseForgePanel extends JPanel {
 
                 if(line.startsWith("Choose a number:")) {
                     recordOutput.set(false);
-                    new NumericSelectionDialog(dialog, "Select mod", recordedOutputs, (selectIdx) -> {
+                    new NumericSelectionDialog(dialog, "Select Mod", recordedOutputs, (selectIdx) -> {
                        if(selectIdx == -1) {
                            programExecution.enterInput("0");
                        } else {
@@ -82,7 +82,7 @@ public class CurseForgePanel extends JPanel {
                 // Dependencies
                 if(line.endsWith("Would you like to add them? [Y/n]: ")) {
                     String depList = recordedOutputs.stream().map(e -> "• " + e).collect(Collectors.joining("\n"));
-                    if(JOptionPane.showConfirmDialog(dialog, String.format("The following dependencies are required:\n%s\nDo you want to add them?", depList), Util.withTitlePrefix("Add dependencies?"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                    if(JOptionPane.showConfirmDialog(dialog, String.format("The following dependencies are required:\n%s\nDo you want to add them?", depList), Util.withTitlePrefix("Add Dependencies?"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                         programExecution.enterInput("Y");
                     } else {
                         programExecution.enterInput("N");
@@ -106,7 +106,7 @@ public class CurseForgePanel extends JPanel {
 
             programExecution.whenExit((exitCode) -> {
                if(exitCode == 0) {
-                   JOptionPane.showMessageDialog(getTopLevelAncestor(), String.format("%s has been added to the modpack!", modName.get()), Util.withTitlePrefix("Project added"), JOptionPane.INFORMATION_MESSAGE);
+                   JOptionPane.showMessageDialog(getTopLevelAncestor(), String.format("%s has been added to the modpack!", modName.get()), Util.withTitlePrefix("Project Added!"), JOptionPane.INFORMATION_MESSAGE);
                }
             });
 

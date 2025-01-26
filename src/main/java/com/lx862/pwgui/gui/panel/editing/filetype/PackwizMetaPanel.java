@@ -118,7 +118,7 @@ public class PackwizMetaPanel extends FileTypePanel {
     }
 
     private void removeMod() {
-        if(JOptionPane.showConfirmDialog(getTopLevelAncestor(), String.format("Are you sure you want to remove %s?", packwizMetaFile.name), Util.withTitlePrefix("Remove confirmation"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+        if(JOptionPane.showConfirmDialog(getTopLevelAncestor(), String.format("Are you sure you want to remove %s?", packwizMetaFile.name), Util.withTitlePrefix("Remove Confirmation"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             Main.packwiz.buildCommand("remove", packwizMetaFile.getSlug()).execute(Constants.REASON_TRIGGERED_BY_USER);
         }
     }
@@ -138,9 +138,9 @@ public class PackwizMetaPanel extends FileTypePanel {
             if(exitCode == 0) {
                 String updateMsg = updateString.get();
                 if(updateMsg != null) {
-                    JOptionPane.showMessageDialog(parent, String.format("%s has been updated!\n%s", packwizMetaFile.name, updateMsg), Util.withTitlePrefix("File updated!"), JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(parent, String.format("%s has been updated!\n%s", packwizMetaFile.name, updateMsg), Util.withTitlePrefix("File Updated!"), JOptionPane.INFORMATION_MESSAGE);
                 } else {
-                    JOptionPane.showMessageDialog(parent, String.format("%s is already up to date!", packwizMetaFile.name), Util.withTitlePrefix("Up to date!"), JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(parent, String.format("%s is already up to date!", packwizMetaFile.name), Util.withTitlePrefix("Up to Date!"), JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         });

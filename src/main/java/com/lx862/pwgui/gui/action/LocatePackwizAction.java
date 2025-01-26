@@ -39,21 +39,21 @@ public class LocatePackwizAction extends AbstractAction {
         if(fileChooser.showOpenDialog(parent) == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
             if(!selectedFile.canExecute()) {
-                JOptionPane.showMessageDialog(parent, "The selected file is not executable!\nConsider adding the executable (x) permission to the file.", Util.withTitlePrefix("File non-excutable"), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(parent, "The selected file is not executable!\nConsider adding the executable (x) permission to the file.", Util.withTitlePrefix("File Not Excutable!"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             Main.getConfig().setPackwizExecutablePath(selectedFile.toPath());
             Main.packwiz.locate(null);
             if(!Main.packwiz.usable()) {
-                JOptionPane.showMessageDialog(parent, "The selected executable is not valid!\nAre you sure you can run the executable?", Util.withTitlePrefix("Invalid executable"), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(parent, "The selected executable is not valid!\nAre you sure you can run the executable?", Util.withTitlePrefix("Invalid Executable"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             try {
                 Main.getConfig().write();
             } catch (IOException e) {
-                JOptionPane.showMessageDialog(parent, String.format("Failed to write configuration file:\n%s", e.getMessage()), Util.withTitlePrefix("Failed to write config"), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(parent, String.format("Failed to write configuration file:\n%s", e.getMessage()), Util.withTitlePrefix("Failed to Write Config"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
 

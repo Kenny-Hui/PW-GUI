@@ -122,7 +122,7 @@ public class WelcomeFrame extends BaseFrame {
             dispose();
         } catch (Exception e) {
             Main.LOGGER.exception(e);
-            JOptionPane.showMessageDialog(this, String.format("Failed to open modpack:\n%s", e.getMessage()), Util.withTitlePrefix("Open modpack"), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, String.format("Failed to open modpack:\n%s", e.getMessage()), Util.withTitlePrefix("Failed to open Modpack"), JOptionPane.ERROR_MESSAGE);
         }
     }
 

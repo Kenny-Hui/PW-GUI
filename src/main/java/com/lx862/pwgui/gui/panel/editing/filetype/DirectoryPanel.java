@@ -40,7 +40,7 @@ public class DirectoryPanel extends FileTypePanel {
         KButton removeButton = new KButton("Remove folder");
         removeButton.setMnemonic(KeyEvent.VK_R);
         removeButton.addActionListener(actionEvent -> {
-            final boolean shouldDelete = JOptionPane.showConfirmDialog(getTopLevelAncestor(), String.format("Are you sure you want to delete \"%s\"?", fileEntry.name), Util.withTitlePrefix("Delete confirmation"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
+            final boolean shouldDelete = JOptionPane.showConfirmDialog(getTopLevelAncestor(), String.format("Are you sure you want to delete \"%s\"?", fileEntry.name), Util.withTitlePrefix("Delete Confirmation"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
 
             if(shouldDelete) {
                 try {

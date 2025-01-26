@@ -82,9 +82,7 @@ public class ModpackVersionPanel extends KGridBagLayoutPanel {
             if(!packComponent.choosable) continue;
 
             JRadioButton componentRadioButton = new JRadioButton(packComponent.iconName.name);
-            componentRadioButton.addActionListener((itemListener) -> {
-                updateModloaderUI(packComponent);
-            });
+            componentRadioButton.addActionListener((itemListener) -> updateModloaderUI(packComponent));
             componentRadioButton.setIcon(new ImageIcon(GUIHelper.imageOpacity(GUIHelper.resizeImage(packComponent.iconName.image, 18), 0.5f)));
             componentRadioButton.setSelectedIcon(new ImageIcon(GUIHelper.resizeImage(packComponent.iconName.image, 18)));
             modloaderChoicePanel.add(componentRadioButton);
@@ -108,9 +106,7 @@ public class ModpackVersionPanel extends KGridBagLayoutPanel {
             fillComboBoxes(null, minecraftVersionComboBox, PackComponent.MINECRAFT, showSnapshot);
             // We add event listener after we fill the combobox, as we don't want the fill update to be triggered
             minecraftVersionComboBox.setAction(null);
-            minecraftVersionComboBox.addActionListener(actionEvent -> {
-                updateModloaderUI(selectedModloader);
-            });
+            minecraftVersionComboBox.addActionListener(actionEvent -> updateModloaderUI(selectedModloader));
         });
     }
 

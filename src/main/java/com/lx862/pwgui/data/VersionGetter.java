@@ -29,7 +29,7 @@ public interface VersionGetter {
         CompletableFuture.runAsync(() -> {
             try {
                 String content = NetworkHelper.getFromURL(url);
-                JsonObject jsonObject = new JsonParser().parse(content).getAsJsonObject();
+                JsonObject jsonObject = JsonParser.parseString(content).getAsJsonObject();
                 JsonArray versionsArray = jsonObject.get("versions").getAsJsonArray();
                 List<VersionMetadata> metadatas = new ArrayList<>();
                 for(int i = 0; i < versionsArray.size(); i++) {

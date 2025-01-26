@@ -35,7 +35,7 @@ public class PackwizMetaFile extends TomlFile {
     public boolean optionOptional;
     public boolean optionDefault;
 
-    private String slug; // The file name without .pw.toml
+    private final String slug; // The file name without .pw.toml
 
     public PackwizMetaFile(Path path) {
         this(path, new Toml().read(path.toFile()));
@@ -104,25 +104,19 @@ public class PackwizMetaFile extends TomlFile {
         // Option category
         map.remove("option"); // We rewrite the entire section
         if(this.optionDescription != null || this.optionOptional) {
-            Map<String, Object> values = new HashMap<>();
+            Map<String, Object> newOptions = new HashMap<>();
             if(optionDescription != null) {
-                values.put("description", this.optionDescription);
-            } else {
-                values.remove("description");
+                newOptions.put("description", this.optionDescription);
             }
             if(optionOptional) {
-                values.put("optional", this.optionOptional);
-            } else {
-                values.remove("optional");
+                newOptions.put("optional", this.optionOptional);
             }
 
             if(optionDefault) {
-                values.put("default", this.optionDefault);
-            } else {
-                values.remove("default");
+                newOptions.put("default", this.optionDefault);
             }
 
-            map.put("option", values);
+            map.put("option", newOptions);
         }
 
         writeToFilesystem(map);

@@ -89,9 +89,7 @@ public class WelcomeFrame extends BaseFrame {
         KButton createPackButton = new KButton("Create new modpack...");
         createPackButton.setMnemonic(KeyEvent.VK_C);
         createPackButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        createPackButton.addActionListener(actionEvent -> {
-            new NewModpackDialog(this, this::openModpack).setVisible(true);
-        });
+        createPackButton.addActionListener(actionEvent -> showNewModpackDialog());
         mainPanel.add(createPackButton);
 
         mainPanel.add(Box.createRigidArea(new Dimension(0, 8)));
@@ -114,6 +112,10 @@ public class WelcomeFrame extends BaseFrame {
         this.jMenuBar.add(super.getHelpMenu());
 
         Main.getConfig().setLastModpackPath(null);
+    }
+
+    private void showNewModpackDialog() {
+        new NewModpackDialog(this, this::openModpack).setVisible(true);
     }
 
     private void openModpack(Path path) {

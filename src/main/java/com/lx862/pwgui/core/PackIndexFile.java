@@ -58,7 +58,7 @@ public class PackIndexFile extends TomlFile {
 
     public void updateEntry(FileEntry newFileEntry) {
         FileEntry originalEntry = getEntryByPath(newFileEntry.path);
-        if(originalEntry == null) throw new IllegalStateException(String.format("Index file does not contain entry: %s", newFileEntry.path));
+        if(originalEntry == null) throw new IllegalArgumentException(String.format("Index file does not contain entry: %s", newFileEntry.path));
         int index = fileEntries.indexOf(originalEntry);
         fileEntries.set(index, newFileEntry);
     }

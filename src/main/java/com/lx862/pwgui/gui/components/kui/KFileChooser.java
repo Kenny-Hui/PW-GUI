@@ -1,7 +1,6 @@
 package com.lx862.pwgui.gui.components.kui;
 
 import com.lx862.pwgui.Main;
-import com.lx862.pwgui.core.Config;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
@@ -11,10 +10,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.stream.Stream;
 
 public class KFileChooser extends JFileChooser {
     private final String context;
 
+    @SuppressWarnings("unused")
     public KFileChooser() {
         this(null);
     }
@@ -51,16 +52,18 @@ public class KFileChooser extends JFileChooser {
     public int openSaveDirectoryDialog(Component component) {
         int showDialogResult = showSaveDialog(component);
         if(showDialogResult == APPROVE_OPTION) {
-            if(getSelectedFile().list().length > 0) {
-                int replaceResult = JOptionPane.showConfirmDialog(component, "Hmm folder is not empty, are you sure this is what you want?\nAll operations that follows will be performed directly in the folder you chose.\nIf that's not your intent, click \"No\" and create a new folder.", Util.withTitlePrefix("Replace File?"), JOptionPane.YES_NO_OPTION);
-                if(replaceResult != JOptionPane.YES_OPTION) {
-                    return openSaveDirectoryDialog(component);
+            try(Stream<Path> files = Files.list(getSelectedFile().toPath())) {
+                if(files.findAny().isPresent()){
+                    int replaceResult = JOptionPane.showConfirmDialog(component, "Hmm folder is not empty, are you sure this is what you want?\nAll operations that follows will be performed directly in the folder you chose.\nIf that's not your intent, click \"No\" and create a new folder.", Util.withTitlePrefix("Folder Not Empty"), JOptionPane.YES_NO_OPTION);
+                    if (replaceResult != JOptionPane.YES_OPTION) {
+                        return openSaveDirectoryDialog(component);
+                    }
                 }
+            } catch (IOException e) {
+                Main.LOGGER.exception(e);
             }
-            return showDialogResult;
-        } else {
-            return showDialogResult;
         }
+        return showDialogResult;
     }
 
     @Override

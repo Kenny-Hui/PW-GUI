@@ -1,10 +1,6 @@
 package com.lx862.pwgui.core;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.stream.JsonReader;
+import com.google.gson.*;
 import com.lx862.pwgui.Main;
 import com.lx862.pwgui.util.GoUtil;
 
@@ -25,7 +21,7 @@ public class Config extends WritableFile {
     private boolean openLastModpackOnLaunch;
 
     public Config() throws FileNotFoundException {
-        this(new Gson().fromJson(new JsonReader(new FileReader(CONFIG_PATH.toFile())), JsonObject.class));
+        this(JsonParser.parseReader(new FileReader(CONFIG_PATH.toFile())).getAsJsonObject());
     }
 
     public Config(JsonObject jsonObject) {
@@ -93,7 +89,7 @@ public class Config extends WritableFile {
     }
 
     public void setLastModpackPath(Path newPath) {
-        if(openLastModpackOnLaunch() && !Objects.equals(newPath, this.lastModpackPath)) {
+        if(!Objects.equals(newPath, this.lastModpackPath)) {
             this.lastModpackPath = newPath;
             try { // Write if changed
                 write("Save last opened modpack path");

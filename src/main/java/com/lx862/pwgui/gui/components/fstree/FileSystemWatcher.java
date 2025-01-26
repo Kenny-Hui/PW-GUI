@@ -1,5 +1,7 @@
 package com.lx862.pwgui.gui.components.fstree;
 
+import com.lx862.pwgui.Main;
+
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -9,9 +11,9 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 
 public class FileSystemWatcher {
     private final Path path;
-    private WatchService ws;
     private final WatchEvent.Kind<?>[] watchKinds;
     private final boolean recursive;
+    private WatchService ws;
 
     public FileSystemWatcher(Path path, boolean recursive, WatchEvent.Kind<?> ...watchKinds) {
         this.path = path;
@@ -60,7 +62,7 @@ public class FileSystemWatcher {
                 wk.reset();
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            Main.LOGGER.exception(e);
         } catch (InterruptedException ignored) {
         }
     }

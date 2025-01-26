@@ -1,5 +1,6 @@
 package com.lx862.pwgui.core;
 
+import com.lx862.pwgui.Main;
 import com.lx862.pwgui.data.Cache;
 import com.lx862.pwgui.data.GitIgnoreRules;
 
@@ -39,7 +40,14 @@ public class Modpack {
         this.packFilePath = packFilePath;
         this.root = packFilePath.getParent();
         if(Files.isDirectory(packFilePath) || Files.notExists(packFilePath)) throw new FileNotFoundException(String.format("Cannot find target file: %s. Expected a toml file containing modpack config!", packFilePath));
-        this.packFile = new Cache<>(() -> new PackFile(packFilePath));
+        this.packFile = new Cache<>(() -> {
+             try {
+                 return new PackFile(packFilePath);
+             } catch (Exception e) {
+                 Main.LOGGER.exception(e);
+                 return null;
+             }
+        });
     }
 
     public Path getPackFilePath() {

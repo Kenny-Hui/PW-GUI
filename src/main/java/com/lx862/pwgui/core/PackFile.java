@@ -6,6 +6,7 @@ import com.lx862.pwgui.data.Cache;
 import com.lx862.pwgui.data.exception.MissingKeyPropertyException;
 import com.moandjiezana.toml.Toml;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,11 +31,11 @@ public class PackFile extends TomlFile {
     public final List<String> optionsAcceptableGameVersion;
     public String optionsDatapackFolder;
 
-    public PackFile(Path path) {
+    public PackFile(Path path) throws MissingKeyPropertyException, FileNotFoundException {
         this(path, new Toml().read(path.toFile()));
     }
 
-    public PackFile(Path path, Toml toml) throws MissingKeyPropertyException {
+    public PackFile(Path path, Toml toml) throws MissingKeyPropertyException, FileNotFoundException {
         super(path, toml);
 
         this.name = toml.getString("name", "");
@@ -60,7 +61,7 @@ public class PackFile extends TomlFile {
         this.optionsDatapackFolder = toml.getString("options.datapack-folder");
 
         if(Files.notExists(resolveRelative(indexFile))) {
-            throw new RuntimeException(String.format("%s says index file is at \"%s\", but is not found :(\nPlease double check %s.", getPath().getFileName(), this.indexFile, getPath().getFileName()));
+            throw new FileNotFoundException(String.format("%s says index file is at \"%s\", but is not found :(\nPlease double check %s.", getPath().getFileName(), this.indexFile, getPath().getFileName()));
         }
         this.packIndexFile = new Cache<>(() -> new PackIndexFile(getIndexPath()));
     }

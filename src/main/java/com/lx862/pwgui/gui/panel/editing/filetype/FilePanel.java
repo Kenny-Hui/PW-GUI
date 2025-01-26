@@ -56,9 +56,7 @@ public class FilePanel extends FileTypePanel {
 
         KButton openFileButton = new KButton("Open file");
         openFileButton.setMnemonic(KeyEvent.VK_O);
-        openFileButton.addActionListener(actionEvent -> {
-            Util.tryOpenFile(fileEntry.path.toFile());
-        });
+        openFileButton.addActionListener(actionEvent -> Util.tryOpenFile(fileEntry.path.toFile()));
 
         actionButtons.add(openFileButton);
 

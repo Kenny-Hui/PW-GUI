@@ -31,11 +31,7 @@ public abstract class Executable {
         String probedLocation = probe(executableOverride);
         this.executableLocation = probedLocation;
 
-        if(probedLocation != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return probedLocation != null;
     }
 
     public String probe(String executableOverride) {

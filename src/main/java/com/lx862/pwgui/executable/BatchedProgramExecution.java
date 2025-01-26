@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
-/* Executes multiple commands and invokes callback after completion of all commands */
+/** Executes multiple commands and invokes callback after completion of all commands */
 public class BatchedProgramExecution {
     private final List<ProgramExecution> programExecutions;
 

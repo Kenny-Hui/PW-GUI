@@ -107,7 +107,7 @@ public class DownloadPackwizAction extends AbstractAction {
         } else if(os.contains("linux")) {
             artifactName = "Linux 64-bit";
         } else {
-            throw new UnsupportedOperationException(String.format("%s is not supported.", os));
+            throw new IllegalStateException(String.format("%s is not supported.", os));
         }
 
         if(isARM) artifactName += " ARM";

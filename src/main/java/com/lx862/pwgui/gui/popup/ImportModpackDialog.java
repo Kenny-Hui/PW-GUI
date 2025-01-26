@@ -94,7 +94,7 @@ public class ImportModpackDialog extends JDialog {
 
                 if(isCreate) {
                     String[] selection = new String[]{"Continue"};
-                    JOptionPane.showOptionDialog(this, "Good! Now let's create a folder you want your modpack to be saved to.", Util.withTitlePrefix("Choose Save Folder"), JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, selection, selection[0]);
+                    JOptionPane.showOptionDialog(this, "Good! Now let's create a folder you want your modpack to be saved t!.", Util.withTitlePrefix("Choose Save Folder"), JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, selection, selection[0]);
 
                     KFileChooser modpackFileChooser = new KFileChooser("import-modpack");
                     modpackFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);

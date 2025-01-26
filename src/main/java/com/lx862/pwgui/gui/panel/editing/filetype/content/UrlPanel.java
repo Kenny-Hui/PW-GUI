@@ -70,8 +70,7 @@ public class UrlPanel extends JPanel {
                         return;
                     }
                 }
-            } catch (URISyntaxException e) {
-                throw new RuntimeException(e);
+            } catch (URISyntaxException ignored) {
             }
 
             ProgramExecution programExecution = Main.packwiz.buildCommand("url", "add", nameTextField.getText(), urlTextField.getText(), "--meta-folder", context.getModpack().getRootPath().relativize(fileEntry.path).toString(), "--force"); // We already did a domain check before, so forcibly add it anyway.

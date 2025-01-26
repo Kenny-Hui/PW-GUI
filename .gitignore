@@ -43,3 +43,5 @@ bin/
 
 # My packwiz playground :P
 PLAYGROUND/
+
+assets/launch4j/*.exe

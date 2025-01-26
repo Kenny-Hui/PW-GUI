@@ -36,17 +36,17 @@ public class KTreeCellRenderer extends DefaultTreeCellRenderer {
             setText(fileInfo.getTreeDisplayName());
 
             if(fileInfo.name.equals("options.txt")) {
-                setIcon(new ImageIcon(GUIHelper.convertImage(Util.getAssets("/components/minecraft.png"), 18)));
+                setIcon(new ImageIcon(GUIHelper.convertImage(Util.getAssets("/assets/components/minecraft.png"), 18)));
             } else if(fileInfo instanceof ModpackConfigFileEntry) {
-                setIcon(new ImageIcon(GUIHelper.convertImage(Util.getAssets("/mime/settings.png"), 18)));
+                setIcon(new ImageIcon(GUIHelper.convertImage(Util.getAssets("/assets/mime/settings.png"), 18)));
             } else if(fileInfo instanceof PackwizIgnoreFileEntry) {
-                setIcon(new ImageIcon(GUIHelper.convertImage(Util.getAssets("/mime/packwizignore.png"), 18)));
+                setIcon(new ImageIcon(GUIHelper.convertImage(Util.getAssets("/assets/mime/packwizignore.png"), 18)));
             } else if(fileInfo instanceof ModpackIndexFileEntry) {
-                setIcon(new ImageIcon(GUIHelper.convertImage(Util.getAssets("/mime/packwiz.png"), 18)));
+                setIcon(new ImageIcon(GUIHelper.convertImage(Util.getAssets("/assets/mime/packwiz.png"), 18)));
             } else if(fileInfo instanceof GitIgnoreFileEntry) {
-                setIcon(new ImageIcon(GUIHelper.convertImage(Util.getAssets("/mime/gitignore.png"), 18)));
+                setIcon(new ImageIcon(GUIHelper.convertImage(Util.getAssets("/assets/mime/gitignore.png"), 18)));
             } else if(fileInfo instanceof ModrinthPackFileEntry) {
-                setIcon(new ImageIcon(GUIHelper.convertImage(Util.getAssets("/services/modrinth.png"), 18)));
+                setIcon(new ImageIcon(GUIHelper.convertImage(Util.getAssets("/assets/services/modrinth.png"), 18)));
             } else if(!isDirectory) {
                 setIcon(UIManager.getIcon("FileView.fileIcon"));
             } else {

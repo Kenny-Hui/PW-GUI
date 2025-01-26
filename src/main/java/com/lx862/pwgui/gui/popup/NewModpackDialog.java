@@ -137,11 +137,11 @@ public class NewModpackDialog extends JDialog {
         }
 
         try {
-            Util.copyAssetsToPath("/new_modpack_structure/README.md", "README.md", path);
-            Util.copyAssetsToPath("/new_modpack_structure/gitattributes", ".gitattributes", path);
-            Util.copyAssetsToPath("/new_modpack_structure/gitignore", ".gitignore", path);
-            Util.copyAssetsToPath("/new_modpack_structure/_LICENSE", "LICENSE", path);
-            Util.copyAssetsToPath("/new_modpack_structure/.packwizignore", ".packwizignore", path);
+            Util.copyAssetsToPath("/assets/new_modpack_structure/README.md", "README.md", path);
+            Util.copyAssetsToPath("/assets/new_modpack_structure/gitattributes", ".gitattributes", path);
+            Util.copyAssetsToPath("/assets/new_modpack_structure/gitignore", ".gitignore", path);
+            Util.copyAssetsToPath("/assets/new_modpack_structure/_LICENSE", "LICENSE", path);
+            Util.copyAssetsToPath("/assets/new_modpack_structure/.packwizignore", ".packwizignore", path);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Failed to copy additional files to the modpack.\nYou may need to manually create the \"mods\" and \"config\" folder if you want to install mods.", Util.withTitlePrefix("Create Modpack"), JOptionPane.ERROR_MESSAGE);
         }

@@ -16,7 +16,7 @@ public abstract class BaseFrame extends JFrame {
     public BaseFrame(String title) {
         super(title);
         this.jMenuBar = new JMenuBar();
-        setIconImage(GUIHelper.convertImage(Util.getAssets("/icon.png")));
+        setIconImage(GUIHelper.convertImage(Util.getAssets("/assets/icon.png")));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setJMenuBar(jMenuBar);
     }

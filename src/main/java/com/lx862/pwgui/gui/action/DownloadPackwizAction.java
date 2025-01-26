@@ -7,6 +7,7 @@ import com.lx862.pwgui.gui.dialog.DownloadProgressDialog;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.FileInputStream;
@@ -23,9 +24,9 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class DownloadPackwizAction extends AbstractAction {
-    private final JFrame parent;
+    private final Window parent;
 
-    public DownloadPackwizAction(JFrame parent) {
+    public DownloadPackwizAction(Window parent) {
         super("Download packwiz");
         this.parent = parent;
         putValue(MNEMONIC_KEY, KeyEvent.VK_D);
@@ -125,13 +126,13 @@ public class DownloadPackwizAction extends AbstractAction {
             } catch (UnsupportedOperationException ignored) {
             }
 
-            Main.packwiz.locate(null);
+            Main.packwiz.updateExecutableLocation(null);
             if(!Main.packwiz.usable()) {
                 JOptionPane.showMessageDialog(parent, "Packwiz executable is not valid :(\nPlease try manually downloading packwiz and locating it.", Util.withTitlePrefix("Invalid Executable"), JOptionPane.ERROR_MESSAGE);
                 return false;
             }
 
-            Main.getConfig().write();
+            Main.getConfig().write("Update packwiz executable path");
 
             return true;
         } catch (IOException e) {

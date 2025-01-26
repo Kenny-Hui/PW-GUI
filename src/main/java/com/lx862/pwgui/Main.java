@@ -32,8 +32,8 @@ public class Main {
         try {
             CommandLine cmd = cliParser.parse(options, args);
 
-            final String execPath = cmd.getOptionValue("pwexec");
-            final String modpackPath = cmd.getOptionValue("pack");
+            String execPath = cmd.getOptionValue("pwexec");
+            String modpackPath = cmd.getOptionValue("pack");
 
             try {
                 config = new Config();
@@ -45,37 +45,49 @@ public class Main {
                 config = new Config(new JsonObject());
             }
 
-            final boolean packwizLocated = packwiz.locate(execPath);
-            final boolean gitLocated = git.locate(null);
+            if(modpackPath == null && config.openLastModpackOnLaunch()) {
+                modpackPath = config.getLastModpackPath() == null ? null : config.getLastModpackPath().toString();
+            }
+
+            final boolean packwizLocated = packwiz.updateExecutableLocation(execPath);
+            // final boolean gitLocated = git.updateExecutableLocation(null); // We don't have git support yet
 
             GUIHelper.setupApplicationTheme(); // Initialize FlatLaf and it's config
-
-            if(!packwizLocated) { // No packwiz, show setup wizard
-                SwingUtilities.invokeLater(() -> {
-                    SetupFrame setupFrame = new SetupFrame(null);
-                    setupFrame.setVisible(true);
-                });
-                return;
-            }
-
-            if(modpackPath != null) { // Modpack specified via CLI
-                LOGGER.info(String.format("Pack File is specified at: %s", modpackPath));
-
-                Modpack modpack = new Modpack(new File(modpackPath).toPath());
-                SwingUtilities.invokeLater(() -> {
-                    EditFrame editFrame = new EditFrame(null, modpack);
-                    editFrame.setVisible(true);
-                });
-            } else {
-                SwingUtilities.invokeLater(() -> {
-                    WelcomeFrame welcomeFrame = new WelcomeFrame(null);
-                    welcomeFrame.setVisible(true);
-                });
-            }
+            launchGUI(packwizLocated, modpackPath);
         } catch (Exception e) {
             Main.LOGGER.exception(e);
             System.exit(1);
         }
+    }
+
+    private static void launchGUI(boolean packwizLocated, String packFilePath) {
+        if(!packwizLocated) { // No packwiz, show setup wizard
+            SwingUtilities.invokeLater(() -> {
+                SetupFrame setupFrame = new SetupFrame(null);
+                setupFrame.setVisible(true);
+            });
+            return;
+        }
+
+        if(packFilePath != null) { // Pack specified via CLI or last opened
+            LOGGER.info(String.format("Pack File is specified at: %s", packFilePath));
+            File packFile = new File(packFilePath);
+            try {
+                Modpack modpack = new Modpack(packFile.toPath());
+                SwingUtilities.invokeLater(() -> {
+                    EditFrame editFrame = new EditFrame(null, modpack);
+                    editFrame.setVisible(true);
+                });
+                return;
+            } catch (FileNotFoundException e) {
+                LOGGER.info("Specified Pack File does not exist!");
+            }
+        }
+
+        SwingUtilities.invokeLater(() -> {
+            WelcomeFrame welcomeFrame = new WelcomeFrame(null);
+            welcomeFrame.setVisible(true);
+        });
     }
 
     public static Config getConfig() {

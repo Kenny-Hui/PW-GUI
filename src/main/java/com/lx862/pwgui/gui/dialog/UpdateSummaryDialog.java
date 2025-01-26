@@ -13,11 +13,11 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class UpdateSummaryDialog extends JDialog {
-    public UpdateSummaryDialog(JFrame parentFrame, List<String> newItems, List<String> skippedItems, List<String> unsupportedItems, Consumer<Boolean> callback) {
-        super(parentFrame, Util.withTitlePrefix("Update Summary"), true);
+    public UpdateSummaryDialog(Window parent, List<String> newItems, List<String> skippedItems, List<String> unsupportedItems, Consumer<Boolean> callback) {
+        super(parent, Util.withTitlePrefix("Update Summary"), ModalityType.DOCUMENT_MODAL);
 
         setSize(500, 400);
-        setLocationRelativeTo(parentFrame);
+        setLocationRelativeTo(parent);
 
         JPanel rootPanel = new JPanel();
         rootPanel.setLayout(new BoxLayout(rootPanel, BoxLayout.PAGE_AXIS));

@@ -10,7 +10,7 @@ import com.lx862.pwgui.util.Util;
 import javax.swing.*;
 import java.awt.event.KeyEvent;
 
-public class BaseFrame extends JFrame {
+public abstract class BaseFrame extends JFrame {
     protected JMenuBar jMenuBar;
 
     public BaseFrame(String title) {

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-/* The main logger used for this program */
+/** The logger used for the program */
 public class Logger {
     private final List<Consumer<String>> logListeners;
     public final List<String> lines;

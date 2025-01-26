@@ -174,6 +174,6 @@ public class PackwizMetaPanel extends FileTypePanel {
         packwizMetaFile.side = !serverCheckbox.isSelected() && !clientCheckbox.isSelected() ? "both" : serverCheckbox.isSelected() && clientCheckbox.isSelected() ? "both" : serverCheckbox.isSelected() ? "server" : "client";
         packwizMetaFile.optionDescription = descriptionTextField.getText().isEmpty() ? null : descriptionTextField.getText();
 
-        packwizMetaFile.write();
+        packwizMetaFile.write(Constants.REASON_TRIGGERED_BY_USER);
     }
 }

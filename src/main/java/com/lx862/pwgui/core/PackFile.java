@@ -60,7 +60,7 @@ public class PackFile extends TomlFile {
         this.optionsDatapackFolder = toml.getString("options.datapack-folder");
 
         if(Files.notExists(resolveRelative(indexFile))) {
-            throw new RuntimeException(String.format("%s says index file is at \"%s\", but is not found :(\nPlease double check %s.", this.path.getFileName(), this.indexFile, this.path.getFileName()));
+            throw new RuntimeException(String.format("%s says index file is at \"%s\", but is not found :(\nPlease double check %s.", getPath().getFileName(), this.indexFile, getPath().getFileName()));
         }
         this.packIndexFile = new Cache<>(() -> new PackIndexFile(getIndexPath()));
     }
@@ -90,7 +90,7 @@ public class PackFile extends TomlFile {
     }
 
     public Path resolveRelative(String path) {
-        return this.path.getParent().resolve(path);
+        return getPath().getParent().resolve(path);
     }
 
     public Path getIndexPath() {
@@ -114,7 +114,7 @@ public class PackFile extends TomlFile {
     }
 
     @Override
-    public void write() throws IOException {
+    public void write(String reason) throws IOException {
         Map<String, Object> map = toml.toMap();
         map.put("name", this.name);
         map.put("author", this.author);
@@ -135,5 +135,6 @@ public class PackFile extends TomlFile {
         map.put("options", optionsMap);
 
         writeToFilesystem(map);
+        super.write(reason);
     }
 }

@@ -1,21 +1,22 @@
 package com.lx862.pwgui.gui.action;
 
 import com.lx862.pwgui.Main;
+import com.lx862.pwgui.gui.components.filters.PackwizExecutableFileFilter;
 import com.lx862.pwgui.gui.frame.WelcomeFrame;
 import com.lx862.pwgui.gui.components.kui.KFileChooser;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 
 public class LocatePackwizAction extends AbstractAction {
-    private final JFrame parent;
+    private final Window parent;
 
-    public LocatePackwizAction(JFrame parent) {
+    public LocatePackwizAction(Window parent) {
         super("Locate packwiz...");
         this.parent = parent;
         putValue(MNEMONIC_KEY, KeyEvent.VK_L);
@@ -24,17 +25,7 @@ public class LocatePackwizAction extends AbstractAction {
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         KFileChooser fileChooser = new KFileChooser("locate-pw");
-        fileChooser.setFileFilter(new FileFilter() {
-            @Override
-            public boolean accept(File f) {
-                return f.isDirectory() || f.getName().equals("packwiz") || f.getName().equals("packwiz.exe");
-            }
-
-            @Override
-            public String getDescription() {
-                return "Packwiz Executable (packwiz/packwiz.exe)";
-            }
-        });
+        fileChooser.setFileFilter(new PackwizExecutableFileFilter());
 
         if(fileChooser.showOpenDialog(parent) == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
@@ -44,14 +35,14 @@ public class LocatePackwizAction extends AbstractAction {
             }
 
             Main.getConfig().setPackwizExecutablePath(selectedFile.toPath());
-            Main.packwiz.locate(null);
-            if(!Main.packwiz.usable()) {
+            String newProbedPath = Main.packwiz.probe(null);
+            if(newProbedPath == null) {
                 JOptionPane.showMessageDialog(parent, "The selected executable is not valid!\nAre you sure you can run the executable?", Util.withTitlePrefix("Invalid Executable"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             try {
-                Main.getConfig().write();
+                Main.getConfig().write("Update packwiz executable path");
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(parent, String.format("Failed to write configuration file:\n%s", e.getMessage()), Util.withTitlePrefix("Failed to Write Config"), JOptionPane.ERROR_MESSAGE);
                 return;

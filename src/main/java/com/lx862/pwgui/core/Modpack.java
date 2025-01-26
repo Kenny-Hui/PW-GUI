@@ -11,7 +11,7 @@ import java.nio.file.Path;
 public class Modpack {
     public static final GitIgnoreRules defaultFileIgnoreRules = new GitIgnoreRules(
         // Sourced from https://github.com/packwiz/packwiz/blob/0626c00149a8d9a5e9f76e5640e7b8b95c064350/core/index.go#L131-L151
-        new String[]{
+        new String[] {
             ".git/**",
             ".gitattributes",
             ".gitignore",

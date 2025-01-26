@@ -8,6 +8,7 @@ import com.lx862.pwgui.gui.dialog.UpdateSummaryDialog;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -15,9 +16,9 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class UpdateAllAction extends AbstractAction {
-    private final JFrame parent;
+    private final Window parent;
 
-    public UpdateAllAction(JFrame parent) {
+    public UpdateAllAction(Window parent) {
         super("Update All Items");
         this.parent = parent;
         putValue(MNEMONIC_KEY, KeyEvent.VK_U);

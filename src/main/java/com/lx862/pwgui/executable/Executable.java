@@ -27,12 +27,22 @@ public abstract class Executable {
         this.programName = programName;
     }
 
-    public boolean locate(String executableOverride) {
+    public boolean updateExecutableLocation(String executableOverride) {
+        String probedLocation = probe(executableOverride);
+        this.executableLocation = probedLocation;
+
+        if(probedLocation != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public String probe(String executableOverride) {
         if(executableOverride != null) {
             if(isOurIntendedProgram(executableOverride)) {
                 Main.LOGGER.info(String.format("%s executable is specified at %s", programName, executableOverride));
-                executableLocation = executableOverride;
-                return true;
+                return executableOverride;
             } else {
                 Main.LOGGER.info(String.format("%s executable specified at %s is not valid!", programName, executableOverride));
             }
@@ -43,14 +53,13 @@ public abstract class Executable {
             for(String potentialPath : potentialPaths) {
                 if(isOurIntendedProgram(potentialPath)) {
                     Main.LOGGER.info(String.format("Found %s executable at %s", programName, potentialPath));
-                    executableLocation = potentialPath;
-                    return true;
+                    return potentialPath;
                 }
             }
         }
 
         Main.LOGGER.info(String.format("Cannot probe %s executable!", programName));
-        return false;
+        return null;
     }
 
     public boolean usable() {

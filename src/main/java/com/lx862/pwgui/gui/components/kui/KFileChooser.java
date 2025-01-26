@@ -74,7 +74,7 @@ public class KFileChooser extends JFileChooser {
             if(existingRecord == null || !existingRecord.equals(directory.toPath())) { // Changed
                 try {
                     Main.getConfig().fileChooserLastPath.put(context, directory.toPath());
-                    Main.getConfig().write();
+                    Main.getConfig().write("Save file picker location");
                 } catch (IOException e) {
                     Main.LOGGER.exception(e);
                 }
@@ -93,7 +93,7 @@ public class KFileChooser extends JFileChooser {
             if(existingRecord == null || !existingRecord.equals(directory.toPath())) { // Changed
                 try {
                     Main.getConfig().fileChooserLastPath.put(context, directory.toPath());
-                    Main.getConfig().write();
+                    Main.getConfig().write("Save file picker location");
                 } catch (IOException e) {
                     Main.LOGGER.exception(e);
                 }

@@ -91,7 +91,7 @@ public class PackwizMetaFile extends TomlFile {
     }
 
     @Override
-    public void write() throws IOException {
+    public void write(String reason) throws IOException {
         Map<String, Object> map = this.toml.toMap();
         map.put("side", this.side);
 
@@ -126,5 +126,6 @@ public class PackwizMetaFile extends TomlFile {
         }
 
         writeToFilesystem(map);
+        super.write(reason);
     }
 }

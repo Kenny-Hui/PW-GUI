@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
+import com.lx862.pwgui.Main;
 import com.lx862.pwgui.util.GoUtil;
 
 import java.io.*;
@@ -12,17 +13,24 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
-public class Config {
+/** Config for the main program */
+public class Config extends WritableFile {
     public static final Path CONFIG_DIR_PATH = GoUtil.userConfigDir().resolve("pwgui");
+    private static final Path CONFIG_PATH = CONFIG_DIR_PATH.resolve("config.json");
     public final Map<String, Path> fileChooserLastPath;
     private Path packwizExecutablePath;
+    private Path lastModpackPath;
+    private boolean openLastModpackOnLaunch;
 
     public Config() throws FileNotFoundException {
-        this(new Gson().fromJson(new JsonReader(new FileReader(CONFIG_DIR_PATH.resolve("config.json").toFile())), JsonObject.class));
+        this(new Gson().fromJson(new JsonReader(new FileReader(CONFIG_PATH.toFile())), JsonObject.class));
     }
 
     public Config(JsonObject jsonObject) {
+        super(CONFIG_PATH);
+
         this.fileChooserLastPath = new HashMap<>();
         if(jsonObject.has("executables")) {
             JsonObject executableObject = jsonObject.getAsJsonObject("executables");
@@ -39,17 +47,15 @@ public class Config {
                 fileChooserLastPath.put(contextName, Paths.get(path));
             }
         }
+        if(jsonObject.has("lastModpackPath")) {
+            this.lastModpackPath = Paths.get(jsonObject.get("lastModpackPath").getAsString());
+        }
+        if(jsonObject.has("openLastModpackOnLaunch")) {
+            this.openLastModpackOnLaunch = jsonObject.get("openLastModpackOnLaunch").getAsBoolean();
+        }
     }
 
-    public Path getPackwizExecutablePath() {
-        return this.packwizExecutablePath;
-    }
-
-    public void setPackwizExecutablePath(Path newPath) {
-        this.packwizExecutablePath = newPath;
-    }
-
-    public void write() throws IOException {
+    public void write(String reason) throws IOException {
         CONFIG_DIR_PATH.toFile().mkdirs();
 
         JsonObject jsonObject = new JsonObject();
@@ -65,10 +71,44 @@ public class Config {
             lastPickedFilesJsonArray.add(entryJsonObject);
         }
         jsonObject.add("lastPickedFiles", lastPickedFilesJsonArray);
+        if(lastModpackPath != null) jsonObject.addProperty("lastModpackPath", lastModpackPath.toString());
+        jsonObject.addProperty("openLastModpackOnLaunch", openLastModpackOnLaunch);
 
-        try(Writer writer = new FileWriter(CONFIG_DIR_PATH.resolve("config.json").toFile())) {
+        try(Writer writer = new FileWriter(CONFIG_PATH.toFile())) {
             new GsonBuilder().setPrettyPrinting().create().toJson(jsonObject, writer);
         }
+        super.write(reason);
+    }
+
+    public Path getPackwizExecutablePath() {
+        return this.packwizExecutablePath;
+    }
+
+    public void setPackwizExecutablePath(Path newPath) {
+        this.packwizExecutablePath = newPath;
+    }
+
+    public Path getLastModpackPath() {
+        return this.lastModpackPath;
+    }
+
+    public void setLastModpackPath(Path newPath) {
+        if(openLastModpackOnLaunch() && !Objects.equals(newPath, this.lastModpackPath)) {
+            this.lastModpackPath = newPath;
+            try { // Write if changed
+                write("Save last opened modpack path");
+            } catch (IOException e) {
+                Main.LOGGER.exception(e);
+            }
+        }
+    }
+
+    public boolean openLastModpackOnLaunch() {
+        return this.openLastModpackOnLaunch;
+    }
+
+    public void setOpenLastModpackOnLaunch(boolean value) {
+        this.openLastModpackOnLaunch = value;
     }
 }
 

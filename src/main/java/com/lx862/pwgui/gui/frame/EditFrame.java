@@ -1,8 +1,8 @@
 package com.lx862.pwgui.gui.frame;
 
 import com.lx862.pwgui.core.Modpack;
-import com.lx862.pwgui.gui.action.ClearPackwizCacheAction;
 import com.lx862.pwgui.gui.action.RefreshPackAction;
+import com.lx862.pwgui.gui.action.SettingsAction;
 import com.lx862.pwgui.gui.action.UpdateAllAction;
 import com.lx862.pwgui.gui.components.kui.KMenu;
 import com.lx862.pwgui.gui.components.kui.KMenuItem;
@@ -13,7 +13,6 @@ import com.lx862.pwgui.util.Util;
 import com.lx862.pwgui.Main;
 import com.lx862.pwgui.gui.popup.ImportModpackDialog;
 import com.lx862.pwgui.gui.panel.editing.EditPanel;
-import jdk.nashorn.internal.scripts.JO;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,8 +20,8 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
+/** The main Pack Editing UI */
 public class EditFrame extends BaseFrame {
     private final EditPanel editPanel;
 
@@ -34,6 +33,8 @@ public class EditFrame extends BaseFrame {
 
         Main.packwiz.setPackFileLocation(modpack.getRootPath().relativize(modpack.getPackFilePath()).toString());
         Main.packwiz.changeWorkingDirectory(modpack.getRootPath());
+
+        Main.getConfig().setLastModpackPath(modpack.getPackFilePath());
 
         editPanel = new EditPanel(modpack);
         add(editPanel);
@@ -106,6 +107,9 @@ public class EditFrame extends BaseFrame {
         addMissingMenu.add(pluginsDirectoryMenuItem);
 
         editMenu.add(addMissingMenu);
+
+        KMenuItem settingsItem = new KMenuItem(new SettingsAction(this));
+        editMenu.add(settingsItem);
 
         return editMenu;
     }

@@ -1,6 +1,7 @@
 package com.lx862.pwgui.gui.frame;
 
 import com.lx862.pwgui.core.Modpack;
+import com.lx862.pwgui.gui.action.SettingsAction;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.gui.components.kui.KFileChooser;
 import com.lx862.pwgui.gui.components.kui.KLinkButton;
@@ -95,8 +96,7 @@ public class WelcomeFrame extends BaseFrame {
 
         mainPanel.add(Box.createRigidArea(new Dimension(0, 8)));
 
-        KButton settingsButton = new KButton("Settings");
-        settingsButton.setMnemonic(KeyEvent.VK_S);
+        KButton settingsButton = new KButton(new SettingsAction(this));
         settingsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(settingsButton);
 
@@ -112,6 +112,8 @@ public class WelcomeFrame extends BaseFrame {
         add(rootPanel);
 
         this.jMenuBar.add(super.getHelpMenu());
+
+        Main.getConfig().setLastModpackPath(null);
     }
 
     private void openModpack(Path path) {

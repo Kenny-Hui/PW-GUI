@@ -28,7 +28,7 @@ public class PackIndexFile extends TomlFile {
     }
 
     @Override
-    public void write() throws IOException {
+    public void write(String reason) throws IOException {
         Map<String, Object> map = toml.toMap();
         map.put("hash-format", this.hashFormat);
 
@@ -46,6 +46,7 @@ public class PackIndexFile extends TomlFile {
         }
         map.put("files", entries);
         writeToFilesystem(map);
+        super.write(reason);
     }
 
     public FileEntry getEntryByPath(Path path) {

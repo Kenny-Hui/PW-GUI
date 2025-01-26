@@ -24,6 +24,7 @@ public class KGridBagLayoutPanel extends JPanel {
             gbc.gridx = x;
             gbc.gridy = y;
             gbc.weightx = i == maxWidthSpan-1 ? 1 : 0; // Fill last row
+            gbc.weighty = 0;
             gbc.gridwidth = widthSpan;
             if(components[i] != null) add(components[i], gbc);
             x++;
@@ -38,10 +39,19 @@ public class KGridBagLayoutPanel extends JPanel {
             gbc.gridx = x;
             gbc.gridy = y;
             gbc.weightx = i == fullWeightIndex ? 1 : 0;
+            gbc.weighty = 0;
             gbc.gridwidth = widthSpan;
             add(components[i], gbc);
             x++;
         }
         y++;
+    }
+
+    public void addVerticalFiller() {
+        gbc.gridx = 0;
+        gbc.gridy = y;
+        gbc.weighty = 1;
+        gbc.gridwidth = maxWidthSpan;
+        add(new JPanel(), gbc);
     }
 }

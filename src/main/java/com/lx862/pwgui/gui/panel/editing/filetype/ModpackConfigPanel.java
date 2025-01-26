@@ -1,5 +1,6 @@
 package com.lx862.pwgui.gui.panel.editing.filetype;
 
+import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.core.PackFile;
 import com.lx862.pwgui.gui.action.UpdateAllAction;
 import com.lx862.pwgui.gui.panel.ModpackExtraSettingPanel;
@@ -55,7 +56,7 @@ public class ModpackConfigPanel extends FileTypePanel {
     @Override
     public void save() throws IOException {
         boolean mcVersionChanged = this.versionPanel.minecraftVersionChanged();
-        packFile.write();
+        packFile.write(Constants.REASON_TRIGGERED_BY_USER);
 
         if(mcVersionChanged) {
             if(JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Minecraft version has changed.\nDo you want to update the mods as well?", Util.withTitlePrefix("Update Mods"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {

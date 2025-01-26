@@ -13,9 +13,15 @@ import com.lx862.pwgui.util.Util;
 import com.lx862.pwgui.Main;
 import com.lx862.pwgui.gui.popup.ImportModpackDialog;
 import com.lx862.pwgui.gui.panel.editing.EditPanel;
+import jdk.nashorn.internal.scripts.JO;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class EditFrame extends BaseFrame {
     private final EditPanel editPanel;
@@ -33,6 +39,7 @@ public class EditFrame extends BaseFrame {
         add(editPanel);
 
         this.jMenuBar.add(getFileMenu(modpack));
+        this.jMenuBar.add(getEditMenu(modpack));
         this.jMenuBar.add(getToolMenu());
         this.jMenuBar.add(super.getHelpMenu());
     }
@@ -40,7 +47,7 @@ public class EditFrame extends BaseFrame {
     private KMenu getFileMenu(Modpack modpack) {
         KMenu fileMenu = new KMenu("File");
 
-        KMenuItem saveMenuItem = new KMenuItem("Save selected file");
+        KMenuItem saveMenuItem = new KMenuItem("Save Selected File");
         saveMenuItem.setMnemonic(KeyEvent.VK_S);
         saveMenuItem.addActionListener(actionEvent -> editPanel.fileDetailPanel.saveAllTabs(false));
         fileMenu.add(saveMenuItem);
@@ -74,6 +81,37 @@ public class EditFrame extends BaseFrame {
         return fileMenu;
     }
 
+    // TODO: Add missing folder "Edit" menu
+
+    private KMenu getEditMenu(Modpack modpack) {
+        KMenu editMenu = new KMenu("Edit");
+        KMenu addMissingMenu = new KMenu("Add Missing...");
+        KMenuItem modsDirectoryMenuItem = new KMenuItem("Mods Folder");
+        modsDirectoryMenuItem.addActionListener(actionEvent -> makeFolder(modpack.getRootPath(), "mods"));
+
+        KMenuItem resourcePacksDirectoryMenuItem = new KMenuItem("Resource Packs Folder");
+        resourcePacksDirectoryMenuItem.addActionListener(actionEvent -> makeFolder(modpack.getRootPath(), "resourcepacks"));
+
+        KMenuItem shaderPacksDirectoryMenuItem = new KMenuItem("Shader Packs Folder");
+        shaderPacksDirectoryMenuItem.addActionListener(actionEvent -> makeFolder(modpack.getRootPath(), "shaderpacks"));
+
+        KMenuItem configDirectoryMenuItem = new KMenuItem("Mods Config Folder");
+        configDirectoryMenuItem.addActionListener(actionEvent -> makeFolder(modpack.getRootPath(), "config"));
+
+        KMenuItem pluginsDirectoryMenuItem = new KMenuItem("Plugins Folder");
+        pluginsDirectoryMenuItem.addActionListener(actionEvent -> makeFolder(modpack.getRootPath(), "plugins"));
+
+        addMissingMenu.add(modsDirectoryMenuItem);
+        addMissingMenu.add(resourcePacksDirectoryMenuItem);
+        addMissingMenu.add(shaderPacksDirectoryMenuItem);
+        addMissingMenu.add(configDirectoryMenuItem);
+        addMissingMenu.add(pluginsDirectoryMenuItem);
+
+        editMenu.add(addMissingMenu);
+
+        return editMenu;
+    }
+
     private KMenu getToolMenu() {
         KMenu toolMenu = new KMenu("Tool");
 
@@ -102,6 +140,21 @@ public class EditFrame extends BaseFrame {
     private void openPackwizConsole() {
         ConsoleDialog frame = new ConsoleDialog(Main.packwiz, this);
         frame.setVisible(true);
+    }
+
+    private void makeFolder(Path path, String dir) {
+        Path finalPath = path.resolve(dir);
+        if(finalPath.toFile().exists()) {
+            JOptionPane.showMessageDialog(this, String.format("Folder \"%s\" already exists!", dir), Util.withTitlePrefix("Folder Already Exists"), JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            try {
+                Files.createDirectory(finalPath);
+                JOptionPane.showMessageDialog(this, String.format("Created folder \"%s\"!", dir), Util.withTitlePrefix("Folder Created!"), JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException e) {
+                Main.LOGGER.exception(e);
+                JOptionPane.showMessageDialog(this, String.format("Failed to create folder \"%s\":\n%s", dir, e.getMessage()), Util.withTitlePrefix("Failed to Create Folder"), JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
     @Override

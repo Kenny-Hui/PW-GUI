@@ -18,7 +18,7 @@ public class UpdateAllAction extends AbstractAction {
     private final JFrame parent;
 
     public UpdateAllAction(JFrame parent) {
-        super("Update all items");
+        super("Update All Items");
         this.parent = parent;
         putValue(MNEMONIC_KEY, KeyEvent.VK_U);
     }

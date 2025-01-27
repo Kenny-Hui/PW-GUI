@@ -102,6 +102,9 @@ public class ModpackVersionPanel extends KGridBagLayoutPanel {
     }
 
     private void updateMinecraftUI(boolean showSnapshot) {
+        // Dummy entry to retain the combo box height account for the list padding
+        minecraftVersionComboBox.addItem(new VersionMetadata(null, "Loading...", VersionMetadata.State.RELEASE));
+
         fetchComponentDatas(PackComponent.MINECRAFT, () -> {
             fillComboBoxes(null, minecraftVersionComboBox, PackComponent.MINECRAFT, showSnapshot);
             // We add event listener after we fill the combobox, as we don't want the fill update to be triggered
@@ -122,6 +125,7 @@ public class ModpackVersionPanel extends KGridBagLayoutPanel {
             modloaderVersionLabel.setText(modloader.iconName.name + " version:");
 
             modloaderVersionComboBox.setEnabled(false);
+            modloaderVersionComboBox.addItem(new VersionMetadata(null, "Loading...", VersionMetadata.State.RELEASE));
             fetchComponentDatas(modloader, () -> {
                 fillComboBoxes(minecraftVersionComboBox.getEditor().getItem().toString(), modloaderVersionComboBox, modloader, false);
                 modloaderVersionComboBox.setEnabled(true);
@@ -197,7 +201,7 @@ public class ModpackVersionPanel extends KGridBagLayoutPanel {
         try {
             packComponent.versionGetter.get((versionList) -> {
                 Caches.componentCaches.put(packComponent, versionList);
-                callback.run();
+                SwingUtilities.invokeLater(callback);
             });
         } catch (Exception e) {
             Caches.componentCaches.put(packComponent, null);

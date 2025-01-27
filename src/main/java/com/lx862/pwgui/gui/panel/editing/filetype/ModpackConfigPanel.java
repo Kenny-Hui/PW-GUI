@@ -18,21 +18,21 @@ public class ModpackConfigPanel extends FileTypePanel {
     private final ModpackInfoPanel infoPanel;
     private final ModpackVersionPanel versionPanel;
     private final ModpackExtraSettingPanel modpackExtraSettingPanel;
-    private final PackFile packFile;
+    private final PackFile modifiedPackFile;
 
     public ModpackConfigPanel(FileEntryPaneContext context, ModpackConfigFileModel fileEntry) throws IOException {
         super(context);
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
-        this.packFile = new PackFile(fileEntry.packFile.getPath(), fileEntry.packFile.getToml());
+        this.modifiedPackFile = new PackFile(fileEntry.packFile.getPath(), fileEntry.packFile.getToml());
 
-        this.infoPanel = new ModpackInfoPanel(packFile, this::updateSaveState);
+        this.infoPanel = new ModpackInfoPanel(modifiedPackFile, this::updateSaveState);
         this.infoPanel.setAlignmentX(LEFT_ALIGNMENT);
 
-        this.versionPanel = new ModpackVersionPanel(packFile, this::updateSaveState);
+        this.versionPanel = new ModpackVersionPanel(modifiedPackFile, this::updateSaveState);
         this.versionPanel.setAlignmentX(LEFT_ALIGNMENT);
 
-        this.modpackExtraSettingPanel = new ModpackExtraSettingPanel(packFile);
+        this.modpackExtraSettingPanel = new ModpackExtraSettingPanel(context, modifiedPackFile, this::updateSaveState);
         this.modpackExtraSettingPanel.setAlignmentX(LEFT_ALIGNMENT);
 
         add(this.infoPanel);
@@ -45,7 +45,7 @@ public class ModpackConfigPanel extends FileTypePanel {
 
     @Override
     public boolean shouldSave() {
-        return this.infoPanel != null && this.versionPanel != null && (this.infoPanel.shouldSave() || this.versionPanel.shouldSave());
+        return this.infoPanel != null && this.versionPanel != null && this.modpackExtraSettingPanel != null && (this.infoPanel.shouldSave() || this.versionPanel.shouldSave() || this.modpackExtraSettingPanel.shouldSave());
     }
 
     @Override
@@ -56,7 +56,7 @@ public class ModpackConfigPanel extends FileTypePanel {
     @Override
     public void save() throws IOException {
         boolean mcVersionChanged = this.versionPanel.minecraftVersionChanged();
-        packFile.write(Constants.REASON_TRIGGERED_BY_USER);
+        modifiedPackFile.write(Constants.REASON_TRIGGERED_BY_USER);
 
         if(mcVersionChanged) {
             if(JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Minecraft version has changed.\nDo you want to update the mods as well?", Util.withTitlePrefix("Update Mods"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {

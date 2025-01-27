@@ -4,6 +4,7 @@ import com.lx862.pwgui.data.PackComponent;
 import com.lx862.pwgui.data.PackComponentVersion;
 import com.lx862.pwgui.data.Cache;
 import com.lx862.pwgui.data.exception.MissingKeyPropertyException;
+import com.lx862.pwgui.util.Util;
 import com.moandjiezana.toml.Toml;
 
 import java.io.FileNotFoundException;
@@ -29,7 +30,7 @@ public class PackFile extends TomlFile {
     private PackComponentVersion versionsModloader;
 
     public final List<String> optionsAcceptableGameVersion;
-    public String optionsDatapackFolder;
+    private String optionsDatapackFolder;
 
     public PackFile(Path path) throws MissingKeyPropertyException, FileNotFoundException {
         this(path, new Toml().read(path.toFile()));
@@ -90,28 +91,32 @@ public class PackFile extends TomlFile {
         return versionList;
     }
 
-    public Path resolveRelative(String path) {
-        return getPath().getParent().resolve(path);
-    }
-
     public Path getIndexPath() {
         return resolveRelative(indexFile);
-    }
-
-    public Path getDatapackPath() {
-        return this.optionsDatapackFolder == null ? null : resolveRelative(optionsDatapackFolder);
-    }
-
-    public void setMinecraft(PackComponentVersion newComponent) {
-        this.versionsMinecraft = newComponent;
     }
 
     public PackComponentVersion getModloader() {
         return versionsModloader;
     }
 
+    public Path getDatapackPath() {
+        return this.optionsDatapackFolder == null ? null : getPath().getParent().relativize(resolveRelative(optionsDatapackFolder));
+    }
+
+    public void setDatapackPath(Path path) {
+        this.optionsDatapackFolder = Util.pathToString(path);
+    }
+
+    public void setMinecraft(PackComponentVersion newComponent) {
+        this.versionsMinecraft = newComponent;
+    }
+
     public void setModloader(PackComponentVersion newComponent) {
         this.versionsModloader = newComponent;
+    }
+
+    public Path resolveRelative(String path) {
+        return getPath().getParent().resolve(path);
     }
 
     @Override
@@ -133,6 +138,7 @@ public class PackFile extends TomlFile {
 
         Map<String, Object> optionsMap = (Map<String, Object>) map.getOrDefault("options", new HashMap<>());
         optionsMap.put("acceptable-game-versions", getOptionAcceptableGameVersion(false));
+        optionsMap.put("datapack-folder", this.optionsDatapackFolder);
         map.put("options", optionsMap);
 
         writeToFilesystem(map);

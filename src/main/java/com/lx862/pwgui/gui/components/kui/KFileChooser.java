@@ -21,11 +21,15 @@ public class KFileChooser extends JFileChooser {
     }
 
     public KFileChooser(String context) {
+        this(context, null);
+    }
+
+    public KFileChooser(String context, Path defaultPath) {
         this.context = context;
         if(context != null && Main.getConfig().fileChooserLastPath.containsKey(context)) {
             setCurrentDirectory(Main.getConfig().fileChooserLastPath.get(context).toFile());
         } else {
-            setCurrentDirectory(Paths.get(System.getProperty("user.dir")).toFile());
+            setCurrentDirectory(defaultPath == null ? Paths.get(System.getProperty("user.dir")).toFile() : defaultPath.toFile());
         }
     }
 

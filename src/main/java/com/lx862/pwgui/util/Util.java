@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Matcher;
 
 public class Util {
     /** Returns a String with the format PROGRAM_NAME - TEXT */
@@ -53,6 +54,16 @@ public class Util {
         StringSelection stringSelection = new StringSelection(str);
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(stringSelection, null);
+    }
+
+    /** Replaces all backward slashes with forward slashes in a path */
+    /** Toml4j has a issue of misparsing \UXXX as a unicode code points, so something like C:\Users on Windows could break the parsing entirely */
+    public static String pathToString(Path path) {
+        if(File.pathSeparator.equals("\\")) {
+            return path.toString().replaceAll(Matcher.quoteReplacement("\\"), "/");
+        } else {
+            return path.toString();
+        }
     }
 
     public static void tryOpenFile(File file) {

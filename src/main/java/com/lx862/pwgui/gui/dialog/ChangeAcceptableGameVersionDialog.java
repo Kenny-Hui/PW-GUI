@@ -1,4 +1,4 @@
-package com.lx862.pwgui.gui.popup;
+package com.lx862.pwgui.gui.dialog;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.data.Caches;
@@ -24,8 +24,9 @@ import java.util.stream.Collectors;
 
 public class ChangeAcceptableGameVersionDialog extends JDialog {
     private final List<VersionMetadata> versions;
+    private final Runnable saveCallback;
 
-    public ChangeAcceptableGameVersionDialog(JFrame parentFrame, String requiredVersion, List<String> preSelectedVersions) {
+    public ChangeAcceptableGameVersionDialog(JFrame parentFrame, String requiredVersion, List<String> preSelectedVersions, Runnable saveCallback) {
         super(parentFrame, Util.withTitlePrefix("Change Acceptable Version"), true);
 
         setSize(420, 400);
@@ -33,6 +34,7 @@ public class ChangeAcceptableGameVersionDialog extends JDialog {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         this.versions = new ArrayList<>();
+        this.saveCallback = saveCallback;
 
         JPanel rootPanel = new JPanel();
         rootPanel.setLayout(new BoxLayout(rootPanel, BoxLayout.PAGE_AXIS));
@@ -85,6 +87,9 @@ public class ChangeAcceptableGameVersionDialog extends JDialog {
 
         okButton.addActionListener(actionEvent -> {
             okButton.setEnabled(false);
+            // Because we directly run packwiz to change the version, it would bypass the regular save procedure and would overwrite the file directly, discarding any unsaved changes
+            // We should prompt for saving to avoid any data loss (Ideally we should write the changes ourselves, but meh :P)
+            saveCallback.run();
             changeAcceptableVersion(preSelectedVersions, versionList.getSelectedValuesList(), (success) -> {
                 if(success) {
                     dispose();

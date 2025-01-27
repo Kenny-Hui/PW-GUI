@@ -9,11 +9,13 @@ public class FileEntryPaneContext {
     private final Modpack modpack;
     private final Consumer<GitIgnoreRules> setTreeIgnorePattern;
     private final Consumer<Boolean> shouldSave;
+    private final Runnable promptForSaveCallback;
 
-    public FileEntryPaneContext(Modpack modpack, Consumer<GitIgnoreRules> setTreeIgnorePattern, Consumer<Boolean> setSaveCallback) {
+    public FileEntryPaneContext(Modpack modpack, Consumer<GitIgnoreRules> setTreeIgnorePattern, Consumer<Boolean> setSaveCallback, Runnable promptForSaveCallback) {
         this.modpack = modpack;
         this.setTreeIgnorePattern = setTreeIgnorePattern;
         this.shouldSave = setSaveCallback;
+        this.promptForSaveCallback = promptForSaveCallback;
     }
 
     public Modpack getModpack() {
@@ -26,5 +28,9 @@ public class FileEntryPaneContext {
 
     public void setShouldSave(boolean bl) {
         shouldSave.accept(bl);
+    }
+
+    public void promptForSave() {
+        promptForSaveCallback.run();
     }
 }

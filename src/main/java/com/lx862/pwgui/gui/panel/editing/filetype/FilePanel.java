@@ -110,7 +110,6 @@ public class FilePanel extends FileTypePanel {
     }
 
     public static String formatFileSize(long bytes) {
-        if(bytes <= 0) return "0";
         if(bytes < 1024) return bytes + " B";
 
         double kib = bytes / 1024.0;

@@ -38,7 +38,7 @@ public class EditPanel extends JPanel {
             fileBrowserPanel.fileBrowserTree.setIgnorePattern(null);
 
             FileSystemEntityModel entry = (FileSystemEntityModel) node.getUserObject();
-            List<NameTabPair> inspectPanels = getViews(new FileEntryPaneContext(modpack, fileBrowserPanel.fileBrowserTree::setIgnorePattern, fileDetailPanel.saveButton::setEnabled), entry);
+            List<NameTabPair> inspectPanels = getViews(new FileEntryPaneContext(modpack, fileBrowserPanel.fileBrowserTree::setIgnorePattern, fileDetailPanel.saveButton::setEnabled, () -> saveChanges(true)), entry);
             Collections.reverse(inspectPanels);
             fileDetailPanel.fileEntryTab.setTabs(inspectPanels);
         });

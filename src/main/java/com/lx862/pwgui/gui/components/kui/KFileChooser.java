@@ -26,8 +26,10 @@ public class KFileChooser extends JFileChooser {
 
     public KFileChooser(String context, Path defaultPath) {
         this.context = context;
-        if(context != null && Main.getConfig().fileChooserLastPath.containsKey(context)) {
-            setCurrentDirectory(Main.getConfig().fileChooserLastPath.get(context).toFile());
+        Path lastChosenPath = Main.getConfig().fileChooserLastPath.get(context);
+
+        if(context != null && lastChosenPath != null && lastChosenPath.toFile().exists()) {
+            setCurrentDirectory(lastChosenPath.toFile());
         } else {
             setCurrentDirectory(defaultPath == null ? Paths.get(System.getProperty("user.dir")).toFile() : defaultPath.toFile());
         }

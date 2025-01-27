@@ -62,13 +62,13 @@ public class ModpackExtraSettingPanel extends KGridBagLayoutPanel {
         File parent = file;
         boolean isWithinDirectory = false;
 
-        do {
-            parent = parent.getParentFile();
-            if(parent != null && parent.equals(root.toFile())) {
+        while(parent != null) {
+            if(parent.equals(root.toFile())) {
                 isWithinDirectory = true;
                 break;
             }
-        } while(parent != null);
+            parent = parent.getParentFile();
+        }
 
         return isWithinDirectory;
     }

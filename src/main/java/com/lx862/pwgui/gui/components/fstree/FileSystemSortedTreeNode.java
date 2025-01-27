@@ -12,10 +12,10 @@ public class FileSystemSortedTreeNode extends DefaultMutableTreeNode implements 
     public final String name;
     public final Path path;
 
-    public FileSystemSortedTreeNode(FileSystemEntityModel node) {
-        this.path = node.path;
-        this.name = node.name;
-        setUserObject(node);
+    public FileSystemSortedTreeNode(FileSystemEntityModel model) {
+        this.path = model.path;
+        this.name = model.name;
+        setUserObject(model);
     }
 
     protected <T> List<T> addToList(List<T> existingList, T item) {

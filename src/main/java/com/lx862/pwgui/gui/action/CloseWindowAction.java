@@ -10,8 +10,8 @@ public class CloseWindowAction extends AbstractAction {
 
     public CloseWindowAction(Window parent, boolean isCancel) {
         super(isCancel ? "Cancel" : "Close");
-        putValue(MNEMONIC_KEY, KeyEvent.VK_C);
         this.parent = parent;
+        putValue(MNEMONIC_KEY, KeyEvent.VK_C);
     }
 
     @Override

@@ -7,8 +7,8 @@ import com.lx862.pwgui.gui.components.kui.KLinkButton;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-public class ManualModEntryPanel extends JPanel {
-    public ManualModEntryPanel(ManualModInfo info, boolean exists) {
+public class ManualFileEntryPanel extends JPanel {
+    public ManualFileEntryPanel(ManualModInfo info, boolean exists) {
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         setBorder(new EmptyBorder(6, 6, 0, 6));
         setBackground(new JTextArea().getBackground());

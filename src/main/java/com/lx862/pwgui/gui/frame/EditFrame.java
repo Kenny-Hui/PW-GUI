@@ -2,169 +2,101 @@ package com.lx862.pwgui.gui.frame;
 
 import com.lx862.pwgui.core.Modpack;
 import com.lx862.pwgui.executable.Executables;
-import com.lx862.pwgui.gui.action.RefreshPackAction;
-import com.lx862.pwgui.gui.action.SettingsAction;
-import com.lx862.pwgui.gui.action.UpdateAllAction;
-import com.lx862.pwgui.gui.components.kui.KMenu;
-import com.lx862.pwgui.gui.components.kui.KMenuItem;
-import com.lx862.pwgui.gui.popup.ConsoleDialog;
-import com.lx862.pwgui.gui.dialog.ExportModpackDialog;
-import com.lx862.pwgui.gui.popup.DevServerDialog;
+import com.lx862.pwgui.gui.components.fstree.FileSystemWatcher;
+import com.lx862.pwgui.gui.panel.editing.HeaderPanel;
 import com.lx862.pwgui.util.Util;
 import com.lx862.pwgui.Main;
-import com.lx862.pwgui.gui.popup.ImportModpackDialog;
 import com.lx862.pwgui.gui.panel.editing.EditPanel;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.WatchEvent;
+import java.util.function.BiConsumer;
+
+import static java.nio.file.StandardWatchEventKinds.*;
 
 /** The main Pack Editing UI */
 public class EditFrame extends BaseFrame {
     private final EditPanel editPanel;
+    private Thread fileWatcherThread;
 
     public EditFrame(Component parent, Modpack modpack) {
-        super(Util.withTitlePrefix(String.format("Editing %s", modpack.packFile.get().name)));
-
+        setTitle(getTitle(modpack));
         setSize(900, 650);
         setLocationRelativeTo(parent);
 
+        Main.getConfig().setLastModpackPath(modpack.getPackFilePath());
         Executables.packwiz.setPackFileLocation(modpack.getRootPath().relativize(modpack.getPackFilePath()).toString());
         Executables.packwiz.changeWorkingDirectory(modpack.getRootPath());
 
-        Main.getConfig().setLastModpackPath(modpack.getPackFilePath());
+        JPanel rootPanel = new JPanel(new BorderLayout(0, 10));
+        rootPanel.setBorder(new EmptyBorder(7, 15, 15, 15));
+
+        HeaderPanel headerBarPanel = new HeaderPanel(modpack.packFile.get());
+        rootPanel.add(headerBarPanel, BorderLayout.NORTH);
 
         editPanel = new EditPanel(modpack);
-        add(editPanel);
+        rootPanel.add(editPanel, BorderLayout.CENTER);
 
-        this.jMenuBar.add(getFileMenu(modpack));
-        this.jMenuBar.add(getEditMenu(modpack));
-        this.jMenuBar.add(getToolMenu());
-        this.jMenuBar.add(super.getHelpMenu());
-    }
+        add(rootPanel);
 
-    private KMenu getFileMenu(Modpack modpack) {
-        KMenu fileMenu = new KMenu("File");
+        jMenuBar.add(getFileMenu(modpack, () -> editPanel.saveChanges(false)));
+        jMenuBar.add(getEditMenu(modpack));
+        jMenuBar.add(getToolMenu());
+        jMenuBar.add(getHelpMenu());
 
-        KMenuItem saveMenuItem = new KMenuItem("Save Selected File");
-        saveMenuItem.setMnemonic(KeyEvent.VK_S);
-        saveMenuItem.addActionListener(actionEvent -> editPanel.fileDetailPanel.saveAllTabs(false));
-        fileMenu.add(saveMenuItem);
+        startWatchFile(modpack, (kind, path) -> {
+            editPanel.onFileChange(kind, path);
 
-        KMenuItem importMenuItem = new KMenuItem("Import pack...");
-        importMenuItem.setMnemonic(KeyEvent.VK_I);
-        importMenuItem.addActionListener(actionEvent -> {
-            editPanel.fileDetailPanel.saveAllTabs(false);
-            new ImportModpackDialog(this).setVisible(true);
-        });
-        fileMenu.add(importMenuItem);
-
-        KMenuItem exportMenuItem = new KMenuItem("Export pack...");
-        exportMenuItem.setMnemonic(KeyEvent.VK_E);
-        exportMenuItem.addActionListener(actionEvent -> {
-            editPanel.fileDetailPanel.saveAllTabs(false);
-            new ExportModpackDialog(this, modpack).setVisible(true);
-        });
-        fileMenu.add(exportMenuItem);
-
-        KMenuItem quitMenuItem = new KMenuItem("Quit...");
-        quitMenuItem.setMnemonic(KeyEvent.VK_Q);
-
-        quitMenuItem.addActionListener(actionEvent -> {
-            WelcomeFrame welcomeFrame = new WelcomeFrame(this);
-            welcomeFrame.setVisible(true);
-            dispose();
-        });
-        fileMenu.add(quitMenuItem);
-
-        return fileMenu;
-    }
-
-    private KMenu getEditMenu(Modpack modpack) {
-        KMenu editMenu = new KMenu("Edit");
-        KMenu addMissingMenu = new KMenu("Add Missing...");
-        KMenuItem modsDirectoryMenuItem = new KMenuItem("Mods Folder");
-        modsDirectoryMenuItem.addActionListener(actionEvent -> makeFolder(modpack.getRootPath(), "mods"));
-
-        KMenuItem resourcePacksDirectoryMenuItem = new KMenuItem("Resource Packs Folder");
-        resourcePacksDirectoryMenuItem.addActionListener(actionEvent -> makeFolder(modpack.getRootPath(), "resourcepacks"));
-
-        KMenuItem shaderPacksDirectoryMenuItem = new KMenuItem("Shader Packs Folder");
-        shaderPacksDirectoryMenuItem.addActionListener(actionEvent -> makeFolder(modpack.getRootPath(), "shaderpacks"));
-
-        KMenuItem configDirectoryMenuItem = new KMenuItem("Mods Config Folder");
-        configDirectoryMenuItem.addActionListener(actionEvent -> makeFolder(modpack.getRootPath(), "config"));
-
-        KMenuItem pluginsDirectoryMenuItem = new KMenuItem("Plugins Folder");
-        pluginsDirectoryMenuItem.addActionListener(actionEvent -> makeFolder(modpack.getRootPath(), "plugins"));
-
-        addMissingMenu.add(modsDirectoryMenuItem);
-        addMissingMenu.add(resourcePacksDirectoryMenuItem);
-        addMissingMenu.add(shaderPacksDirectoryMenuItem);
-        addMissingMenu.add(configDirectoryMenuItem);
-        addMissingMenu.add(pluginsDirectoryMenuItem);
-
-        editMenu.add(addMissingMenu);
-
-        KMenuItem settingsItem = new KMenuItem(new SettingsAction(this));
-        editMenu.add(settingsItem);
-
-        return editMenu;
-    }
-
-    private KMenu getToolMenu() {
-        KMenu toolMenu = new KMenu("Tool");
-
-        KMenuItem refreshMenuItem = new KMenuItem(new RefreshPackAction(this));
-        toolMenu.add(refreshMenuItem);
-
-        KMenuItem updateAllMenuItem = new KMenuItem(new UpdateAllAction(this));
-        toolMenu.add(updateAllMenuItem);
-
-        KMenuItem devServerMenuItem = new KMenuItem("Run Development Server...");
-        devServerMenuItem.setMnemonic(KeyEvent.VK_D);
-        toolMenu.add(devServerMenuItem);
-        devServerMenuItem.addActionListener(actionEvent -> {
-            DevServerDialog frame = new DevServerDialog(this);
-            frame.setVisible(true);
-        });
-
-        KMenuItem pwConsoleMenuItem = new KMenuItem("Open Packwiz Console");
-        pwConsoleMenuItem.setMnemonic(KeyEvent.VK_O);
-        toolMenu.add(pwConsoleMenuItem);
-        pwConsoleMenuItem.addActionListener(actionEvent -> openPackwizConsole());
-
-        return toolMenu;
-    }
-
-    private void openPackwizConsole() {
-        ConsoleDialog frame = new ConsoleDialog(Executables.packwiz, this);
-        frame.setVisible(true);
-    }
-
-    private void makeFolder(Path path, String dir) {
-        Path finalPath = path.resolve(dir);
-        if(finalPath.toFile().exists()) {
-            JOptionPane.showMessageDialog(this, String.format("Folder \"%s\" already exists!", dir), Util.withTitlePrefix("Folder Already Exists!"), JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            try {
-                Files.createDirectory(finalPath);
-                JOptionPane.showMessageDialog(this, String.format("Created folder \"%s\"!", dir), Util.withTitlePrefix("Folder Created!"), JOptionPane.INFORMATION_MESSAGE);
-            } catch (IOException e) {
-                Main.LOGGER.exception(e);
-                JOptionPane.showMessageDialog(this, String.format("Failed to create folder \"%s\":\n%s", dir, e.getMessage()), Util.withTitlePrefix("Failed to Create Folder"), JOptionPane.ERROR_MESSAGE);
+            if(kind == ENTRY_CREATE || kind == ENTRY_MODIFY) {
+                if(path.equals(modpack.getPackFilePath())) {
+                    modpack.packFile.clearCache();
+                    headerBarPanel.initialize(modpack.packFile.get()); // Update header with new info
+                    setTitle(getTitle(modpack));
+                } else if(path.equals(modpack.packFile.get().getIndexPath())) {
+                    modpack.packFile.get().packIndexFile.clearCache();
+                }
             }
-        }
+        });
+
+        registerKeyboardShortcut();
+    }
+
+    private String getTitle(Modpack modpack) {
+        return Util.withTitlePrefix(String.format("Editing %s", modpack.packFile.get().name));
+    }
+
+    private void registerKeyboardShortcut() {
+        getRootPane().registerKeyboardAction(actionEvent -> {
+            editPanel.saveChanges(false);
+        }, KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK), JComponent.WHEN_IN_FOCUSED_WINDOW);
+    }
+
+    private void startWatchFile(Modpack modpack, BiConsumer<WatchEvent.Kind<?>, Path> callback) {
+        this.fileWatcherThread = new Thread(() -> {
+            FileSystemWatcher watcher = new FileSystemWatcher(modpack.getRootPath(), true, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
+            watcher.startWatching((watchKey, e) -> {
+                Path directory = (Path)watchKey.watchable();
+                WatchEvent.Kind<?> kind = e.kind();
+                final Path path = directory.resolve(((WatchEvent<Path>)e).context());
+
+                SwingUtilities.invokeLater(() -> {
+                    callback.accept(kind, path);
+                });
+            });
+        });
+        fileWatcherThread.start();
     }
 
     @Override
     public void dispose() {
         super.dispose();
-        editPanel.dispose();
-        Executables.packwiz.dispose();
-        Executables.git.dispose();
+        editPanel.saveChanges(false);
+        fileWatcherThread.interrupt();
+        Executables.dispose();
     }
 }

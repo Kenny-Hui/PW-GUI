@@ -2,8 +2,7 @@ package com.lx862.pwgui.gui.action;
 
 import com.lx862.pwgui.Main;
 import com.lx862.pwgui.executable.Executables;
-import com.lx862.pwgui.gui.components.filters.PackwizExecutableFileFilter;
-import com.lx862.pwgui.gui.frame.WelcomeFrame;
+import com.lx862.pwgui.gui.components.filter.PackwizExecutableFileFilter;
 import com.lx862.pwgui.gui.components.kui.KFileChooser;
 import com.lx862.pwgui.util.Util;
 
@@ -16,10 +15,13 @@ import java.io.IOException;
 
 public class LocatePackwizAction extends AbstractAction {
     private final Window parent;
+    private final Runnable finishCallback;
 
-    public LocatePackwizAction(Window parent) {
+    public LocatePackwizAction(Window parent, Runnable finishCallback) {
         super("Locate packwiz...");
         this.parent = parent;
+        this.finishCallback = finishCallback;
+
         putValue(MNEMONIC_KEY, KeyEvent.VK_L);
     }
 
@@ -49,9 +51,7 @@ public class LocatePackwizAction extends AbstractAction {
                 return;
             }
 
-            WelcomeFrame welcomeFrame = new WelcomeFrame(parent);
-            welcomeFrame.setVisible(true);
-            parent.dispose();
+            finishCallback.run();
         }
     }
 }

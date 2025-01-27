@@ -8,6 +8,7 @@ import java.util.List;
 
 public class KTabbedPane extends JTabbedPane {
 
+    /** This clears and sets the tab to the new tab. If the title and order matches the old one, the currently selected tab index will be restored */
     public void setTabs(List<NameTabPair> newTab) {
         final List<String> oldTabTitles = getTabTitles();
         final int oldSelected = getSelectedIndex();

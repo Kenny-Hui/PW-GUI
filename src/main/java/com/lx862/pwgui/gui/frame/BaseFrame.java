@@ -1,8 +1,12 @@
 package com.lx862.pwgui.gui.frame;
 
-import com.lx862.pwgui.gui.action.ClearPackwizCacheAction;
+import com.lx862.pwgui.core.Modpack;
+import com.lx862.pwgui.gui.action.*;
 import com.lx862.pwgui.gui.components.kui.KMenu;
 import com.lx862.pwgui.gui.components.kui.KMenuItem;
+import com.lx862.pwgui.gui.dialog.ExportModpackDialog;
+import com.lx862.pwgui.gui.popup.DevServerDialog;
+import com.lx862.pwgui.gui.popup.ImportModpackDialog;
 import com.lx862.pwgui.gui.popup.ViewLogDialog;
 import com.lx862.pwgui.util.GUIHelper;
 import com.lx862.pwgui.util.Util;
@@ -13,12 +17,17 @@ import java.awt.event.KeyEvent;
 public abstract class BaseFrame extends JFrame {
     protected JMenuBar jMenuBar;
 
-    public BaseFrame(String title) {
-        super(title);
+    public BaseFrame() {
+        super();
         this.jMenuBar = new JMenuBar();
         setIconImage(GUIHelper.convertImage(Util.getAssets("/assets/icon.png")));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setJMenuBar(jMenuBar);
+    }
+
+    public BaseFrame(String title) {
+        this();
+        setTitle(title);
     }
 
     protected KMenu getHelpMenu() {
@@ -40,5 +49,89 @@ public abstract class BaseFrame extends JFrame {
         helpMenu.add(aboutMenuItem);
 
         return helpMenu;
+    }
+
+    protected KMenu getToolMenu() {
+        KMenu toolMenu = new KMenu("Tool");
+
+        KMenuItem refreshMenuItem = new KMenuItem(new RefreshPackAction(this));
+        toolMenu.add(refreshMenuItem);
+
+        KMenuItem updateAllMenuItem = new KMenuItem(new UpdateAllAction(this));
+        toolMenu.add(updateAllMenuItem);
+
+        KMenuItem devServerMenuItem = new KMenuItem("Run Development Server...");
+        devServerMenuItem.setMnemonic(KeyEvent.VK_D);
+        toolMenu.add(devServerMenuItem);
+        devServerMenuItem.addActionListener(actionEvent -> {
+            DevServerDialog frame = new DevServerDialog(this);
+            frame.setVisible(true);
+        });
+
+        KMenuItem pwConsoleMenuItem = new KMenuItem(new OpenPackwizConsoleAction(this));
+        toolMenu.add(pwConsoleMenuItem);
+
+        return toolMenu;
+    }
+
+    protected KMenu getEditMenu(Modpack modpack) {
+        KMenu editMenu = new KMenu("Edit");
+        KMenu addMissingMenu = new KMenu("Add Missing...");
+
+        KMenuItem modsDirectoryMenuItem = new KMenuItem(new CreateMissingDirectoryAction(this, modpack.getRootPath(), "mods", "Mods Folder"));
+        KMenuItem resourcePacksDirectoryMenuItem = new KMenuItem(new CreateMissingDirectoryAction(this, modpack.getRootPath(), "resourcepacks", "Resource Packs Folder"));
+        KMenuItem shaderPacksDirectoryMenuItem = new KMenuItem(new CreateMissingDirectoryAction(this, modpack.getRootPath(), "shaderpacks", "Shader Packs Folder"));
+        KMenuItem configDirectoryMenuItem = new KMenuItem(new CreateMissingDirectoryAction(this, modpack.getRootPath(), "config", "Mods Config Folder"));
+        KMenuItem pluginsDirectoryMenuItem = new KMenuItem(new CreateMissingDirectoryAction(this, modpack.getRootPath(), "plugins", "Plugins Folder"));
+
+        addMissingMenu.add(modsDirectoryMenuItem);
+        addMissingMenu.add(resourcePacksDirectoryMenuItem);
+        addMissingMenu.add(shaderPacksDirectoryMenuItem);
+        addMissingMenu.add(configDirectoryMenuItem);
+        addMissingMenu.add(pluginsDirectoryMenuItem);
+
+        editMenu.add(addMissingMenu);
+
+        KMenuItem settingsItem = new KMenuItem(new SettingsAction(this));
+        editMenu.add(settingsItem);
+
+        return editMenu;
+    }
+
+    protected KMenu getFileMenu(Modpack modpack, Runnable saveAllCallback) {
+        KMenu fileMenu = new KMenu("File");
+
+        KMenuItem saveMenuItem = new KMenuItem("Save Selected File");
+        saveMenuItem.setMnemonic(KeyEvent.VK_S);
+        saveMenuItem.addActionListener(actionEvent -> saveAllCallback.run());
+        fileMenu.add(saveMenuItem);
+
+        KMenuItem importMenuItem = new KMenuItem("Import pack...");
+        importMenuItem.setMnemonic(KeyEvent.VK_I);
+        importMenuItem.addActionListener(actionEvent -> {
+            saveAllCallback.run();
+            new ImportModpackDialog(this).setVisible(true);
+        });
+        fileMenu.add(importMenuItem);
+
+        KMenuItem exportMenuItem = new KMenuItem("Export pack...");
+        exportMenuItem.setMnemonic(KeyEvent.VK_E);
+        exportMenuItem.addActionListener(actionEvent -> {
+            saveAllCallback.run();
+            new ExportModpackDialog(this, modpack).setVisible(true);
+        });
+        fileMenu.add(exportMenuItem);
+
+        KMenuItem quitMenuItem = new KMenuItem("Quit...");
+        quitMenuItem.setMnemonic(KeyEvent.VK_Q);
+
+        quitMenuItem.addActionListener(actionEvent -> {
+            WelcomeFrame welcomeFrame = new WelcomeFrame(this);
+            welcomeFrame.setVisible(true);
+            dispose();
+        });
+        fileMenu.add(quitMenuItem);
+
+        return fileMenu;
     }
 }

@@ -1,4 +1,4 @@
-package com.lx862.pwgui.gui.components.filters;
+package com.lx862.pwgui.gui.components.filter;
 
 import javax.swing.filechooser.FileFilter;
 import java.io.File;

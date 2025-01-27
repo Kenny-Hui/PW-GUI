@@ -3,7 +3,6 @@ package com.lx862.pwgui.gui.action;
 import com.lx862.pwgui.Main;
 import com.lx862.pwgui.core.Config;
 import com.lx862.pwgui.executable.Executables;
-import com.lx862.pwgui.gui.frame.WelcomeFrame;
 import com.lx862.pwgui.gui.dialog.DownloadProgressDialog;
 import com.lx862.pwgui.util.Util;
 
@@ -26,10 +25,12 @@ import java.util.zip.ZipInputStream;
 
 public class DownloadPackwizAction extends AbstractAction {
     private final Window parent;
+    private final Runnable finishCallback;
 
-    public DownloadPackwizAction(Window parent) {
+    public DownloadPackwizAction(Window parent, Runnable finishCallback) {
         super("Download packwiz");
         this.parent = parent;
+        this.finishCallback = finishCallback;
         putValue(MNEMONIC_KEY, KeyEvent.VK_D);
     }
 
@@ -79,12 +80,9 @@ public class DownloadPackwizAction extends AbstractAction {
                 } catch (IOException ignored) { // Not important
                 }
 
-                boolean configureSuccessful = configurePackwiz(packwizBinaryDestination.get());
+                boolean configureSuccessful = tryConfigurePackwiz(packwizBinaryDestination.get());
                 if(configureSuccessful) {
-                    JOptionPane.showMessageDialog(parent, "Packwiz has been downloaded and configured!", Util.withTitlePrefix("Download Success!"), JOptionPane.INFORMATION_MESSAGE);
-                    WelcomeFrame welcomeFrame = new WelcomeFrame(parent);
-                    welcomeFrame.setVisible(true);
-                    parent.dispose();
+                    finishCallback.run();
                 }
             });
 
@@ -118,7 +116,7 @@ public class DownloadPackwizAction extends AbstractAction {
         return artifactName;
     }
 
-    private boolean configurePackwiz(Path path) {
+    private boolean tryConfigurePackwiz(Path path) {
         Main.getConfig().setPackwizExecutablePath(path);
 
         try {

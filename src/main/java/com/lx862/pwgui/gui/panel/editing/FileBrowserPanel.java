@@ -4,7 +4,7 @@ import com.lx862.pwgui.core.Modpack;
 import com.lx862.pwgui.data.model.file.*;
 import com.lx862.pwgui.gui.components.fstree.FileSystemTree;
 import com.lx862.pwgui.gui.components.kui.KButton;
-import com.lx862.pwgui.gui.components.kui.KTreeCellRenderer;
+import com.lx862.pwgui.gui.components.fstree.FileSystemTreeCellRenderer;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
@@ -21,8 +21,8 @@ class FileBrowserPanel extends JPanel {
         gbc.weightx = 1;
         gbc.gridx = 0;
 
-        fileBrowserTree = new FileSystemTree(modpack.getRootPath(), (file -> getFileType(modpack, file)));
-        fileBrowserTree.setCellRenderer(new KTreeCellRenderer());
+        fileBrowserTree = new FileSystemTree(modpack.getRootPath(), (file -> getFileModel(modpack, file)));
+        fileBrowserTree.setCellRenderer(new FileSystemTreeCellRenderer());
 
         gbc.weighty = 1.0;
         add(new JScrollPane(fileBrowserTree), gbc);
@@ -37,7 +37,7 @@ class FileBrowserPanel extends JPanel {
         add(openDirectoryButton, gbc);
     }
 
-    private static FileSystemEntityModel getFileType(Modpack modpack, File file) {
+    private static FileSystemEntityModel getFileModel(Modpack modpack, File file) {
         if (file.getName().equals(".packwizignore")) {
             return new PackwizIgnoreFileModel(file);
         } else if (file.getName().equals(".gitignore")) {

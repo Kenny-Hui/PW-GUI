@@ -4,6 +4,7 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.executable.ProgramExecution;
+import com.lx862.pwgui.gui.components.filter.CurseForgeModpackFilter;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.gui.components.kui.KFileChooser;
 import com.lx862.pwgui.gui.dialog.ExecutableProgressDialog;
@@ -11,7 +12,6 @@ import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.io.File;
 import java.nio.file.Path;
@@ -78,17 +78,7 @@ public class ImportModpackDialog extends JDialog {
 
         private void importModpack(Consumer<Path> importCallback, boolean isCreate) {
             KFileChooser cfModpackFileChooser = new KFileChooser("choose-cf-modpack-import");
-            cfModpackFileChooser.setFileFilter(new FileFilter() {
-                @Override
-                public boolean accept(File file) {
-                    return file.isDirectory() || file.getName().endsWith(".zip") || file.getName().equals("manifest.json");
-                }
-
-                @Override
-                public String getDescription() {
-                    return "CurseForge Modpack (.zip / manifest.json)";
-                }
-            });
+            cfModpackFileChooser.setFileFilter(new CurseForgeModpackFilter());
 
             if(cfModpackFileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
                 File file = cfModpackFileChooser.getSelectedFile();

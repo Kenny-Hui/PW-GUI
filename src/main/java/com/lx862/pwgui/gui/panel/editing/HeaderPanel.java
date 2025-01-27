@@ -10,9 +10,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 /* The top section that displays the modpack's name and versions */
-class HeaderPanel extends JPanel {
+public class HeaderPanel extends JPanel {
     public HeaderPanel(PackFile packFile) {
-        setBorder(new EmptyBorder(0, 0, 10, 0));
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         initialize(packFile);
     }

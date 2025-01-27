@@ -2,7 +2,7 @@ package com.lx862.pwgui.gui.dialog;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.Main;
-import com.lx862.pwgui.gui.components.ManualModEntryPanel;
+import com.lx862.pwgui.gui.components.ManualFileEntryPanel;
 import com.lx862.pwgui.data.model.ManualModInfo;
 import com.lx862.pwgui.gui.components.fstree.FileSystemWatcher;
 import com.lx862.pwgui.gui.components.kui.KButton;
@@ -47,10 +47,11 @@ public class ManualDownloadDialog extends JDialog {
         rootPanel.add(descriptionLabel);
 
         this.modListPanel = new JPanel();
-        this.modListPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         this.modListPanel.setLayout(new BoxLayout(this.modListPanel, BoxLayout.PAGE_AXIS));
+        this.modListPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JScrollPane modListScrollPane = new JScrollPane(this.modListPanel);
+        modListScrollPane.setAlignmentX(Component.LEFT_ALIGNMENT);
         modListScrollPane.getVerticalScrollBar().setUnitIncrement(10); // Default is too slow
         rootPanel.add(modListScrollPane);
 
@@ -72,6 +73,8 @@ public class ManualDownloadDialog extends JDialog {
             }
         });
         monitorLocationPanel.addRow(1, 0, watchingPathLabel, changeWatchPathButton);
+
+        monitorLocationPanel.addVerticalFiller();
 
         rootPanel.add(monitorLocationPanel);
 
@@ -126,7 +129,7 @@ public class ManualDownloadDialog extends JDialog {
         for(ManualModInfo manualModInfo : this.modList) {
             boolean modExists = this.watchingPath.resolve(manualModInfo.fileName).toFile().exists();
             if(!modExists) allModFound = false;
-            this.modListPanel.add(new ManualModEntryPanel(manualModInfo, modExists));
+            this.modListPanel.add(new ManualFileEntryPanel(manualModInfo, modExists));
         }
         this.okButton.setEnabled(allModFound);
         this.modListPanel.updateUI();

@@ -2,6 +2,7 @@ package com.lx862.pwgui.gui.panel.editing.filetype;
 
 import com.lx862.pwgui.gui.components.kui.KImageDisplayPanel;
 import com.lx862.pwgui.data.model.file.GenericFileModel;
+import com.lx862.pwgui.util.GUIHelper;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
@@ -15,10 +16,12 @@ public class ImagePanel extends FileTypePanel {
         imagePreviewPanel.setAlignmentX(LEFT_ALIGNMENT);
 
         BufferedImage image = imagePreviewPanel.getImage();
+
         if(image != null) {
             JLabel desc = new JLabel(String.format("Dimensions: %dx%d", image.getWidth(), image.getHeight()));
             desc.setAlignmentX(LEFT_ALIGNMENT);
             add(desc);
+            add(GUIHelper.createVerticalPadding(8));
         }
 
         add(imagePreviewPanel);

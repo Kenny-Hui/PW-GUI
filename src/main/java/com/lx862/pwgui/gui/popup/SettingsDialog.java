@@ -6,7 +6,7 @@ import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.data.ApplicationTheme;
 import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.gui.action.ResetProgramAction;
-import com.lx862.pwgui.gui.components.filters.PackwizExecutableFileFilter;
+import com.lx862.pwgui.gui.components.filter.PackwizExecutableFileFilter;
 import com.lx862.pwgui.gui.components.kui.*;
 import com.lx862.pwgui.util.GUIHelper;
 import com.lx862.pwgui.util.Util;

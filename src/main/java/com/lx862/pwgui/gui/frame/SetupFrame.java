@@ -64,13 +64,22 @@ public class SetupFrame extends BaseFrame {
         rootPanel.add(whatToDoNextDescriptionLabel);
         rootPanel.add(Box.createRigidArea(new Dimension(0, 16)));
 
-        KButton downloadButton = new KButton(new DownloadPackwizAction(this));
+        KButton downloadButton = new KButton(new DownloadPackwizAction(this, () -> {
+            JOptionPane.showMessageDialog(parent, "Packwiz has been downloaded and configured!", Util.withTitlePrefix("Download Success!"), JOptionPane.INFORMATION_MESSAGE);
+            WelcomeFrame welcomeFrame = new WelcomeFrame(parent);
+            welcomeFrame.setVisible(true);
+            dispose();
+        }));
         downloadButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         rootPanel.add(downloadButton);
 
         rootPanel.add(Box.createRigidArea(new Dimension(0, 8)));
 
-        KButton locateButton = new KButton(new LocatePackwizAction(this));
+        KButton locateButton = new KButton(new LocatePackwizAction(this, () -> {
+            WelcomeFrame welcomeFrame = new WelcomeFrame(parent);
+            welcomeFrame.setVisible(true);
+            dispose();
+        }));
         locateButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         rootPanel.add(locateButton);
 

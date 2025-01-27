@@ -5,7 +5,7 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-/** JTextField with placeholder text support */
+/** A padded variant of JTextField with placeholder text support */
 public class KTextField extends JTextField {
     private final String placeholder;
 

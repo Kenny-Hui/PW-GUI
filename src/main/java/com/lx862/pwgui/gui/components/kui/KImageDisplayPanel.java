@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 
 /** An image preview panel */
 public class KImageDisplayPanel extends JPanel {
@@ -21,7 +20,6 @@ public class KImageDisplayPanel extends JPanel {
             Main.LOGGER.exception(e);
             add(new JLabel(String.format("Error while reading the image: %s", e.getMessage())));
         }
-        setBorder(new EmptyBorder(8, 0, 8, 0));
     }
 
     @Override

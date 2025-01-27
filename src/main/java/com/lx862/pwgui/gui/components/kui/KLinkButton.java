@@ -5,7 +5,7 @@ import com.lx862.pwgui.util.Util;
 import javax.swing.*;
 import java.awt.*;
 
-/* A button disguised as a clickable hyperlink */
+/** A button disguised as a clickable hyperlink */
 public class KLinkButton extends JButton {
     public KLinkButton(String url) {
         this(url, url);

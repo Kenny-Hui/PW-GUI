@@ -22,11 +22,11 @@ public class ConsoleDialog extends JDialog {
     private final JTextArea logTextArea;
     private ProgramExecution currentExecution;
 
-    public ConsoleDialog(Executable executable, JFrame frame) {
-        super(frame, Util.withTitlePrefix(String.format("%s Console", executable.getProgramName())));
+    public ConsoleDialog(Executable executable, Window parent) {
+        super(parent, Util.withTitlePrefix(String.format("%s Console", executable.getProgramName())));
 
         setSize(600, 450);
-        setLocationRelativeTo(frame);
+        setLocationRelativeTo(parent);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         this.commandHistory = new ArrayList<>();

@@ -70,18 +70,7 @@ public class KFileChooser extends JFileChooser {
     public int showOpenDialog(Component parent) throws HeadlessException {
         int result = super.showOpenDialog(parent);
         if(context != null && result == APPROVE_OPTION) {
-            File selectedFile = getSelectedFile();
-            File directory = selectedFile.isDirectory() ? selectedFile : selectedFile.getParentFile();
-
-            Path existingRecord = Main.getConfig().fileChooserLastPath.get(context);
-            if(existingRecord == null || !existingRecord.equals(directory.toPath())) { // Changed
-                try {
-                    Main.getConfig().fileChooserLastPath.put(context, directory.toPath());
-                    Main.getConfig().write("Save file picker location");
-                } catch (IOException e) {
-                    Main.LOGGER.exception(e);
-                }
-            }
+            saveLastOpenRecord(getSelectedFile());
         }
         return result;
     }
@@ -90,18 +79,21 @@ public class KFileChooser extends JFileChooser {
     public int showSaveDialog(Component parent) throws HeadlessException {
         int result = super.showSaveDialog(parent);
         if(context != null && result == APPROVE_OPTION) {
-            File selectedFile = getSelectedFile();
-            File directory = selectedFile.isDirectory() ? selectedFile : selectedFile.getParentFile();
-            Path existingRecord = Main.getConfig().fileChooserLastPath.get(context);
-            if(existingRecord == null || !existingRecord.equals(directory.toPath())) { // Changed
-                try {
-                    Main.getConfig().fileChooserLastPath.put(context, directory.toPath());
-                    Main.getConfig().write("Save file picker location");
-                } catch (IOException e) {
-                    Main.LOGGER.exception(e);
-                }
-            }
+            saveLastOpenRecord(getSelectedFile());
         }
         return result;
+    }
+
+    private void saveLastOpenRecord(File file) {
+        File directory = file.isDirectory() ? file : file.getParentFile();
+        Path existingRecord = Main.getConfig().fileChooserLastPath.get(context);
+        if(existingRecord == null || !existingRecord.equals(directory.toPath())) { // Changed
+            try {
+                Main.getConfig().fileChooserLastPath.put(context, directory.toPath());
+                Main.getConfig().write("Save file picker location");
+            } catch (IOException e) {
+                Main.LOGGER.exception(e);
+            }
+        }
     }
 }

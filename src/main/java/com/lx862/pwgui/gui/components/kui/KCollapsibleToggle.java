@@ -5,6 +5,7 @@ import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
 
+/** A button that can be expanded and collapsed */
 public class KCollapsibleToggle extends JCheckBox {
     private final String collapsedText;
     private final String expandedText;

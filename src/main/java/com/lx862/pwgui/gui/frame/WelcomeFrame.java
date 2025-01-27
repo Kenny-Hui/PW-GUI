@@ -4,6 +4,7 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.core.Modpack;
 import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.gui.action.SettingsAction;
+import com.lx862.pwgui.gui.components.filter.PackFileFilter;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.gui.components.kui.KFileChooser;
 import com.lx862.pwgui.gui.components.kui.KLinkButton;
@@ -15,11 +16,8 @@ import com.lx862.pwgui.Main;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.io.File;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 /** The welcome splash screen after packwiz executable is found */
@@ -63,24 +61,7 @@ public class WelcomeFrame extends BaseFrame {
 
         openPackButton.addActionListener(actionEvent -> {
             KFileChooser fileChooser = new KFileChooser("open-modpack");
-            fileChooser.setFileFilter(new FileFilter() {
-                @Override
-                public boolean accept(File file) {
-                    if(file.isDirectory()) return true;
-                    if(file.getName().endsWith(".pw.toml")) return false;
-
-                    // index.toml, but we also have pack.toml in the same directory, so we hide it to avoid confusion, as it's very likely it's pack.toml in this case.
-                    if(file.getName().equals("index.toml") && Files.exists(file.toPath().getParent().resolve("pack.toml"))) return false;
-                    if(file.getName().endsWith(".toml")) return true; // Packwiz supports filename other than pack.toml, so we don't only whitelist pack.toml.
-
-                    return false;
-                }
-
-                @Override
-                public String getDescription() {
-                    return "Packwiz Pack File (pack.toml by default)";
-                }
-            });
+            fileChooser.setFileFilter(new PackFileFilter());
             if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
                 openModpack(fileChooser.getSelectedFile().toPath());
             }

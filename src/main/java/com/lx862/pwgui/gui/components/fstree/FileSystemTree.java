@@ -17,13 +17,13 @@ import static java.nio.file.StandardWatchEventKinds.*;
 
 /* A JTree representing a directory view/file browser. */
 public class FileSystemTree extends JTree {
-    private final Function<File, FileSystemEntityModel> getFileEntry;
+    private final Function<File, FileSystemEntityModel> getModel;
     private GitIgnoreRules ignorePattern;
     public boolean fsLock; // A slight hack to signal to others when a file is changed
 
-    public FileSystemTree(Path root, Function<File, FileSystemEntityModel> getFileEntry) {
+    public FileSystemTree(Path root, Function<File, FileSystemEntityModel> getModel) {
         super();
-        this.getFileEntry = getFileEntry;
+        this.getModel = getModel;
         setModel(new DefaultTreeModel(generateRecursiveTree(root), false));
         setRootVisible(false);
         setShowsRootHandles(true);
@@ -39,7 +39,7 @@ public class FileSystemTree extends JTree {
     }
 
     private FileSystemSortedTreeNode generateRecursiveTree(Path root) {
-        return generateRecursiveTree(new FileSystemSortedTreeNode(getFileEntry.apply(root.toFile())));
+        return generateRecursiveTree(new FileSystemSortedTreeNode(getModel.apply(root.toFile())));
     }
 
     private FileSystemSortedTreeNode generateRecursiveTree(FileSystemSortedTreeNode rootNode) {
@@ -47,11 +47,11 @@ public class FileSystemTree extends JTree {
 
         for(File file : files) {
             if(file.isDirectory() && !file.getName().equals(".git")) {
-                FileSystemEntityModel child = getFileEntry.apply(file);
+                FileSystemEntityModel child = getModel.apply(file);
                 FileSystemSortedTreeNode node = generateRecursiveTree(new FileSystemSortedTreeNode(child));
                 rootNode.add(node);
             } else {
-                FileSystemEntityModel child = getFileEntry.apply(file);
+                FileSystemEntityModel child = getModel.apply(file);
                 rootNode.add(new FileSystemSortedTreeNode(child));
             }
         }
@@ -64,7 +64,7 @@ public class FileSystemTree extends JTree {
         if(kind == ENTRY_CREATE) {
             addNode(filePath);
         } else if(kind == ENTRY_MODIFY) {
-            FileSystemEntityModel newNode = getFileEntry.apply(filePath.toFile());
+            FileSystemEntityModel newNode = getModel.apply(filePath.toFile());
             modifyNode(filePath, newNode);
         } else {
             removeNode(filePath);
@@ -73,7 +73,7 @@ public class FileSystemTree extends JTree {
 
     private void addNode(Path target) {
         Path parent = target.getParent();
-        FileSystemSortedTreeNode newNode = new FileSystemSortedTreeNode(getFileEntry.apply(target.toFile()));
+        FileSystemSortedTreeNode newNode = new FileSystemSortedTreeNode(getModel.apply(target.toFile()));
 
         iterateTree((node) -> {
             if(node.path.equals(parent)) {

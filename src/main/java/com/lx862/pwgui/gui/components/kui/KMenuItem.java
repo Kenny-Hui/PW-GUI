@@ -3,7 +3,7 @@ package com.lx862.pwgui.gui.components.kui;
 import javax.swing.*;
 import java.awt.*;
 
-/* A padded variant of JMenuItem */
+/** A padded variant of JMenuItem */
 public class KMenuItem extends JMenuItem {
     public KMenuItem(String description) {
         super(description);

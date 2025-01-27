@@ -10,6 +10,7 @@ import java.util.function.Supplier;
 public enum ApplicationTheme {
     LIGHT("Light", FlatIntelliJLaf::new),
     ARC_DARK("Arc Dark", FlatArcDarkIJTheme::new),
+    NORD("Nord", FlatNordIJTheme::new),
     DARK_PURPLE("Dark Purple", FlatDarkPurpleIJTheme::new),
     ONE_DARK("One Dark", FlatOneDarkIJTheme::new),
     HIGH_CONTRAST("High Contrast", FlatHighContrastIJTheme::new);

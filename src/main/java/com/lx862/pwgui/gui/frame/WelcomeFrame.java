@@ -105,8 +105,8 @@ public class WelcomeFrame extends BaseFrame {
         try {
             Modpack modpack = new Modpack(path);
             EditFrame editFrame = new EditFrame(this, modpack);
-            editFrame.setVisible(true);
             dispose();
+            editFrame.setVisible(true);
         } catch (Exception e) {
             Main.LOGGER.exception(e);
             JOptionPane.showMessageDialog(this, String.format("Failed to open modpack:\n%s", e.getMessage()), Util.withTitlePrefix("Failed to open Modpack"), JOptionPane.ERROR_MESSAGE);

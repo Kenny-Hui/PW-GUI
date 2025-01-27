@@ -13,6 +13,7 @@ import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
+import java.util.function.Consumer;
 
 public abstract class BaseFrame extends JFrame {
     protected final JMenuBar jMenuBar;
@@ -98,18 +99,18 @@ public abstract class BaseFrame extends JFrame {
         return editMenu;
     }
 
-    protected KMenu getFileMenu(Modpack modpack, Runnable saveAllCallback) {
+    protected KMenu getFileMenu(Modpack modpack, Consumer<Boolean> saveAllCallback) {
         KMenu fileMenu = new KMenu("File");
 
         KMenuItem saveMenuItem = new KMenuItem("Save Selected File");
         saveMenuItem.setMnemonic(KeyEvent.VK_S);
-        saveMenuItem.addActionListener(actionEvent -> saveAllCallback.run());
+        saveMenuItem.addActionListener(actionEvent -> saveAllCallback.accept(false));
         fileMenu.add(saveMenuItem);
 
         KMenuItem importMenuItem = new KMenuItem("Import pack...");
         importMenuItem.setMnemonic(KeyEvent.VK_I);
         importMenuItem.addActionListener(actionEvent -> {
-            saveAllCallback.run();
+            saveAllCallback.accept(false);
             new ImportModpackDialog(this).setVisible(true);
         });
         fileMenu.add(importMenuItem);
@@ -117,7 +118,7 @@ public abstract class BaseFrame extends JFrame {
         KMenuItem exportMenuItem = new KMenuItem("Export pack...");
         exportMenuItem.setMnemonic(KeyEvent.VK_E);
         exportMenuItem.addActionListener(actionEvent -> {
-            saveAllCallback.run();
+            saveAllCallback.accept(false);
             new ExportModpackDialog(this, modpack).setVisible(true);
         });
         fileMenu.add(exportMenuItem);
@@ -127,8 +128,8 @@ public abstract class BaseFrame extends JFrame {
 
         quitMenuItem.addActionListener(actionEvent -> {
             WelcomeFrame welcomeFrame = new WelcomeFrame(this);
-            welcomeFrame.setVisible(true);
             dispose();
+            welcomeFrame.setVisible(true);
         });
         fileMenu.add(quitMenuItem);
 

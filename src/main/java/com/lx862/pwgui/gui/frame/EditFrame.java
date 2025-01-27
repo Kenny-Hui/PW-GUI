@@ -44,7 +44,7 @@ public class EditFrame extends BaseFrame {
 
         add(rootPanel);
 
-        jMenuBar.add(getFileMenu(modpack, () -> editPanel.saveChanges(false)));
+        jMenuBar.add(getFileMenu(modpack, editPanel::saveChanges));
         jMenuBar.add(getEditMenu(modpack));
         jMenuBar.add(getToolMenu());
         jMenuBar.add(getHelpMenu());
@@ -92,8 +92,8 @@ public class EditFrame extends BaseFrame {
 
     @Override
     public void dispose() {
+        editPanel.saveChanges(true);
         super.dispose();
-        editPanel.saveChanges(false);
         fileWatcherThread.interrupt();
         Executables.dispose();
     }

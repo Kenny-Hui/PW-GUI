@@ -22,6 +22,7 @@ public class Config extends WritableFile {
     private Path lastModpackPath;
     private ApplicationTheme applicationTheme = ApplicationTheme.LIGHT;
     private boolean openLastModpackOnLaunch;
+    public boolean debugMode;
 
     public Config() throws FileNotFoundException {
         this(JsonParser.parseReader(new FileReader(CONFIG_PATH.toFile())).getAsJsonObject());
@@ -60,6 +61,10 @@ public class Config extends WritableFile {
                 Main.LOGGER.exception(e);
             }
         }
+
+        if(jsonObject.has("debugMode")) {
+            this.debugMode = jsonObject.get("debugMode").getAsBoolean();
+        }
     }
 
     public void write(String reason) throws IOException {
@@ -78,6 +83,7 @@ public class Config extends WritableFile {
         if(lastModpackPath != null) jsonObject.addProperty("lastModpackPath", lastModpackPath.toString());
         jsonObject.addProperty("openLastModpackOnLaunch", openLastModpackOnLaunch);
         jsonObject.addProperty("applicationTheme", applicationTheme.name());
+        jsonObject.addProperty("debugMode", debugMode);
 
         JsonObject executableJsonObject = new JsonObject();
         if(packwizExecutablePath != null) executableJsonObject.addProperty("packwiz", packwizExecutablePath.toString());
@@ -97,17 +103,19 @@ public class Config extends WritableFile {
         return this.lastModpackPath;
     }
 
-    public ApplicationTheme getApplicationTheme() {
-        return this.applicationTheme;
-    }
 
     public boolean openLastModpackOnLaunch() {
         return this.openLastModpackOnLaunch;
     }
 
-    public void setApplicationTheme(ApplicationTheme newValue) {
-        this.applicationTheme = newValue;
+    public ApplicationTheme getApplicationTheme() {
+        return this.applicationTheme;
     }
+
+    public boolean getDebugMode() {
+        return this.debugMode;
+    }
+
 
     public void setPackwizExecutablePath(Path newValue) {
         this.packwizExecutablePath = newValue;
@@ -115,6 +123,14 @@ public class Config extends WritableFile {
 
     public void setOpenLastModpackOnLaunch(boolean newValue) {
         this.openLastModpackOnLaunch = newValue;
+    }
+
+    public void setApplicationTheme(ApplicationTheme newValue) {
+        this.applicationTheme = newValue;
+    }
+
+    public void setDebugMode(boolean newValue) {
+        this.debugMode = newValue;
     }
 
     public void setLastModpackPath(Path newValue) {

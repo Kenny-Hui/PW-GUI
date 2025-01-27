@@ -1,5 +1,7 @@
 package com.lx862.pwgui.core;
 
+import com.lx862.pwgui.Main;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -48,6 +50,14 @@ public class Logger {
 
     public void info(String prefix, String str) {
         log(prefix + " [INFO]", str);
+    }
+
+    public void debug(String str) {
+        debug("[" + Constants.PROGRAM_NAME + "]", str);
+    }
+
+    public void debug(String prefix, String str) {
+        if(Main.getConfig().getDebugMode()) log(prefix + " [DEBUG]", str);
     }
 
     private void log(String prefix, String str) {

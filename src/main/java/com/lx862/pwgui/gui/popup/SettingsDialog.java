@@ -20,9 +20,11 @@ import java.nio.file.Path;
 
 public class SettingsDialog extends JDialog {
     private final JCheckBox relaunchModpackCheckbox;
-    private final JLabel packwizLocationLabel;
-    private final ApplicationTheme initialTheme;
+    private final JCheckBox debugModeCheckBox;
     private final KComboBox<ApplicationTheme> themeComboBox;
+    private final JLabel packwizLocationLabel;
+
+    private final ApplicationTheme initialTheme;
     private Path packwizLocationPath;
     private boolean saved;
 
@@ -49,13 +51,6 @@ public class SettingsDialog extends JDialog {
         programPanel.setLayout(new BoxLayout(programPanel, BoxLayout.PAGE_AXIS));
         programPanel.setBorder(BorderFactory.createTitledBorder(Constants.PROGRAM_NAME));
 
-        this.relaunchModpackCheckbox = new JCheckBox("Open last modpack on launch");
-        this.relaunchModpackCheckbox.setSelected(Main.getConfig().openLastModpackOnLaunch());
-        this.relaunchModpackCheckbox.setAlignmentX(Component.LEFT_ALIGNMENT);
-        programPanel.add(relaunchModpackCheckbox);
-
-        programPanel.add(GUIHelper.createVerticalPadding(4));
-
         JPanel themePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 0));
         themePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         themePanel.add(new JLabel("Theme:"));
@@ -74,6 +69,18 @@ public class SettingsDialog extends JDialog {
         });
         themePanel.add(themeComboBox);
         programPanel.add(themePanel);
+
+        programPanel.add(GUIHelper.createVerticalPadding(4));
+
+        relaunchModpackCheckbox = new JCheckBox("Open last modpack on launch");
+        relaunchModpackCheckbox.setSelected(Main.getConfig().openLastModpackOnLaunch());
+        this.relaunchModpackCheckbox.setAlignmentX(Component.LEFT_ALIGNMENT);
+        programPanel.add(relaunchModpackCheckbox);
+
+        this.debugModeCheckBox = new JCheckBox("Enable Debug Log");
+        debugModeCheckBox.setSelected(Main.getConfig().getDebugMode());
+        debugModeCheckBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+        programPanel.add(debugModeCheckBox);
 
         programPanel.add(GUIHelper.createVerticalPadding(4));
 
@@ -138,9 +145,10 @@ public class SettingsDialog extends JDialog {
 
     private void save() {
         this.saved = true;
-        Main.getConfig().setOpenLastModpackOnLaunch(relaunchModpackCheckbox.isSelected());
-        Main.getConfig().setPackwizExecutablePath(packwizLocationPath);
         Main.getConfig().setApplicationTheme((ApplicationTheme) themeComboBox.getSelectedItem());
+        Main.getConfig().setOpenLastModpackOnLaunch(relaunchModpackCheckbox.isSelected());
+        Main.getConfig().setDebugMode(debugModeCheckBox.isSelected());
+        Main.getConfig().setPackwizExecutablePath(packwizLocationPath);
         Executables.packwiz.updateExecutableLocation(null);
 
         try {

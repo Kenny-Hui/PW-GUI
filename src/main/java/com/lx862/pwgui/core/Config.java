@@ -6,6 +6,7 @@ import com.lx862.pwgui.data.ApplicationTheme;
 import com.lx862.pwgui.util.GoUtil;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -62,7 +63,7 @@ public class Config extends WritableFile {
     }
 
     public void write(String reason) throws IOException {
-        CONFIG_DIR_PATH.toFile().mkdirs();
+        Files.createDirectories(CONFIG_DIR_PATH);
 
         JsonObject jsonObject = new JsonObject();
 

@@ -4,6 +4,7 @@ import java.awt.*;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
+// https://tips4java.wordpress.com/2008/11/06/wrap-layout/
 /**
  *  FlowLayout subclass that fully supports wrapping of components.
  */

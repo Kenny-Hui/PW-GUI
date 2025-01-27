@@ -94,9 +94,7 @@ public class ManualDownloadDialog extends JDialog {
 
         KButton cancelButton = new KButton("Cancel");
         cancelButton.setMnemonic(KeyEvent.VK_C);
-        cancelButton.addActionListener(actionEvent -> {
-            dispose();
-        });
+        cancelButton.addActionListener(actionEvent -> dispose());
         actionRowPanel.add(cancelButton);
 
         rootPanel.add(actionRowPanel);

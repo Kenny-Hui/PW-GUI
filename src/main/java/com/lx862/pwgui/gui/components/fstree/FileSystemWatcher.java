@@ -21,6 +21,7 @@ public class FileSystemWatcher {
         this.watchKinds = watchKinds;
     }
 
+    @SuppressWarnings("InfiniteLoopStatement")
     public void startWatching(BiConsumer<WatchKey, WatchEvent<?>> callback) {
         FileSystem fs = FileSystems.getDefault();
         try {

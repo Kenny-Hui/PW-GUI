@@ -84,9 +84,7 @@ public class EditFrame extends BaseFrame {
                 WatchEvent.Kind<?> kind = e.kind();
                 final Path path = directory.resolve(((WatchEvent<Path>)e).context());
 
-                SwingUtilities.invokeLater(() -> {
-                    callback.accept(kind, path);
-                });
+                SwingUtilities.invokeLater(() -> callback.accept(kind, path));
             });
         });
         fileWatcherThread.start();

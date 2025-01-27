@@ -6,7 +6,6 @@ import com.lx862.pwgui.data.PackComponentVersion;
 import com.lx862.pwgui.util.GUIHelper;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 /* The top section that displays the modpack's name and versions */

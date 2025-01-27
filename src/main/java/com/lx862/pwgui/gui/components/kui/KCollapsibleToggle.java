@@ -16,9 +16,7 @@ public class KCollapsibleToggle extends JCheckBox {
 
         updateToggle();
 
-        addItemListener(itemEvent -> {
-            updateToggle();
-        });
+        addItemListener(itemEvent -> updateToggle());
     }
 
     private void updateToggle() {

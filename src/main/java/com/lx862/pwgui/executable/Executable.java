@@ -88,14 +88,12 @@ public abstract class Executable {
         this.workingDirectory = newPath;
     }
 
-    public ProgramExecution buildCommand(String... str) {
-        String[] commandWithExecutable = new String[str.length + 1];
-        // Insert our executable at the front
-        commandWithExecutable[0] = executableLocation;
-        for(int i = 0; i < str.length; i++) {
-            commandWithExecutable[i+1] = str[i];
-        }
-        ProcessBuilder processBuilder = new ProcessBuilder(commandWithExecutable);
+    public ProgramExecution buildCommand(String... args) {
+        String[] fullCommand = new String[args.length + 1];
+        fullCommand[0] = executableLocation; // Insert our executable path at the front
+        System.arraycopy(args, 0, fullCommand, 1, args.length);
+
+        ProcessBuilder processBuilder = new ProcessBuilder(fullCommand);
         processBuilder.directory(this.workingDirectory.toFile());
 
         if(executor == null || executor.isShutdown()) this.executor = Executors.newSingleThreadExecutor();

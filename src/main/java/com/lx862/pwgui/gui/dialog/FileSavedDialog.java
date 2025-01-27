@@ -65,9 +65,7 @@ public class FileSavedDialog extends JDialog {
 
         KButton finishButton = new KButton("Finish!");
         finishButton.setMnemonic(KeyEvent.VK_I);
-        finishButton.addActionListener(actionEvent -> {
-            dispose();
-        });
+        finishButton.addActionListener(actionEvent -> dispose());
         actionRowPanel.add(finishButton);
 
         rootPanel.add(actionRowPanel);

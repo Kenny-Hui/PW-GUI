@@ -2,7 +2,6 @@ package com.lx862.pwgui.gui.panel.editing.filetype;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.*;
 import java.io.IOException;
 
 public abstract class FileTypePanel extends JPanel {

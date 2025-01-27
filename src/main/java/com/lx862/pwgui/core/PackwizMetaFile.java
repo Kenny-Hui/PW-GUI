@@ -109,11 +109,11 @@ public class PackwizMetaFile extends TomlFile {
                 newOptions.put("description", this.optionDescription);
             }
             if(optionOptional) {
-                newOptions.put("optional", this.optionOptional);
+                newOptions.put("optional", true);
             }
 
             if(optionDefault) {
-                newOptions.put("default", this.optionDefault);
+                newOptions.put("default", true);
             }
 
             map.put("option", newOptions);

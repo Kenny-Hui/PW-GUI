@@ -30,9 +30,7 @@ public class DirectoryPanel extends FileTypePanel {
 
         KButton openButton = new KButton("Open folder");
         openButton.setMnemonic(KeyEvent.VK_O);
-        openButton.addActionListener(actionEvent -> {
-            Util.tryOpenFile(fileEntry.path.toFile());
-        });
+        openButton.addActionListener(actionEvent -> Util.tryOpenFile(fileEntry.path.toFile()));
 
         actionButtons.add(openButton);
 
@@ -40,7 +38,6 @@ public class DirectoryPanel extends FileTypePanel {
         removeButton.setMnemonic(KeyEvent.VK_R);
         removeButton.addActionListener(actionEvent -> {
             final boolean shouldDelete = JOptionPane.showConfirmDialog(getTopLevelAncestor(), String.format("Are you sure you want to delete \"%s\"?", fileEntry.name), Util.withTitlePrefix("Delete Confirmation"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
-
             if(shouldDelete) {
                 try {
                     FileUtils.deleteDirectory(fileEntry.path.toFile());

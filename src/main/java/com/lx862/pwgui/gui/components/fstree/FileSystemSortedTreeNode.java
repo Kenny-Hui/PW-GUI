@@ -6,7 +6,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 import java.nio.file.Path;
 import java.util.Collections;
-import java.util.List;
 
 public class FileSystemSortedTreeNode extends DefaultMutableTreeNode implements Comparable<FileSystemSortedTreeNode> {
     public final String name;
@@ -16,11 +15,6 @@ public class FileSystemSortedTreeNode extends DefaultMutableTreeNode implements 
         this.path = model.path;
         this.name = model.name;
         setUserObject(model);
-    }
-
-    protected <T> List<T> addToList(List<T> existingList, T item) {
-        existingList.add(item);
-        return existingList;
     }
 
     @Override

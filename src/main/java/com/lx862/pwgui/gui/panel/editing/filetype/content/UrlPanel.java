@@ -23,7 +23,7 @@ public class UrlPanel extends JPanel {
 
     static {
         alternativeForDomain.put("modrinth.com", "Modrinth");
-        //alternativeForDomain.put("github.com", "GitHub"); // Doesn't seems finished?
+        //alternativeForDomain.put("github.com", "GitHub"); // Doesn't seem finished?
         alternativeForDomain.put("curseforge.com", "Curseforge");
         alternativeForDomain.put("forgecdn.net", "Curseforge");
     }

@@ -36,7 +36,7 @@ public class PackwizMetaPanel extends FileTypePanel {
 
     private final PackwizMetaFile packwizMetaFile;
 
-    public PackwizMetaPanel(FileEntryPaneContext context, PackMetadataFileModel fileEntry) throws IOException {
+    public PackwizMetaPanel(FileEntryPaneContext context, PackMetadataFileModel fileEntry) {
         super(context);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.packwizMetaFile = new PackwizMetaFile(fileEntry.getPackMetadata().getPath(), fileEntry.getPackMetadata().getToml());

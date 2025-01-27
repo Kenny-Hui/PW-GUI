@@ -15,7 +15,7 @@ import javax.swing.*;
 import java.awt.event.KeyEvent;
 
 public abstract class BaseFrame extends JFrame {
-    protected JMenuBar jMenuBar;
+    protected final JMenuBar jMenuBar;
 
     public BaseFrame() {
         super();

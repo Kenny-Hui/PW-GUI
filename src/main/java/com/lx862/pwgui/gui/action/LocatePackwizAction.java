@@ -33,7 +33,7 @@ public class LocatePackwizAction extends AbstractAction {
         if(fileChooser.showOpenDialog(parent) == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
             if(!selectedFile.canExecute()) {
-                JOptionPane.showMessageDialog(parent, "The selected file is not executable!\nConsider adding the executable (x) permission to the file.", Util.withTitlePrefix("File Not Excutable!"), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(parent, "The selected file is not executable!\nConsider adding the executable (x) permission to the file.", Util.withTitlePrefix("File Not Executable!"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
 

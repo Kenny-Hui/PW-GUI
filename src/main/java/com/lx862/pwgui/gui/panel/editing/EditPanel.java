@@ -24,7 +24,7 @@ public class EditPanel extends JPanel {
     public EditPanel(Modpack modpack) {
         setLayout(new BorderLayout());
 
-        this.fileDetailPanel = new FileDetailPanel(modpack);
+        this.fileDetailPanel = new FileDetailPanel();
         this.fileBrowserPanel = new FileBrowserPanel(modpack);
 
         fileBrowserPanel.fileBrowserTree.addTreeSelectionListener(treeSelectionEvent -> {

@@ -17,7 +17,7 @@ public class FileDetailPanel extends JPanel {
     public final KTabbedPane fileEntryTab;
     public final KButton saveButton;
 
-    public FileDetailPanel(Modpack modpack) {
+    public FileDetailPanel() {
         setLayout(new BorderLayout());
 
         this.fileEntryTab = new KTabbedPane();

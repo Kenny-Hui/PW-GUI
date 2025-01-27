@@ -57,8 +57,7 @@ public class ExportModpackDialog extends JDialog {
             fileChooser.setSelectedFile(new File(modpack.packFile.get().name + selectedTab.getExtension()));
             if(fileChooser.openSaveAsDialog(this) == JFileChooser.APPROVE_OPTION) {
                 File file = fileChooser.getSelectedFile();
-                List<String> args = new ArrayList<>();
-                args.addAll(selectedTab.getArguments());
+                List<String> args = new ArrayList<>(selectedTab.getArguments());
                 args.add("--output");
                 args.add(file.getPath());
 
@@ -81,18 +80,18 @@ public class ExportModpackDialog extends JDialog {
             if(refreshExitCode != 0) return;
 
             ProgramExecution program = Executables.packwiz.buildCommand(args.toArray(new String[0]));
-            ExecutableProgressDialog dialog = new ExecutableProgressDialog(this, "Exporting modpack...", Constants.REASON_TRIGGERED_BY_USER, program);
+            ExecutableProgressDialog dialog = new ExecutableProgressDialog(this, "Exporting Modpack...", Constants.REASON_TRIGGERED_BY_USER, program);
             Util.addManualDownloadPrompt(this, program, dialog, () -> {
                 exportModpack(args, destination);
             });
             program.whenExit(exitCode -> {
                 if(exitCode == 0) {
-                    new FileSavedDialog(this, "Modpack exported!", destination).setVisible(true);
+                    new FileSavedDialog(this, "Modpack Exported!", destination).setVisible(true);
                 }
             });
             dialog.setVisible(true);
         });
-        new ExecutableProgressDialog(this, "Refreshing modpack...", "Refresh before export to ensure consistency.", programRefresh).setVisible(true);
+        new ExecutableProgressDialog(this, "Refreshing Modpack...", "Refresh before export to ensure consistency.", programRefresh).setVisible(true);
     }
 
     private void setExportButtonState(boolean active) {

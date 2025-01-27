@@ -25,9 +25,7 @@ public class KLinkButton extends JButton {
         setToolTipText(url);
         setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         if(url != null) {
-            addActionListener(actionEvent -> {
-                Util.tryBrowse(url);
-            });
+            addActionListener(actionEvent -> Util.tryBrowse(url));
         }
         setBorder(null);
     }

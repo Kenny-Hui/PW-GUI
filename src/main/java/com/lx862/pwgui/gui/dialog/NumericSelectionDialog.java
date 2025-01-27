@@ -14,14 +14,9 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class NumericSelectionDialog extends JDialog {
-    public <T> NumericSelectionDialog(JDialog dialog, String title, List<T> list, Consumer<Integer> callback) {
-        super(dialog, Util.withTitlePrefix(title), true);
-        init(dialog, title, list, callback);
-    }
-
-    public <T> NumericSelectionDialog(JFrame frame, String title, List<T> list, Consumer<Integer> callback) {
-        super(frame, Util.withTitlePrefix(title), true);
-        init(frame, title, list, callback);
+    public <T> NumericSelectionDialog(Window parent, String title, List<T> list, Consumer<Integer> callback) {
+        super(parent, Util.withTitlePrefix(title), ModalityType.DOCUMENT_MODAL);
+        init(parent, title, list, callback);
     }
 
     private <T> void init(Component component, String title, List<T> list, Consumer<Integer> callback) {

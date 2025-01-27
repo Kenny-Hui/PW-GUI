@@ -39,8 +39,8 @@ public class PackIndexFile extends TomlFile {
             entryMap.put("hash", entry.hash);
             if(entry.alias != null) entryMap.put("alias", entry.alias);
             if(!this.hashFormat.equals(entry.hashFormat)) entryMap.put("hash-format", entry.hashFormat);
-            if(entry.metafile) entryMap.put("metafile", entry.metafile);
-            if(entry.preserve) entryMap.put("preserve", entry.preserve);
+            if(entry.metafile) entryMap.put("metafile", true);
+            if(entry.preserve) entryMap.put("preserve", true);
 
             entries.add(entryMap);
         }
@@ -68,7 +68,7 @@ public class PackIndexFile extends TomlFile {
         public final String file;
         public final String hash;
         public final String hashFormat;
-        public String alias;
+        public final String alias;
         public boolean metafile;
         public boolean preserve;
 

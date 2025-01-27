@@ -104,7 +104,8 @@ public class NewModpackDialog extends JDialog {
                         }
                     }
                 }
-                modpackDirectory.mkdir();
+
+                Files.createDirectory(modpackDirectory.toPath());
 
                 // Build arguments
                 final List<String> arguments = new ArrayList<>();

@@ -44,6 +44,10 @@ public class AboutDialog extends JDialog {
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(titleLabel);
 
+        JLabel descriptionLabel = new JLabel("<html><div style='text-align:center'>GUI Wrapper for packwiz, a tool to edit & distribute Minecraft modpacks.</div></html>", SwingConstants.CENTER);
+        descriptionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        mainPanel.add(descriptionLabel);
+
         JLabel versionLabel = new JLabel(Constants.VERSION);
         versionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(versionLabel);

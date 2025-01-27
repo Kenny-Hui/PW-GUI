@@ -43,16 +43,17 @@ public class FileSystemTree extends JTree {
     }
 
     private FileSystemSortedTreeNode generateRecursiveTree(FileSystemSortedTreeNode rootNode) {
-        File[] files = Objects.requireNonNull(rootNode.path.toFile().listFiles());
-
-        for(File file : files) {
-            if(file.isDirectory() && !file.getName().equals(".git")) {
-                FileSystemEntityModel child = getModel.apply(file);
-                FileSystemSortedTreeNode node = generateRecursiveTree(new FileSystemSortedTreeNode(child));
-                rootNode.add(node);
-            } else {
-                FileSystemEntityModel child = getModel.apply(file);
-                rootNode.add(new FileSystemSortedTreeNode(child));
+        File[] files = rootNode.path.toFile().listFiles();
+        if(files != null) {
+            for(File file : files) {
+                if(file.isDirectory() && !file.getName().equals(".git")) {
+                    FileSystemEntityModel child = getModel.apply(file);
+                    FileSystemSortedTreeNode node = generateRecursiveTree(new FileSystemSortedTreeNode(child));
+                    rootNode.add(node);
+                } else {
+                    FileSystemEntityModel child = getModel.apply(file);
+                    rootNode.add(new FileSystemSortedTreeNode(child));
+                }
             }
         }
 

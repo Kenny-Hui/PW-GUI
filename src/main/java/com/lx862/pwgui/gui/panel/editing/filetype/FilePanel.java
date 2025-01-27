@@ -79,7 +79,7 @@ public class FilePanel extends FileTypePanel {
                     Executables.packwiz.buildCommand("refresh").execute("File deleted by user");
                 } catch (IOException e) {
                     Main.LOGGER.error(String.format("Failed to deleted file %s due to %s", fileEntry.path, e.getMessage()));
-                    JOptionPane.showMessageDialog(getTopLevelAncestor(), String.format("Sorry but we are unable to delete the file, error as follows: \n%s\nYou might try doing it from an external file manager.", e.getMessage()));
+                    JOptionPane.showMessageDialog(getTopLevelAncestor(), String.format("Failed to delete file: \n%s\nYou may try doing it from an external file manager.", e.getMessage()), Util.withTitlePrefix("Failed to Delete File!"), JOptionPane.ERROR_MESSAGE);
                 }
             }
         });

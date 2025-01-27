@@ -33,7 +33,10 @@ public class EditPanel extends JPanel {
             }
 
             FileSystemSortedTreeNode node = (FileSystemSortedTreeNode) fileBrowserPanel.fileBrowserTree.getLastSelectedPathComponent();
-            if(node == null) return;
+            if(node == null) {
+                fileDetailPanel.fileEntryTab.removeAll();
+                return;
+            }
 
             fileBrowserPanel.fileBrowserTree.setIgnorePattern(null);
 

@@ -43,9 +43,7 @@ public class FileSystemWatcher {
 
             while(true) {
                 WatchKey wk = ws.take();
-                try {
-                    Thread.sleep(40); // A bit of a hack since some files may not have finished writing by other programs.
-                } catch (InterruptedException ignored) {}
+                Thread.sleep(40); // A bit of a hack since some files may not have finished writing by other programs.
 
                 for (WatchEvent<?> e : wk.pollEvents())
                 {

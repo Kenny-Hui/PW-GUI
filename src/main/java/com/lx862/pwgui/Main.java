@@ -16,8 +16,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 public class Main {
-    private static Config config;
     public static final Logger LOGGER = new Logger();
+    private static Config config;
 
     public static void main(String[] args) {
         Options options = new Options();

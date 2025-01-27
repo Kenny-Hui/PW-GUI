@@ -22,10 +22,15 @@ public class FileSystemSortedTreeNode extends DefaultMutableTreeNode implements 
         return name;
     }
 
-    @Override
-    public void add(MutableTreeNode newChild) {
+    public void addAndSort(MutableTreeNode newChild) {
         super.add(newChild);
-        Collections.sort(this.children);
+        sort();
+    }
+
+    public void sort() {
+        if(this.children != null) {
+            Collections.sort(this.children);
+        }
     }
 
     @Override

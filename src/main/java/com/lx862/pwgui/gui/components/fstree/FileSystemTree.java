@@ -55,6 +55,8 @@ public class FileSystemTree extends JTree {
                 rootNode.add(new FileSystemSortedTreeNode(child));
             }
         }
+
+        rootNode.sort();
         return rootNode;
     }
 
@@ -73,11 +75,11 @@ public class FileSystemTree extends JTree {
 
     private void addNode(Path target) {
         Path parent = target.getParent();
-        FileSystemSortedTreeNode newNode = new FileSystemSortedTreeNode(getModel.apply(target.toFile()));
+        FileSystemSortedTreeNode newNode = generateRecursiveTree(target);
 
         iterateTree((node) -> {
             if(node.path.equals(parent)) {
-                node.add(newNode);
+                node.addAndSort(newNode);
                 int idx = node.getIndex(newNode);
                 ((DefaultTreeModel)getModel()).nodesWereInserted(node, new int[]{idx});
             }

@@ -7,6 +7,7 @@ import com.lx862.pwgui.data.model.file.MarkdownFileModel;
 
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
+import java.io.IOException;
 
 public class MarkdownPanel extends FileTypePanel {
 
@@ -14,24 +15,30 @@ public class MarkdownPanel extends FileTypePanel {
         super(context);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        JEditorPane editorPane = new JEditorPane();
-        editorPane.setEditable(false);
-        editorPane.addHyperlinkListener(e -> {
-            if (HyperlinkEvent.EventType.ACTIVATED.equals(e.getEventType())) {
-                Util.tryBrowse(e.getURL().toString());
-            }
-        });
+        MarkdownPane editorPane = new MarkdownPane();
 
         try {
             String content = fileEntry.getContent();
             String html = Processor.process(content);
-            editorPane.setContentType("text/html");
-            editorPane.setText("<html>" + html + "</html>");
+            editorPane.setText(html);
         } catch (Exception e) {
             Main.LOGGER.exception(e);
             editorPane.setText(Util.withBracketPrefix(String.format("Error trying to read file: %s", e.getMessage())));
         }
 
         add(new JScrollPane(editorPane));
+    }
+
+    public static class MarkdownPane extends JEditorPane {
+        public MarkdownPane() {
+            setEditable(false);
+            setContentType("text/html");
+
+            addHyperlinkListener(e -> {
+                if (HyperlinkEvent.EventType.ACTIVATED.equals(e.getEventType())) {
+                    Util.tryBrowse(e.getURL().toString());
+                }
+            });
+        }
     }
 }

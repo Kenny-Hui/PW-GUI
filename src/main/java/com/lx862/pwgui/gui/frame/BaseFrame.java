@@ -45,7 +45,7 @@ public abstract class BaseFrame extends JFrame {
         });
         helpMenu.add(viewLogMenuItem);
 
-        KMenuItem aboutMenuItem = new KMenuItem("About"); // TODO: Implement about dialog
+        KMenuItem aboutMenuItem = new KMenuItem(new AboutAction(this));
         aboutMenuItem.setMnemonic(KeyEvent.VK_A);
         helpMenu.add(aboutMenuItem);
 

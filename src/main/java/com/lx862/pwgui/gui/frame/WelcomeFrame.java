@@ -7,7 +7,6 @@ import com.lx862.pwgui.gui.action.SettingsAction;
 import com.lx862.pwgui.gui.components.filter.PackFileFilter;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.gui.components.kui.KFileChooser;
-import com.lx862.pwgui.gui.components.kui.KLinkButton;
 import com.lx862.pwgui.gui.popup.NewModpackDialog;
 import com.lx862.pwgui.util.GUIHelper;
 import com.lx862.pwgui.util.Util;
@@ -84,11 +83,6 @@ public class WelcomeFrame extends BaseFrame {
         mainPanel.add(Box.createVerticalGlue());
 
         rootPanel.add(mainPanel, BorderLayout.CENTER);
-
-        JPanel actionRowPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        actionRowPanel.add(new KLinkButton("Discord", Constants.LINK_DISCORD));
-        actionRowPanel.add(new KLinkButton("GitHub", Constants.LINK_GITHUB));
-        rootPanel.add(actionRowPanel, BorderLayout.SOUTH);
 
         add(rootPanel);
 

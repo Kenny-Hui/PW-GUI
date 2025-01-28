@@ -2,12 +2,9 @@ package com.lx862.pwgui.gui.dialog;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.Main;
-import com.lx862.pwgui.gui.components.ManualFileEntryPanel;
 import com.lx862.pwgui.data.model.ManualModInfo;
 import com.lx862.pwgui.gui.components.fstree.FileSystemWatcher;
-import com.lx862.pwgui.gui.components.kui.KButton;
-import com.lx862.pwgui.gui.components.kui.KFileChooser;
-import com.lx862.pwgui.gui.components.kui.KGridBagLayoutPanel;
+import com.lx862.pwgui.gui.components.kui.*;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
@@ -127,7 +124,15 @@ public class ManualDownloadDialog extends JDialog {
         for(ManualModInfo manualModInfo : this.modList) {
             boolean modExists = this.watchingPath.resolve(manualModInfo.fileName).toFile().exists();
             if(!modExists) allModFound = false;
-            this.modListPanel.add(new ManualFileEntryPanel(manualModInfo, modExists));
+
+            KListEntryPanel modEntryPanel = new KListEntryPanel();
+            JLabel title = new JLabel(String.format("<html><b>%s</b> <span style='color:green'>%s</span></html>", manualModInfo.name, modExists ? "(Found!)" : ""));
+            title.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h4.font")));
+            modEntryPanel.add(title);
+            modEntryPanel.add(new JLabel(manualModInfo.fileName));
+            modEntryPanel.add(new KLinkButton(manualModInfo.url));
+
+            this.modListPanel.add(modEntryPanel);
         }
         this.okButton.setEnabled(allModFound);
         this.modListPanel.updateUI();

@@ -6,6 +6,10 @@ import com.lx862.pwgui.data.ApplicationTheme;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
@@ -20,7 +24,8 @@ public class GUIHelper {
             UIManager.put("ScrollBar.width", 14);
             UIManager.put("TabbedPane.showTabSeparators", true);
             UIManager.put("Button.arc", 9);
-            UIManager.put("TextComponent.arc", 5);
+            UIManager.put("TextComponent.arc", 6);
+            UIManager.put("Component.arc", 6);
             UIManager.put("Component.hideMnemonics", false);
 
             if(window == null) { // Every window
@@ -35,6 +40,22 @@ public class GUIHelper {
 
     public static Component createVerticalPadding(int height) {
         return Box.createRigidArea(new Dimension(0, height));
+    }
+
+    public static CompoundBorder borderWithPadding(int padding, Border border) {
+        return new CompoundBorder(border, getPaddedBorder(padding));
+    }
+
+    public static EmptyBorder getPaddedBorder(int padding) {
+        return new EmptyBorder(padding, padding, padding, padding);
+    }
+
+    public static Border getSeparatorBorder() {
+        return new MatteBorder(0, 0, 1, 0, getBorderColor());
+    }
+
+    public static Color getBorderColor() {
+        return UIManager.getColor("Component.borderColor");
     }
 
     public static Image resizeImage(Image img, int size) {

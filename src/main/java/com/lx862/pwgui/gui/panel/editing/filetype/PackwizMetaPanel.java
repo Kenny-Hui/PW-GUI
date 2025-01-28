@@ -1,21 +1,20 @@
 package com.lx862.pwgui.gui.panel.editing.filetype;
 
-import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.formdev.flatlaf.ui.*;
 import com.lx862.pwgui.data.model.file.PackMetadataFileModel;
 import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.gui.components.DocumentChangedListener;
-import com.lx862.pwgui.gui.components.kui.KButton;
+import com.lx862.pwgui.gui.components.kui.*;
 import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.executable.ProgramExecution;
 import com.lx862.pwgui.core.PackwizMetaFile;
-import com.lx862.pwgui.gui.components.kui.KGridBagLayoutPanel;
-import com.lx862.pwgui.gui.components.kui.KSeparator;
-import com.lx862.pwgui.gui.components.kui.KTextField;
 import com.lx862.pwgui.gui.dialog.ExecutableProgressDialog;
+import com.lx862.pwgui.util.GUIHelper;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
@@ -111,6 +110,19 @@ public class PackwizMetaPanel extends FileTypePanel {
         wrapperPanel.setLayout(new BorderLayout());
         wrapperPanel.add(editableContentPanel, BorderLayout.NORTH);
         wrapperPanel.setAlignmentX(LEFT_ALIGNMENT);
+
+        KCollapsibleToggle showDetailButton = new KCollapsibleToggle("Show Detail", "Hide Detail");
+
+        JPanel detailPanel = new JPanel();
+        detailPanel.setLayout(new BorderLayout());
+        detailPanel.add(showDetailButton, BorderLayout.NORTH);
+
+        JScrollPane jsp = new JScrollPane(new DetailPanel(packwizMetaFile));
+        detailPanel.add(jsp, BorderLayout.CENTER);
+        jsp.setVisible(false);
+
+        showDetailButton.addItemListener(actionEvent -> jsp.setVisible(!jsp.isVisible()));
+        wrapperPanel.add(detailPanel, BorderLayout.CENTER);
         add(wrapperPanel);
     }
 
@@ -176,5 +188,52 @@ public class PackwizMetaPanel extends FileTypePanel {
         packwizMetaFile.optionDescription = descriptionTextField.getText().isEmpty() ? null : descriptionTextField.getText();
 
         packwizMetaFile.write(Constants.REASON_TRIGGERED_BY_USER);
+    }
+
+    static class DetailPanel extends KGridBagLayoutPanel {
+        public DetailPanel(PackwizMetaFile packwizMetaFile) {
+            super(0, 1);
+            setMinimumSize(new Dimension(0, 0));
+
+            KListEntryPanel downloadPanel = new KListEntryPanel("Download");
+
+            if(packwizMetaFile.downloadUrl != null) {
+                JPanel urlPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+                urlPanel.setOpaque(false);
+                urlPanel.add(new JLabel("URL: "));
+                urlPanel.add(new KLinkButton(packwizMetaFile.downloadUrl));
+                downloadPanel.add(urlPanel);
+            }
+            downloadPanel.add(new JLabel(String.format("Hash (%s): %s", packwizMetaFile.downloadHashFormat, packwizMetaFile.downloadHash)));
+
+            addRow(1, downloadPanel);
+
+            if(packwizMetaFile.updateMrModId != null && packwizMetaFile.updateMrVersion != null) {
+                JPanel updatePanel = new KListEntryPanel("Updates - Modrinth");
+                updatePanel.add(new JLabel(String.format("Mod ID: %s", packwizMetaFile.updateMrModId)));
+                updatePanel.add(new JLabel(String.format("Version ID: %s", packwizMetaFile.updateMrVersion)));
+
+                KLinkButton browseProjectPageLink = new KLinkButton("Browse Project Page", String.format("https://modrinth.com/mod/%s", packwizMetaFile.updateMrModId));
+                KLinkButton browseVersionPageLink = new KLinkButton("Browse Version Page", String.format("https://modrinth.com/mod/%s/version/%s", packwizMetaFile.updateMrModId, packwizMetaFile.updateMrVersion));
+
+                updatePanel.add(browseProjectPageLink);
+                updatePanel.add(browseVersionPageLink);
+
+                addRow(1, updatePanel);
+            }
+
+            if(packwizMetaFile.updateCfFileId != -1 && packwizMetaFile.updateCfProjectId != -1) {
+                JPanel updatePanel = new KListEntryPanel("Updates - CurseForge");
+                updatePanel.add(new JLabel(String.format("Project ID: %s", packwizMetaFile.updateCfProjectId)));
+                updatePanel.add(new JLabel(String.format("File ID: %s", packwizMetaFile.updateCfFileId)));
+
+                KLinkButton browseProjectPageLink = new KLinkButton("Browse Project Page", String.format("https://www.curseforge.com/projects/%s", packwizMetaFile.updateCfProjectId));
+                updatePanel.add(browseProjectPageLink);
+
+                addRow(1, updatePanel);
+            }
+
+            addVerticalFiller();
+        }
     }
 }

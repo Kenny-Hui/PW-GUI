@@ -10,4 +10,4 @@ PW-GUI is considered finish for the most part (Albeit with some slight UX inconv
 
 These will be done in no particular order nor deadline (and might not even be done if it isn't a highly requested feature).
 
-If you have any other ideas or would like to bring some of the above items to light, please make sure to open an [issue](https://github.com/Kenny-Hui/PW-GUI) about it!
+If you have any other ideas or would like to bring some of the above items to light, please make sure to open an [issue](https://github.com/Kenny-Hui/PW-GUI/issues) about it!

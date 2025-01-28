@@ -2,6 +2,8 @@
     <img src="./assets/pwgui_logo.svg" width="256" alt="PW-GUI Logo">    
     <h1>PW-GUI</h1>
     <p>A lightweight GUI Wrapper around <a href="https://github.com/packwiz/packwiz">packwiz</a>, a tool for managing Minecraft modpacks.</p>
+    <img alt="GitHub Build Status Badge" src="https://github.com/Kenny-Hui/PW-GUI/actions/workflows/build.yml/badge.svg">
+    <img alt="MIT License" src="https://img.shields.io/github/license/Kenny-Hui/PW-GUI">
 </div>
 
 ---

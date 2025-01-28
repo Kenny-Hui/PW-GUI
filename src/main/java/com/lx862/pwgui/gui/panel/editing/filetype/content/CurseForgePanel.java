@@ -29,11 +29,11 @@ public class CurseForgePanel extends JPanel {
         formPanel.addRow(1, new JLabel("URL/Search Term: "), contentTextField);
 
         contentTextField.addActionListener(actionEvent -> {
-            if(!contentTextField.getText().isEmpty()) AddContentPanel.addProjectFromContentPlatform((Window)getTopLevelAncestor(), "curseforge", "add", contentTextField.getText());
+            if(!contentTextField.getText().isEmpty()) AddContentPanel.addProjectFromContentPlatform((Window)getTopLevelAncestor(), context.getModpack(), "curseforge", "add", contentTextField.getText());
         });
 
         KButton addButton = new KButton("Add Project");
-        addButton.addActionListener(actionEvent -> AddContentPanel.addProjectFromContentPlatform((Window)getTopLevelAncestor(), "curseforge", "add", contentTextField.getText()));
+        addButton.addActionListener(actionEvent -> AddContentPanel.addProjectFromContentPlatform((Window)getTopLevelAncestor(), context.getModpack(), "curseforge", "add", contentTextField.getText()));
         addButton.setMnemonic(KeyEvent.VK_A);
         addButton.setAlignmentX(LEFT_ALIGNMENT);
         formPanel.addRow(2, addButton);

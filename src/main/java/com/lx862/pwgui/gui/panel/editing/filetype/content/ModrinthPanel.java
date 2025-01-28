@@ -27,12 +27,12 @@ public class ModrinthPanel extends JPanel {
 
         KTextField contentTextField = new KTextField("Cloth Config API");
         contentTextField.addActionListener(actionEvent -> {
-            if(!contentTextField.getText().isEmpty()) AddContentPanel.addProjectFromContentPlatform((Window)getTopLevelAncestor(), "modrinth", "add", contentTextField.getText());
+            if(!contentTextField.getText().isEmpty()) AddContentPanel.addProjectFromContentPlatform((Window)getTopLevelAncestor(), context.getModpack(), "modrinth", "add", contentTextField.getText());
         });
         formPanel.addRow(1, new JLabel("URL/Search Term: "), contentTextField);
 
         KButton addButton = new KButton("Add Project");
-        addButton.addActionListener(actionEvent -> AddContentPanel.addProjectFromContentPlatform((Window)getTopLevelAncestor(), "modrinth", "add", contentTextField.getText()));
+        addButton.addActionListener(actionEvent -> AddContentPanel.addProjectFromContentPlatform((Window)getTopLevelAncestor(), context.getModpack(), "modrinth", "add", contentTextField.getText()));
         addButton.setMnemonic(KeyEvent.VK_A);
         addButton.setAlignmentX(LEFT_ALIGNMENT);
         formPanel.addRow(2, addButton);

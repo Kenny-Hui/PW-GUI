@@ -1,6 +1,7 @@
 package com.lx862.pwgui.gui.panel.editing.filetype.content;
 
 import com.lx862.pwgui.core.Constants;
+import com.lx862.pwgui.core.Modpack;
 import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.executable.ProgramExecution;
 import com.lx862.pwgui.gui.dialog.ExecutableProgressDialog;
@@ -32,7 +33,7 @@ public class AddContentPanel extends FileTypePanel {
         add(tab);
     }
 
-    public static void addProjectFromContentPlatform(Window parent, String... args) {
+    public static void addProjectFromContentPlatform(Window parent, Modpack modpack, String... args) {
         ProgramExecution programExecution = Executables.packwiz.buildCommand(args);
         ExecutableProgressDialog dialog = new ExecutableProgressDialog(parent, "Adding mod...", Constants.REASON_TRIGGERED_BY_USER, programExecution);
 
@@ -100,7 +101,13 @@ public class AddContentPanel extends FileTypePanel {
 
         dialog.whenProgramErrored(() -> {
             if(noValidVersion.get()) {
-                JOptionPane.showMessageDialog(parent, "No valid version found!\nThis likely means the project does not have a version that is compatible with your modloader/Minecraft version.\n\nTips:\n- You may need to configure \"Acceptable Minecraft Version\" in Modpack Config if a cross-compatible version (i.e. 1.20 & 1.20.1) is available.\n- If you are trying to install a Datapack, you need to configure the Datapack folder in Modpack Config.", Util.withTitlePrefix("No Valid Version Found!"), JOptionPane.ERROR_MESSAGE);
+                List<String> tips = new ArrayList<>();
+                tips.add("- You may need to configure \"Acceptable Minecraft Version\" in Modpack Config if a cross-compatible version (i.e. 1.20 & 1.20.1) is available.");
+
+                if(modpack.packFile.get().getDatapackPath() == null) {
+                    tips.add("- If you are trying to install a Datapack, you need to configure the Datapack folder in Modpack Config.");
+                }
+                JOptionPane.showMessageDialog(parent, String.format("No valid version found!\nThis likely means the project does not have a version that is compatible with your modloader/Minecraft version.\n\nTips:\n%s", String.join("\n", tips)), Util.withTitlePrefix("No Valid Version Found!"), JOptionPane.ERROR_MESSAGE);
             }
             return false;
         });

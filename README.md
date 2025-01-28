@@ -4,6 +4,8 @@
     <p>A lightweight GUI Wrapper around <a href="https://github.com/packwiz/packwiz">packwiz</a>, a tool for managing Minecraft modpacks.</p>
     <img alt="GitHub Build Status Badge" src="https://github.com/Kenny-Hui/PW-GUI/actions/workflows/build.yml/badge.svg">
     <img alt="MIT License" src="https://img.shields.io/github/license/Kenny-Hui/PW-GUI">
+    <a href="https://github.com/Kenny-Hui/PW-GUI/releases"><img alt="Latest Release" src="https://img.shields.io/github/v/release/Kenny-Hui/PW-GUI"></a>
+    <a href="https://discord.gg/jzbhWEBFPx"><img alt="Join Discord Server" src="https://img.shields.io/discord/1257225868292653087"></a>
 </div>
 
 ---

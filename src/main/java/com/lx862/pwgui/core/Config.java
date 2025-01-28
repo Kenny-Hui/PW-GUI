@@ -23,6 +23,7 @@ public class Config extends WritableFile {
     private ApplicationTheme applicationTheme = ApplicationTheme.LIGHT;
     private boolean openLastModpackOnLaunch;
     public boolean debugMode;
+    public boolean useWindowDecoration;
 
     public Config() throws FileNotFoundException {
         this(JsonParser.parseReader(new FileReader(CONFIG_PATH.toFile())).getAsJsonObject());
@@ -65,6 +66,9 @@ public class Config extends WritableFile {
         if(jsonObject.has("debugMode")) {
             this.debugMode = jsonObject.get("debugMode").getAsBoolean();
         }
+        if(jsonObject.has("useWindowDecoration")) {
+            this.useWindowDecoration = jsonObject.get("useWindowDecoration").getAsBoolean();
+        }
     }
 
     public void write(String reason) throws IOException {
@@ -84,6 +88,7 @@ public class Config extends WritableFile {
         jsonObject.addProperty("openLastModpackOnLaunch", openLastModpackOnLaunch);
         jsonObject.addProperty("applicationTheme", applicationTheme.name());
         jsonObject.addProperty("debugMode", debugMode);
+        jsonObject.addProperty("useWindowDecoration", useWindowDecoration);
 
         JsonObject executableJsonObject = new JsonObject();
         if(packwizExecutablePath != null) executableJsonObject.addProperty("packwiz", packwizExecutablePath.toString());

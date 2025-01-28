@@ -19,6 +19,8 @@ public class GUIHelper {
         SwingUtilities.invokeLater(() -> {
             FlatLaf.setup(applicationTheme.getLaf());
 
+            System.setProperty("flatlaf.useWindowDecorations", Main.getConfig().useWindowDecoration ? "true" : "false");
+
             UIManager.put("Component.focusWidth", 1);
             UIManager.put("ScrollBar.showButtons", true);
             UIManager.put("ScrollBar.width", 14);

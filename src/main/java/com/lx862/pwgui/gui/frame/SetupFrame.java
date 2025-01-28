@@ -65,7 +65,7 @@ public class SetupFrame extends BaseFrame {
         rootPanel.add(Box.createRigidArea(new Dimension(0, 16)));
 
         KButton downloadButton = new KButton(new DownloadPackwizAction("Download Packwiz", this, (path) -> {
-            JOptionPane.showMessageDialog(parent, String.format("Packwiz has been downloaded and configured!\nPath:\n%s", path), Util.withTitlePrefix("Download Success!"), JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(parent, String.format("Packwiz has been downloaded and configured!\nPath: %s", path), Util.withTitlePrefix("Download Success!"), JOptionPane.INFORMATION_MESSAGE);
             WelcomeFrame welcomeFrame = new WelcomeFrame(parent);
             welcomeFrame.setVisible(true);
             dispose();

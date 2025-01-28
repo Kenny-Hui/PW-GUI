@@ -56,10 +56,15 @@ public class ModpackConfigPanel extends FileTypePanel {
     @Override
     public void save() throws IOException {
         boolean mcVersionChanged = this.versionPanel.minecraftVersionChanged();
+        boolean modloaderChanged = this.versionPanel.modloaderChanged();
         modifiedPackFile.write(Constants.REASON_TRIGGERED_BY_USER);
 
         if(mcVersionChanged) {
             if(JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Minecraft version has changed.\nDo you want to update the mods as well?", Util.withTitlePrefix("Update Mods"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+                new UpdateAllAction((JFrame)getTopLevelAncestor()).actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
+            }
+        } else if(modloaderChanged) {
+            if(JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Modloader has been switched.\nDo you want to update the mods as well?", Util.withTitlePrefix("Update Mods"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
                 new UpdateAllAction((JFrame)getTopLevelAncestor()).actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
             }
         }

@@ -28,32 +28,41 @@ public class Main {
 
         try {
             CommandLine cmd = cliParser.parse(options, args);
-
-            String execPath = cmd.getOptionValue("pwexec");
-            String modpackPath = cmd.getOptionValue("pack");
-
-            try {
-                config = new Config();
-            } catch (Exception e) {
-                if(!(e instanceof FileNotFoundException)) { // Missing file is expected on first launch, nothing notable that needs logging
-                    Main.LOGGER.exception(e);
-                    Main.LOGGER.error("Failed to read config file!");
-                }
-                config = new Config(new JsonObject());
-            }
-
-            if(modpackPath == null && config.openLastModpackOnLaunch()) {
-                modpackPath = config.getLastModpackPath() == null ? null : config.getLastModpackPath().toString();
-            }
-
-            final boolean packwizLocated = Executables.packwiz.updateExecutableLocation(execPath);
-            // final boolean gitLocated = git.updateExecutableLocation(null); // We don't have git support yet
-
-            launchGUI(packwizLocated, modpackPath);
+            initializeProgram(cmd);
         } catch (Exception e) {
             Main.LOGGER.exception(e);
             System.exit(1);
         }
+    }
+
+    /**
+     * Initialize/re-initialize the program
+     * @param commandLine The CommandLine parsed from the CLI. Null if this is a reinitialization process.
+     */
+    public static void initializeProgram(CommandLine commandLine) {
+        try {
+            config = new Config();
+        } catch (Exception e) {
+            if(!(e instanceof FileNotFoundException)) { // Missing file is expected on first launch, nothing notable that needs logging
+                Main.LOGGER.exception(e);
+                Main.LOGGER.error("Failed to read config file!");
+            }
+            config = new Config(new JsonObject());
+        }
+
+        String packFilePath = config.openLastModpackOnLaunch() ? config.getLastModpackPath() == null ? null : config.getLastModpackPath().toString() : null;
+        boolean packwizLocated;
+
+        if(commandLine != null) {
+            String packwizPathOverride = commandLine.getOptionValue("pwexec");
+            packFilePath = commandLine.getOptionValue("pack");
+            packwizLocated = Executables.packwiz.updateExecutableLocation(packwizPathOverride);
+        } else {
+            packwizLocated = Executables.packwiz.updateExecutableLocation(null);
+        }
+        // final boolean gitLocated = git.updateExecutableLocation(null); // We don't have git support yet
+
+        launchGUI(packwizLocated, packFilePath);
     }
 
     private static void launchGUI(boolean packwizLocated, String packFilePath) {

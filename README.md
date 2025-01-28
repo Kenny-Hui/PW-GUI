@@ -1,4 +1,4 @@
-<div style="text-align: center">
+<div align="center">
     <img src="./assets/pwgui_logo.svg" width="256" alt="PW-GUI Logo">    
     <h1>PW-GUI</h1>
     <p>A lightweight GUI Wrapper around <a href="https://github.com/packwiz/packwiz">packwiz</a>, a tool for managing Minecraft modpacks.</p>

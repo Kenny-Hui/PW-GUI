@@ -5,6 +5,7 @@ import com.lx862.pwgui.Main;
 import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.data.ApplicationTheme;
 import com.lx862.pwgui.executable.Executables;
+import com.lx862.pwgui.gui.action.DownloadPackwizAction;
 import com.lx862.pwgui.gui.action.ResetProgramAction;
 import com.lx862.pwgui.gui.components.filter.PackwizExecutableFileFilter;
 import com.lx862.pwgui.gui.components.kui.*;
@@ -93,6 +94,7 @@ public class SettingsDialog extends JDialog {
         packwizPanel.setBorder(BorderFactory.createTitledBorder("Packwiz"));
 
         KGridBagLayoutPanel packwizLocationPanel = new KGridBagLayoutPanel(3, 2);
+        packwizLocationPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         this.packwizLocationLabel = new JLabel("Location: ???");
 
         KButton changePackwizLocationButton = new KButton("Change...");
@@ -108,6 +110,14 @@ public class SettingsDialog extends JDialog {
         packwizLocationPanel.addRow(1, 0, packwizLocationLabel, changePackwizLocationButton);
 
         packwizPanel.add(packwizLocationPanel);
+
+        KButton downloadPackwizButton = new KButton(new DownloadPackwizAction("Re-download packwiz", this, (path) -> {
+            updatePackwizPath(path);
+            JOptionPane.showMessageDialog(this, "Packwiz has been downloaded!", Util.withTitlePrefix("Packwiz Downloaded!"), JOptionPane.INFORMATION_MESSAGE);
+        }));
+
+        downloadPackwizButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+        packwizPanel.add(downloadPackwizButton);
 
         settingsPanel.addRow(1, programPanel);
         settingsPanel.addRow(1, packwizPanel);

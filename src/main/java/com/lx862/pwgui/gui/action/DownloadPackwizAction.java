@@ -20,15 +20,16 @@ import java.nio.file.Path;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class DownloadPackwizAction extends AbstractAction {
     private final Window parent;
-    private final Runnable finishCallback;
+    private final Consumer<Path> finishCallback;
 
-    public DownloadPackwizAction(Window parent, Runnable finishCallback) {
-        super("Download packwiz");
+    public DownloadPackwizAction(String title, Window parent, Consumer<Path> finishCallback) {
+        super(title);
         this.parent = parent;
         this.finishCallback = finishCallback;
         putValue(MNEMONIC_KEY, KeyEvent.VK_D);
@@ -82,7 +83,7 @@ public class DownloadPackwizAction extends AbstractAction {
 
                 boolean configureSuccessful = tryConfigurePackwiz(packwizBinaryDestination.get());
                 if(configureSuccessful) {
-                    finishCallback.run();
+                    finishCallback.accept(packwizBinaryDestination.get());
                 }
             });
 

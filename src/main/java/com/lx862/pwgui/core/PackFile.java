@@ -64,7 +64,11 @@ public class PackFile extends TomlFile {
         if(Files.notExists(resolveRelative(indexFile))) {
             throw new FileNotFoundException(String.format("%s says index file is at \"%s\", but is not found :(\nPlease double check %s.", getPath().getFileName(), this.indexFile, getPath().getFileName()));
         }
-        this.packIndexFile = new Cache<>(() -> new PackIndexFile(getIndexPath()));
+        if(!Util.withinDirectory(path.getParent(), getIndexPath().toFile())) {
+            throw new IllegalStateException("Pack index file must not be outside the modpack folder!");
+        }
+        this.packIndexFile = new Cache<>(() -> new PackIndexFile(getPath().getParent(), getIndexPath()));
+        this.packIndexFile.get();
     }
 
     public String getName() {
@@ -104,7 +108,7 @@ public class PackFile extends TomlFile {
     }
 
     public void setDatapackPath(Path path) {
-        this.optionsDatapackFolder = Util.pathToString(path);
+        this.optionsDatapackFolder = Util.toForwardSlashString(path);
     }
 
     public void setMinecraft(PackComponentVersion newComponent) {

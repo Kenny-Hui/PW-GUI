@@ -47,7 +47,7 @@ public class ModpackExtraSettingPanel extends KGridBagLayoutPanel {
 
         if(fileChooser.showOpenDialog(getTopLevelAncestor()) == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
-            if(!withinDirectory(modpack.getRootPath(), selectedFile)) {
+            if(!Util.withinDirectory(modpack.getRootPath(), selectedFile)) {
                 JOptionPane.showMessageDialog(getTopLevelAncestor(), "Folder must be inside modpack folder!", Util.withTitlePrefix("Invalid Selected Directory"), JOptionPane.ERROR_MESSAGE);
                 changeDatapackDirectory(modpack, existingFile, datapackFolderLabel);
                 return;
@@ -56,21 +56,6 @@ public class ModpackExtraSettingPanel extends KGridBagLayoutPanel {
             datapackFolderLabel.setText(getDatapackFolderString());
             updateSaveState.run();
         }
-    }
-
-    private boolean withinDirectory(Path root, File file) {
-        File parent = file;
-        boolean isWithinDirectory = false;
-
-        while(parent != null) {
-            if(parent.equals(root.toFile())) {
-                isWithinDirectory = true;
-                break;
-            }
-            parent = parent.getParentFile();
-        }
-
-        return isWithinDirectory;
     }
 
     private String getDatapackFolderString() {

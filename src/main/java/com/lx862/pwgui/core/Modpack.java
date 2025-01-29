@@ -41,13 +41,13 @@ public class Modpack {
         this.root = packFilePath.getParent();
         if(Files.isDirectory(packFilePath) || Files.notExists(packFilePath)) throw new FileNotFoundException(String.format("Cannot find target file: %s. Expected a toml file containing modpack config!", packFilePath));
         this.packFile = new Cache<>(() -> {
-             try {
-                 return new PackFile(packFilePath);
-             } catch (Exception e) {
-                 Main.LOGGER.exception(e);
-                 return null;
-             }
+            try {
+                return new PackFile(packFilePath);
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
         });
+        this.packFile.get();
     }
 
     public Path getPackFilePath() {

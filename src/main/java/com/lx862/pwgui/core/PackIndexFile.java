@@ -1,5 +1,6 @@
 package com.lx862.pwgui.core;
 
+import com.lx862.pwgui.util.Util;
 import com.moandjiezana.toml.Toml;
 
 import java.io.IOException;
@@ -10,11 +11,11 @@ public class PackIndexFile extends TomlFile {
     private final List<FileEntry> fileEntries;
     private final String hashFormat;
 
-    public PackIndexFile(Path path) {
-        this(path, new Toml().read(path.toFile()));
+    public PackIndexFile(Path modpackRoot, Path path) {
+        this(modpackRoot, path, new Toml().read(path.toFile()));
     }
 
-    public PackIndexFile(Path path, Toml toml) {
+    public PackIndexFile(Path modpackRoot, Path path, Toml toml) {
         super(path, toml);
 
         this.fileEntries = new ArrayList<>();
@@ -23,7 +24,7 @@ public class PackIndexFile extends TomlFile {
         List<Toml> entries = toml.getTables("files");
         if(entries == null) return;
         for(Toml entryToml : entries) {
-            fileEntries.add(new FileEntry(entryToml, this.hashFormat, path));
+            fileEntries.add(new FileEntry(modpackRoot, entryToml, this.hashFormat, path));
         }
     }
 
@@ -72,9 +73,10 @@ public class PackIndexFile extends TomlFile {
         public boolean metafile;
         public boolean preserve;
 
-        public FileEntry(Toml toml, String indexHashFormat, Path indexFilePath) {
+        public FileEntry(Path modpackRoot, Toml toml, String indexHashFormat, Path indexFilePath) {
             this.file = toml.getString("file");
             this.path = indexFilePath.getParent().resolve(this.file);
+            if(!Util.withinDirectory(modpackRoot, this.path.toFile())) throw new IllegalStateException(String.format("Referenced file %s must not be outside the modpack folder!", this.file));
             this.hash = toml.getString("hash");
             this.alias = toml.getString("alias");
             this.hashFormat = toml.getString("hash-format") == null ? indexHashFormat : toml.getString("hash-format");

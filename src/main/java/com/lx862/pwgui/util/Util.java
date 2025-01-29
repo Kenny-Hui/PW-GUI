@@ -58,12 +58,27 @@ public class Util {
 
     /** Replaces all backward slashes with forward slashes in a path */
     /** Toml4j has a issue of misparsing \UXXX as a unicode code points, so something like C:\Users on Windows could break the parsing entirely */
-    public static String pathToString(Path path) {
+    public static String toForwardSlashString(Path path) {
         if(File.pathSeparator.equals("\\")) {
             return path.toString().replaceAll(Matcher.quoteReplacement("\\"), "/");
         } else {
             return path.toString();
         }
+    }
+
+    public static boolean withinDirectory(Path root, File file) {
+        File parent = file.toPath().normalize().toFile();
+        boolean isWithinDirectory = false;
+
+        while(parent != null) {
+            if(parent.equals(root.toFile())) {
+                isWithinDirectory = true;
+                break;
+            }
+            parent = parent.getParentFile();
+        }
+
+        return isWithinDirectory;
     }
 
     public static void tryOpenFile(File file) {

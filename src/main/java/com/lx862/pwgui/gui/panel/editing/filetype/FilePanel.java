@@ -37,11 +37,13 @@ public class FilePanel extends FileTypePanel {
         this.indexEntry = context.getModpack().packFile.get().packIndexFile.get().getEntryByPath(fileEntry.path);
 
         if(indexEntry != null) {
-            JLabel hashLabel = new JLabel(String.format("Hash (%s): %s", indexEntry.hashFormat, indexEntry.hash));
-            hashLabel.setToolTipText(indexEntry.hash);
-            hashLabel.setMinimumSize(new Dimension(1, 1)); // Hash is too long
-            hashLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-            add(hashLabel);
+            if(indexEntry.hash != null) { // If no-internal-hashes is set to true, then there won't be a hash
+                JLabel hashLabel = new JLabel(String.format("Hash (%s): %s", indexEntry.hashFormat, indexEntry.hash));
+                hashLabel.setToolTipText(indexEntry.hash);
+                hashLabel.setMinimumSize(new Dimension(1, 1)); // Hash is too long
+                hashLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+                add(hashLabel);
+            }
 
             initialPreserve = indexEntry.preserve;
 

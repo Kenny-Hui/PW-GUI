@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -104,7 +105,7 @@ public class PackFile extends TomlFile {
     }
 
     public Path getDatapackPath() {
-        return this.optionsDatapackFolder == null ? null : resolveRelativeRelativize(optionsDatapackFolder);
+        return this.optionsDatapackFolder == null ? null : getPath().getParent().relativize(resolveRelative(optionsDatapackFolder));
     }
 
     public void setDatapackPath(Path path) {
@@ -120,10 +121,7 @@ public class PackFile extends TomlFile {
     }
 
     public Path resolveRelative(String path) {
-        return getPath().getParent().resolve(path);
-    }
-    public Path resolveRelativeRelativize(String path) {
-        return getPath().getParent().relativize(resolveRelative(path).normalize());
+        return Paths.get(getPath().getParent().toString(), path);
     }
 
     @Override

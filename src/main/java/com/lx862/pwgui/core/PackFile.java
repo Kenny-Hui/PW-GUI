@@ -104,7 +104,7 @@ public class PackFile extends TomlFile {
     }
 
     public Path getDatapackPath() {
-        return this.optionsDatapackFolder == null ? null : resolveRelative(optionsDatapackFolder);
+        return this.optionsDatapackFolder == null ? null : resolveRelativeRelativize(optionsDatapackFolder);
     }
 
     public void setDatapackPath(Path path) {
@@ -121,6 +121,9 @@ public class PackFile extends TomlFile {
 
     public Path resolveRelative(String path) {
         return getPath().getParent().resolve(path);
+    }
+    public Path resolveRelativeRelativize(String path) {
+        return getPath().getParent().relativize(resolveRelative(path).normalize());
     }
 
     @Override

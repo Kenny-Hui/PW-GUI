@@ -22,7 +22,7 @@
     <maxVersion></maxVersion>
   </jre>
   <versionInfo>
-    <fileVersion>1.0.0.0</fileVersion>
+    <fileVersion>1.0.1.0</fileVersion>
     <txtFileVersion>1.0</txtFileVersion>
     <fileDescription>Lightweight GUI Wrapper around packwiz, a Minecraft modpack tool.</fileDescription>
     <copyright>LX86</copyright>

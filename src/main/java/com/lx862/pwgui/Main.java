@@ -55,8 +55,9 @@ public class Main {
 
         if(commandLine != null) {
             String packwizPathOverride = commandLine.getOptionValue("pwexec");
-            packFilePath = commandLine.getOptionValue("pack");
+            String packFilePathOverride = commandLine.getOptionValue("pack");
             packwizLocated = Executables.packwiz.updateExecutableLocation(packwizPathOverride);
+            if(packFilePathOverride != null) packFilePath = packFilePathOverride;
         } else {
             packwizLocated = Executables.packwiz.updateExecutableLocation(null);
         }

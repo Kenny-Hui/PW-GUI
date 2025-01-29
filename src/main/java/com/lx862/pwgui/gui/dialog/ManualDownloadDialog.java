@@ -126,7 +126,7 @@ public class ManualDownloadDialog extends JDialog {
             if(!modExists) allModFound = false;
 
             KListEntryPanel modEntryPanel = new KListEntryPanel();
-            JLabel title = new JLabel(String.format("<html><b>%s</b> <span style='color:green'>%s</span></html>", manualModInfo.name, modExists ? "(Found!)" : ""));
+            JLabel title = new JLabel(String.format("<html><b>%s</b> <span style='color:%s'>%s</span></html>", manualModInfo.name, modExists ? "green" : "red", modExists ? "(Found!)" : "(Not Found)"));
             title.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h4.font")));
             modEntryPanel.add(title);
             modEntryPanel.add(new JLabel(manualModInfo.fileName));

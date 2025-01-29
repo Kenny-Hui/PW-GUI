@@ -42,7 +42,7 @@ class FileBrowserPanel extends JPanel {
             return new PackwizIgnoreFileModel(file);
         } else if (file.getName().equals(".gitignore")) {
             return new GitIgnoreFileModel(file);
-        } else if (file.getName().equals("LICENSE")) {
+        } else if (file.getName().equals("LICENSE") || file.getName().equals("LICENSE.txt")) {
             return new LicenseFileModel(file);
         } else if (isFileFromModpackRoot(modpack, file, "options.txt")) {
             return new MinecraftOptionsFileModel(file);

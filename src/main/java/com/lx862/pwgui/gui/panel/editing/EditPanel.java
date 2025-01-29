@@ -67,7 +67,7 @@ public class EditPanel extends JPanel {
             if(node instanceof PlainTextFileModel) panels.add(new NameTabPair("Plain Text", new PlainTextPanel(context, (PlainTextFileModel) node)));
             if(node instanceof ConfigDirectoryModel) panels.add(new NameTabPair("Config Folder", new ConfigDirectoryPanel(context, (DirectoryModel)node)));
             if(node instanceof GitIgnoreFileModel) panels.add(new NameTabPair("Git Ignore", new GitIgnorePanel(context, (GitIgnoreFileModel) node)));
-            if(node instanceof ImageFileModel) panels.add(new NameTabPair("Image Panel", new ImagePanel(context, (ImageFileModel) node)));
+            if(node instanceof ImageFileModel) panels.add(new NameTabPair("Image Preview", new ImagePanel(context, (ImageFileModel) node)));
             if(node instanceof LicenseFileModel) panels.add(new NameTabPair("License", new LicenseFilePanel(context, (LicenseFileModel) node)));
             if(node instanceof MarkdownFileModel) panels.add(new NameTabPair("Markdown", new MarkdownPanel(context, (MarkdownFileModel) node)));
             if(node instanceof MinecraftOptionsFileModel) panels.add(new NameTabPair("Minecraft Options", new MinecraftOptionPanel(context, (MinecraftOptionsFileModel) node)));

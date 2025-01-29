@@ -7,7 +7,6 @@ import com.lx862.pwgui.data.model.file.MarkdownFileModel;
 
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
-import java.io.IOException;
 
 public class MarkdownPanel extends FileTypePanel {
 
@@ -21,6 +20,7 @@ public class MarkdownPanel extends FileTypePanel {
             String content = fileEntry.getContent();
             String html = Processor.process(content);
             editorPane.setText(html);
+            editorPane.setCaretPosition(0);
         } catch (Exception e) {
             Main.LOGGER.exception(e);
             editorPane.setText(Util.withBracketPrefix(String.format("Error trying to read file: %s", e.getMessage())));

@@ -21,7 +21,7 @@ public class Config extends WritableFile {
     private Path packwizExecutablePath;
     private Path lastModpackPath;
     private ApplicationTheme applicationTheme = ApplicationTheme.LIGHT;
-    private boolean openLastModpackOnLaunch;
+    private boolean openLastModpackOnLaunch = true;
     public boolean debugMode;
     public boolean useWindowDecoration;
 

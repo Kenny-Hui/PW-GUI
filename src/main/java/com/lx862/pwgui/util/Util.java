@@ -126,16 +126,11 @@ public class Util {
                 // Format: Mod Display Name (mod_file_name.jar) from https://example.com
 
                 String[] split = line.split(" from http");
-                String[] splitForTheRest = split[0].split(" ");
-                String fileName = "pwgui_cannot_parse_filename.jar";
-                for(String word : splitForTheRest) {
-                    if(word.startsWith("(") && word.endsWith(")")) { // We will take a blind shot that jar file don't have spaces...
-                        fileName = word.substring(1, word.length()-1);
-                        break;
-                    }
-                }
-                String name = line.substring(0, line.indexOf(fileName)-2);
+                String metaNameAndFileName = split[0];
                 String url = "http" + split[1];
+
+                String fileName = metaNameAndFileName.substring(metaNameAndFileName.lastIndexOf("(")+1, metaNameAndFileName.lastIndexOf(")"));
+                String name = line.substring(0, line.indexOf(fileName)-2);
 
                 manualDownloadMod.add(new ManualModInfo(name, fileName, url));
             }

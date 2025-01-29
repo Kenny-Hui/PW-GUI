@@ -44,10 +44,16 @@ class FileBrowserPanel extends JPanel {
             return new GitIgnoreFileModel(file);
         } else if (file.getName().equals("LICENSE")) {
             return new LicenseFileModel(file);
-        } else if (file.getName().endsWith(".pw.toml")) {
-            return new PackMetadataFileModel(file);
+        } else if (isFileFromModpackRoot(modpack, file, "options.txt")) {
+            return new MinecraftOptionsFileModel(file);
+        } else if (file.isDirectory() && isFileFromModpackRoot(modpack, file, "config")) {
+            return new ConfigDirectoryModel(file);
+        } else if (file.isDirectory() && (isFileFromModpackRoot(modpack, file, "mods") || isFileFromModpackRoot(modpack, file, "resourcepacks") || isFileFromModpackRoot(modpack, file, "shaderpacks") || isFileFromModpackRoot(modpack, file, "plugins"))) {
+            return new ContentDirectoryModel(file);
         } else if (file.toPath().equals(modpack.getPackFilePath())) {
             return new ModpackConfigFileModel(file);
+        } else if (file.getName().endsWith(".pw.toml")) {
+            return new PackMetadataFileModel(file);
         } else if (file.toPath().equals(modpack.packFile.get().getIndexPath())) {
             return new ModpackIndexFileModel(file);
         } else if (file.getName().endsWith(".md")) {
@@ -58,12 +64,6 @@ class FileBrowserPanel extends JPanel {
             return new PlainTextFileModel(file);
         } else if (file.getName().endsWith(".png") || file.getName().endsWith(".jpg") || file.getName().endsWith(".jpeg")) {
             return new ImageFileModel(file);
-        } else if (isFileFromModpackRoot(modpack, file, "options.txt")) {
-            return new MinecraftOptionsFileModel(file);
-        } else if (file.isDirectory() && isFileFromModpackRoot(modpack, file, "config")) {
-            return new ConfigDirectoryModel(file);
-        } else if (file.isDirectory() && (isFileFromModpackRoot(modpack, file, "mods") || isFileFromModpackRoot(modpack, file, "resourcepacks") || isFileFromModpackRoot(modpack, file, "shaderpacks") || isFileFromModpackRoot(modpack, file, "plugins"))) {
-            return new ContentDirectoryModel(file);
         } else if (file.isFile()) {
             return new GenericFileModel(file);
         } else {

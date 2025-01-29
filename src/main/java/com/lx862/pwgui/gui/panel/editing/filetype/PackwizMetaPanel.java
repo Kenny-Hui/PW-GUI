@@ -210,7 +210,7 @@ public class PackwizMetaPanel extends FileTypePanel {
 
             if(packwizMetaFile.updateMrModId != null && packwizMetaFile.updateMrVersion != null) {
                 JPanel updatePanel = new KListEntryPanel("Updates - Modrinth");
-                updatePanel.add(new JLabel(String.format("Mod ID: %s", packwizMetaFile.updateMrModId)));
+                updatePanel.add(new JLabel(String.format("Project ID: %s", packwizMetaFile.updateMrModId)));
                 updatePanel.add(new JLabel(String.format("Version ID: %s", packwizMetaFile.updateMrVersion)));
 
                 KLinkButton browseProjectPageLink = new KLinkButton("Browse Project Page", String.format("https://modrinth.com/mod/%s", packwizMetaFile.updateMrModId));

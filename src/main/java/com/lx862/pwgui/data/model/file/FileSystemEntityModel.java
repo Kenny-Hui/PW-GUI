@@ -1,9 +1,10 @@
 package com.lx862.pwgui.data.model.file;
 
+import javax.swing.*;
 import java.io.File;
 import java.nio.file.Path;
 
-public class FileSystemEntityModel {
+public abstract class FileSystemEntityModel {
     public final String name;
     public final Path path;
 
@@ -19,4 +20,6 @@ public class FileSystemEntityModel {
     public boolean isUserFriendlyName() {
         return false;
     }
+
+    public abstract Icon getIcon();
 }

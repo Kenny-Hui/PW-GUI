@@ -2,11 +2,11 @@ package com.lx862.pwgui.gui.panel.editing.filetype;
 
 import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.core.PackFile;
+import com.lx862.pwgui.data.model.file.*;
 import com.lx862.pwgui.gui.action.UpdateAllAction;
 import com.lx862.pwgui.gui.panel.ModpackExtraSettingPanel;
 import com.lx862.pwgui.gui.panel.ModpackInfoPanel;
 import com.lx862.pwgui.gui.panel.ModpackVersionPanel;
-import com.lx862.pwgui.data.model.file.ModpackConfigFileModel;
 import com.lx862.pwgui.gui.components.kui.KSeparator;
 import com.lx862.pwgui.util.Util;
 

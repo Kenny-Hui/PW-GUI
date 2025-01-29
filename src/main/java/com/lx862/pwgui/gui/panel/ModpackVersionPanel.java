@@ -13,11 +13,13 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class ModpackVersionPanel extends KGridBagLayoutPanel {
     private final KComboBox<VersionMetadata> minecraftVersionComboBox;
     private final KComboBox<VersionMetadata> modloaderVersionComboBox;
+    private final JCheckBox showSnapshotCheckBox;
     private final JLabel modloaderVersionLabel;
 
     private final PackComponentVersion initialMinecraft;
@@ -53,12 +55,10 @@ public class ModpackVersionPanel extends KGridBagLayoutPanel {
         if(initialMinecraft != null) minecraftVersionComboBox.setSelectedItem(initialMinecraft.getVersion());
         if(initialModloader != null) modloaderVersionComboBox.setSelectedItem(initialModloader.getVersion());
 
-        updateMinecraftUI(false);
-
         addRow(1, new JLabel("Minecraft Version: ", new ImageIcon(GUIHelper.resizeImage(IconNamePair.MINECRAFT.image, 20)), SwingConstants.LEFT), minecraftVersionComboBox);
 
-        JCheckBox showSnapshotCheckBox = new JCheckBox("Show Snapshot");
-        showSnapshotCheckBox.addActionListener(actionEvent -> updateMinecraftUI(showSnapshotCheckBox.isSelected()));
+        showSnapshotCheckBox = new JCheckBox("Show Snapshot");
+        showSnapshotCheckBox.addActionListener(actionEvent -> updateMinecraftUI());
         addRow(1, null, showSnapshotCheckBox);
 
         JPanel modloaderChoicePanel = new JPanel(new WrapLayout(FlowLayout.LEFT, 0, 0));
@@ -68,7 +68,7 @@ public class ModpackVersionPanel extends KGridBagLayoutPanel {
 
         JRadioButton vanillaRadioButton = new JRadioButton("None (Vanilla)");
         vanillaRadioButton.addActionListener((itemListener) -> {
-            updateModloaderUI(null);
+            setModloader(null);
             if(existingFile != null) {
                 existingFile.setModloader(null);
                 updateSaveState.run();
@@ -82,7 +82,7 @@ public class ModpackVersionPanel extends KGridBagLayoutPanel {
             if(!packComponent.choosable) continue;
 
             JRadioButton componentRadioButton = new JRadioButton(packComponent.iconName.name);
-            componentRadioButton.addActionListener((itemListener) -> updateModloaderUI(packComponent));
+            componentRadioButton.addActionListener((itemListener) -> setModloader(packComponent));
             componentRadioButton.setIcon(new ImageIcon(GUIHelper.imageOpacity(GUIHelper.resizeImage(packComponent.iconName.image, 18), 0.5f)));
             componentRadioButton.setSelectedIcon(new ImageIcon(GUIHelper.resizeImage(packComponent.iconName.image, 18)));
             modloaderChoicePanel.add(componentRadioButton);
@@ -98,23 +98,35 @@ public class ModpackVersionPanel extends KGridBagLayoutPanel {
         addRow(2, modloaderChoicePanel);
         addRow(1, modloaderVersionLabel, modloaderVersionComboBox);
 
-        updateModloaderUI(this.initialModloader == null ? null : this.initialModloader.getComponent());
+        updateMinecraftUI();
+        updateModloaderUI();
     }
 
-    private void updateMinecraftUI(boolean showSnapshot) {
+    private void updateMinecraftUI() {
         // Dummy entry to retain the combo box height account for the list padding
         minecraftVersionComboBox.addItem(new VersionMetadata(null, "Loading...", VersionMetadata.State.RELEASE));
 
-        fetchComponentDatas(PackComponent.MINECRAFT, () -> {
-            fillComboBoxes(null, minecraftVersionComboBox, PackComponent.MINECRAFT, showSnapshot);
+        fetchComponentDatas(PackComponent.MINECRAFT, (versionList) -> {
+            boolean showSnapshot = showSnapshotCheckBox.isSelected();
+            boolean isSnapshot = versionList.stream().anyMatch(e -> e.getState() != VersionMetadata.State.RELEASE && e.getVersionName().equals(minecraftVersionComboBox.getEditor().getItem().toString()));
+            if(isSnapshot) {
+                showSnapshot = true;
+                showSnapshotCheckBox.setSelected(true);
+            }
+            fillComboBoxes(null, minecraftVersionComboBox, versionList, showSnapshot);
             // We add event listener after we fill the combobox, as we don't want the fill update to be triggered
             minecraftVersionComboBox.setAction(null);
-            minecraftVersionComboBox.addActionListener(actionEvent -> updateModloaderUI(selectedModloader));
+            minecraftVersionComboBox.addActionListener(actionEvent -> updateModloaderUI());
         });
     }
 
-    private void updateModloaderUI(PackComponent modloader) {
-        selectedModloader = modloader;
+    private void setModloader(PackComponent modloader) {
+        this.selectedModloader = modloader;
+        updateModloaderUI();
+    }
+
+    private void updateModloaderUI() {
+        PackComponent modloader = this.selectedModloader;
 
         if(modloader == null) {
             modloaderVersionLabel.setVisible(false);
@@ -126,8 +138,8 @@ public class ModpackVersionPanel extends KGridBagLayoutPanel {
 
             modloaderVersionComboBox.setEnabled(false);
             modloaderVersionComboBox.addItem(new VersionMetadata(null, "Loading...", VersionMetadata.State.RELEASE));
-            fetchComponentDatas(modloader, () -> {
-                fillComboBoxes(minecraftVersionComboBox.getEditor().getItem().toString(), modloaderVersionComboBox, modloader, false);
+            fetchComponentDatas(modloader, (versionList) -> {
+                fillComboBoxes(minecraftVersionComboBox.getEditor().getItem().toString(), modloaderVersionComboBox, versionList, false);
                 modloaderVersionComboBox.setEnabled(true);
             });
         }
@@ -160,11 +172,10 @@ public class ModpackVersionPanel extends KGridBagLayoutPanel {
         return selectedModloader == null ? null : new PackComponentVersion(selectedModloader, modloaderVersionComboBox.getEditor().getItem().toString());
     }
 
-    private void fillComboBoxes(String mcVersion, JComboBox<VersionMetadata> comboBox, PackComponent packComponent, boolean showAllReleaseType) {
+    private void fillComboBoxes(String mcVersion, JComboBox<VersionMetadata> comboBox, List<VersionMetadata> metadatas, boolean showAllReleaseType) {
         Object oldValue = comboBox.getEditor().getItem().toString();
         comboBox.removeAllItems();
 
-        List<VersionMetadata> metadatas = Caches.componentCaches.get(packComponent);
         if(metadatas == null) {
             comboBox.setEditable(true);
             return;
@@ -192,20 +203,20 @@ public class ModpackVersionPanel extends KGridBagLayoutPanel {
         comboBox.setSelectedIndex(equivalentToOldValueIndex);
     }
 
-    private void fetchComponentDatas(PackComponent packComponent, Runnable callback) {
+    private void fetchComponentDatas(PackComponent packComponent, Consumer<List<VersionMetadata>> callback) {
         if(Caches.componentCaches.get(packComponent) != null) {
-            callback.run();
+            callback.accept(Caches.componentCaches.get(packComponent));
             return;
         }
 
         try {
             packComponent.versionGetter.get((versionList) -> {
                 Caches.componentCaches.put(packComponent, versionList);
-                SwingUtilities.invokeLater(callback);
+                SwingUtilities.invokeLater(() -> callback.accept(versionList));
             });
         } catch (Exception e) {
             Caches.componentCaches.put(packComponent, null);
-            callback.run();
+            callback.accept(null);
         }
     }
 

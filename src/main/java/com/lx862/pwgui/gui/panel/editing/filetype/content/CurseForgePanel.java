@@ -32,8 +32,20 @@ public class CurseForgePanel extends JPanel {
             if(!contentTextField.getText().isEmpty()) AddContentPanel.addProjectFromContentPlatform((Window)getTopLevelAncestor(), context.getModpack(), "curseforge", "add", contentTextField.getText());
         });
 
+        JCheckBox forceCurrentFolder = new JCheckBox("Always install to current folder instead of auto detection");
+        formPanel.addRow(2, forceCurrentFolder);
+
         KButton addButton = new KButton("Add Project");
-        addButton.addActionListener(actionEvent -> AddContentPanel.addProjectFromContentPlatform((Window)getTopLevelAncestor(), context.getModpack(), "curseforge", "add", contentTextField.getText()));
+        addButton.addActionListener(actionEvent -> {
+            String[] argsToUse;
+            if(forceCurrentFolder.isSelected()) {
+                argsToUse = new String[]{"curseforge", "add", contentTextField.getText(), "--meta-folder", context.getModpack().getRootPath().relativize(fileEntry.path).toString()};
+            } else {
+                argsToUse = new String[]{"curseforge", "add", contentTextField.getText()};
+            }
+
+            AddContentPanel.addProjectFromContentPlatform((Window)getTopLevelAncestor(), context.getModpack(), argsToUse);
+        });
         addButton.setMnemonic(KeyEvent.VK_A);
         addButton.setAlignmentX(LEFT_ALIGNMENT);
         formPanel.addRow(2, addButton);

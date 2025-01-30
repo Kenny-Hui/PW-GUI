@@ -1,5 +1,6 @@
 package com.lx862.pwgui.gui.panel.editing.filetype;
 
+import com.github.rjeschke.txtmark.Configuration;
 import com.github.rjeschke.txtmark.Processor;
 import com.lx862.pwgui.Main;
 import com.lx862.pwgui.util.Util;
@@ -18,7 +19,7 @@ public class MarkdownPanel extends FileTypePanel {
 
         try {
             String content = fileEntry.getContent();
-            String html = Processor.process(content);
+            String html = Processor.process(content, Configuration.builder().forceExtentedProfile().build());
             editorPane.setText(html);
             editorPane.setCaretPosition(0);
         } catch (Exception e) {

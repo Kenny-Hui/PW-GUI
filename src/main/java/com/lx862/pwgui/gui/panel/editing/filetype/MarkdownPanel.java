@@ -20,8 +20,7 @@ public class MarkdownPanel extends FileTypePanel {
         try {
             String content = fileEntry.getContent();
             String html = Processor.process(content, Configuration.builder().forceExtentedProfile().build());
-            editorPane.setText(html);
-            editorPane.setCaretPosition(0);
+            editorPane.setInitialContent(html);
         } catch (Exception e) {
             Main.LOGGER.exception(e);
             editorPane.setText(Util.withBracketPrefix(String.format("Error trying to read file: %s", e.getMessage())));
@@ -40,6 +39,12 @@ public class MarkdownPanel extends FileTypePanel {
                     Util.tryBrowse(e.getURL().toString());
                 }
             });
+        }
+
+        /** Set content of the panel and stay the caret at the top */
+        public void setInitialContent(String str) {
+            setText(str);
+            setCaretPosition(0);
         }
     }
 }

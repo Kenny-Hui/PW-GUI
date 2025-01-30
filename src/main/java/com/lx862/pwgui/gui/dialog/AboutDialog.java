@@ -72,10 +72,10 @@ public class AboutDialog extends JDialog {
             super();
 
             try {
-                setText(Processor.process(Util.getAssets("/assets/about/" + resource)));
+                setInitialContent(Processor.process(Util.getAssets("/assets/about/" + resource)));
             } catch (IOException e) {
                 Main.LOGGER.exception(e);
-                setText(String.format("Error trying to read file: %s", e.getMessage()));
+                setInitialContent(String.format("Error trying to read file: %s", e.getMessage()));
             }
         }
     }

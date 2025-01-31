@@ -25,15 +25,19 @@ public class HeaderPanel extends JPanel {
         modpackNameLabel.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h2.font")));
         infoPanel.add(modpackNameLabel);
 
-        JLabel modpackVersionAuthorLabel = new JLabel();
-        if (!packFile.author.isEmpty()) {
-            modpackVersionAuthorLabel.setText(packFile.version + " by " + packFile.author);
-        } else {
-            modpackVersionAuthorLabel.setText(packFile.version);
+        if(!packFile.author.isEmpty() || !packFile.version.isEmpty()) {
+            JLabel modpackVersionAuthorLabel = new JLabel();
+            if(!packFile.version.isEmpty() && packFile.author.isEmpty()) {
+                modpackVersionAuthorLabel.setText(packFile.version);
+            } else if(!packFile.author.isEmpty() && packFile.version.isEmpty()) {
+                modpackVersionAuthorLabel.setText(String.format("by %s", packFile.author));
+            } else {
+                modpackVersionAuthorLabel.setText(String.format("%s by %s", packFile.version, packFile.author));
+            }
+            infoPanel.add(modpackVersionAuthorLabel);
         }
-        infoPanel.add(modpackVersionAuthorLabel);
-        add(infoPanel);
 
+        add(infoPanel);
         add(Box.createHorizontalGlue());
 
         JPanel componentsPanel = new JPanel();

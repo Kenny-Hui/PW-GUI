@@ -42,8 +42,24 @@ Each tab contains different operations you can do. Some of them are read-only (F
 
 The reason these 3 tabs appears in the above image is that the selected file belongs to all 3 categories: It is both a packwiz meta file (.pw.toml). It is a plain text file, and finally it is a file on your computer.  
 
-In the same vein, you select the Mods folder for a panel to add new mods in:
+
+## Adding Contents
+With the same logic as above, to add new mod, you can select the Mods folder:
 
 <img alt="User Interface with Mods folder selected" width="560px" src="./img/new_mods.png">
 
-You can also open the modpack folder by clicking the "Open Containing Folder..." at the bottom and adding in new files/folders manually.
+Note that packwiz automatically determines which folder the content will be placed in, based on the category that is tagged on Modrinth/CurseForge.
+
+If that's not desirable/the detection is not accurate, you can check **Always install to current folder instead of auto detection** to always put content to the current folder.
+
+## Adding Files
+One thing most modpack do have is that they contain mods. (duh!) (*Although it is possible to create a vanilla modpack in packwiz*)
+
+However, often times you also want to ship various configurations into the modpack as well. For example, you want a pre-configured set of Minecraft Options (via options.txt), or you want to configure some mod in certain ways.
+
+The way this is done is to literally ship the file into the modpack. In packwiz that is no exception, you simply put files into your modpack folder and it gets shipped!
+
+Several Tips:
+- Packwiz ignores some files by default, and those files won't be shipped to the modpack. You can check out *Packwiz Ignore List* in the file browser for a preview of what is/isn't ignored and to modify the rules.  
+- You can access the modpack folder by clicking **Open Containing Folder...** at the bottom.  
+- Packwiz uses the *Index File* to keep track of various files in the modpack. It is good practice to refresh the index after you put in some files outside of PW-GUI. This can be done in **Tool > Refresh Pack Index** in the toolbar at the top.

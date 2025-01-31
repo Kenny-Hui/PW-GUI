@@ -4,6 +4,7 @@ import com.lx862.pwgui.gui.components.DocumentChangedListener;
 import com.lx862.pwgui.data.model.file.ContentDirectoryModel;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.gui.components.kui.KGridBagLayoutPanel;
+import com.lx862.pwgui.gui.components.kui.KHelpButton;
 import com.lx862.pwgui.gui.components.kui.KTextField;
 import com.lx862.pwgui.gui.panel.editing.filetype.FileEntryPaneContext;
 
@@ -31,13 +32,16 @@ public class ModrinthPanel extends JPanel {
         });
         formPanel.addRow(1, new JLabel("URL/Search Term: "), contentTextField);
 
-        JCheckBox forceCurrentFolder = new JCheckBox("Always install to current folder instead of auto detection");
-        formPanel.addRow(2, forceCurrentFolder);
+        JPanel forceCurrentFolderPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        JCheckBox forceCurrentFolderCheckBox = new JCheckBox("Always install to current folder instead of auto detection");
+        forceCurrentFolderPanel.add(forceCurrentFolderCheckBox);
+        forceCurrentFolderPanel.add(new KHelpButton("When installing contents from Modrinth/CurseForge, packwiz will automatically determine the folder to use based on the content type.\nBy selecting the checkbox, you can force packwiz to always install to the current folder."));
+        formPanel.addRow(2, forceCurrentFolderPanel);
 
         KButton addButton = new KButton("Add Project");
         addButton.addActionListener(actionEvent -> {
             String[] argsToUse;
-            if(forceCurrentFolder.isSelected()) {
+            if(forceCurrentFolderCheckBox.isSelected()) {
                 argsToUse = new String[]{"modrinth", "add", contentTextField.getText(), "--meta-folder", context.getModpack().getRootPath().relativize(fileEntry.path).toString()};
             } else {
                 argsToUse = new String[]{"modrinth", "add", contentTextField.getText()};

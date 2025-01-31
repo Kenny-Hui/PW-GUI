@@ -4,10 +4,7 @@ import com.lx862.pwgui.core.Modpack;
 import com.lx862.pwgui.data.PackComponent;
 import com.lx862.pwgui.core.PackFile;
 import com.lx862.pwgui.gui.components.DocumentChangedListener;
-import com.lx862.pwgui.gui.components.kui.KButton;
-import com.lx862.pwgui.gui.components.kui.KFileChooser;
-import com.lx862.pwgui.gui.components.kui.KGridBagLayoutPanel;
-import com.lx862.pwgui.gui.components.kui.KTextField;
+import com.lx862.pwgui.gui.components.kui.*;
 import com.lx862.pwgui.gui.dialog.ChangeAcceptableGameVersionDialog;
 import com.lx862.pwgui.gui.panel.editing.filetype.FileEntryPaneContext;
 import com.lx862.pwgui.util.Util;
@@ -42,8 +39,8 @@ public class ModpackExtraSettingPanel extends KGridBagLayoutPanel {
             updateSaveState.run();
         }));
 
-        KGridBagLayoutPanel modpackDescriptionPanel = new KGridBagLayoutPanel(0, 2);
-        modpackDescriptionPanel.addRow(1, new JLabel("Description: "), modpackDescriptionTextField);
+        KGridBagLayoutPanel modpackDescriptionPanel = new KGridBagLayoutPanel(0, 3);
+        modpackDescriptionPanel.addRow(1, 1, new JLabel("Description: "), modpackDescriptionTextField, new KHelpButton("Here you can enter a short description of the modpack. \nThis is only used when exporting to a Modrinth modpack, and not in use elsewhere."));
         addRow(2, modpackDescriptionPanel);
 
         KButton changeVersionRangeButton = new KButton("Change...");

@@ -21,6 +21,8 @@ dependencies {
     implementation 'com.github.rjeschke:txtmark:0.13'
     implementation 'com.google.code.gson:gson:2.11.0'
     implementation 'com.moandjiezana.toml:toml4j:0.7.2'
+    implementation 'com.twelvemonkeys.imageio:imageio-bmp:3.12.0'
+    implementation 'com.twelvemonkeys.imageio:imageio-webp:3.12.0'
 }
 
 tasks.withType(JavaCompile).configureEach {

@@ -32,7 +32,7 @@ public class FileSystemWatcher {
             this.ws = fs.newWatchService();
 
             if(recursive) {
-                Files.walkFileTree(this.path, new SimpleFileVisitor<Path>() {
+                Files.walkFileTree(this.path, new SimpleFileVisitor<>() {
                     @Override
                     public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
                     if(dir.toFile().getName().equals(".git")) return FileVisitResult.SKIP_SUBTREE; // git directory has way too many files, we are not interested in it anyway

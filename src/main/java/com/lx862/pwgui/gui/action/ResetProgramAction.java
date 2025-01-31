@@ -3,7 +3,6 @@ package com.lx862.pwgui.gui.action;
 import com.lx862.pwgui.Main;
 import com.lx862.pwgui.core.Config;
 import com.lx862.pwgui.core.Constants;
-import com.lx862.pwgui.gui.frame.SetupFrame;
 import com.lx862.pwgui.util.Util;
 import org.apache.commons.io.FileUtils;
 

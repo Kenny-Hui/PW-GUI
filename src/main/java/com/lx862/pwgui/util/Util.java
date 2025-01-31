@@ -56,8 +56,8 @@ public class Util {
         clipboard.setContents(stringSelection, null);
     }
 
-    /** Replaces all backward slashes with forward slashes in a path */
-    /** Toml4j has a issue of misparsing \UXXX as a unicode code points, so something like C:\Users on Windows could break the parsing entirely */
+    /** Replaces all backward slashes with forward slashes in a path
+    * Toml4j has a issue of misparsing \UXXX as a unicode code points, so something like C:\Users on Windows could break the parsing entirely */
     public static String toForwardSlashString(Path path) {
         if(File.pathSeparator.equals("\\")) {
             return path.toString().replaceAll(Matcher.quoteReplacement("\\"), "/");
@@ -143,13 +143,13 @@ public class Util {
 
     private static void moveManualDownloadToCache(Component parent, List<ManualModInfo> modList, Path sourceDirectory, Path cacheDirectory) {
         for(ManualModInfo modInfo : modList) {
-            Path sourcePath = sourceDirectory.resolve(modInfo.fileName);
-            Path destinationPath = cacheDirectory.resolve(modInfo.fileName);
+            Path sourcePath = sourceDirectory.resolve(modInfo.fileName());
+            Path destinationPath = cacheDirectory.resolve(modInfo.fileName());
             try {
                 Main.LOGGER.info(String.format("Moving manually downloaded file from \"%s\" to \"%s\"", sourcePath, destinationPath));
                 Files.move(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
-                JOptionPane.showMessageDialog(parent, String.format("An error occured while moving manually downloaded files:\n%s\nPlease move %s manually to %s", e.getMessage(), modInfo.fileName, cacheDirectory), Util.withTitlePrefix("Failed to Move Files!"), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(parent, String.format("An error occured while moving manually downloaded files:\n%s\nPlease move %s manually to %s", e.getMessage(), modInfo.fileName(), cacheDirectory), Util.withTitlePrefix("Failed to Move Files!"), JOptionPane.ERROR_MESSAGE);
             }
         }
     }

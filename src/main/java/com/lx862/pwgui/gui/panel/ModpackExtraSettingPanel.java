@@ -45,7 +45,7 @@ public class ModpackExtraSettingPanel extends KGridBagLayoutPanel {
 
         KButton changeVersionRangeButton = new KButton("Change...");
         changeVersionRangeButton.addActionListener(actionEvent -> {
-            new ChangeAcceptableGameVersionDialog((JFrame) getTopLevelAncestor(), existingFile.getComponent(PackComponent.MINECRAFT).getVersion(), existingFile.getOptionAcceptableGameVersion(true), () -> context.promptForSave()).setVisible(true);
+            new ChangeAcceptableGameVersionDialog((JFrame) getTopLevelAncestor(), existingFile.getComponent(PackComponent.MINECRAFT).getVersion(), existingFile.getOptionAcceptableGameVersion(true), context::promptForSave).setVisible(true);
         });
 
         addRow(1, 0, new JLabel("Acceptable Minecraft Version: " + String.join(", ", existingFile.getOptionAcceptableGameVersion(true))), changeVersionRangeButton);

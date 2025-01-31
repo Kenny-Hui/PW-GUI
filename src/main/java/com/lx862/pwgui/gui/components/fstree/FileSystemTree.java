@@ -9,7 +9,6 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import java.io.File;
 import java.nio.file.*;
-import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 

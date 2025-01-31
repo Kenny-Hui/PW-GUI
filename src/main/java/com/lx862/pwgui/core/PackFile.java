@@ -137,7 +137,7 @@ public class PackFile extends TomlFile {
         Map<String, Object> versionsMap = (Map<String, Object>) map.getOrDefault("versions", new HashMap<>());
         versionsMap.put("minecraft", getComponent(PackComponent.MINECRAFT).getVersion());
 
-        for(PackComponent component : Arrays.stream(PackComponent.values()).filter(e -> e.choosable).collect(Collectors.toList())) {
+        for(PackComponent component : Arrays.stream(PackComponent.values()).filter(e -> e.choosable).toList()) {
             versionsMap.remove(component.slug);
         }
 

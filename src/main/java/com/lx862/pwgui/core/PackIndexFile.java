@@ -87,9 +87,12 @@ public class PackIndexFile extends TomlFile {
         @Override
         public boolean equals(Object o) {
             if(o == this) return true;
-            if(!(o instanceof FileEntry)) return false;
 
-            return ((FileEntry)o).path.equals(path);
+            if(o instanceof FileEntry fileEntry) {
+                return fileEntry.path.equals(path);
+            } else {
+                return false;
+            }
         }
     }
 }

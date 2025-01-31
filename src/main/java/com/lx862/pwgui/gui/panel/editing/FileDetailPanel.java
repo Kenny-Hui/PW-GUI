@@ -2,7 +2,6 @@ package com.lx862.pwgui.gui.panel.editing;
 
 import com.lx862.pwgui.Main;
 import com.lx862.pwgui.core.Constants;
-import com.lx862.pwgui.core.Modpack;
 import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.gui.components.kui.KTabbedPane;
@@ -56,8 +55,8 @@ public class FileDetailPanel extends JPanel {
 
         for(int i = 0; i < fileEntryTab.getTabCount(); i++) {
             Component component = fileEntryTab.getComponent(i);
-            if(component instanceof FileTypePanel) {
-                saveTab((FileTypePanel) component, false);
+            if(component instanceof FileTypePanel filePanel) {
+                saveTab(filePanel, false);
             }
         }
 

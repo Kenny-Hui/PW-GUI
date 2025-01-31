@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 
 public class ChangeAcceptableGameVersionDialog extends JDialog {
     private final List<VersionMetadata> versions;
-    private final Runnable saveCallback;
 
     public ChangeAcceptableGameVersionDialog(JFrame parentFrame, String requiredVersion, List<String> preSelectedVersions, Runnable saveCallback) {
         super(parentFrame, Util.withTitlePrefix("Change Acceptable Version"), true);
@@ -34,7 +33,6 @@ public class ChangeAcceptableGameVersionDialog extends JDialog {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         this.versions = new ArrayList<>();
-        this.saveCallback = saveCallback;
 
         JPanel rootPanel = new JPanel();
         rootPanel.setLayout(new BoxLayout(rootPanel, BoxLayout.PAGE_AXIS));
@@ -76,9 +74,7 @@ public class ChangeAcceptableGameVersionDialog extends JDialog {
         });
 
 
-        snapshotCheckBox.addActionListener(actionEvent -> {
-            refreshVersionList(versionList, versionList.getSelectedValuesList(), snapshotCheckBox);
-        });
+        snapshotCheckBox.addActionListener(actionEvent -> refreshVersionList(versionList, versionList.getSelectedValuesList(), snapshotCheckBox));
         rootPanel.add(snapshotCheckBox);
         rootPanel.add(selectedVersionLabel);
 
@@ -109,7 +105,7 @@ public class ChangeAcceptableGameVersionDialog extends JDialog {
     }
 
     private boolean containsSnapshot(List<String> selected, List<VersionMetadata> versions) {
-        List<VersionMetadata> snapshotVersions = versions.stream().filter(e -> e.getState() != VersionMetadata.State.RELEASE).collect(Collectors.toList());
+        List<VersionMetadata> snapshotVersions = versions.stream().filter(e -> e.getState() != VersionMetadata.State.RELEASE).toList();
         for(VersionMetadata versionMetadata : snapshotVersions) {
             if(selected.contains(versionMetadata.getVersionName())) return true;
         }
@@ -117,8 +113,8 @@ public class ChangeAcceptableGameVersionDialog extends JDialog {
     }
 
     private void changeAcceptableVersion(List<String> oldVersionList, List<String> newVersionList, Consumer<Boolean> callback) {
-        List<String> toBeRemoved = oldVersionList.stream().filter(e -> !newVersionList.contains(e)).collect(Collectors.toList());
-        List<String> toBeAdded = newVersionList.stream().filter(e -> !oldVersionList.contains(e)).collect(Collectors.toList());
+        List<String> toBeRemoved = oldVersionList.stream().filter(e -> !newVersionList.contains(e)).toList();
+        List<String> toBeAdded = newVersionList.stream().filter(e -> !oldVersionList.contains(e)).toList();
 
         BatchedProgramExecution batchedProgramExecution = new BatchedProgramExecution();
 

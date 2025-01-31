@@ -20,7 +20,7 @@ public class DownloadProgressDialog extends ProgressDialog {
         Main.LOGGER.info(String.format("Downloading %s from %s", itemName, url));
         setStatus(String.format("Initiating download for %s...", itemName));
 
-        SwingWorker<Boolean, Long> downloadWorker = new SwingWorker<Boolean, Long>() {
+        SwingWorker<Boolean, Long> downloadWorker = new SwingWorker<>() {
             private long contentLength = -1;
 
             @Override

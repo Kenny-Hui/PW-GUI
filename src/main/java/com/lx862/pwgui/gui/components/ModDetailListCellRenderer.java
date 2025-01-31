@@ -15,8 +15,7 @@ public class ModDetailListCellRenderer extends DefaultListCellRenderer {
                 new EmptyBorder(3, 3, 3, 3)
         ));
 
-        if (item instanceof String) {
-            String str = (String) item;
+        if (item instanceof String str) {
             String[] split = str.split(" -> ");
             String newVersion = split[split.length - 1];
             String firstHalf = split[0];

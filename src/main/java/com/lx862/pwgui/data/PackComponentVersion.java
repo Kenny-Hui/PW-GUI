@@ -20,9 +20,10 @@ public class PackComponentVersion {
     @Override
     public boolean equals(Object o) {
         if(o == this) return true;
-        if(!(o instanceof PackComponentVersion)) return false;
-
-        PackComponentVersion other = ((PackComponentVersion)o);
-        return other.version.equals(this.version) && other.component.equals(this.component);
+        if(o instanceof PackComponentVersion other) {
+            return other.version.equals(this.version) && other.component.equals(this.component);
+        } else {
+            return false;
+        }
     }
 }

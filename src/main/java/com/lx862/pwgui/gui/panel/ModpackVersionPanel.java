@@ -187,7 +187,7 @@ public class ModpackVersionPanel extends KGridBagLayoutPanel {
                    boolean minecraftVersionMatched = e.getAccompaniedMinecraftVersion() == null || e.getAccompaniedMinecraftVersion().equals(mcVersion);
                    return releaseTypeMatched && minecraftVersionMatched;
                 })
-                .collect(Collectors.toList());
+                .toList();
 
         int equivalentToOldValueIndex = 0;
         for(int i = 0; i < filteredMetadatas.size(); i++) {

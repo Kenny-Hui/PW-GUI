@@ -21,9 +21,7 @@ public class PackwizExecutable extends Executable {
         if(packFileLocation == null) return super.buildCommand(str);
 
         String[] args = new String[str.length+2];
-        for(int i = 0; i < str.length; i++) {
-            args[i] = str[i];
-        }
+        System.arraycopy(str, 0, args, 0, str.length);
         args[args.length-2] = "--pack-file";
         args[args.length-1] = packFileLocation;
 

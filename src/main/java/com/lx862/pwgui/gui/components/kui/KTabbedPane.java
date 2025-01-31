@@ -16,7 +16,7 @@ public class KTabbedPane extends JTabbedPane {
         removeAll();
 
         for(NameTabPair nameTabPair : newTab) {
-            add(nameTabPair.title, nameTabPair.component);
+            add(nameTabPair.title(), nameTabPair.component());
         }
 
         final List<String> newTitles = getTabTitles();

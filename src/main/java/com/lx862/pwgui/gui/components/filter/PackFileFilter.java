@@ -12,9 +12,7 @@ public class PackFileFilter extends FileFilter {
 
         // index.toml, but we also have pack.toml in the same directory, so we hide it to avoid confusion, as it's very likely it's pack.toml in this case.
         if(file.getName().equals("index.toml") && Files.exists(file.toPath().getParent().resolve("pack.toml"))) return false;
-        if(file.getName().endsWith(".toml")) return true; // Packwiz supports filename other than pack.toml, so we don't only whitelist pack.toml.
-
-        return false;
+        return file.getName().endsWith(".toml"); // Packwiz supports filename other than pack.toml, so we don't only whitelist pack.toml.
     }
 
     @Override

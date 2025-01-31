@@ -9,12 +9,10 @@ import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.executable.ProgramExecution;
 import com.lx862.pwgui.core.PackwizMetaFile;
 import com.lx862.pwgui.gui.dialog.ExecutableProgressDialog;
-import com.lx862.pwgui.util.GUIHelper;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;

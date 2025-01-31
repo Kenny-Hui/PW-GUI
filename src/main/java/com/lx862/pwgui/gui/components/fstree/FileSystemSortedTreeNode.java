@@ -5,7 +5,6 @@ import com.lx862.pwgui.data.model.file.FileSystemEntityModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 import java.nio.file.Path;
-import java.util.Collections;
 
 public class FileSystemSortedTreeNode extends DefaultMutableTreeNode implements Comparable<FileSystemSortedTreeNode> {
     public final String name;
@@ -29,7 +28,7 @@ public class FileSystemSortedTreeNode extends DefaultMutableTreeNode implements 
 
     public void sort() {
         if(this.children != null) {
-            Collections.sort(this.children);
+            this.children.sort(null);
         }
     }
 

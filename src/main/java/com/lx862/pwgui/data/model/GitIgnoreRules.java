@@ -20,12 +20,8 @@ public class GitIgnoreRules {
     public GitIgnoreRules overlay(GitIgnoreRules gitIgnoreRules) {
         int totalSize = rules.length + gitIgnoreRules.rules.length;
         String[] newRules = new String[totalSize];
-        for(int i = 0; i < rules.length; i++) {
-            newRules[i] = rules[i];
-        }
-        for(int i = 0; i < gitIgnoreRules.rules.length; i++) {
-            newRules[rules.length + i] = gitIgnoreRules.rules[i];
-        }
+        System.arraycopy(rules, 0, newRules, 0, rules.length);
+        System.arraycopy(gitIgnoreRules.rules, 0, newRules, rules.length, gitIgnoreRules.rules.length);
         return new GitIgnoreRules(newRules);
     }
 

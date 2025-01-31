@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class NewModpackDialog extends JDialog {
+    private ModpackInfoPanel modpackInfoPanel = null;
     public NewModpackDialog(JFrame frame, Consumer<Path> packCreatedCallback) {
         super(frame, Util.withTitlePrefix("New Modpack"), true);
 
@@ -51,7 +52,13 @@ public class NewModpackDialog extends JDialog {
         descriptionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         createFormPanel.add(descriptionLabel);
 
-        ModpackInfoPanel modpackInfoPanel = new ModpackInfoPanel(null, () -> {});
+        KButton saveButton = new KButton("Create & Save!");
+
+        modpackInfoPanel = new ModpackInfoPanel(null, () -> {
+            saveButton.setEnabled(modpackInfoPanel.requiredInfoFilled());
+        });
+        saveButton.setEnabled(modpackInfoPanel.requiredInfoFilled());
+
         ModpackVersionPanel modpackVersionPanel = new ModpackVersionPanel(null, () -> {});
         createFormPanel.add(modpackInfoPanel);
         createFormPanel.add(new KSeparator());
@@ -61,7 +68,6 @@ public class NewModpackDialog extends JDialog {
         createPanel.add(createFormPanel, BorderLayout.CENTER);
 
         JPanel actionRowPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        KButton saveButton = new KButton("Create & Save!");
         saveButton.addActionListener(actionEvent -> {
             createModpack(modpackInfoPanel, modpackVersionPanel, (path) -> {
                 doAftermath(path, modpackVersionPanel.getModloader() != null);

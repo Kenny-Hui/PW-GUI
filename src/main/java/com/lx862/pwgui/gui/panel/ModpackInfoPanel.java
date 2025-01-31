@@ -21,37 +21,37 @@ public class ModpackInfoPanel extends KGridBagLayoutPanel {
 
     public ModpackInfoPanel(PackFile existingFile, Runnable updateSaveState) {
         super(3, 2);
-        this.initialName = existingFile == null ? "My Epic Modpack" : existingFile.name;
-        this.initialAuthor = existingFile == null ? "Me!" : existingFile.author;
-        this.initialVersion = existingFile == null ? "1.0.0" : existingFile.version;
+        this.initialName = existingFile == null ? "" : existingFile.name;
+        this.initialAuthor = existingFile == null ? "" : existingFile.author;
+        this.initialVersion = existingFile == null ? "" : existingFile.version;
 
-        nameTextField = new KTextField();
+        nameTextField = new KTextField("My Epic Modpack!");
         nameTextField.setText(this.initialName);
         nameTextField.getDocument().addDocumentListener(new DocumentChangedListener(() -> {
             if(existingFile != null) {
                 existingFile.name = nameTextField.getText();
-                updateSaveState.run();
             }
+            updateSaveState.run();
         }));
         addRow(1, new JLabel("Name: "), nameTextField);
 
-        authorTextField = new KTextField();
+        authorTextField = new KTextField("Me!");
         authorTextField.setText(this.initialAuthor);
         authorTextField.getDocument().addDocumentListener(new DocumentChangedListener(() -> {
             if(existingFile != null) {
                 existingFile.author = authorTextField.getText();
-                updateSaveState.run();
             }
+            updateSaveState.run();
         }));
         addRow(1, new JLabel("Author: "), authorTextField);
 
-        versionTextField = new KTextField();
+        versionTextField = new KTextField("1.0.0");
         versionTextField.setText(this.initialVersion);
         versionTextField.getDocument().addDocumentListener(new DocumentChangedListener(() -> {
             if(existingFile != null) {
                 existingFile.version = versionTextField.getText();
-                updateSaveState.run();
             }
+            updateSaveState.run();
         }));
         addRow(1, new JLabel("Version: "), versionTextField);
     }
@@ -61,7 +61,11 @@ public class ModpackInfoPanel extends KGridBagLayoutPanel {
     }
 
     public boolean shouldSave() {
-        return !initialVersion.equals(versionTextField.getText()) || !initialName.equals(nameTextField.getText()) || !initialAuthor.equals(authorTextField.getText());
+        return requiredInfoFilled() && (!initialVersion.equals(versionTextField.getText()) || !initialName.equals(nameTextField.getText()) || !initialAuthor.equals(authorTextField.getText()));
+    }
+
+    public boolean requiredInfoFilled() {
+        return !nameTextField.getText().isEmpty();
     }
 
     public List<String> getInitArguments() {

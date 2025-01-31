@@ -3,9 +3,11 @@ package com.lx862.pwgui.gui.panel;
 import com.lx862.pwgui.core.Modpack;
 import com.lx862.pwgui.data.PackComponent;
 import com.lx862.pwgui.core.PackFile;
+import com.lx862.pwgui.gui.components.DocumentChangedListener;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.gui.components.kui.KFileChooser;
 import com.lx862.pwgui.gui.components.kui.KGridBagLayoutPanel;
+import com.lx862.pwgui.gui.components.kui.KTextField;
 import com.lx862.pwgui.gui.dialog.ChangeAcceptableGameVersionDialog;
 import com.lx862.pwgui.gui.panel.editing.filetype.FileEntryPaneContext;
 import com.lx862.pwgui.util.Util;
@@ -17,8 +19,12 @@ import java.nio.file.Path;
 import java.util.Objects;
 
 public class ModpackExtraSettingPanel extends KGridBagLayoutPanel {
+    private final String initialDescription;
     private final Path initialDatapackPath;
     private final PackFile existingFile;
+
+    private final KTextField modpackDescriptionTextField;
+
     private final Runnable updateSaveState;
 
     public ModpackExtraSettingPanel(FileEntryPaneContext context, PackFile existingFile, Runnable updateSaveState) {
@@ -26,7 +32,19 @@ public class ModpackExtraSettingPanel extends KGridBagLayoutPanel {
 
         this.existingFile = existingFile;
         this.updateSaveState = updateSaveState;
+        this.initialDescription = existingFile.description;
         this.initialDatapackPath = existingFile.getDatapackPath();
+
+        modpackDescriptionTextField = new KTextField("Modpack description...");
+        modpackDescriptionTextField.setText(this.initialDescription);
+        modpackDescriptionTextField.getDocument().addDocumentListener(new DocumentChangedListener(() -> {
+            existingFile.description = modpackDescriptionTextField.getText();
+            updateSaveState.run();
+        }));
+
+        KGridBagLayoutPanel modpackDescriptionPanel = new KGridBagLayoutPanel(0, 2);
+        modpackDescriptionPanel.addRow(1, new JLabel("Description: "), modpackDescriptionTextField);
+        addRow(2, modpackDescriptionPanel);
 
         KButton changeVersionRangeButton = new KButton("Change...");
         changeVersionRangeButton.addActionListener(actionEvent -> {
@@ -63,7 +81,7 @@ public class ModpackExtraSettingPanel extends KGridBagLayoutPanel {
     }
 
     public boolean shouldSave() {
-        return !Objects.equals(initialDatapackPath, existingFile.getDatapackPath());
+        return !Objects.equals(initialDatapackPath, existingFile.getDatapackPath()) || !Objects.equals(initialDescription, modpackDescriptionTextField.getText());
     }
 
     @Override

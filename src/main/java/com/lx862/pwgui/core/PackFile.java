@@ -22,6 +22,7 @@ public class PackFile extends TomlFile {
     public String name;
     public String author;
     public String version;
+    public String description;
 
     public String indexFile;
     public String indexHashFormat;
@@ -43,6 +44,7 @@ public class PackFile extends TomlFile {
         this.name = toml.getString("name", "");
         this.author = toml.getString("author", "");
         this.version = toml.getString("version", "");
+        this.description = toml.getString("description", "");
         this.packFormat = toml.getString("pack-format", "packwiz:1.1.0");
 
         this.indexFile = toml.getString("index.file");
@@ -130,6 +132,7 @@ public class PackFile extends TomlFile {
         map.put("name", this.name);
         map.put("author", this.author);
         map.put("version", this.version);
+        map.put("description", this.description);
 
         Map<String, Object> versionsMap = (Map<String, Object>) map.getOrDefault("versions", new HashMap<>());
         versionsMap.put("minecraft", getComponent(PackComponent.MINECRAFT).getVersion());

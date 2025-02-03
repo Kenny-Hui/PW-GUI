@@ -25,8 +25,10 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Util {
+    private static final Pattern MANUAL_DOWNLOAD_FILENAME_PATTERN = Pattern.compile("\\(([^()]*|\\((?:[^()]*|\\([^()]*\\))*\\))*\\)");
     /** Returns a String with the format PROGRAM_NAME - TEXT */
     public static String withTitlePrefix(String str) {
         return String.format("%s - %s", Constants.PROGRAM_NAME, str);
@@ -129,10 +131,17 @@ public class Util {
                 String metaNameAndFileName = split[0];
                 String url = "http" + split[1];
 
-                String fileName = metaNameAndFileName.substring(metaNameAndFileName.lastIndexOf("(")+1, metaNameAndFileName.lastIndexOf(")"));
-                String name = line.substring(0, line.indexOf(fileName)-2);
+                String fileName = "(pwgui_cannot_parse_filename.jar)";
+                Matcher fileNameMatcher = MANUAL_DOWNLOAD_FILENAME_PATTERN.matcher(metaNameAndFileName);
 
-                manualDownloadMod.add(new ManualModInfo(name, fileName, url));
+                while(fileNameMatcher.find()) {
+                    fileName = fileNameMatcher.group();
+                }
+
+                fileName = fileName.substring(1, fileName.length()-1);
+                String displayName = line.substring(0, line.indexOf(fileName)-1);
+
+                manualDownloadMod.add(new ManualModInfo(displayName, fileName, url));
             }
         });
 

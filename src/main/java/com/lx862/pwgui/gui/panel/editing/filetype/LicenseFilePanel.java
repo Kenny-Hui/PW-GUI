@@ -15,6 +15,7 @@ public class LicenseFilePanel extends FileTypePanel {
         textArea.setEditable(false);
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
+        textArea.setTabSize(1);
 
         try {
             String content = fileEntry.getContent();

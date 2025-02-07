@@ -24,6 +24,7 @@ public class PlainTextPanel extends FileTypePanel {
         textArea = new JTextArea();
         textArea.setWrapStyleWord(true);
         textArea.setLineWrap(true);
+        textArea.setTabSize(1);
         textArea.getDocument().addDocumentListener(new DocumentChangedListener(this::updateSaveState));
 
         try {

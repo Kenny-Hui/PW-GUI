@@ -1,6 +1,7 @@
 package com.lx862.pwgui.gui.panel.editing.filetype;
 
 import com.lx862.pwgui.Main;
+import com.lx862.pwgui.core.Modpack;
 import com.lx862.pwgui.gui.components.DocumentChangedListener;
 import com.lx862.pwgui.util.Util;
 import com.lx862.pwgui.data.model.GitIgnoreRules;
@@ -12,12 +13,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class GitIgnorePanel extends FileTypePanel {
+    private final FileEntryPaneContext context;
     private final GenericFileModel fileEntry;
     private final JTextArea textArea;
     private String initialContent;
 
     public GitIgnorePanel(FileEntryPaneContext context, GitIgnoreFileModel fileEntry) {
         super(context);
+        this.context = context;
         this.fileEntry = fileEntry;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -27,7 +30,10 @@ public class GitIgnorePanel extends FileTypePanel {
 
         this.textArea = new JTextArea();
         this.textArea.setLineWrap(true);
-        this.textArea.getDocument().addDocumentListener(new DocumentChangedListener(this::updateSaveState));
+        this.textArea.getDocument().addDocumentListener(new DocumentChangedListener(() -> {
+            updateIgnore(this.textArea.getText());
+            updateSaveState();
+        }));
 
         try {
             String content = fileEntry.getContent();
@@ -42,6 +48,11 @@ public class GitIgnorePanel extends FileTypePanel {
         }
         this.textArea.select(0, 0);
         add(new JScrollPane(this.textArea));
+    }
+
+    private void updateIgnore(String content) {
+        GitIgnoreRules gitIgnoreRules = new GitIgnoreRules(content);
+        context.invokeSetTreeIgnorePattern(gitIgnoreRules);
     }
 
     @Override

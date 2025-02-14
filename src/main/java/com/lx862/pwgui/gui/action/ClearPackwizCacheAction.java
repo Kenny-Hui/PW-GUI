@@ -23,7 +23,7 @@ public class ClearPackwizCacheAction extends AbstractAction {
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-        Path packwizCacheDir = GoUtil.userCacheDir().resolve("packwiz");
+        Path packwizCacheDir = GoUtil.getUserCacheDir().resolve("packwiz");
         if(!packwizCacheDir.toFile().exists()) {
             JOptionPane.showMessageDialog(parent, "There are currently no packwiz cache yet, nothing to clear~", Util.withTitlePrefix("No Cache Found"), JOptionPane.INFORMATION_MESSAGE);
         } else {

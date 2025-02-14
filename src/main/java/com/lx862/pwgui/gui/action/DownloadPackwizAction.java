@@ -118,7 +118,7 @@ public class DownloadPackwizAction extends AbstractAction {
     }
 
     private boolean tryConfigurePackwiz(Path path) {
-        Main.getConfig().setPackwizExecutablePath(path);
+        Main.getConfig().packwizExecutablePath.setValue(path);
 
         try {
             try { // We want executable permission on *nix

@@ -37,7 +37,7 @@ public class LocatePackwizAction extends AbstractAction {
                 return;
             }
 
-            Main.getConfig().setPackwizExecutablePath(selectedFile.toPath());
+            Main.getConfig().packwizExecutablePath.setValue(selectedFile.toPath());
             String newProbedPath = Executables.packwiz.probe(null);
             if(newProbedPath == null) {
                 JOptionPane.showMessageDialog(parent, "The selected executable is not valid!\nAre you sure you can run the executable?", Util.withTitlePrefix("Invalid Executable"), JOptionPane.ERROR_MESSAGE);

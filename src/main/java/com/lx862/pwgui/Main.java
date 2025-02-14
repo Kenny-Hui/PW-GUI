@@ -50,7 +50,7 @@ public class Main {
             config = new Config(new JsonObject());
         }
 
-        String packFilePath = config.openLastModpackOnLaunch() ? config.getLastModpackPath() == null ? null : config.getLastModpackPath().toString() : null;
+        String packFilePath = config.openLastModpackOnLaunch.getValue() ? config.lastModpackPath.getValue() == null ? null : config.lastModpackPath.getValue().toString() : null;
         boolean packwizLocated;
 
         if(commandLine != null) {
@@ -67,7 +67,7 @@ public class Main {
     }
 
     private static void launchGUI(boolean packwizLocated, String packFilePath) {
-        GUIHelper.setupApplicationTheme(Main.getConfig().getApplicationTheme(), null); // Initialize FlatLaf and it's config
+        GUIHelper.setupApplicationTheme(Main.getConfig().applicationTheme.getValue(), null); // Initialize FlatLaf and it's config
 
         if(!packwizLocated) { // No packwiz, show setup wizard
             SwingUtilities.invokeLater(() -> {

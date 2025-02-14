@@ -57,7 +57,7 @@ public class Logger {
     }
 
     public void debug(String prefix, String str) {
-        if(Main.getConfig().getDebugMode()) log(prefix + " [DEBUG]", str);
+        if(Main.getConfig().debugMode.getValue()) log(prefix + " [DEBUG]", str);
     }
 
     private void log(String prefix, String str) {

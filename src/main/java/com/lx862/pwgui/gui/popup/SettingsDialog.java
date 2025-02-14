@@ -2,6 +2,7 @@ package com.lx862.pwgui.gui.popup;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.Main;
+import com.lx862.pwgui.core.Config;
 import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.data.ApplicationTheme;
 import com.lx862.pwgui.executable.Executables;
@@ -22,6 +23,7 @@ import java.nio.file.Path;
 public class SettingsDialog extends JDialog {
     private final JCheckBox relaunchModpackCheckbox;
     private final JCheckBox debugModeCheckBox;
+    private final JCheckBox showPackwizMetaFileNameCheckbox;
     private final KComboBox<ApplicationTheme> themeComboBox;
     private final JLabel packwizLocationLabel;
 
@@ -32,7 +34,7 @@ public class SettingsDialog extends JDialog {
     public SettingsDialog(Window parent) {
         super(parent, Util.withTitlePrefix("Settings"), ModalityType.DOCUMENT_MODAL);
 
-        this.initialTheme = Main.getConfig().getApplicationTheme();
+        this.initialTheme = Main.getConfig().applicationTheme.getValue();
 
         setSize(400, 500);
         setLocationRelativeTo(parent);
@@ -74,12 +76,17 @@ public class SettingsDialog extends JDialog {
         programPanel.add(GUIHelper.createVerticalPadding(4));
 
         relaunchModpackCheckbox = new JCheckBox("Open last modpack on launch");
-        relaunchModpackCheckbox.setSelected(Main.getConfig().openLastModpackOnLaunch());
+        relaunchModpackCheckbox.setSelected(Main.getConfig().openLastModpackOnLaunch.getValue());
         this.relaunchModpackCheckbox.setAlignmentX(Component.LEFT_ALIGNMENT);
         programPanel.add(relaunchModpackCheckbox);
 
+        showPackwizMetaFileNameCheckbox = new JCheckBox("Show packwiz metafile name (.pw.toml)");
+        showPackwizMetaFileNameCheckbox.setSelected(Main.getConfig().showMetaFileName.getValue());
+        this.showPackwizMetaFileNameCheckbox.setAlignmentX(Component.LEFT_ALIGNMENT);
+        programPanel.add(showPackwizMetaFileNameCheckbox);
+
         this.debugModeCheckBox = new JCheckBox("Enable Debug Log");
-        debugModeCheckBox.setSelected(Main.getConfig().getDebugMode());
+        debugModeCheckBox.setSelected(Main.getConfig().debugMode.getValue());
         debugModeCheckBox.setAlignmentX(Component.LEFT_ALIGNMENT);
         programPanel.add(debugModeCheckBox);
 
@@ -134,15 +141,15 @@ public class SettingsDialog extends JDialog {
         rootPanel.add(actionRowPanel, BorderLayout.SOUTH);
         add(rootPanel);
 
-        updatePackwizPath(Main.getConfig().getPackwizExecutablePath());
+        updatePackwizPath(Main.getConfig().packwizExecutablePath.getValue());
     }
 
     private void updatePackwizPath(Path newPath) {
-        Path oldPath = Main.getConfig().getPackwizExecutablePath();
+        Path oldPath = Main.getConfig().lastModpackPath.getValue();
 
-        Main.getConfig().setPackwizExecutablePath(newPath);
+        Main.getConfig().lastModpackPath.setValue(newPath);
         boolean located = Executables.packwiz.probe(null) != null;
-        Main.getConfig().setPackwizExecutablePath(oldPath); // restore
+        Main.getConfig().lastModpackPath.setValue(oldPath); // restore
 
         if(!located) {
             JOptionPane.showMessageDialog(this, "The specified packwiz executable is not valid!", Util.withTitlePrefix("Invalid Executable"), JOptionPane.ERROR_MESSAGE);
@@ -155,14 +162,16 @@ public class SettingsDialog extends JDialog {
 
     private void save() {
         this.saved = true;
-        Main.getConfig().setApplicationTheme((ApplicationTheme) themeComboBox.getSelectedItem());
-        Main.getConfig().setOpenLastModpackOnLaunch(relaunchModpackCheckbox.isSelected());
-        Main.getConfig().setDebugMode(debugModeCheckBox.isSelected());
-        Main.getConfig().setPackwizExecutablePath(packwizLocationPath);
+        Config configInstance = Main.getConfig();
+        configInstance.applicationTheme.setValue((ApplicationTheme) themeComboBox.getSelectedItem());
+        configInstance.openLastModpackOnLaunch.setValue(relaunchModpackCheckbox.isSelected());
+        configInstance.debugMode.setValue(debugModeCheckBox.isSelected());
+        configInstance.showMetaFileName.setValue(showPackwizMetaFileNameCheckbox.isSelected());
+        configInstance.packwizExecutablePath.setValue(packwizLocationPath);
         Executables.packwiz.updateExecutableLocation(null);
 
         try {
-            Main.getConfig().write(Constants.REASON_TRIGGERED_BY_USER);
+            configInstance.write(Constants.REASON_TRIGGERED_BY_USER);
             dispose();
         } catch (IOException e) {
             Main.LOGGER.exception(e);

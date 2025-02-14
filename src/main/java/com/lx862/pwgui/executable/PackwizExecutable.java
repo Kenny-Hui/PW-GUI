@@ -30,7 +30,7 @@ public class PackwizExecutable extends Executable {
 
     @Override
     public String probe(String override) {
-        Path configuredPackwizExecutablePath = Main.getConfig().getPackwizExecutablePath();
+        Path configuredPackwizExecutablePath = Main.getConfig().packwizExecutablePath.getValue();
         if(configuredPackwizExecutablePath != null) {
             if(isOurIntendedProgram(configuredPackwizExecutablePath.toString())) {
                 Main.LOGGER.info(String.format("%s executable configured at %s", programName, configuredPackwizExecutablePath));

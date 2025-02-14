@@ -94,7 +94,7 @@ public class UrlPanel extends JPanel {
         new ExecutableProgressDialog((Window)getTopLevelAncestor(), "Adding item...", "Triggered by user", programExecution).setVisible(true);
     }
 
-    private void updateInstallButtonState(JButton addButton, KTextField nameTextField, KTextField urlTextField, JLabel urlInvalidLabel) {
+    private void updateInstallButtonState(KButton addButton, KTextField nameTextField, KTextField urlTextField, JLabel urlInvalidLabel) {
         boolean shouldEnable = true;
         urlInvalidLabel.setVisible(false);
         if(nameTextField.getText().isEmpty() || urlTextField.getText().isEmpty()) {

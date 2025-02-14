@@ -63,7 +63,7 @@ public class CurseForgePanel extends JPanel {
         add(rootPanel, BorderLayout.CENTER);
     }
 
-    private void updateAddProjectButtonState(JButton addButton, KTextField urlTextField) {
+    private void updateAddProjectButtonState(KButton addButton, KTextField urlTextField) {
         boolean shouldEnable = !urlTextField.getText().isEmpty();
         addButton.setEnabled(shouldEnable);
     }

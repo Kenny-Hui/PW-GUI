@@ -115,17 +115,17 @@ public class PackwizMetaPanel extends FileTypePanel {
         detailPanel.setLayout(new BorderLayout());
         detailPanel.add(showDetailButton, BorderLayout.NORTH);
 
-        JScrollPane jsp = new JScrollPane(new DetailPanel(packwizMetaFile));
-        detailPanel.add(jsp, BorderLayout.CENTER);
-        jsp.setVisible(false);
+        JScrollPane scrollPane = new JScrollPane(new DetailPanel(packwizMetaFile));
+        detailPanel.add(scrollPane, BorderLayout.CENTER);
+        scrollPane.setVisible(false);
 
-        showDetailButton.addItemListener(actionEvent -> jsp.setVisible(!jsp.isVisible()));
+        showDetailButton.addItemListener(actionEvent -> scrollPane.setVisible(!scrollPane.isVisible()));
         wrapperPanel.add(detailPanel, BorderLayout.CENTER);
         add(wrapperPanel);
     }
 
-    private void updateUpdateButtonState(JButton updateButton, JCheckBox pinnedCheckbox) {
-        updateButton.setEnabled(!pinnedCheckbox.isSelected());
+    private void updateUpdateButtonState(KButton updateButton, JCheckBox pinnedCheckbox) {
+        updateButton.setEnabled(!pinnedCheckbox.isSelected(), "Version is pinned");
     }
 
     private void removeMod() {
@@ -226,6 +226,18 @@ public class PackwizMetaPanel extends FileTypePanel {
                 updatePanel.add(new JLabel(String.format("File ID: %s", packwizMetaFile.updateCfFileId)));
 
                 KLinkButton browseProjectPageLink = new KLinkButton("Browse Project Page", String.format("https://www.curseforge.com/projects/%s", packwizMetaFile.updateCfProjectId));
+                updatePanel.add(browseProjectPageLink);
+
+                addRow(1, updatePanel);
+            }
+
+            if(packwizMetaFile.updateGhSlug != null) {
+                JPanel updatePanel = new KListEntryPanel("Updates - GitHub");
+                updatePanel.add(new JLabel(String.format("Repository: %s", packwizMetaFile.updateGhSlug)));
+                updatePanel.add(new JLabel(String.format("Branch: %s", packwizMetaFile.updateGhBranch)));
+                updatePanel.add(new JLabel(String.format("Tag: %s", packwizMetaFile.updateGhTag)));
+
+                KLinkButton browseProjectPageLink = new KLinkButton("Browse Repository", String.format("https://github.com/%s", packwizMetaFile.updateGhSlug));
                 updatePanel.add(browseProjectPageLink);
 
                 addRow(1, updatePanel);

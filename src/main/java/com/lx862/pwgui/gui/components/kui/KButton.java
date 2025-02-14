@@ -18,4 +18,13 @@ public class KButton extends JButton {
         super(action);
         setMargin(new Insets(5, 15, 5, 15));
     }
+
+    public void setEnabled(boolean value, String disabledReason) {
+        if(!value) {
+            setToolTipText(disabledReason);
+        } else {
+            setToolTipText(null);
+        }
+        super.setEnabled(value);
+    }
 }

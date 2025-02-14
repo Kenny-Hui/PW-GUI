@@ -36,7 +36,7 @@ public class CurseForgePanel extends JPanel {
         JPanel forceCurrentFolderPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         JCheckBox forceCurrentFolderCheckBox = new JCheckBox("Always install to current folder instead of auto detection");
         forceCurrentFolderPanel.add(forceCurrentFolderCheckBox);
-        forceCurrentFolderPanel.add(new KHelpButton("When installing contents from Modrinth/CurseForge, packwiz will automatically determine the folder to use based on the content type.\nBy selecting the checkbox, you can force packwiz to always install to the current folder."));
+        forceCurrentFolderPanel.add(new KHelpButton("When installing contents from Modrinth/CurseForge, packwiz will automatically determine the folder to use based on the project type.\nBy selecting the checkbox, you can force packwiz to always install to the current folder."));
         formPanel.addRow(2, forceCurrentFolderPanel);
 
         KButton addButton = new KButton("Add Project");

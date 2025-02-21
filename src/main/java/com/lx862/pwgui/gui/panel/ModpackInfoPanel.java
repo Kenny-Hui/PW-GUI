@@ -25,7 +25,7 @@ public class ModpackInfoPanel extends KGridBagLayoutPanel {
         this.initialAuthor = existingFile == null ? "" : existingFile.author;
         this.initialVersion = existingFile == null ? "" : existingFile.version;
 
-        nameTextField = new KTextField("My Epic Modpack!");
+        nameTextField = new KTextField("My Epic Modpack!", true);
         nameTextField.setText(this.initialName);
         nameTextField.getDocument().addDocumentListener(new DocumentChangedListener(() -> {
             if(existingFile != null) {
@@ -35,7 +35,7 @@ public class ModpackInfoPanel extends KGridBagLayoutPanel {
         }));
         addRow(1, new JLabel("Name: "), nameTextField);
 
-        authorTextField = new KTextField("Me!");
+        authorTextField = new KTextField("Me!", true);
         authorTextField.setText(this.initialAuthor);
         authorTextField.getDocument().addDocumentListener(new DocumentChangedListener(() -> {
             if(existingFile != null) {
@@ -45,7 +45,7 @@ public class ModpackInfoPanel extends KGridBagLayoutPanel {
         }));
         addRow(1, new JLabel("Author: "), authorTextField);
 
-        versionTextField = new KTextField("1.0.0");
+        versionTextField = new KTextField("1.0.0", true);
         versionTextField.setText(this.initialVersion);
         versionTextField.getDocument().addDocumentListener(new DocumentChangedListener(() -> {
             if(existingFile != null) {

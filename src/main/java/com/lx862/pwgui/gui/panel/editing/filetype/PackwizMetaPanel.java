@@ -55,7 +55,7 @@ public class PackwizMetaPanel extends FileTypePanel {
         KGridBagLayoutPanel editableContentPanel = new KGridBagLayoutPanel(1, 2);
         editableContentPanel.setBorder(new EmptyBorder(5, 0, 0, 0));
 
-        descriptionTextField = new KTextField("(None)");
+        descriptionTextField = new KTextField("(None)", true);
         descriptionTextField.setText(packwizMetaFile.optionDescription);
         descriptionTextField.getDocument().addDocumentListener(new DocumentChangedListener(this::updateSaveState));
         editableContentPanel.addRow(1, new JLabel("Description: "), descriptionTextField);

@@ -32,7 +32,7 @@ public class ModpackExtraSettingPanel extends KGridBagLayoutPanel {
         this.initialDescription = existingFile.description;
         this.initialDatapackPath = existingFile.getDatapackPath();
 
-        modpackDescriptionTextField = new KTextField("Modpack description...");
+        modpackDescriptionTextField = new KTextField("Modpack description...", true);
         modpackDescriptionTextField.setText(this.initialDescription);
         modpackDescriptionTextField.getDocument().addDocumentListener(new DocumentChangedListener(() -> {
             existingFile.description = modpackDescriptionTextField.getText();

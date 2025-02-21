@@ -12,14 +12,17 @@ import com.lx862.pwgui.util.Util;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
 public class ConsoleDialog extends JDialog {
-    private final List<String> commandHistory; // TODO: Up/Down arrow for command history
+    private final List<String> commandHistory;
     private final Executable executable;
     private final JTextArea logTextArea;
+    private int commandHistoryIndex;
     private ProgramExecution currentExecution;
 
     public ConsoleDialog(Executable executable, Window parent) {
@@ -49,6 +52,29 @@ public class ConsoleDialog extends JDialog {
             inputField.setText("");
         });
 
+        inputField.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent keyEvent) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent keyEvent) {
+                if(commandHistory.isEmpty()) return;
+                if(keyEvent.getKeyCode() == KeyEvent.VK_UP) {
+                    commandHistoryIndex--;
+                    if(commandHistoryIndex < 0) commandHistoryIndex = 0;
+                    inputField.setText(commandHistory.get(commandHistoryIndex));
+                } else if(keyEvent.getKeyCode() == KeyEvent.VK_DOWN) {
+                    commandHistoryIndex++;
+                    if(commandHistoryIndex >= commandHistory.size()) commandHistoryIndex = commandHistory.size() - 1;
+                    inputField.setText(commandHistory.get(commandHistoryIndex));
+                }
+            }
+            @Override
+            public void keyReleased(KeyEvent keyEvent) {
+            }
+        });
+
         KButton sendButton = new KButton("Send");
         sendButton.addActionListener(actionEvent -> {
             executeCommand(inputField.getText(), false);
@@ -64,6 +90,9 @@ public class ConsoleDialog extends JDialog {
     }
 
     private void executeCommand(String args, boolean helpMessage) {
+        commandHistory.add(args);
+        commandHistoryIndex = commandHistory.size();
+
         if(currentExecution != null) {
             logTextArea.append(String.format("\n> %s\n", args));
             currentExecution.enterInput(args);

@@ -8,10 +8,25 @@ import java.awt.*;
 /** A padded variant of JTextField with placeholder text support */
 public class KTextField extends JTextField {
     private final String placeholder;
+    private final boolean moveCaretToFront;
 
-    public KTextField(String placeholderText) {
+    /**
+     * Create a new KTextField
+     * @param placeholderText Placeholder text, can be null
+     * @param moveCaretToFront Whether to move the cursor/caret to the front when using {@link KTextField#setText}
+     */
+    public KTextField(String placeholderText, boolean moveCaretToFront) {
         this.placeholder = placeholderText;
+        this.moveCaretToFront = moveCaretToFront;
         setBorder(new CompoundBorder(getBorder(), new EmptyBorder(3, 3, 3, 3)));
+    }
+
+    /**
+     * Create a new KTextField.
+     * @param placeholderText Placeholder text, can be null
+     */
+    public KTextField(String placeholderText) {
+        this(placeholderText, false);
     }
 
     public KTextField() {
@@ -35,8 +50,9 @@ public class KTextField extends JTextField {
     public void setText(String str) {
         super.setText(str);
 
-        // We want it to always start at the beginning
-        setSelectionStart(0);
-        setSelectionEnd(0);
+        if(moveCaretToFront) {
+            setSelectionStart(0);
+            setSelectionEnd(0);
+        }
     }
 }

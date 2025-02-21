@@ -30,7 +30,7 @@ The end goal is that newcomers should be able to get started authoring their own
 - gitignore and packwizignore preview
 
 ## Using PW-GUI!
-PW-GUI requires **Java 8 or above** to run.  
+PW-GUI requires **Java 17 or above** to run.  
 If you don't have Java yet, you can download them at [Adoptium](https://adoptium.net) (Or any other Java distributions)
 
 After that, you can head to the [Release](https://github.com/Kenny-Hui/PW-GUI/releases) page and download the latest release, run it and follow the instructions on screen.  

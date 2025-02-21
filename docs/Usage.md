@@ -3,7 +3,7 @@ Hopefully the program itself is intuitive enough that you do not need to resort 
 However in the case it isn't, and for those just browsing around, you've come to the right place!
 
 ## Installation
-PW-GUI is built on Java, and it requires Java 8 or above to run.  
+PW-GUI is built on Java, and it requires Java 17 or above to run.  
 If you don't have Java yet, you should install it first. [Adoptium](https://adoptium.net/) is usually a good place to start.
 
 **Windows**  

@@ -107,7 +107,7 @@ public abstract class BaseFrame extends JFrame {
         saveMenuItem.addActionListener(actionEvent -> saveAllCallback.accept(false));
         fileMenu.add(saveMenuItem);
 
-        KMenuItem importMenuItem = new KMenuItem("Import pack...");
+        KMenuItem importMenuItem = new KMenuItem("Import Pack...");
         importMenuItem.setMnemonic(KeyEvent.VK_I);
         importMenuItem.addActionListener(actionEvent -> {
             saveAllCallback.accept(false);
@@ -115,7 +115,7 @@ public abstract class BaseFrame extends JFrame {
         });
         fileMenu.add(importMenuItem);
 
-        KMenuItem exportMenuItem = new KMenuItem("Export pack...");
+        KMenuItem exportMenuItem = new KMenuItem("Export Pack...");
         exportMenuItem.setMnemonic(KeyEvent.VK_E);
         exportMenuItem.addActionListener(actionEvent -> {
             saveAllCallback.accept(false);

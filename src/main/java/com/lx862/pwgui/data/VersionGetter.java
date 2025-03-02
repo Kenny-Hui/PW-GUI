@@ -17,6 +17,7 @@ import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
@@ -116,6 +117,7 @@ public interface VersionGetter {
             try {
                 fetchNeoForgeInternal("https://maven.neoforged.net/releases/net/neoforged/neoforge/maven-metadata.xml", (metadata12002) -> {
                     metadatas.addAll(metadata12002);
+                    Collections.reverse(metadatas); // NeoForge sorts from oldest to newest
                     callback.accept(metadatas);
                 }, false);
             } catch (MalformedURLException e) {

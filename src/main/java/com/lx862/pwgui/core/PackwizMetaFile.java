@@ -35,7 +35,7 @@ public class PackwizMetaFile extends TomlFile {
     public boolean optionOptional;
     public boolean optionDefault;
 
-    private final String slug; // The file name without .pw.toml
+    private final String slug; // The file name without extension
 
     public PackwizMetaFile(Path path) {
         this(path, new Toml().read(path.toFile()));
@@ -44,7 +44,10 @@ public class PackwizMetaFile extends TomlFile {
     public PackwizMetaFile(Path path, Toml toml) throws MissingKeyPropertyException {
         super(path, toml);
 
-        this.slug = path.toFile().getName().replace(".pw.toml", "");
+        this.slug = path.toFile().getName()
+                .replace(".pw.toml", "")
+                .replace(".toml", "") // Previously packwiz uses .toml as the extension
+        ;
 
         this.name = toml.getString("name");
         if(name == null) throw new MissingKeyPropertyException(path.toFile().getName(), "name");
@@ -78,16 +81,38 @@ public class PackwizMetaFile extends TomlFile {
         this.optionDefault = toml.getBoolean("option.default", false);
     }
 
-    public boolean isClientSide() {
+    public boolean isClientSide(boolean exclusive) {
+        if(exclusive) return this.side != null && this.side.equals("client");
         return this.side == null || this.side.equals("client") || this.side.equals("both");
     }
 
-    public boolean isServerSide() {
+    public boolean isServerSide(boolean exclusive) {
+        if(exclusive) return this.side != null && this.side.equals("server");
         return this.side == null || this.side.equals("server") || this.side.equals("both");
     }
 
     public String getSlug() {
         return slug;
+    }
+
+    public String getProjectPageURL() {
+        if(updateMrModId != null) {
+            return String.format("https://modrinth.com/mod/%s", updateMrModId);
+        } else if(updateCfProjectId != -1) {
+            return String.format("https://www.curseforge.com/projects/%s", updateCfProjectId);
+        } else if(updateGhSlug != null) {
+            return String.format("https://github.com/%s", updateGhSlug);
+        }
+        return null;
+    }
+
+    public String getVersionPageURL() {
+        if(updateMrVersion != null && updateMrModId != null) {
+            return String.format("https://modrinth.com/mod/%s/version/%s", updateMrModId, updateMrVersion);
+        } else if(updateCfProjectId != -1 && updateCfFileId != -1) {
+            return String.format("https://www.curseforge.com/minecraft/mc-mods/%s/files/%s", getSlug(), updateCfFileId);
+        }
+        return null;
     }
 
     @Override

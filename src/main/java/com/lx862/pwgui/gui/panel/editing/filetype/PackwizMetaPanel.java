@@ -68,8 +68,8 @@ public class PackwizMetaPanel extends FileTypePanel {
         serverCheckbox.addActionListener(actionEvent -> updateSaveState());
         serverCheckbox.setMnemonic(KeyEvent.VK_S);
 
-        clientCheckbox.setSelected(fileEntry.getPackMetadata().isClientSide());
-        serverCheckbox.setSelected(fileEntry.getPackMetadata().isServerSide());
+        clientCheckbox.setSelected(fileEntry.getPackMetadata().isClientSide(false));
+        serverCheckbox.setSelected(fileEntry.getPackMetadata().isServerSide(false));
 
         sidePanel.add(clientCheckbox);
         sidePanel.add(serverCheckbox);
@@ -211,8 +211,8 @@ public class PackwizMetaPanel extends FileTypePanel {
                 updatePanel.add(new JLabel(String.format("Project ID: %s", packwizMetaFile.updateMrModId)));
                 updatePanel.add(new JLabel(String.format("Version ID: %s", packwizMetaFile.updateMrVersion)));
 
-                KLinkButton browseProjectPageLink = new KLinkButton("Browse Project Page", String.format("https://modrinth.com/mod/%s", packwizMetaFile.updateMrModId));
-                KLinkButton browseVersionPageLink = new KLinkButton("Browse Version Page", String.format("https://modrinth.com/mod/%s/version/%s", packwizMetaFile.updateMrModId, packwizMetaFile.updateMrVersion));
+                KLinkButton browseProjectPageLink = new KLinkButton("Browse Project Page", packwizMetaFile.getProjectPageURL());
+                KLinkButton browseVersionPageLink = new KLinkButton("Browse Version Page", packwizMetaFile.getVersionPageURL());
 
                 updatePanel.add(browseProjectPageLink);
                 updatePanel.add(browseVersionPageLink);
@@ -225,8 +225,8 @@ public class PackwizMetaPanel extends FileTypePanel {
                 updatePanel.add(new JLabel(String.format("Project ID: %s", packwizMetaFile.updateCfProjectId)));
                 updatePanel.add(new JLabel(String.format("File ID: %s", packwizMetaFile.updateCfFileId)));
 
-                KLinkButton browseProjectPageLink = new KLinkButton("Browse Project Page", String.format("https://www.curseforge.com/projects/%s", packwizMetaFile.updateCfProjectId));
-                KLinkButton browseVersionPageLink = new KLinkButton("Browse Version Page", String.format("https://www.curseforge.com/minecraft/mc-mods/%s/files/%s", packwizMetaFile.getSlug(), packwizMetaFile.updateCfFileId));
+                KLinkButton browseProjectPageLink = new KLinkButton("Browse Project Page", packwizMetaFile.getProjectPageURL());
+                KLinkButton browseVersionPageLink = new KLinkButton("Browse Version Page", packwizMetaFile.getVersionPageURL());
                 updatePanel.add(browseProjectPageLink);
                 updatePanel.add(browseVersionPageLink);
 
@@ -239,7 +239,7 @@ public class PackwizMetaPanel extends FileTypePanel {
                 updatePanel.add(new JLabel(String.format("Branch: %s", packwizMetaFile.updateGhBranch)));
                 updatePanel.add(new JLabel(String.format("Tag: %s", packwizMetaFile.updateGhTag)));
 
-                KLinkButton browseProjectPageLink = new KLinkButton("Browse Repository", String.format("https://github.com/%s", packwizMetaFile.updateGhSlug));
+                KLinkButton browseProjectPageLink = new KLinkButton("Browse Repository", packwizMetaFile.getProjectPageURL());
                 updatePanel.add(browseProjectPageLink);
 
                 addRow(1, updatePanel);

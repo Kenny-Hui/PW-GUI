@@ -50,6 +50,10 @@ public class PackIndexFile extends TomlFile {
         super.write(reason);
     }
 
+    public List<FileEntry> getFileEntries() {
+        return new ArrayList<>(this.fileEntries);
+    }
+
     public FileEntry getEntryByPath(Path path) {
         for(FileEntry entry : fileEntries) {
             if(entry.path.equals(path)) return entry;

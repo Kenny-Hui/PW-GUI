@@ -52,7 +52,7 @@ public abstract class BaseFrame extends JFrame {
         return helpMenu;
     }
 
-    protected KMenu getToolMenu() {
+    protected KMenu getToolMenu(Modpack modpack) {
         KMenu toolMenu = new KMenu("Tool");
 
         KMenuItem refreshMenuItem = new KMenuItem(new RefreshPackAction(this));
@@ -60,6 +60,9 @@ public abstract class BaseFrame extends JFrame {
 
         KMenuItem updateAllMenuItem = new KMenuItem(new UpdateAllAction(this));
         toolMenu.add(updateAllMenuItem);
+
+        KMenuItem generateModlistItem = new KMenuItem(new GenerateModlistAction(this, modpack.packFile.get()));
+        toolMenu.add(generateModlistItem);
 
         KMenuItem devServerMenuItem = new KMenuItem("Run Development Server...");
         devServerMenuItem.setMnemonic(KeyEvent.VK_D);

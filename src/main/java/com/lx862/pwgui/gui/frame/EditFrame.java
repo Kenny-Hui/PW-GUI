@@ -46,7 +46,7 @@ public class EditFrame extends BaseFrame {
 
         jMenuBar.add(getFileMenu(modpack, editPanel::saveChanges));
         jMenuBar.add(getEditMenu(modpack));
-        jMenuBar.add(getToolMenu());
+        jMenuBar.add(getToolMenu(modpack));
         jMenuBar.add(getHelpMenu());
 
         startWatchFile(modpack, (kind, path) -> {

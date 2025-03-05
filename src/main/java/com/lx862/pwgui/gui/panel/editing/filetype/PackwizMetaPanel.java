@@ -226,7 +226,9 @@ public class PackwizMetaPanel extends FileTypePanel {
                 updatePanel.add(new JLabel(String.format("File ID: %s", packwizMetaFile.updateCfFileId)));
 
                 KLinkButton browseProjectPageLink = new KLinkButton("Browse Project Page", String.format("https://www.curseforge.com/projects/%s", packwizMetaFile.updateCfProjectId));
+                KLinkButton browseVersionPageLink = new KLinkButton("Browse Version Page", String.format("https://www.curseforge.com/minecraft/mc-mods/%s/files/%s", packwizMetaFile.getSlug(), packwizMetaFile.updateCfFileId));
                 updatePanel.add(browseProjectPageLink);
+                updatePanel.add(browseVersionPageLink);
 
                 addRow(1, updatePanel);
             }

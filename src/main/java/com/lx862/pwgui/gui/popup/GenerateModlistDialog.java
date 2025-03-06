@@ -25,11 +25,12 @@ public class GenerateModlistDialog extends JDialog {
     private final PackFile packFile;
     private String plainTextModlist = null;
 
-    private final MarkdownPanel.MarkdownPane editorPane;
+    private final MarkdownPanel.MarkdownPane previewPane;
     private final JRadioButton plainTextRadioButton;
     private final JRadioButton markdownRadioButton;
 
-    private final JCheckBox addLinkCheckBox;
+    private final JCheckBox projectLinkCheckBox;
+    private final JCheckBox versionLinkCheckBox;
     private final JCheckBox fileNameCheckBox;
     private final JCheckBox separateSidesCheckBox;
 
@@ -78,26 +79,34 @@ public class GenerateModlistDialog extends JDialog {
         this.separateSidesCheckBox = new JCheckBox("Separate Side");
         separateSidesCheckBox.setAlignmentX(Component.LEFT_ALIGNMENT);
         separateSidesCheckBox.setSelected(true);
-        separateSidesCheckBox.addChangeListener(e -> updateModlist());
+        separateSidesCheckBox.addItemListener(e -> updateModlist());
         optionsRow.add(separateSidesCheckBox);
 
-        this.addLinkCheckBox = new JCheckBox("Project Link");
-        this.addLinkCheckBox.setSelected(true);
-        addLinkCheckBox.setAlignmentX(Component.LEFT_ALIGNMENT);
-        addLinkCheckBox.addChangeListener(e -> updateModlist());
-        optionsRow.add(addLinkCheckBox);
+        this.projectLinkCheckBox = new JCheckBox("Project Link");
+        projectLinkCheckBox.setSelected(true);
+        projectLinkCheckBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+        projectLinkCheckBox.addItemListener(e -> updateModlist());
+        optionsRow.add(projectLinkCheckBox);
+
+        this.versionLinkCheckBox = new JCheckBox("Version Link");
+        versionLinkCheckBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+        versionLinkCheckBox.addItemListener(e -> {
+            projectLinkCheckBox.setEnabled(!versionLinkCheckBox.isSelected());
+            updateModlist();
+        });
+        optionsRow.add(versionLinkCheckBox);
 
         this.fileNameCheckBox = new JCheckBox("File Name");
         fileNameCheckBox.setAlignmentX(Component.LEFT_ALIGNMENT);
-        fileNameCheckBox.addChangeListener(e -> updateModlist());
+        fileNameCheckBox.addItemListener(e -> updateModlist());
         optionsRow.add(fileNameCheckBox);
 
         headerRow.add(optionsRow);
         add(headerRow, BorderLayout.NORTH);
 
-        this.editorPane = new MarkdownPanel.MarkdownPane();
-        JScrollPane textAreaScrollPane = new JScrollPane(editorPane);
-        add(textAreaScrollPane);
+        this.previewPane = new MarkdownPanel.MarkdownPane();
+        JScrollPane previewScrollPane = new JScrollPane(previewPane);
+        add(previewScrollPane);
 
         updateModlist();
 
@@ -134,11 +143,11 @@ public class GenerateModlistDialog extends JDialog {
 
     private void updateModlist() {
         boolean useMarkdown = markdownRadioButton.isSelected();
-        plainTextModlist = getModlist(packFile, useMarkdown, addLinkCheckBox.isSelected(), separateSidesCheckBox.isSelected(), fileNameCheckBox.isSelected());
-        editorPane.setInitialContent(useMarkdown ? Processor.process(this.plainTextModlist) : this.plainTextModlist.replace("\n", "<br>"));
+        plainTextModlist = getModlist(packFile, useMarkdown, projectLinkCheckBox.isSelected(), versionLinkCheckBox.isSelected(), separateSidesCheckBox.isSelected(), fileNameCheckBox.isSelected());
+        previewPane.setInitialContent(useMarkdown ? Processor.process(this.plainTextModlist) : this.plainTextModlist.replace("\n", "<br>"));
     }
 
-    private String getModlist(PackFile packFile, boolean useMarkdown, boolean addLink, boolean separateSides, boolean showFileName) {
+    private String getModlist(PackFile packFile, boolean useMarkdown, boolean projectLink, boolean versionLink, boolean separateSides, boolean showFileName) {
         PackIndexFile indexFile = packFile.packIndexFile.get();
         List<PackwizMetaFile> metaFiles = new ArrayList<>();
         for(PackIndexFile.FileEntry fileEntry : indexFile.getFileEntries()) {
@@ -155,27 +164,27 @@ public class GenerateModlistDialog extends JDialog {
 
         if(!separateSides) {
             for(PackwizMetaFile packwizMetaFile : metaFiles) {
-                sb.append(getMetaLine(packwizMetaFile, useMarkdown, addLink, showFileName)).append("\n");
+                sb.append(getMetaLine(packwizMetaFile, useMarkdown, projectLink, versionLink, showFileName)).append("\n");
             }
         } else {
             if(!clientFiles.isEmpty()) {
                 sb.append("\n").append(getSectionHeader("Client-only", useMarkdown)).append("\n");
                 for(PackwizMetaFile packwizMetaFile : clientFiles) {
-                    sb.append(getMetaLine(packwizMetaFile, useMarkdown, addLink, showFileName)).append("\n");
+                    sb.append(getMetaLine(packwizMetaFile, useMarkdown, projectLink, versionLink, showFileName)).append("\n");
                 }
             }
 
             if(!serverFiles.isEmpty()) {
                 sb.append("\n").append(getSectionHeader("Server-only", useMarkdown)).append("\n");
                 for(PackwizMetaFile packwizMetaFile : serverFiles) {
-                    sb.append(getMetaLine(packwizMetaFile, useMarkdown, addLink, showFileName)).append("\n");
+                    sb.append(getMetaLine(packwizMetaFile, useMarkdown, projectLink, versionLink, showFileName)).append("\n");
                 }
             }
 
             if(!bothFiles.isEmpty()) {
                 sb.append("\n").append(getSectionHeader("Common", useMarkdown)).append("\n");
                 for(PackwizMetaFile packwizMetaFile : bothFiles) {
-                    sb.append(getMetaLine(packwizMetaFile, useMarkdown, addLink, showFileName)).append("\n");
+                    sb.append(getMetaLine(packwizMetaFile, useMarkdown, projectLink, versionLink, showFileName)).append("\n");
                 }
             }
         }
@@ -187,22 +196,26 @@ public class GenerateModlistDialog extends JDialog {
         return useMarkdown ? "## " + str : "===== " + str + " =====";
     }
 
-    private String getMetaLine(PackwizMetaFile packwizMetaFile, boolean isMarkdown, boolean addLink, boolean showFileName) {
+    private String getMetaLine(PackwizMetaFile packwizMetaFile, boolean isMarkdown, boolean projectLink, boolean versionLink, boolean showFileName) {
         if(!isMarkdown) {
             String line = packwizMetaFile.name;
-            line += "\n";
 
             if(packwizMetaFile.optionDescription != null) {
-                line += packwizMetaFile.optionDescription + "\n";
+                line += "\n" + packwizMetaFile.optionDescription;
             }
 
             if(showFileName) {
-                line += String.format("%s", packwizMetaFile.fileName) + "\n";
+                line += String.format("\n%s", packwizMetaFile.fileName);
             }
 
-            if(addLink) {
-                String projectURL = packwizMetaFile.getProjectPageURL();
-                line += (projectURL == null ? packwizMetaFile.downloadUrl : projectURL);
+            if(projectLink || versionLink) {
+                final String url;
+                if(versionLink) {
+                    url = packwizMetaFile.getVersionPageURL();
+                } else {
+                    url = packwizMetaFile.getProjectPageURL();
+                }
+                line += "\n" + (url == null ? packwizMetaFile.downloadUrl : url);
             }
 
             line += "\n";
@@ -210,12 +223,20 @@ public class GenerateModlistDialog extends JDialog {
         }
 
         String line = "- ";
-        if(addLink) {
-            String projectURL = packwizMetaFile.getProjectPageURL();
-            line += String.format(("[%s](%s)"), packwizMetaFile.name, (projectURL == null ? packwizMetaFile.downloadUrl : projectURL));
+
+        if(versionLink || projectLink) {
+            final String url;
+            if(versionLink) {
+                url = packwizMetaFile.getVersionPageURL();
+            } else {
+                url = packwizMetaFile.getProjectPageURL();
+            }
+            line += String.format(("[%s](%s)"), packwizMetaFile.name, (url == null ? packwizMetaFile.downloadUrl : url));
         } else {
             line += String.format("%s", packwizMetaFile.name);
         }
+
+
         if(packwizMetaFile.optionDescription != null) {
             line += " - " + packwizMetaFile.optionDescription;
         }

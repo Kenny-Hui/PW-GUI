@@ -55,8 +55,8 @@ public abstract class BaseFrame extends JFrame {
     protected KMenu getToolMenu(Modpack modpack) {
         KMenu toolMenu = new KMenu("Tool");
 
-        KMenuItem refreshMenuItem = new KMenuItem(new RefreshPackAction(this));
-        toolMenu.add(refreshMenuItem);
+//        KMenuItem refreshMenuItem = new KMenuItem(new RefreshPackAction(this));
+//        toolMenu.add(refreshMenuItem);
 
         KMenuItem updateAllMenuItem = new KMenuItem(new UpdateAllAction(this));
         toolMenu.add(updateAllMenuItem);

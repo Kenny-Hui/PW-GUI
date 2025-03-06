@@ -8,8 +8,8 @@ import java.awt.event.KeyEvent;
 public class CloseWindowAction extends AbstractAction {
     private final Window parent;
 
-    public CloseWindowAction(Window parent, boolean isCancel) {
-        super(isCancel ? "Cancel" : "Close");
+    public CloseWindowAction(Window parent, boolean useCancelText) {
+        super(useCancelText ? "Cancel" : "Close");
         this.parent = parent;
         putValue(MNEMONIC_KEY, KeyEvent.VK_C);
     }

@@ -39,8 +39,8 @@ public class ExportModpackDialog extends JDialog {
 
         JTabbedPane formatTabPane = new JTabbedPane();
         formatTabPane.setBorder(new EmptyBorder(10, 0, 10, 0));
-        formatTabPane.addTab(IconNamePair.MODRINTH.name, new ImageIcon(GUIHelper.resizeImage(IconNamePair.MODRINTH.image, 20)), new ModrinthExportPanel());
-        formatTabPane.addTab(IconNamePair.CURSEFORGE.name, new ImageIcon(GUIHelper.resizeImage(IconNamePair.CURSEFORGE.image, 20)), new CurseforgeExportPanel(this::setExportButtonState));
+        formatTabPane.addTab(IconNamePair.MODRINTH.name, new ImageIcon(GUIHelper.clampImageSize(IconNamePair.MODRINTH.image, 20)), new ModrinthExportPanel());
+        formatTabPane.addTab(IconNamePair.CURSEFORGE.name, new ImageIcon(GUIHelper.clampImageSize(IconNamePair.CURSEFORGE.image, 20)), new CurseforgeExportPanel(this::setExportButtonState));
 
         formatTabPane.addChangeListener(changeEvent -> {
             ExportPanel selectedTab = (ExportPanel)formatTabPane.getComponentAt(formatTabPane.getSelectedIndex());

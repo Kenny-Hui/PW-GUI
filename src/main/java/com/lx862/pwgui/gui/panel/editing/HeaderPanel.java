@@ -1,12 +1,17 @@
 package com.lx862.pwgui.gui.panel.editing;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.lx862.pwgui.Main;
 import com.lx862.pwgui.core.PackFile;
 import com.lx862.pwgui.data.PackComponentVersion;
 import com.lx862.pwgui.util.GUIHelper;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 
 /* The top section that displays the modpack's name and versions */
 public class HeaderPanel extends JPanel {
@@ -17,6 +22,22 @@ public class HeaderPanel extends JPanel {
 
     public void initialize(PackFile packFile) {
         removeAll();
+
+        // Prism / MMC seems to update this file to match the instance's icon on every launch
+        File iconFile = packFile.resolveRelative("icon.png").toFile();
+        if(iconFile.exists()) {
+            try {
+                BufferedImage iconImage = ImageIO.read(iconFile);
+                if(iconImage != null) {
+                    JLabel iconLabel = new JLabel();
+                    iconLabel.setIcon(new ImageIcon(GUIHelper.resizeImage(iconImage, 36, 36, Image.SCALE_FAST), "icon.png from modpack"));
+                    add(iconLabel);
+                    add(GUIHelper.createHorizontalPadding(8));
+                }
+            } catch (Exception e) {
+                Main.LOGGER.exception(e);
+            }
+        }
 
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
@@ -44,7 +65,7 @@ public class HeaderPanel extends JPanel {
         componentsPanel.setLayout(new BoxLayout(componentsPanel, BoxLayout.Y_AXIS));
 
         for (PackComponentVersion packComponentVersion : packFile.getComponents()) {
-            JLabel componentLabel = new JLabel(packComponentVersion.getComponent().iconName.name + " version: " + packComponentVersion.getVersion(), new ImageIcon(GUIHelper.resizeImage(packComponentVersion.getComponent().iconName.image, 20)), SwingConstants.LEFT);
+            JLabel componentLabel = new JLabel(packComponentVersion.getComponent().iconName.name + " version: " + packComponentVersion.getVersion(), new ImageIcon(GUIHelper.clampImageSize(packComponentVersion.getComponent().iconName.image, 20)), SwingConstants.LEFT);
             componentLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
             componentsPanel.add(componentLabel);
         }

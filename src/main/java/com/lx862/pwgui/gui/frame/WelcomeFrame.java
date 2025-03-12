@@ -21,6 +21,8 @@ import java.nio.file.Path;
 
 /** The welcome splash screen after packwiz executable is found */
 public class WelcomeFrame extends BaseFrame {
+    private static final int LOGO_SIZE = 250;
+
     public WelcomeFrame(Component parent) {
         super(String.format("Welcome to %s!", Constants.PROGRAM_NAME));
         Executables.packwiz.setPackFileLocation(null);
@@ -37,7 +39,7 @@ public class WelcomeFrame extends BaseFrame {
 
         JLabel logoLabel;
         try {
-            logoLabel = new JLabel(new ImageIcon(GUIHelper.convertImage(Util.getAssets("/assets/logo.png"), 250)));
+            logoLabel = new JLabel(new ImageIcon(GUIHelper.convertImage(Util.getAssets("/assets/logo.png"), LOGO_SIZE), String.format("%s Logo", Constants.PROGRAM_NAME)));
         } catch (Exception e) {
             logoLabel = new JLabel(Constants.PROGRAM_NAME);
             logoLabel.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h1.font")));

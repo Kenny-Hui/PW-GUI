@@ -29,7 +29,7 @@ public class AboutDialog extends JDialog {
 
         JLabel logoLabel;
         try {
-            logoLabel = new JLabel(new ImageIcon(GUIHelper.convertImage(Util.getAssets("/assets/logo.png"), 200)));
+            logoLabel = new JLabel(new ImageIcon(GUIHelper.convertImage(Util.getAssets("/assets/logo.png"), 200), String.format("%s Logo", Constants.PROGRAM_NAME)));
         } catch (Exception e) {
             logoLabel = new JLabel(Constants.PROGRAM_NAME);
             logoLabel.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h1.font")));

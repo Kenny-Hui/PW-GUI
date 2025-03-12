@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 public class ModpackVersionPanel extends KGridBagLayoutPanel {
     private final KComboBox<VersionMetadata> minecraftVersionComboBox;
@@ -55,7 +54,7 @@ public class ModpackVersionPanel extends KGridBagLayoutPanel {
         if(initialMinecraft != null) minecraftVersionComboBox.setSelectedItem(initialMinecraft.getVersion());
         if(initialModloader != null) modloaderVersionComboBox.setSelectedItem(initialModloader.getVersion());
 
-        addRow(1, new JLabel("Minecraft Version: ", new ImageIcon(GUIHelper.resizeImage(IconNamePair.MINECRAFT.image, 20)), SwingConstants.LEFT), minecraftVersionComboBox);
+        addRow(1, new JLabel("Minecraft Version: ", new ImageIcon(GUIHelper.clampImageSize(IconNamePair.MINECRAFT.image, 20)), SwingConstants.LEFT), minecraftVersionComboBox);
 
         showSnapshotCheckBox = new JCheckBox("Show Snapshot");
         showSnapshotCheckBox.addActionListener(actionEvent -> updateMinecraftUI());
@@ -83,8 +82,8 @@ public class ModpackVersionPanel extends KGridBagLayoutPanel {
 
             JRadioButton componentRadioButton = new JRadioButton(packComponent.iconName.name);
             componentRadioButton.addActionListener((itemListener) -> setModloader(packComponent));
-            componentRadioButton.setIcon(new ImageIcon(GUIHelper.imageOpacity(GUIHelper.resizeImage(packComponent.iconName.image, 18), 0.5f)));
-            componentRadioButton.setSelectedIcon(new ImageIcon(GUIHelper.resizeImage(packComponent.iconName.image, 18)));
+            componentRadioButton.setIcon(new ImageIcon(GUIHelper.imageOpacity(GUIHelper.clampImageSize(packComponent.iconName.image, 18), 0.5f)));
+            componentRadioButton.setSelectedIcon(new ImageIcon(GUIHelper.clampImageSize(packComponent.iconName.image, 18)));
             modloaderChoicePanel.add(componentRadioButton);
             modloadersButtonGroup.add(componentRadioButton);
 

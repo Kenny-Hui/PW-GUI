@@ -40,6 +40,10 @@ public class GUIHelper {
         });
     }
 
+    public static Component createHorizontalPadding(int width) {
+        return Box.createRigidArea(new Dimension(width, 0));
+    }
+
     public static Component createVerticalPadding(int height) {
         return Box.createRigidArea(new Dimension(0, height));
     }
@@ -60,7 +64,7 @@ public class GUIHelper {
         return UIManager.getColor("Component.borderColor");
     }
 
-    public static Image resizeImage(Image img, int size) {
+    public static Image clampImageSize(Image img, int size) {
         double imgWidth = img.getWidth(null);
         double imgHeight = img.getHeight(null);
         double ratioW = 1;
@@ -73,7 +77,11 @@ public class GUIHelper {
         }
         double minRatio = Math.min(ratioW, ratioH);
 
-        return img.getScaledInstance((int)(imgWidth * minRatio), (int)(imgHeight * minRatio), Image.SCALE_SMOOTH);
+        return resizeImage(img, (int)(imgWidth * minRatio), (int)(imgHeight * minRatio), Image.SCALE_SMOOTH);
+    }
+
+    public static Image resizeImage(Image img, int width, int height, int scaleMode) {
+        return img.getScaledInstance(width, height, scaleMode);
     }
 
     /** Returns a new image with the specified opacity */
@@ -89,7 +97,7 @@ public class GUIHelper {
     public static Image convertImage(InputStream is, int size) {
         Image img = convertImage(is);
         if(img != null) {
-            return resizeImage(img, size);
+            return clampImageSize(img, size);
         }
         return null;
     }

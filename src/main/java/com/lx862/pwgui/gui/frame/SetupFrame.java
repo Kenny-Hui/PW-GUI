@@ -16,6 +16,8 @@ import java.awt.*;
 
 /** The greeting splash screen if the packwiz executable is not found */
 public class SetupFrame extends BaseFrame {
+    private static final int LOGO_SIZE = 200;
+
     public SetupFrame(Component parent) {
         super(String.format("Welcome to %s!", Constants.PROGRAM_NAME));
 
@@ -28,7 +30,7 @@ public class SetupFrame extends BaseFrame {
 
         JLabel logoLabel;
         try {
-            logoLabel = new JLabel(new ImageIcon(GUIHelper.convertImage(Util.getAssets("/assets/logo.png"), 200)));
+            logoLabel = new JLabel(new ImageIcon(GUIHelper.convertImage(Util.getAssets("/assets/logo.png"), LOGO_SIZE), String.format("%s Logo", Constants.PROGRAM_NAME)));
         } catch (Exception e) {
             logoLabel = new JLabel(Constants.PROGRAM_NAME);
             logoLabel.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h1.font")));

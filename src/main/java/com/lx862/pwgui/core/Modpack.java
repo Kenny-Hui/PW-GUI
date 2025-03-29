@@ -57,12 +57,12 @@ public class Modpack {
         return this.root;
     }
 
-    /* The mandatory file required for the pack to function. */
-    public boolean isKeyFile(Path path) {
+    /** Returns whether the specified path is a mandatory file required for the pack to function. */
+    public boolean isCriticalFile(Path path) {
         return getPackFilePath().equals(path) || this.packFile.get().getIndexPath().equals(path);
     }
 
-    public GitIgnoreRules getPackwizIgnoredFile() {
+    public GitIgnoreRules getPackwizIgnore() {
         Path packwizIgnoreFile = this.root.resolve(".packwizignore");
         GitIgnoreRules bonusRules;
 

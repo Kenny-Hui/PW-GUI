@@ -85,7 +85,7 @@ public class UrlPanel extends JPanel {
         }
 
         ProgramExecution programExecution = Executables.packwiz.buildCommand("url", "add", name, urlString, "--meta-folder", context.getModpack().getRootPath().relativize(fileEntry.path).toString(), "--force"); // We already did a domain check before, so forcibly add it anyway.
-        programExecution.whenExit((exitCode) -> {
+        programExecution.onExit((exitCode) -> {
             if(exitCode == 0) {
                 JOptionPane.showMessageDialog(getTopLevelAncestor(), String.format("%s has been added!", name), Util.withTitlePrefix("Item Added!"), JOptionPane.INFORMATION_MESSAGE);
             }

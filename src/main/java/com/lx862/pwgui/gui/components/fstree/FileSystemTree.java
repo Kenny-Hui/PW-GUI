@@ -9,6 +9,10 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import java.io.File;
 import java.nio.file.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -16,6 +20,11 @@ import static java.nio.file.StandardWatchEventKinds.*;
 
 /* A JTree representing a directory view/file browser. */
 public class FileSystemTree extends JTree {
+    private static final List<String> nonCapturedDirectories = Arrays.asList(
+            ".git", // Huge amount of files to walk through, not gonna bother
+            ".pwgui-tmp" // Our temp directory, should be deleted shortly after. (Currently used for mod probing)
+    );
+
     private final Function<File, FileSystemEntityModel> getModel;
     private GitIgnoreRules ignorePattern;
     public boolean fsLock; // A slight hack to signal to others when a file is changed
@@ -45,12 +54,13 @@ public class FileSystemTree extends JTree {
         File[] files = rootNode.path.toFile().listFiles();
         if(files != null) {
             for(File file : files) {
-                if(file.isDirectory() && !file.getName().equals(".git")) {
-                    FileSystemEntityModel child = getModel.apply(file);
+                FileSystemEntityModel child = getModel.apply(file);
+                if(child == null) continue;
+
+                if(file.isDirectory() && !nonCapturedDirectories.contains(file.getName())) {
                     FileSystemSortedTreeNode node = generateRecursiveTree(new FileSystemSortedTreeNode(child));
                     rootNode.add(node);
                 } else {
-                    FileSystemEntityModel child = getModel.apply(file);
                     rootNode.add(new FileSystemSortedTreeNode(child));
                 }
             }
@@ -63,7 +73,11 @@ public class FileSystemTree extends JTree {
     /* This is used to notify that a file has been created/modified/removed for live update purposes.
     * You are expected to bring your own FileWatcher to the table :) */
     public void onFileChange(WatchEvent.Kind<?> kind, Path filePath) {
-        if(kind == ENTRY_CREATE) {
+        for(String nonCapturedDirectory : nonCapturedDirectories) {
+            if(nonCapturedDirectory.contains(filePath.getFileName().toString())) return;
+        }
+
+        if(kind == ENTRY_CREATE && Files.exists(filePath)) {
             addNode(filePath);
         } else if(kind == ENTRY_MODIFY) {
             FileSystemEntityModel newNode = getModel.apply(filePath.toFile());

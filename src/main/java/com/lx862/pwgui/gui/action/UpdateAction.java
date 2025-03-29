@@ -15,10 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class UpdateAllAction extends AbstractAction {
-    private final Window parent;
+public class UpdateAction extends AbstractAction {
+    protected final Window parent;
+    protected AtomicBoolean alreadyUpToDate = new AtomicBoolean();
+    protected AtomicBoolean modsUpdated = new AtomicBoolean();
 
-    public UpdateAllAction(Window parent) {
+    public UpdateAction(Window parent) {
         super("Update All Items");
         this.parent = parent;
         putValue(MNEMONIC_KEY, KeyEvent.VK_U);
@@ -26,15 +28,32 @@ public class UpdateAllAction extends AbstractAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        ProgramExecution programExecution = getProgramExecution();
+
+        programExecution.onExit(exitCode -> {
+            if(exitCode == 0) {
+                if(alreadyUpToDate.get()) {
+                    JOptionPane.showMessageDialog(parent, "All files are already up to date!", Util.withTitlePrefix("Up to Date!"), JOptionPane.INFORMATION_MESSAGE);
+                } else if(modsUpdated.get()) {
+                    JOptionPane.showMessageDialog(parent, "All files have been updated!", Util.withTitlePrefix("Update Successful!"), JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(parent, "Update cancelled, no changes were made.", Util.withTitlePrefix("Update Cancelled!"), JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        });
+        ExecutableProgressDialog executableProgressDialog = new ExecutableProgressDialog(parent, "Checking for update...", Constants.REASON_TRIGGERED_BY_USER, programExecution);
+        executableProgressDialog.setVisible(true);
+    }
+
+    public ProgramExecution getProgramExecution() {
         ProgramExecution programExecution = Executables.packwiz.buildCommand("update", "--all");
         List<String> updateMods = new ArrayList<>();
         List<String> skippedMods = new ArrayList<>();
         List<String> unsupportedMods = new ArrayList<>();
         AtomicBoolean startLogMods = new AtomicBoolean();
-        AtomicBoolean alreadyUpToDate = new AtomicBoolean();
-        AtomicBoolean modsUpdated = new AtomicBoolean();
 
-        programExecution.whenStdout(line -> {
+        programExecution.whenStdout(stdout -> {
+            String line = stdout.content();
             if(line.startsWith("Updates found:")) {
                 startLogMods.set(true);
             }
@@ -66,19 +85,6 @@ public class UpdateAllAction extends AbstractAction {
                 updateMods.add(line);
             }
         });
-
-        programExecution.whenExit(exitCode -> {
-            if(exitCode == 0) {
-                if(alreadyUpToDate.get()) {
-                    JOptionPane.showMessageDialog(parent, "All files are already up to date!", Util.withTitlePrefix("Up to Date!"), JOptionPane.INFORMATION_MESSAGE);
-                } else if(modsUpdated.get()) {
-                    JOptionPane.showMessageDialog(parent, "All files have been updated!", Util.withTitlePrefix("Update Successful!"), JOptionPane.INFORMATION_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(parent, "Update cancelled, no changes were made.", Util.withTitlePrefix("Update Cancelled!"), JOptionPane.INFORMATION_MESSAGE);
-                }
-            }
-        });
-        ExecutableProgressDialog executableProgressDialog = new ExecutableProgressDialog(parent, "Checking for update...", Constants.REASON_TRIGGERED_BY_USER, programExecution);
-        executableProgressDialog.setVisible(true);
+        return programExecution;
     }
 }

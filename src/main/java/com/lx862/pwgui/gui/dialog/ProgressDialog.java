@@ -62,10 +62,21 @@ public abstract class ProgressDialog extends JDialog {
         });
 
         rootPanel.add(logWrapper);
-
         add(rootPanel);
     }
 
+    /**
+     * Set the progress bar of the current progress dialog.
+     * @param progress An double value from 0 to 1. Automatically multiplied by 100 and rounded to the nearest integer percentage
+     */
+    protected void setProgress(double progress) {
+        setProgress((int)Math.round(progress * 100));
+    }
+
+    /**
+     * Set the progress bar of the current progress dialog.
+     * @param progress An integer value from 0 to 100
+     */
     protected void setProgress(int progress) {
         progressBar.setIndeterminate(false);
         progressBar.setValue(progress);

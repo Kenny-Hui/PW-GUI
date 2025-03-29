@@ -44,7 +44,8 @@ public class AddContentPanel extends FileTypePanel {
         AtomicBoolean noValidVersion = new AtomicBoolean();
         AtomicBoolean cancelled = new AtomicBoolean();
 
-        programExecution.whenStdout((line) -> {
+        programExecution.whenStdout((stdout) -> {
+            String line = stdout.content();
             if((line.startsWith("Searching") && line.endsWith("...")) || line.startsWith("Dependencies found:")) {
                 recordedOutputs.clear();
                 recordOutput.set(true);
@@ -112,7 +113,7 @@ public class AddContentPanel extends FileTypePanel {
             return false;
         });
 
-        programExecution.whenExit((exitCode) -> {
+        programExecution.onExit((exitCode) -> {
             if(exitCode == 0 && !cancelled.get()) {
                 JOptionPane.showMessageDialog(parent, String.format("%s has been added to the modpack!", modName.get()), Util.withTitlePrefix("Project Added!"), JOptionPane.INFORMATION_MESSAGE);
             }

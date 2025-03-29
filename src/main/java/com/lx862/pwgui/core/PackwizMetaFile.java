@@ -115,6 +115,10 @@ public class PackwizMetaFile extends TomlFile {
         return null;
     }
 
+    public boolean haveUpdateSource() {
+        return updateCfFileId != -1 || updateMrModId != null || updateGhSlug != null;
+    }
+
     @Override
     public void write(String reason) throws IOException {
         Map<String, Object> map = this.toml.toMap();
@@ -146,5 +150,10 @@ public class PackwizMetaFile extends TomlFile {
 
         writeToFilesystem(map);
         super.write(reason);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s (%s)", slug, fileName);
     }
 }

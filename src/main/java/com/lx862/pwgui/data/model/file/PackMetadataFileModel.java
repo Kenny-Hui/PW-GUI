@@ -6,16 +6,11 @@ import com.lx862.pwgui.core.PackwizMetaFile;
 import java.io.File;
 
 public class PackMetadataFileModel extends PlainTextFileModel {
-    private PackwizMetaFile packwizMetaFile;
+    private final PackwizMetaFile packwizMetaFile;
 
     public PackMetadataFileModel(File file) {
         super(file);
-
-        try {
-            packwizMetaFile = new PackwizMetaFile(file.toPath());
-        } catch (Exception e) {
-            Main.LOGGER.exception(e);
-        }
+        packwizMetaFile = new PackwizMetaFile(file.toPath());
     }
 
     @Override

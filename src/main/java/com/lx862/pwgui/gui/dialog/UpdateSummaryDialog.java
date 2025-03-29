@@ -1,7 +1,7 @@
 package com.lx862.pwgui.gui.dialog;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
-import com.lx862.pwgui.gui.components.ModDetailListCellRenderer;
+import com.lx862.pwgui.gui.components.ModUpdateListCellRenderer;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.gui.components.kui.KCollapsibleToggle;
 import com.lx862.pwgui.util.Util;
@@ -39,7 +39,7 @@ public class UpdateSummaryDialog extends JDialog {
         }
 
         JList<String> updateItemsList = new JList<>(updateModListModel);
-        updateItemsList.setCellRenderer(new ModDetailListCellRenderer());
+        updateItemsList.setCellRenderer(new ModUpdateListCellRenderer());
 
         JScrollPane updateItemsListScrollPane = new JScrollPane(updateItemsList);
         updateItemsListScrollPane.setAlignmentX(Component.LEFT_ALIGNMENT);

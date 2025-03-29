@@ -42,7 +42,7 @@ public class DirectoryPanel extends FileTypePanel {
                 try {
                     FileUtils.deleteDirectory(fileEntry.path.toFile());
                     Main.LOGGER.info(String.format("Deleted folder %s", fileEntry.path));
-                    Executables.packwiz.buildCommand("refresh").execute("Folder deleted by user");
+                    Executables.packwiz.refresh().execute("Folder deleted by user");
                 } catch (IOException e) {
                     Main.LOGGER.error(String.format("Failed to deleted folder %s due to %s", fileEntry.path, e.getMessage()));
                     JOptionPane.showMessageDialog(getTopLevelAncestor(), String.format("Sorry but we are unable to delete the folder, error as follows: \n%s\nYou might try doing it from an external file manager.", e.getMessage()));

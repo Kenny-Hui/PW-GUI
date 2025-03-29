@@ -3,7 +3,7 @@ package com.lx862.pwgui.gui.panel.editing.filetype;
 import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.core.PackFile;
 import com.lx862.pwgui.data.model.file.*;
-import com.lx862.pwgui.gui.action.UpdateAllAction;
+import com.lx862.pwgui.gui.action.FullUpdateAction;
 import com.lx862.pwgui.gui.panel.ModpackExtraSettingPanel;
 import com.lx862.pwgui.gui.panel.ModpackInfoPanel;
 import com.lx862.pwgui.gui.panel.ModpackVersionPanel;
@@ -61,11 +61,11 @@ public class ModpackConfigPanel extends FileTypePanel {
 
         if(mcVersionChanged) {
             if(JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Minecraft version has changed.\nDo you want to update the mods as well?", Util.withTitlePrefix("Update Mods"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-                new UpdateAllAction((JFrame)getTopLevelAncestor()).actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
+                new FullUpdateAction((JFrame)getTopLevelAncestor(), modifiedPackFile).actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
             }
         } else if(modloaderChanged) {
             if(JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Modloader has been switched.\nDo you want to update the mods as well?", Util.withTitlePrefix("Update Mods"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-                new UpdateAllAction((JFrame)getTopLevelAncestor()).actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
+                new FullUpdateAction((JFrame)getTopLevelAncestor(), modifiedPackFile).actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
             }
         }
     }

@@ -115,7 +115,7 @@ public class ConsoleDialog extends JDialog {
                 logTextArea.append(line + "\n");
                 logTextArea.setCaretPosition(logTextArea.getDocument().getLength());
             });
-            programExecution.whenExit(exitCode -> {
+            programExecution.onExit(exitCode -> {
                 if(helpMessage) {
                     logTextArea.select(0, 0);
                 } else {

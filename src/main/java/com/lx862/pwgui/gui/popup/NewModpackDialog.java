@@ -123,7 +123,7 @@ public class NewModpackDialog extends JDialog {
 
                 Executables.packwiz.changeWorkingDirectory(modpackDirectory.toPath());
 
-                ProgramExecution processExecution = Executables.packwiz.buildCommand(argsStr).whenExit(exitCode -> {
+                ProgramExecution processExecution = Executables.packwiz.buildCommand(argsStr).onExit(exitCode -> {
                     if(exitCode == 0) {
                         dispose();
                         if(finishCallback != null) finishCallback.accept(modpackDirectory.toPath());

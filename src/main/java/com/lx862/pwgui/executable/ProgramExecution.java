@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 
 public class ProgramExecution {
     private final ProcessBuilder processBuilder;
-    private final List<Consumer<String>> stdoutListeners;
+    private final List<Consumer<StdoutContext>> stdoutListeners;
     private final List<Consumer<Integer>> exitListeners;
     private final String programDisplayName;
     private final ExecutorService defaultExecutor;
@@ -25,17 +25,17 @@ public class ProgramExecution {
         this.stdoutListeners = new ArrayList<>();
         this.exitListeners = new ArrayList<>();
 
-        whenStdout((line) -> { // Display log when we got a new line
-            Main.LOGGER.info("[" + programDisplayName + "]", line);
+        whenStdout((stdout) -> { // Display log when we got a new line
+            Main.LOGGER.info("[" + programDisplayName + "]", stdout.content());
         });
     }
 
-    public ProgramExecution whenStdout(Consumer<String> consumer) {
+    public ProgramExecution whenStdout(Consumer<StdoutContext> consumer) {
         this.stdoutListeners.add(consumer);
         return this;
     }
 
-    public ProgramExecution whenExit(Consumer<Integer> consumer) {
+    public ProgramExecution onExit(Consumer<Integer> consumer) {
         this.exitListeners.add(consumer);
         return this;
     }
@@ -57,13 +57,13 @@ public class ProgramExecution {
                     while ((c = reader.read()) != -1) {
                         if(c == '\n' || c == '\r') { // Newline character
                             String line = sb.toString();
-                            callStdoutListeners(line);
+                            callStdoutListeners(new StdoutContext(line, false));
                             sb = new StringBuilder(); // Clear current line
                         } else {
                             sb.append((char)c);
                             String line = sb.toString();
                             if(line.endsWith("[Y/n]: ")) { // Inline prompt
-                                callStdoutListeners(line);
+                                callStdoutListeners(new StdoutContext(line, true));
                             }
                         }
                     }
@@ -74,7 +74,7 @@ public class ProgramExecution {
                 callExitListeners(exitValue);
             } catch (IOException e) {
                 Main.LOGGER.exception(e);
-                callStdoutListeners(Util.withBracketPrefix(String.format("Failed to execute %s:\n%s", programDisplayName, e.getMessage())));
+                callStdoutListeners(new StdoutContext(Util.withBracketPrefix(String.format("Failed to execute %s:\n%s", programDisplayName, e.getMessage())), false));
                 callExitListeners(-2);
             } catch (InterruptedException ignored) {
             }
@@ -94,14 +94,14 @@ public class ProgramExecution {
         }
     }
 
-    public void stop() {
+    public void terminate() {
         if(this.process != null && this.process.isAlive()) this.process.destroy();
     }
 
-    private void callStdoutListeners(String str) {
-        for(Consumer<String> outputListener : stdoutListeners) {
+    private void callStdoutListeners(StdoutContext stdoutContext) {
+        for(Consumer<StdoutContext> outputListener : stdoutListeners) {
             SwingUtilities.invokeLater(() -> {
-                outputListener.accept(str);
+                outputListener.accept(stdoutContext);
             });
         }
     }
@@ -110,5 +110,8 @@ public class ProgramExecution {
         for(Consumer<Integer> listener : exitListeners) {
             SwingUtilities.invokeLater(() -> listener.accept(exitCode));
         }
+    }
+
+    public record StdoutContext(String content, boolean isQuestion) {
     }
 }

@@ -67,7 +67,7 @@ public class FilePanel extends FileTypePanel {
         removeFileButton.setMnemonic(KeyEvent.VK_R);
         removeFileButton.addActionListener(actionEvent -> {
             final boolean shouldDelete;
-            if(context.getModpack().isKeyFile(fileEntry.path)) {
+            if(context.getModpack().isCriticalFile(fileEntry.path)) {
                 Object[] options = new String[]{"Yes", "No"};
                 shouldDelete = JOptionPane.showOptionDialog(getTopLevelAncestor(), "Removing this critical file would render the modpack unusable.\nOnly continue if you know what you are doing!", Util.withTitlePrefix("Delete Confirmation"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]) == JOptionPane.YES_OPTION;
             } else {
@@ -78,7 +78,7 @@ public class FilePanel extends FileTypePanel {
                 try {
                     Files.delete(fileEntry.path);
                     Main.LOGGER.info(String.format("Deleted file %s", fileEntry.path));
-                    Executables.packwiz.buildCommand("refresh").execute("File deleted by user");
+                    Executables.packwiz.refresh().execute("File deleted by user");
                 } catch (IOException e) {
                     Main.LOGGER.error(String.format("Failed to deleted file %s due to %s", fileEntry.path, e.getMessage()));
                     JOptionPane.showMessageDialog(getTopLevelAncestor(), String.format("Failed to delete file: \n%s\nYou may try doing it from an external file manager.", e.getMessage()), Util.withTitlePrefix("Failed to Delete File!"), JOptionPane.ERROR_MESSAGE);

@@ -75,8 +75,8 @@ public class ExportModpackDialog extends JDialog {
     }
 
     private void exportModpack(List<String> args, File destination) {
-        ProgramExecution programRefresh = Executables.packwiz.buildCommand("refresh");
-        programRefresh.whenExit(refreshExitCode -> {
+        ProgramExecution programRefresh = Executables.packwiz.refresh();
+        programRefresh.onExit(refreshExitCode -> {
             if(refreshExitCode != 0) return;
 
             ProgramExecution program = Executables.packwiz.buildCommand(args.toArray(new String[0]));
@@ -84,7 +84,7 @@ public class ExportModpackDialog extends JDialog {
             Util.addManualDownloadPrompt(this, program, dialog, () -> {
                 exportModpack(args, destination);
             });
-            program.whenExit(exitCode -> {
+            program.onExit(exitCode -> {
                 if(exitCode == 0) {
                     new FileSavedDialog(this, "Modpack Exported!", destination).setVisible(true);
                 }

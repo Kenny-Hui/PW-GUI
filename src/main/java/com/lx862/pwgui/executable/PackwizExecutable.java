@@ -40,6 +40,10 @@ public class PackwizExecutable extends Executable {
         return super.probe(override);
     }
 
+    public ProgramExecution refresh() {
+        return buildCommand("refresh");
+    }
+
     public void setPackFileLocation(String str) {
         this.packFileLocation = str;
     }

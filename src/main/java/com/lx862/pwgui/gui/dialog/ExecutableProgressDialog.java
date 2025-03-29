@@ -17,18 +17,22 @@ public class ExecutableProgressDialog extends ProgressDialog {
         this.programExecution = programExecution;
 
         AtomicReference<String> lastOutput = new AtomicReference<>();
-        programExecution.whenStdout((text) -> {
-            lastOutput.set(text);
-            setStatus(text);
+        programExecution.whenStdout(stdout -> {
+            SwingUtilities.invokeLater(() -> {
+                lastOutput.set(stdout.content());
+                setStatus(stdout.content());
+            });
         });
-        programExecution.whenExit(exitCode -> {
-            dispose();
+        programExecution.onExit(exitCode -> {
+            SwingUtilities.invokeLater(() -> {
+                dispose();
 
-            if(exitCode != 0 && exitCode != -1) { // -1 reserved for termination exit.
-                if(programErroredSupplier != null && !programErroredSupplier.get()) return; // it's not considered an error
-                String formattedMessage = String.format("%s exited with code %d:\n%s", programExecution.getProgramDisplayName(), exitCode, lastOutput.get());
-                JOptionPane.showMessageDialog(this, formattedMessage, Util.withTitlePrefix(programExecution.getProgramDisplayName()), JOptionPane.ERROR_MESSAGE);
-            }
+                if(exitCode != 0 && exitCode != -1) { // -1 reserved for termination exit.
+                    if(programErroredSupplier != null && !programErroredSupplier.get()) return; // it's not considered an error
+                    String formattedMessage = String.format("%s exited with code %d:\n%s", programExecution.getProgramDisplayName(), exitCode, lastOutput.get());
+                    JOptionPane.showMessageDialog(this, formattedMessage, Util.withTitlePrefix(programExecution.getProgramDisplayName()), JOptionPane.ERROR_MESSAGE);
+                }
+            });
         });
         setStatus(String.format("Waiting for %s...", programExecution.getProgramDisplayName()));
         programExecution.execute(executionReason);
@@ -40,7 +44,7 @@ public class ExecutableProgressDialog extends ProgressDialog {
 
     @Override
     public void dispose() {
-        programExecution.stop();
+        programExecution.terminate();
         super.dispose();
     }
 }

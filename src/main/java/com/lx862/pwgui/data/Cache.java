@@ -24,4 +24,9 @@ public class Cache<T> {
     public void clearCache() {
         value = null;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Cache (%s)", value);
+    }
 }

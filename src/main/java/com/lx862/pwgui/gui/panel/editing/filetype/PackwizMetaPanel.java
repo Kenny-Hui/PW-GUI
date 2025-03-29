@@ -139,13 +139,13 @@ public class PackwizMetaPanel extends FileTypePanel {
         ExecutableProgressDialog dialog = new ExecutableProgressDialog((Window)getTopLevelAncestor(), String.format("Updating %s...", packwizMetaFile.name), Constants.REASON_TRIGGERED_BY_USER, programExecution);
 
         AtomicReference<String> updateString = new AtomicReference<>(null);
-        programExecution.whenStdout((line) -> {
-            if(line.startsWith("Update available:")) {
-               updateString.set(line.split("Update available: ")[1]);
+        programExecution.whenStdout((stdout) -> {
+            if(stdout.content().startsWith("Update available:")) {
+               updateString.set(stdout.content().split("Update available: ")[1]);
             }
         });
 
-        programExecution.whenExit(exitCode -> {
+        programExecution.onExit(exitCode -> {
             if(exitCode == 0) {
                 String updateMsg = updateString.get();
                 if(updateMsg != null) {

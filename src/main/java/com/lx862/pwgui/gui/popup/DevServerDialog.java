@@ -73,7 +73,7 @@ public class DevServerDialog extends JDialog {
     }
 
     private void stopServer() {
-        if(packwizServeProgram != null) packwizServeProgram.stop();
+        if(packwizServeProgram != null) packwizServeProgram.terminate();
         serverExecutor.shutdown();
         logTextArea.append("----- Development Server Stopped -----\n");
     }

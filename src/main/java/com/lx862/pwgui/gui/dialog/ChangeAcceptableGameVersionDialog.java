@@ -20,7 +20,6 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 public class ChangeAcceptableGameVersionDialog extends JDialog {
     private final List<VersionMetadata> versions;
@@ -125,7 +124,8 @@ public class ChangeAcceptableGameVersionDialog extends JDialog {
             batchedProgramExecution.add(Executables.packwiz.buildCommand("settings", "acceptable-versions", "--add", version));
         }
 
-        batchedProgramExecution.run(Constants.REASON_TRIGGERED_BY_USER, callback);
+        batchedProgramExecution.onFinish(callback);
+        batchedProgramExecution.execute(Constants.REASON_TRIGGERED_BY_USER);
     }
 
     private void refreshVersionList(JList<String> jList, List<String> selected, JCheckBox snapshotCheckBox) {

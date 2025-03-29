@@ -8,9 +8,13 @@ import java.util.function.Consumer;
 /** Executes multiple commands and invokes callback after completion of all commands */
 public class BatchedProgramExecution {
     private final List<ProgramExecution> programExecutions;
+    private final List<Consumer<Integer>> programExitCallbacks;
+    private final List<Consumer<Boolean>> finishCallbacks;
 
     public BatchedProgramExecution() {
         this.programExecutions = new ArrayList<>();
+        this.programExitCallbacks = new ArrayList<>();
+        this.finishCallbacks = new ArrayList<>();
     }
 
     /** Add another program to queued for execution */
@@ -18,21 +22,44 @@ public class BatchedProgramExecution {
         programExecutions.add(exec);
     }
 
-    public void run(String reason, Consumer<Boolean> callback) {
-        if(programExecutions.isEmpty()) callback.accept(true); // Nothing to run
+    public void onExit(Consumer<Integer> exitConsumer) {
+        this.programExitCallbacks.add(exitConsumer);
+    }
+
+    public void onFinish(Consumer<Boolean> finishConsumer) {
+        this.finishCallbacks.add(finishConsumer);
+    }
+
+    public int getTotalCommands() {
+        return programExecutions.size();
+    }
+
+    /**
+     * Terminate all subprocess
+     */
+    public void terminate() {
+        programExecutions.forEach(ProgramExecution::terminate);
+    }
+
+    public void execute(String reason) {
+        if(programExecutions.isEmpty()) { // Nothing to run
+            finishCallbacks.forEach(callback -> callback.accept(true));
+        }
 
         AtomicInteger erroredCommands = new AtomicInteger();
         AtomicInteger executedCommands = new AtomicInteger();
         int totalCommands = programExecutions.size();
 
         for(ProgramExecution programExecution : programExecutions) {
-            programExecution.whenExit(exitCode -> {
+            programExecution.onExit(exitCode -> {
+                programExitCallbacks.forEach(callback -> callback.accept(exitCode));
+
                 if(exitCode > 0) erroredCommands.incrementAndGet();
                 executedCommands.incrementAndGet();
 
                 boolean allCommandExecuted = executedCommands.get() == totalCommands;
                 if(allCommandExecuted) {
-                    callback.accept(erroredCommands.get() == 0);
+                    finishCallbacks.forEach(callback -> callback.accept(erroredCommands.get() == 0));
                 }
             });
             programExecution.execute(reason);

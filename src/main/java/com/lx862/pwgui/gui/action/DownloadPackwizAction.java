@@ -14,12 +14,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.util.Locale;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -27,6 +27,10 @@ import java.util.zip.ZipInputStream;
 public class DownloadPackwizAction extends AbstractAction {
     private final Window parent;
     private final Consumer<Path> finishCallback;
+    private static final String[] downloadMirror = {
+            "https://nightly.link/packwiz/packwiz/workflows/go/main/%s.zip", // https://github.com/packwiz/packwiz/tree/main
+            "https://nightly.link/Kenny-Hui/packwiz/workflows/go/artifact/%s.zip" // https://github.com/Kenny-Hui/packwiz/tree/artifact
+    };
 
     public DownloadPackwizAction(String title, Window parent, Consumer<Path> finishCallback) {
         super(title);
@@ -45,22 +49,43 @@ public class DownloadPackwizAction extends AbstractAction {
             return;
         }
 
-        Path tempDestination = tempDirectory.resolve("packwiz_executable.zip");
-
         try {
-            URL url = new URL(String.format("https://nightly.link/packwiz/packwiz/workflows/go/main/%s.zip", getArtifactName()));
-            DownloadProgressDialog downloadProgressDialog = new DownloadProgressDialog(parent, "Downloading packwiz...", "packwiz", url, tempDestination, () -> {
-                AtomicReference<Path> packwizBinaryDestination = new AtomicReference<>();
+            int totalMirror = downloadMirror.length;
+            attemptDownload(totalMirror, 0, parent, tempDirectory);
+        } catch (MalformedURLException ignored) {
+        }
+    }
+
+    private void attemptDownload(int totalMirror, int i, Window parent, Path tempDirectory) throws MalformedURLException {
+        Path destination = tempDirectory.resolve("packwiz_executable.zip");
+        URL url = URI.create(String.format(downloadMirror[i], getArtifactName())).toURL();
+
+        DownloadProgressDialog downloadProgressDialog = new DownloadProgressDialog(parent, "Downloading packwiz...", "packwiz", url, destination, success -> {
+            if(!success) {
+                PWGUI.LOGGER.error("Failed to download from " + url + "!");
+                JOptionPane.showMessageDialog(parent, String.format("Failed to download from %s\nWill retry with another mirror.", url), Util.withTitlePrefix("Download Failed"), JOptionPane.WARNING_MESSAGE);
+                int newAttemptedMirror = i+1;
+                if(newAttemptedMirror < totalMirror) {
+                    try {
+                        attemptDownload(totalMirror, newAttemptedMirror, parent, tempDirectory);
+                    } catch (MalformedURLException ignored) {
+                    }
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                Path packwizBinaryDestination = null;
 
                 Path binDirectory = Config.CONFIG_DIR_PATH.resolve("bin");
                 binDirectory.toFile().mkdirs();
 
                 byte[] buffer = new byte[1024];
-                try(FileInputStream fis = new FileInputStream(tempDestination.toFile()); ZipInputStream zis = new ZipInputStream(fis)) {
+                try(FileInputStream fis = new FileInputStream(destination.toFile()); ZipInputStream zis = new ZipInputStream(fis)) {
                     ZipEntry zipEntry;
                     while((zipEntry = zis.getNextEntry()) != null) {
                         if(zipEntry.getName().equals("packwiz") || zipEntry.getName().equals("packwiz.exe")) {
-                            packwizBinaryDestination.set(binDirectory.resolve(zipEntry.getName()));
+                            packwizBinaryDestination = binDirectory.resolve(zipEntry.getName());
                             try(FileOutputStream fos = new FileOutputStream(binDirectory.resolve(zipEntry.getName()).toFile())) {
                                 int len;
                                 while ((len = zis.read(buffer)) > 0) {
@@ -76,20 +101,20 @@ public class DownloadPackwizAction extends AbstractAction {
                 }
 
                 try {
-                    Files.delete(tempDestination);
+                    Files.delete(destination);
                     Files.delete(tempDirectory);
                 } catch (IOException ignored) { // Not important
                 }
 
-                boolean configureSuccessful = tryConfigurePackwiz(packwizBinaryDestination.get());
+                boolean configureSuccessful = tryConfigurePackwiz(packwizBinaryDestination);
                 if(configureSuccessful) {
-                    finishCallback.accept(packwizBinaryDestination.get());
+                    finishCallback.accept(packwizBinaryDestination);
                 }
-            });
+                return true;
+            }
+        });
 
-            downloadProgressDialog.setVisible(true);
-        } catch (MalformedURLException ignored) {
-        }
+        downloadProgressDialog.setVisible(true);
     }
 
     private static String getArtifactName() {

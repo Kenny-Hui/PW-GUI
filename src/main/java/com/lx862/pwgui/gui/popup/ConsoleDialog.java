@@ -117,7 +117,7 @@ public class ConsoleDialog extends JDialog {
             ProgramExecution programExecution = Executables.packwiz.buildCommand(splitArgs);
             currentExecution = programExecution;
             programExecution.whenStdout(line -> {
-                logTextArea.append(line + "\n");
+                logTextArea.append(line.content() + "\n");
                 logTextArea.setCaretPosition(logTextArea.getDocument().getLength());
             });
             programExecution.onExit(exitCode -> {

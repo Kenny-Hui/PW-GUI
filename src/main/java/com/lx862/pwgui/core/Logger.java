@@ -38,6 +38,14 @@ public class Logger {
         log(prefix + " [ERROR]", str);
     }
 
+    public void warn(String str) {
+        warn("[" + Constants.PROGRAM_NAME + "]", str);
+    }
+
+    public void warn(String prefix, String str) {
+        log(prefix + " [WARN]", str);
+    }
+
     public void exception(Throwable t) {
         StringWriter sw = new StringWriter();
         t.printStackTrace(new PrintWriter(sw)); // Only in Java (TM)

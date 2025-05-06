@@ -12,7 +12,6 @@ import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -26,14 +25,24 @@ public class FileSystemTree extends JTree {
     );
 
     private final Function<File, FileSystemEntityModel> getModel;
+    private final List<Path> fileNeedingUserAcknowledgement;
     private GitIgnoreRules ignorePattern;
     public boolean fsLock; // A slight hack to signal to others when a file is changed
 
     public FileSystemTree(Path root, Function<File, FileSystemEntityModel> getModel) {
         super();
         this.getModel = getModel;
+        this.fileNeedingUserAcknowledgement = new ArrayList<>();
         setModel(new DefaultTreeModel(generateRecursiveTree(root), false));
         setRootVisible(false);
+        setDragEnabled(true);
+        setDropMode(DropMode.ON);
+        setTransferHandler(new FileTransferHandler());
+        addTreeSelectionListener((treeSelectionEvent) -> {
+            FileSystemSortedTreeNode treeNode = (FileSystemSortedTreeNode)treeSelectionEvent.getPath().getLastPathComponent();
+            newFileAcknowledged(treeNode.path);
+        });
+
         setShowsRootHandles(true);
     }
 
@@ -44,6 +53,21 @@ public class FileSystemTree extends JTree {
     public void setIgnorePattern(GitIgnoreRules pattern) {
         this.ignorePattern = pattern;
         repaint();
+    }
+
+    public void markAsNewFile(Path path) {
+        fileNeedingUserAcknowledgement.add(path);
+    }
+
+    public boolean isNewFile(Path path) {
+        return fileNeedingUserAcknowledgement.contains(path);
+    }
+
+    /**
+     * The file entry have been selected by the user
+     */
+    public void newFileAcknowledged(Path path) {
+        this.fileNeedingUserAcknowledgement.remove(path);
     }
 
     private FileSystemSortedTreeNode generateRecursiveTree(Path root) {

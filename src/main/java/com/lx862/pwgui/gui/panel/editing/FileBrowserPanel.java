@@ -15,6 +15,7 @@ import java.nio.file.Files;
 
 class FileBrowserPanel extends JPanel {
     public final FileSystemTree fileBrowserTree;
+    private static final Color NEW_FILE_LIST_COLOR = new Color(0x44FFAA00, true);
 
     public FileBrowserPanel(Modpack modpack) {
         setLayout(new GridBagLayout());
@@ -24,7 +25,7 @@ class FileBrowserPanel extends JPanel {
         gbc.gridx = 0;
 
         fileBrowserTree = new FileSystemTree(modpack.getRootPath(), (file -> getFileModel(modpack, file)));
-        fileBrowserTree.setCellRenderer(new FileSystemTreeCellRenderer());
+        fileBrowserTree.setCellRenderer(new FileSystemTreeCellRenderer(NEW_FILE_LIST_COLOR));
 
         gbc.weighty = 1.0;
         add(new JScrollPane(fileBrowserTree), gbc);

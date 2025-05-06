@@ -18,7 +18,7 @@ public class FileSystemSortedTreeNode extends DefaultMutableTreeNode implements 
 
     @Override
     public String toString() {
-        return name;
+        return String.format("FileSystemSortedTreeNode[name=%s, path=%s]", name, path);
     }
 
     public void addAndSort(MutableTreeNode newChild) {

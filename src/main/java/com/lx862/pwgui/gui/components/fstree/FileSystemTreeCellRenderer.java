@@ -9,31 +9,48 @@ import java.awt.*;
 public class FileSystemTreeCellRenderer extends KTreeCellRenderer {
     private static final int IGNORED_COLOR_ALPHA = 75;
 
+    private final Color newFileColor;
+    private boolean fileIsNew = false;
+
+    public FileSystemTreeCellRenderer(Color newFileColor) {
+        this.newFileColor = newFileColor;
+    }
+
     @Override
     public Component getTreeCellRendererComponent(JTree jTree, Object o, boolean selected, boolean expanded, boolean leaf, int row, boolean b3) {
         super.getTreeCellRendererComponent(jTree, o, selected, expanded, leaf, row, b3);
+        if(jTree instanceof FileSystemTree fileSystemTree) {
+            if(o instanceof FileSystemSortedTreeNode fileSystemSortedTreeNode) {
+                FileSystemEntityModel fileInfo = (FileSystemEntityModel)fileSystemSortedTreeNode.getUserObject();
 
-        if(o instanceof FileSystemSortedTreeNode) {
-            FileSystemEntityModel fileInfo = (FileSystemEntityModel)((FileSystemSortedTreeNode)o).getUserObject();
+                if(fileSystemTree.getIgnorePattern() != null && fileSystemTree.getIgnorePattern().shouldIgnore(fileInfo.path)) {
+                    Color lowOpacityColor = new Color(getForeground().getRed(), getForeground().getGreen(), getForeground().getBlue(), IGNORED_COLOR_ALPHA);
+                    setForeground(lowOpacityColor);
+                }
 
-            if(((FileSystemTree)jTree).getIgnorePattern() != null && ((FileSystemTree)jTree).getIgnorePattern().shouldIgnore(fileInfo.path)) {
-                Color lowOpacityColor = new Color(getForeground().getRed(), getForeground().getGreen(), getForeground().getBlue(), IGNORED_COLOR_ALPHA);
-                setForeground(lowOpacityColor);
-            }
+                setText(fileInfo.getDisplayName());
+                setFont(getFont().deriveFont(fileInfo.isUserFriendlyName() ? Font.ITALIC : Font.PLAIN));
+                setIcon(fileInfo.getIcon());
 
-            if(fileInfo.isUserFriendlyName()) {
-                setFont(getFont().deriveFont(Font.ITALIC));
+                fileIsNew = fileSystemTree.isNewFile(fileSystemSortedTreeNode.path);
             } else {
                 setFont(getFont().deriveFont(Font.PLAIN));
+                setText(o.toString());
             }
-            setText(fileInfo.getDisplayName());
-
-            setIcon(fileInfo.getIcon());
         } else {
-            setFont(getFont().deriveFont(Font.PLAIN));
-            setText(o.toString());
+            throw new IllegalStateException("FileSystemTreeCellRenderer not attached to a FileSystemTree!");
         }
 
         return this;
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        if(fileIsNew) {
+            g.setColor(newFileColor);
+            g.fillRect(0, 0, getWidth(), getHeight());
+        }
+
+        super.paint(g);
     }
 }

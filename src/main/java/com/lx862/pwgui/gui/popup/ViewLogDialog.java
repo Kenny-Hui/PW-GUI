@@ -1,6 +1,7 @@
 package com.lx862.pwgui.gui.popup;
 
 import com.lx862.pwgui.PWGUI;
+import com.lx862.pwgui.core.Logger;
 import com.lx862.pwgui.gui.action.CloseWindowAction;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.gui.components.kui.KFileChooser;
@@ -16,7 +17,7 @@ import java.util.function.Consumer;
 
 /** Dialog to view the program's log */
 public class ViewLogDialog extends JDialog {
-    private final Consumer<String> appendLogCallback;
+    private final Logger.LogCallback appendLogCallback;
 
     public ViewLogDialog(JFrame frame) {
         super(frame, Util.withTitlePrefix("View Program Log"));
@@ -30,7 +31,7 @@ public class ViewLogDialog extends JDialog {
         JScrollPane logTextAreaScrollPane = new JScrollPane(logTextArea);
         add(logTextAreaScrollPane);
 
-        this.appendLogCallback = line -> {
+        this.appendLogCallback = (line, realtime) -> {
             logTextArea.append(line + "\n");
             logTextAreaScrollPane.getVerticalScrollBar().setValue(logTextAreaScrollPane.getVerticalScrollBar().getMaximum()); // Jump to bottom
         };
@@ -46,7 +47,7 @@ public class ViewLogDialog extends JDialog {
             if (fileChooser.openSaveAsDialog(this) == JFileChooser.APPROVE_OPTION) {
                 File file = fileChooser.getSelectedFile();
                 try(FileWriter fw = new FileWriter(file)) {
-                    for(String line : PWGUI.LOGGER.lines) {
+                    for(String line : PWGUI.LOGGER.getLogHistory()) {
                         fw.write(line + "\n");
                     }
                 } catch (IOException e) {

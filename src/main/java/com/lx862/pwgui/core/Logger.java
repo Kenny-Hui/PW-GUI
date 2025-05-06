@@ -10,23 +10,24 @@ import java.util.function.Consumer;
 
 /** The logger used for the program */
 public class Logger {
-    private final List<Consumer<String>> logListeners;
-    public final List<String> lines;
+    private final List<LogCallback> logListeners;
+    private final List<String> lines;
 
     public Logger() {
         this.lines = new ArrayList<>();
         this.logListeners = new ArrayList<>();
     }
 
-    public void addListener(Consumer<String> logListener) {
+    public void addListener(LogCallback logListener) {
         this.logListeners.add(logListener);
 
+        // Send historic log to listener
         for(String line : lines) {
-            logListener.accept(line);
+            logListener.onLog(line, false);
         }
     }
 
-    public void removeListener(Consumer<String> logListener) {
+    public void removeListener(LogCallback logListener) {
         this.logListeners.remove(logListener);
     }
 
@@ -72,8 +73,16 @@ public class Logger {
         String finalMessage = prefix + " " + str;
         lines.add(finalMessage);
         System.out.println(finalMessage);
-        for(Consumer<String> logListener : logListeners) {
-            logListener.accept(finalMessage);
+        for(LogCallback logListener : logListeners) {
+            logListener.onLog(finalMessage, true);
         }
+    }
+
+    public String[] getLogHistory() {
+        return this.lines.toArray(String[]::new);
+    }
+
+    public interface LogCallback {
+        void onLog(String content, boolean isRealtime);
     }
 }

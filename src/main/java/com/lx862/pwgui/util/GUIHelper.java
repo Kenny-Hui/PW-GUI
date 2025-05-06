@@ -15,7 +15,7 @@ import java.awt.image.BufferedImage;
 import java.io.InputStream;
 
 public class GUIHelper {
-
+    public static final Image MISSING_TEXTURE = getTextureMissingImage();
     /**
      * Change the application theme for the window
      * @param applicationTheme The application theme to change to
@@ -103,10 +103,7 @@ public class GUIHelper {
 
     public static Image convertImage(InputStream is, int size) {
         Image img = convertImage(is);
-        if(img != null) {
-            return clampImageSize(img, size);
-        }
-        return null;
+        return clampImageSize(img, size);
     }
 
     public static Image convertImage(InputStream is) {
@@ -114,7 +111,20 @@ public class GUIHelper {
             return ImageIO.read(is);
         } catch (Exception e) {
             PWGUI.LOGGER.exception(e);
-            return null;
+            return MISSING_TEXTURE;
         }
+    }
+
+    private static Image getTextureMissingImage() {
+        BufferedImage image = new BufferedImage(16, 16, BufferedImage.TYPE_INT_RGB);
+        Graphics g = image.getGraphics();
+        g.setColor(new Color(0xFF00DC));
+        g.fillRect(0, 0, 8, 8);
+        g.fillRect(8, 8, 8, 8);
+        g.setColor(Color.BLACK);
+        g.fillRect(8, 0, 8, 8);
+        g.fillRect(0, 8, 8, 8);
+        g.dispose();
+        return image;
     }
 }

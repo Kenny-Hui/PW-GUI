@@ -1,6 +1,7 @@
 package com.lx862.pwgui.gui.popup;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.gui.components.kui.KFileChooser;
@@ -9,7 +10,6 @@ import com.lx862.pwgui.gui.panel.ModpackInfoPanel;
 import com.lx862.pwgui.gui.panel.ModpackVersionPanel;
 import com.lx862.pwgui.util.Util;
 import org.apache.commons.io.FileUtils;
-import com.lx862.pwgui.Main;
 import com.lx862.pwgui.gui.components.kui.KSeparator;
 import com.lx862.pwgui.executable.ProgramExecution;
 
@@ -132,7 +132,7 @@ public class NewModpackDialog extends JDialog {
                 new ExecutableProgressDialog(this, "Creating Modpack...", "Requested by user", processExecution).setVisible(true);
             }
         } catch (Exception e) {
-            Main.LOGGER.exception(e);
+            PWGUI.LOGGER.exception(e);
             JOptionPane.showMessageDialog(this, String.format("Failed to create modpack:\n%s", e.getMessage()), Util.withTitlePrefix("Create Modpack"), JOptionPane.ERROR_MESSAGE);
         }
     }

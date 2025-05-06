@@ -1,6 +1,6 @@
 package com.lx862.pwgui.gui.action;
 
-import com.lx862.pwgui.Main;
+import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.core.Config;
 import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.util.Util;
@@ -24,19 +24,19 @@ public class ResetProgramAction extends AbstractAction {
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         if(JOptionPane.showConfirmDialog(parents[0], String.format("This will reset %s to it's initial state as if it's the first time the program is launched.\nAre you sure you want to continue?", Constants.PROGRAM_NAME), Util.withTitlePrefix("Reset Program?"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-            Main.LOGGER.info(String.format("Resetting %s!", Constants.PROGRAM_NAME));
+            PWGUI.LOGGER.info(String.format("Resetting %s!", Constants.PROGRAM_NAME));
 
             try {
                 FileUtils.deleteDirectory(Config.CONFIG_DIR_PATH.toFile());
             } catch (IOException e) {
-                Main.LOGGER.exception(e);
+                PWGUI.LOGGER.exception(e);
                 JOptionPane.showMessageDialog(parents[0], String.format("Failed to delete folder %s!\nCannot reset program!", Config.CONFIG_DIR_PATH), Util.withTitlePrefix("Reset Failed!"), JOptionPane.ERROR_MESSAGE);
             }
 
             for(Window parent : parents) {
                 parent.dispose();
             }
-            Main.initializeProgram(null);
+            PWGUI.init(null);
         }
     }
 }

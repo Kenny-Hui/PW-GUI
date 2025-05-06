@@ -1,4 +1,4 @@
-package com.lx862.pwgui.core;
+package com.lx862.pwgui.pwcore;
 
 import com.lx862.pwgui.data.Cache;
 import com.lx862.pwgui.data.model.GitIgnoreRules;

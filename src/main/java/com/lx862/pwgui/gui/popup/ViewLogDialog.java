@@ -1,10 +1,10 @@
 package com.lx862.pwgui.gui.popup;
 
+import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.gui.action.CloseWindowAction;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.gui.components.kui.KFileChooser;
 import com.lx862.pwgui.util.Util;
-import com.lx862.pwgui.Main;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,7 +35,7 @@ public class ViewLogDialog extends JDialog {
             logTextAreaScrollPane.getVerticalScrollBar().setValue(logTextAreaScrollPane.getVerticalScrollBar().getMaximum()); // Jump to bottom
         };
 
-        Main.LOGGER.addListener(appendLogCallback);
+        PWGUI.LOGGER.addListener(appendLogCallback);
 
         JPanel actionRowPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
@@ -46,7 +46,7 @@ public class ViewLogDialog extends JDialog {
             if (fileChooser.openSaveAsDialog(this) == JFileChooser.APPROVE_OPTION) {
                 File file = fileChooser.getSelectedFile();
                 try(FileWriter fw = new FileWriter(file)) {
-                    for(String line : Main.LOGGER.lines) {
+                    for(String line : PWGUI.LOGGER.lines) {
                         fw.write(line + "\n");
                     }
                 } catch (IOException e) {
@@ -65,6 +65,6 @@ public class ViewLogDialog extends JDialog {
     @Override
     public void dispose() {
         super.dispose();
-        Main.LOGGER.removeListener(appendLogCallback);
+        PWGUI.LOGGER.removeListener(appendLogCallback);
     }
 }

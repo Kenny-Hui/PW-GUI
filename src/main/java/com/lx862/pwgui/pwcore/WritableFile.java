@@ -1,6 +1,6 @@
-package com.lx862.pwgui.core;
+package com.lx862.pwgui.pwcore;
 
-import com.lx862.pwgui.Main;
+import com.lx862.pwgui.PWGUI;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -17,6 +17,6 @@ public abstract class WritableFile {
     }
 
     public void write(String reason) throws IOException {
-        Main.LOGGER.info(String.format("Writing file to \"%s\" due to \"%s\"", path.toString(), reason));
+        PWGUI.LOGGER.info(String.format("Writing file to \"%s\" due to \"%s\"", path.toString(), reason));
     }
 }

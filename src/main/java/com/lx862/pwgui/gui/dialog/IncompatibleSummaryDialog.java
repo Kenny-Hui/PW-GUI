@@ -1,10 +1,9 @@
 package com.lx862.pwgui.gui.dialog;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
-import com.lx862.pwgui.Main;
-import com.lx862.pwgui.core.PackwizMetaFile;
+import com.lx862.pwgui.PWGUI;
+import com.lx862.pwgui.pwcore.PackwizMetaFile;
 import com.lx862.pwgui.gui.components.ModDetailListCellRenderer;
-import com.lx862.pwgui.gui.components.ModUpdateListCellRenderer;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.util.Util;
 
@@ -15,7 +14,6 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class IncompatibleSummaryDialog extends JDialog {
     public IncompatibleSummaryDialog(Window parent, List<PackwizMetaFile> items) {
@@ -73,7 +71,7 @@ public class IncompatibleSummaryDialog extends JDialog {
                     Files.delete(meta.getPath());
                     successfulRemoval++;
                 } catch (IOException e) {
-                    Main.LOGGER.exception(e);
+                    PWGUI.LOGGER.exception(e);
                 }
             }
             if(successfulRemoval == items.size()) {

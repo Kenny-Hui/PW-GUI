@@ -1,6 +1,6 @@
 package com.lx862.pwgui.executable;
 
-import com.lx862.pwgui.Main;
+import com.lx862.pwgui.PWGUI;
 
 import java.nio.file.Path;
 
@@ -30,10 +30,10 @@ public class PackwizExecutable extends Executable {
 
     @Override
     public String probe(String override) {
-        Path configuredPackwizExecutablePath = Main.getConfig().packwizExecutablePath.getValue();
+        Path configuredPackwizExecutablePath = PWGUI.getConfig().packwizExecutablePath.getValue();
         if(configuredPackwizExecutablePath != null) {
             if(isOurIntendedProgram(configuredPackwizExecutablePath.toString())) {
-                Main.LOGGER.info(String.format("%s executable configured at %s", programName, configuredPackwizExecutablePath));
+                PWGUI.LOGGER.info(String.format("%s executable configured at %s", programName, configuredPackwizExecutablePath));
                 return configuredPackwizExecutablePath.toString();
             }
         }

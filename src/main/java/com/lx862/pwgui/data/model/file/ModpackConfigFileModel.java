@@ -1,7 +1,7 @@
 package com.lx862.pwgui.data.model.file;
 
-import com.lx862.pwgui.Main;
-import com.lx862.pwgui.core.PackFile;
+import com.lx862.pwgui.PWGUI;
+import com.lx862.pwgui.pwcore.PackFile;
 import com.lx862.pwgui.util.GUIHelper;
 import com.lx862.pwgui.util.Util;
 
@@ -16,7 +16,7 @@ public class ModpackConfigFileModel extends PlainTextFileModel {
         try {
             packFile = new PackFile(file.toPath());
         } catch (Exception e) {
-            Main.LOGGER.exception(e);
+            PWGUI.LOGGER.exception(e);
         }
     }
 

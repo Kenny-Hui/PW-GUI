@@ -1,7 +1,8 @@
 package com.lx862.pwgui.gui.action;
 
-import com.lx862.pwgui.Main;
-import com.lx862.pwgui.core.*;
+import com.lx862.pwgui.PWGUI;
+import com.lx862.pwgui.core.Constants;
+import com.lx862.pwgui.pwcore.*;
 import com.lx862.pwgui.executable.BatchedProgramExecution;
 import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.executable.ProgramExecution;
@@ -54,7 +55,7 @@ public class FullUpdateAction extends UpdateAction {
                     try {
                         Files.createDirectories(tempDirectory);
                     } catch (Exception ex) {
-                        Main.LOGGER.exception(ex);
+                        PWGUI.LOGGER.exception(ex);
                         JOptionPane.showMessageDialog(parent, "Cannot create a temporary folder for version compatibility checking!\nSome content may not have a version that supports the current modloader/minecraft version.", Util.withTitlePrefix("Compatibility checking failed!"), JOptionPane.ERROR_MESSAGE);
                         return;
                     }
@@ -85,16 +86,16 @@ public class FullUpdateAction extends UpdateAction {
                         batchedProgramExecution.add(execution);
 
                         // Try installing these mod to a temp directory. If it succeeds, it supports our new modpack configuration!
-                        Main.LOGGER.info(entry.file + " is unchanged, adding for check");
+                        PWGUI.LOGGER.info(entry.file + " is unchanged, adding for check");
                     }
 
                     batchedProgramExecution.onFinish(programErrored -> {
-                        Main.LOGGER.info(String.format("Found %s incompatible item(s) under the current modpack configuration.", filesWithoutSuitableVersion.size()));
+                        PWGUI.LOGGER.info(String.format("Found %s incompatible item(s) under the current modpack configuration.", filesWithoutSuitableVersion.size()));
 
                         try {
                             FileUtils.deleteDirectory(tempDirectory.toFile());
                         } catch (Exception ex) {
-                            Main.LOGGER.exception(ex);
+                            PWGUI.LOGGER.exception(ex);
                         }
 
                         if(filesWithoutSuitableVersion.isEmpty()) {

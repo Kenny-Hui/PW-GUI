@@ -1,11 +1,11 @@
 package com.lx862.pwgui.gui.frame;
 
-import com.lx862.pwgui.core.Modpack;
+import com.lx862.pwgui.PWGUI;
+import com.lx862.pwgui.pwcore.Modpack;
 import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.gui.components.fstree.FileSystemWatcher;
 import com.lx862.pwgui.gui.panel.editing.HeaderPanel;
 import com.lx862.pwgui.util.Util;
-import com.lx862.pwgui.Main;
 import com.lx862.pwgui.gui.panel.editing.EditPanel;
 
 import javax.swing.*;
@@ -29,7 +29,7 @@ public class EditFrame extends BaseFrame {
         setSize(900, 650);
         setLocationRelativeTo(parent);
 
-        Main.getConfig().setLastModpackPath(modpack.getPackFilePath());
+        PWGUI.getConfig().setLastModpackPath(modpack.getPackFilePath());
         Executables.packwiz.setPackFileLocation(modpack.getRootPath().relativize(modpack.getPackFilePath()).toString());
         Executables.packwiz.changeWorkingDirectory(modpack.getRootPath());
 

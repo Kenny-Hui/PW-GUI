@@ -2,7 +2,7 @@ package com.lx862.pwgui.gui.dialog;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.github.rjeschke.txtmark.Processor;
-import com.lx862.pwgui.Main;
+import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.gui.components.kui.KTabbedPane;
 import com.lx862.pwgui.gui.panel.editing.filetype.MarkdownPanel;
@@ -33,7 +33,7 @@ public class AboutDialog extends JDialog {
         } catch (Exception e) {
             logoLabel = new JLabel(Constants.PROGRAM_NAME);
             logoLabel.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h1.font")));
-            Main.LOGGER.exception(e);
+            PWGUI.LOGGER.exception(e);
         }
         logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -74,7 +74,7 @@ public class AboutDialog extends JDialog {
             try {
                 setInitialContent(Processor.process(Util.getAssets("/assets/about/" + resource)));
             } catch (IOException e) {
-                Main.LOGGER.exception(e);
+                PWGUI.LOGGER.exception(e);
                 setInitialContent(String.format("Error trying to read file: %s", e.getMessage()));
             }
         }

@@ -7,7 +7,7 @@ import com.lx862.pwgui.gui.components.DocumentChangedListener;
 import com.lx862.pwgui.gui.components.kui.*;
 import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.executable.ProgramExecution;
-import com.lx862.pwgui.core.PackwizMetaFile;
+import com.lx862.pwgui.pwcore.PackwizMetaFile;
 import com.lx862.pwgui.gui.dialog.ExecutableProgressDialog;
 import com.lx862.pwgui.util.Util;
 

@@ -1,7 +1,7 @@
 package com.lx862.pwgui.gui.dialog;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
-import com.lx862.pwgui.core.Modpack;
+import com.lx862.pwgui.pwcore.Modpack;
 import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.util.GUIHelper;

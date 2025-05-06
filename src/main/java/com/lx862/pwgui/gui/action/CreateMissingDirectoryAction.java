@@ -1,6 +1,6 @@
 package com.lx862.pwgui.gui.action;
 
-import com.lx862.pwgui.Main;
+import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
@@ -32,7 +32,7 @@ public class CreateMissingDirectoryAction extends AbstractAction {
                 Files.createDirectory(finalPath);
                 JOptionPane.showMessageDialog(parent, String.format("Created folder \"%s\"!", dirName), Util.withTitlePrefix("Folder Created!"), JOptionPane.INFORMATION_MESSAGE);
             } catch (IOException e) {
-                Main.LOGGER.exception(e);
+                PWGUI.LOGGER.exception(e);
                 JOptionPane.showMessageDialog(parent, String.format("Failed to create folder \"%s\":\n%s", dirName, e.getMessage()), Util.withTitlePrefix("Failed to Create Folder"), JOptionPane.ERROR_MESSAGE);
             }
         }

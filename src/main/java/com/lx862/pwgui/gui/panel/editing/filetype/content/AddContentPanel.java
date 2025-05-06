@@ -1,7 +1,7 @@
 package com.lx862.pwgui.gui.panel.editing.filetype.content;
 
 import com.lx862.pwgui.core.Constants;
-import com.lx862.pwgui.core.Modpack;
+import com.lx862.pwgui.pwcore.Modpack;
 import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.executable.ProgramExecution;
 import com.lx862.pwgui.gui.dialog.ExecutableProgressDialog;

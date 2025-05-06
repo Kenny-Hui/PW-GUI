@@ -1,9 +1,9 @@
 package com.lx862.pwgui.gui.popup;
 
+import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.util.Util;
-import com.lx862.pwgui.Main;
 import com.lx862.pwgui.executable.ProgramExecution;
 
 import javax.swing.*;
@@ -67,7 +67,7 @@ public class DevServerDialog extends JDialog {
         try {
             packwizServeProgram.execute("Launched by user", serverExecutor);
         } catch (Exception e) {
-            Main.LOGGER.exception(e);
+            PWGUI.LOGGER.exception(e);
             logTextArea.append(Util.withBracketPrefix(String.format("ERROR: %s", e.getMessage())));
         }
     }

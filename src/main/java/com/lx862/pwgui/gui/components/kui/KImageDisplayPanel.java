@@ -1,6 +1,6 @@
 package com.lx862.pwgui.gui.components.kui;
 
-import com.lx862.pwgui.Main;
+import com.lx862.pwgui.PWGUI;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -17,7 +17,7 @@ public class KImageDisplayPanel extends JPanel {
         try {
             image = ImageIO.read(file);
         } catch (IOException e) {
-            Main.LOGGER.exception(e);
+            PWGUI.LOGGER.exception(e);
             add(new JLabel(String.format("Error while reading the image: %s", e.getMessage())));
         }
     }

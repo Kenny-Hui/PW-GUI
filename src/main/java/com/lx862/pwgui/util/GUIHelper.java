@@ -1,7 +1,7 @@
 package com.lx862.pwgui.util;
 
 import com.formdev.flatlaf.FlatLaf;
-import com.lx862.pwgui.Main;
+import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.data.ApplicationTheme;
 
 import javax.imageio.ImageIO;
@@ -15,11 +15,18 @@ import java.awt.image.BufferedImage;
 import java.io.InputStream;
 
 public class GUIHelper {
-    public static void setupApplicationTheme(ApplicationTheme applicationTheme, Window window) {
+
+    /**
+     * Change the application theme for the window
+     * @param applicationTheme The application theme to change to
+     * @param useWindowDecoration Whether window decoration (Title bar) should be used
+     * @param window The window to change, null if the theme should apply globally to all swing window
+     */
+    public static void setupApplicationTheme(ApplicationTheme applicationTheme, boolean useWindowDecoration, Window window) {
         SwingUtilities.invokeLater(() -> {
             FlatLaf.setup(applicationTheme.getLaf());
 
-            System.setProperty("flatlaf.useWindowDecorations", Main.getConfig().useWindowDecoration.getValue() ? "true" : "false");
+            System.setProperty("flatlaf.useWindowDecorations", useWindowDecoration ? "true" : "false");
 
             UIManager.put("Component.focusWidth", 1);
             UIManager.put("ScrollBar.showButtons", true);
@@ -106,7 +113,7 @@ public class GUIHelper {
         try {
             return ImageIO.read(is);
         } catch (Exception e) {
-            Main.LOGGER.exception(e);
+            PWGUI.LOGGER.exception(e);
             return null;
         }
     }

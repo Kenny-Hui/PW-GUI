@@ -1,6 +1,6 @@
 package com.lx862.pwgui.core;
 
-import com.lx862.pwgui.Main;
+import com.lx862.pwgui.PWGUI;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -65,7 +65,7 @@ public class Logger {
     }
 
     public void debug(String prefix, String str) {
-        if(Main.getConfig().debugMode.getValue()) log(prefix + " [DEBUG]", str);
+        if(PWGUI.getConfig().debugMode.getValue()) log(prefix + " [DEBUG]", str);
     }
 
     private void log(String prefix, String str) {

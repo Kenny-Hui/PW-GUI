@@ -1,7 +1,8 @@
 package com.lx862.pwgui.gui.frame;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
-import com.lx862.pwgui.core.Modpack;
+import com.lx862.pwgui.PWGUI;
+import com.lx862.pwgui.pwcore.Modpack;
 import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.gui.action.SettingsAction;
 import com.lx862.pwgui.gui.components.filter.PackFileFilter;
@@ -11,7 +12,6 @@ import com.lx862.pwgui.gui.popup.NewModpackDialog;
 import com.lx862.pwgui.util.GUIHelper;
 import com.lx862.pwgui.util.Util;
 import com.lx862.pwgui.core.Constants;
-import com.lx862.pwgui.Main;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -43,7 +43,7 @@ public class WelcomeFrame extends BaseFrame {
         } catch (Exception e) {
             logoLabel = new JLabel(Constants.PROGRAM_NAME);
             logoLabel.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h1.font")));
-            Main.LOGGER.exception(e);
+            PWGUI.LOGGER.exception(e);
         }
         logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -90,7 +90,7 @@ public class WelcomeFrame extends BaseFrame {
 
         this.jMenuBar.add(super.getHelpMenu());
 
-        Main.getConfig().setLastModpackPath(null);
+        PWGUI.getConfig().setLastModpackPath(null);
     }
 
     private void showNewModpackDialog() {
@@ -104,7 +104,7 @@ public class WelcomeFrame extends BaseFrame {
             dispose();
             editFrame.setVisible(true);
         } catch (Exception e) {
-            Main.LOGGER.exception(e);
+            PWGUI.LOGGER.exception(e);
             JOptionPane.showMessageDialog(this, String.format("Failed to open modpack:\n%s", e.getMessage()), Util.withTitlePrefix("Failed to open Modpack"), JOptionPane.ERROR_MESSAGE);
         }
     }

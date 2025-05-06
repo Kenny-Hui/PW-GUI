@@ -1,7 +1,7 @@
 package com.lx862.pwgui.gui.popup;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
-import com.lx862.pwgui.Main;
+import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.core.Config;
 import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.data.ApplicationTheme;
@@ -34,7 +34,7 @@ public class SettingsDialog extends JDialog {
     public SettingsDialog(Window parent) {
         super(parent, Util.withTitlePrefix("Settings"), ModalityType.DOCUMENT_MODAL);
 
-        this.initialTheme = Main.getConfig().applicationTheme.getValue();
+        this.initialTheme = PWGUI.getConfig().applicationTheme.getValue();
 
         setSize(400, 500);
         setLocationRelativeTo(parent);
@@ -68,7 +68,7 @@ public class SettingsDialog extends JDialog {
 
         themeComboBox.addItemListener(actionEvent -> {
             ApplicationTheme t = (ApplicationTheme)themeComboBox.getSelectedItem();
-            GUIHelper.setupApplicationTheme(t, this);
+            GUIHelper.setupApplicationTheme(t, PWGUI.getConfig().useWindowDecoration.getValue(), this);
         });
         themePanel.add(themeComboBox);
         programPanel.add(themePanel);
@@ -76,17 +76,17 @@ public class SettingsDialog extends JDialog {
         programPanel.add(GUIHelper.createVerticalPadding(4));
 
         relaunchModpackCheckbox = new JCheckBox("Open last modpack on launch");
-        relaunchModpackCheckbox.setSelected(Main.getConfig().openLastModpackOnLaunch.getValue());
+        relaunchModpackCheckbox.setSelected(PWGUI.getConfig().openLastModpackOnLaunch.getValue());
         this.relaunchModpackCheckbox.setAlignmentX(Component.LEFT_ALIGNMENT);
         programPanel.add(relaunchModpackCheckbox);
 
         showPackwizMetaFileNameCheckbox = new JCheckBox("Show packwiz metafile name (.pw.toml)");
-        showPackwizMetaFileNameCheckbox.setSelected(Main.getConfig().showMetaFileName.getValue());
+        showPackwizMetaFileNameCheckbox.setSelected(PWGUI.getConfig().showMetaFileName.getValue());
         this.showPackwizMetaFileNameCheckbox.setAlignmentX(Component.LEFT_ALIGNMENT);
         programPanel.add(showPackwizMetaFileNameCheckbox);
 
         this.debugModeCheckBox = new JCheckBox("Enable Debug Log");
-        debugModeCheckBox.setSelected(Main.getConfig().debugMode.getValue());
+        debugModeCheckBox.setSelected(PWGUI.getConfig().debugMode.getValue());
         debugModeCheckBox.setAlignmentX(Component.LEFT_ALIGNMENT);
         programPanel.add(debugModeCheckBox);
 
@@ -141,15 +141,15 @@ public class SettingsDialog extends JDialog {
         rootPanel.add(actionRowPanel, BorderLayout.SOUTH);
         add(rootPanel);
 
-        updatePackwizPath(Main.getConfig().packwizExecutablePath.getValue());
+        updatePackwizPath(PWGUI.getConfig().packwizExecutablePath.getValue());
     }
 
     private void updatePackwizPath(Path newPath) {
-        Path oldPath = Main.getConfig().lastModpackPath.getValue();
+        Path oldPath = PWGUI.getConfig().lastModpackPath.getValue();
 
-        Main.getConfig().lastModpackPath.setValue(newPath);
+        PWGUI.getConfig().lastModpackPath.setValue(newPath);
         boolean located = Executables.packwiz.probe(null) != null;
-        Main.getConfig().lastModpackPath.setValue(oldPath); // restore
+        PWGUI.getConfig().lastModpackPath.setValue(oldPath); // restore
 
         if(!located) {
             JOptionPane.showMessageDialog(this, "The specified packwiz executable is not valid!", Util.withTitlePrefix("Invalid Executable"), JOptionPane.ERROR_MESSAGE);
@@ -162,7 +162,7 @@ public class SettingsDialog extends JDialog {
 
     private void save() {
         this.saved = true;
-        Config configInstance = Main.getConfig();
+        Config configInstance = PWGUI.getConfig();
         configInstance.applicationTheme.setValue((ApplicationTheme) themeComboBox.getSelectedItem());
         configInstance.openLastModpackOnLaunch.setValue(relaunchModpackCheckbox.isSelected());
         configInstance.debugMode.setValue(debugModeCheckBox.isSelected());
@@ -174,7 +174,7 @@ public class SettingsDialog extends JDialog {
             configInstance.write(Constants.REASON_TRIGGERED_BY_USER);
             dispose();
         } catch (IOException e) {
-            Main.LOGGER.exception(e);
+            PWGUI.LOGGER.exception(e);
             JOptionPane.showMessageDialog(this, String.format("Failed to save config:\n%s", e.getMessage()), Util.withTitlePrefix("Config Saving Failed!"), JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -182,9 +182,9 @@ public class SettingsDialog extends JDialog {
     @Override
     public void dispose() {
         if(!saved) {
-            GUIHelper.setupApplicationTheme(initialTheme, null);
+            GUIHelper.setupApplicationTheme(initialTheme, PWGUI.getConfig().useWindowDecoration.getValue(), null);
         } else {
-            GUIHelper.setupApplicationTheme((ApplicationTheme) themeComboBox.getSelectedItem(), null);
+            GUIHelper.setupApplicationTheme((ApplicationTheme) themeComboBox.getSelectedItem(), PWGUI.getConfig().useWindowDecoration.getValue(), null);
         }
         super.dispose();
     }

@@ -1,7 +1,7 @@
 package com.lx862.pwgui.gui.panel.editing;
 
-import com.lx862.pwgui.Main;
-import com.lx862.pwgui.core.Modpack;
+import com.lx862.pwgui.PWGUI;
+import com.lx862.pwgui.pwcore.Modpack;
 import com.lx862.pwgui.data.model.file.*;
 import com.lx862.pwgui.gui.components.fstree.FileSystemTree;
 import com.lx862.pwgui.gui.components.kui.KButton;
@@ -11,7 +11,6 @@ import com.lx862.pwgui.util.Util;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
-import java.nio.file.Files;
 
 class FileBrowserPanel extends JPanel {
     public final FileSystemTree fileBrowserTree;
@@ -75,7 +74,7 @@ class FileBrowserPanel extends JPanel {
                 return new DirectoryModel(file);
             }
         } catch (Exception e) {
-            Main.LOGGER.exception(e);
+            PWGUI.LOGGER.exception(e);
             return null;
         }
     }

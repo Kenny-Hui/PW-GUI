@@ -1,6 +1,6 @@
 package com.lx862.pwgui.gui.action;
 
-import com.lx862.pwgui.Main;
+import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.core.Config;
 import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.gui.dialog.DownloadProgressDialog;
@@ -71,7 +71,7 @@ public class DownloadPackwizAction extends AbstractAction {
                         }
                     }
                 } catch (Exception e) {
-                    Main.LOGGER.exception(e);
+                    PWGUI.LOGGER.exception(e);
                     JOptionPane.showMessageDialog(parent, String.format("Failed to extract packwiz from zip file:\n%s", e.getMessage()), Util.withTitlePrefix("Setup Failed"), JOptionPane.ERROR_MESSAGE);
                 }
 
@@ -118,7 +118,7 @@ public class DownloadPackwizAction extends AbstractAction {
     }
 
     private boolean tryConfigurePackwiz(Path path) {
-        Main.getConfig().packwizExecutablePath.setValue(path);
+        PWGUI.getConfig().packwizExecutablePath.setValue(path);
 
         try {
             try { // We want executable permission on *nix
@@ -132,11 +132,11 @@ public class DownloadPackwizAction extends AbstractAction {
                 return false;
             }
 
-            Main.getConfig().write("Update packwiz executable path");
+            PWGUI.getConfig().write("Update packwiz executable path");
 
             return true;
         } catch (IOException e) {
-            Main.LOGGER.exception(e);
+            PWGUI.LOGGER.exception(e);
             JOptionPane.showMessageDialog(parent, "Failed to write config file!", Util.withTitlePrefix("Setup Failed"), JOptionPane.INFORMATION_MESSAGE);
             return false;
         }

@@ -1,8 +1,8 @@
 package com.lx862.pwgui.gui.panel;
 
-import com.lx862.pwgui.core.Modpack;
+import com.lx862.pwgui.pwcore.Modpack;
 import com.lx862.pwgui.data.PackComponent;
-import com.lx862.pwgui.core.PackFile;
+import com.lx862.pwgui.pwcore.PackFile;
 import com.lx862.pwgui.gui.components.DocumentChangedListener;
 import com.lx862.pwgui.gui.components.kui.*;
 import com.lx862.pwgui.gui.dialog.ChangeAcceptableGameVersionDialog;
@@ -62,7 +62,7 @@ public class ModpackExtraSettingPanel extends KGridBagLayoutPanel {
 
         if(fileChooser.showOpenDialog(getTopLevelAncestor()) == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
-            if(!Util.withinDirectory(modpack.getRootPath(), selectedFile)) {
+            if(!Util.withinDirectory(modpack.getRootPath(), selectedFile.toPath())) {
                 JOptionPane.showMessageDialog(getTopLevelAncestor(), "Folder must be inside modpack folder!", Util.withTitlePrefix("Invalid Selected Directory"), JOptionPane.ERROR_MESSAGE);
                 changeDatapackDirectory(modpack, existingFile, datapackFolderLabel);
                 return;

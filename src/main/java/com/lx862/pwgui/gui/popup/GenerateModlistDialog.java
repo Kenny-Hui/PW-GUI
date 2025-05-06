@@ -1,9 +1,9 @@
 package com.lx862.pwgui.gui.popup;
 
 import com.github.rjeschke.txtmark.Processor;
-import com.lx862.pwgui.core.PackFile;
-import com.lx862.pwgui.core.PackIndexFile;
-import com.lx862.pwgui.core.PackwizMetaFile;
+import com.lx862.pwgui.pwcore.PackFile;
+import com.lx862.pwgui.pwcore.PackIndexFile;
+import com.lx862.pwgui.pwcore.PackwizMetaFile;
 import com.lx862.pwgui.gui.action.CloseWindowAction;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.gui.components.kui.KFileChooser;

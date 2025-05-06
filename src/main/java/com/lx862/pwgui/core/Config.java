@@ -1,8 +1,9 @@
 package com.lx862.pwgui.core;
 
 import com.google.gson.*;
-import com.lx862.pwgui.Main;
+import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.data.ApplicationTheme;
+import com.lx862.pwgui.pwcore.WritableFile;
 import com.lx862.pwgui.util.GoUtil;
 
 import java.io.*;
@@ -29,20 +30,19 @@ public class Config extends WritableFile {
     public final ConfigEntry<Path> lastModpackPath = new ConfigEntry<>("lastModpackPath", null, (jsonElement -> Paths.get(jsonElement.getAsString())));
     public final ConfigEntry<Path> packwizExecutablePath = new ConfigEntry<>("packwiz", null, (jsonElement -> Paths.get(jsonElement.getAsString())));
 
-    public Config() throws FileNotFoundException {
-        this(JsonParser.parseReader(new FileReader(CONFIG_PATH.toFile())).getAsJsonObject());
+    public Config() {
+        super(CONFIG_PATH);
     }
 
-    public Config(JsonObject jsonObject) {
-        super(CONFIG_PATH);
-
-        if(jsonObject.has("executables")) {
-            JsonObject executableObject = jsonObject.getAsJsonObject("executables");
+    public void read() throws FileNotFoundException {
+        JsonObject configJson = JsonParser.parseReader(new FileReader(CONFIG_PATH.toFile())).getAsJsonObject();
+        if(configJson.has("executables")) {
+            JsonObject executableObject = configJson.getAsJsonObject("executables");
             this.packwizExecutablePath.read(executableObject);
         }
 
-        if(jsonObject.has("lastPickedFiles")) {
-            JsonArray lastPickedFiles = jsonObject.getAsJsonArray("lastPickedFiles");
+        if(configJson.has("lastPickedFiles")) {
+            JsonArray lastPickedFiles = configJson.getAsJsonArray("lastPickedFiles");
 
             for(int i = 0; i < lastPickedFiles.size(); i++) {
                 JsonObject entry = lastPickedFiles.get(i).getAsJsonObject();
@@ -52,12 +52,12 @@ public class Config extends WritableFile {
             }
         }
 
-        this.lastModpackPath.read(jsonObject);
-        this.openLastModpackOnLaunch.read(jsonObject);
-        this.applicationTheme.read(jsonObject);
-        this.debugMode.read(jsonObject);
-        this.useWindowDecoration.read(jsonObject);
-        this.showMetaFileName.read(jsonObject);
+        this.lastModpackPath.read(configJson);
+        this.openLastModpackOnLaunch.read(configJson);
+        this.applicationTheme.read(configJson);
+        this.debugMode.read(configJson);
+        this.useWindowDecoration.read(configJson);
+        this.showMetaFileName.read(configJson);
     }
 
     public void write(String reason) throws IOException {
@@ -100,7 +100,7 @@ public class Config extends WritableFile {
             try { // Write if changed
                 write("Save last opened modpack path");
             } catch (IOException e) {
-                Main.LOGGER.exception(e);
+                PWGUI.LOGGER.exception(e);
             }
         }
     }
@@ -121,7 +121,7 @@ public class Config extends WritableFile {
                 try {
                     this.value = valueSupplier.apply(jsonObject.get(configName));
                 } catch (IllegalArgumentException e) {
-                    Main.LOGGER.exception(e);
+                    PWGUI.LOGGER.exception(e);
                 }
             }
         }

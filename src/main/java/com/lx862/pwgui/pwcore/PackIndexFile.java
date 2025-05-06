@@ -1,4 +1,4 @@
-package com.lx862.pwgui.core;
+package com.lx862.pwgui.pwcore;
 
 import com.lx862.pwgui.util.Util;
 import com.moandjiezana.toml.Toml;
@@ -80,7 +80,7 @@ public class PackIndexFile extends TomlFile {
         public FileEntry(Path modpackRoot, Toml toml, String indexHashFormat, Path indexFilePath) {
             this.file = toml.getString("file");
             this.path = indexFilePath.getParent().resolve(this.file);
-            if(!Util.withinDirectory(modpackRoot, this.path.toFile())) throw new IllegalStateException(String.format("Referenced file %s must not be outside the modpack folder!", this.file));
+            if(!Util.withinDirectory(modpackRoot, this.path)) throw new IllegalStateException(String.format("Referenced file %s must not be outside the modpack folder!", this.file));
             this.hash = toml.getString("hash");
             this.alias = toml.getString("alias");
             this.hashFormat = toml.getString("hash-format") == null ? indexHashFormat : toml.getString("hash-format");

@@ -1,7 +1,7 @@
 package com.lx862.pwgui.data.model.file;
 
-import com.lx862.pwgui.Main;
-import com.lx862.pwgui.core.PackwizMetaFile;
+import com.lx862.pwgui.PWGUI;
+import com.lx862.pwgui.pwcore.PackwizMetaFile;
 
 import java.io.File;
 
@@ -15,12 +15,12 @@ public class PackMetadataFileModel extends PlainTextFileModel {
 
     @Override
     public String getDisplayName() {
-        return Main.getConfig().showMetaFileName.getValue() ? name : packwizMetaFile.name;
+        return PWGUI.getConfig().showMetaFileName.getValue() ? name : packwizMetaFile.name;
     }
 
     @Override
     public boolean isUserFriendlyName() {
-        return !Main.getConfig().showMetaFileName.getValue();
+        return !PWGUI.getConfig().showMetaFileName.getValue();
     }
 
     public PackwizMetaFile getPackMetadata() {

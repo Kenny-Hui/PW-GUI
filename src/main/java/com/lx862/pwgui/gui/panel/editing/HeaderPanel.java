@@ -1,14 +1,13 @@
 package com.lx862.pwgui.gui.panel.editing;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
-import com.lx862.pwgui.Main;
-import com.lx862.pwgui.core.PackFile;
+import com.lx862.pwgui.PWGUI;
+import com.lx862.pwgui.pwcore.PackFile;
 import com.lx862.pwgui.data.PackComponentVersion;
 import com.lx862.pwgui.util.GUIHelper;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -35,7 +34,7 @@ public class HeaderPanel extends JPanel {
                     add(GUIHelper.createHorizontalPadding(8));
                 }
             } catch (Exception e) {
-                Main.LOGGER.exception(e);
+                PWGUI.LOGGER.exception(e);
             }
         }
 

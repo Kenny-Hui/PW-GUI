@@ -1,6 +1,6 @@
 package com.lx862.pwgui.gui.action;
 
-import com.lx862.pwgui.Main;
+import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.util.GoUtil;
 import com.lx862.pwgui.util.Util;
 import org.apache.commons.io.FileUtils;
@@ -32,7 +32,7 @@ public class ClearPackwizCacheAction extends AbstractAction {
                     FileUtils.deleteDirectory(packwizCacheDir.toFile());
                     JOptionPane.showMessageDialog(parent, "Packwiz cache has been cleared!", Util.withTitlePrefix("Packwiz Cache Cleared!"), JOptionPane.INFORMATION_MESSAGE);
                 } catch (IOException e) {
-                    Main.LOGGER.exception(e);
+                    PWGUI.LOGGER.exception(e);
                     JOptionPane.showMessageDialog(parent, String.format("Failed to clear packwiz cache:\n%s", e.getMessage()), Util.withTitlePrefix("Error Clearing Cache"), JOptionPane.ERROR_MESSAGE);
                 }
             }

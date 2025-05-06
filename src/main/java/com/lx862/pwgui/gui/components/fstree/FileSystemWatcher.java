@@ -1,6 +1,6 @@
 package com.lx862.pwgui.gui.components.fstree;
 
-import com.lx862.pwgui.Main;
+import com.lx862.pwgui.PWGUI;
 
 import java.io.IOException;
 import java.nio.file.*;
@@ -56,19 +56,19 @@ public class FileSystemWatcher {
                     Path filePath = parentDirectory.resolve(((WatchEvent<Path>)e).context());
 
                     if(recursive && kind == ENTRY_CREATE) {
-                        Main.LOGGER.debug(String.format("[FileWatcher] [+] %s", filePath));
+                        PWGUI.LOGGER.debug(String.format("[FileWatcher] [+] %s", filePath));
                         if(Files.isDirectory(filePath)) {
-                            Main.LOGGER.debug(String.format("[FileWatcher] Watching for path %s", filePath));
+                            PWGUI.LOGGER.debug(String.format("[FileWatcher] Watching for path %s", filePath));
                             watchKeys.put(filePath, filePath.register(ws, watchKinds)); // Watch for our new folder
                         }
                     }
 
                     if(kind == ENTRY_DELETE) {
                         WatchKey existingWatchKey = watchKeys.get(filePath);
-                        Main.LOGGER.debug(String.format("[FileWatcher] [-] %s", filePath));
+                        PWGUI.LOGGER.debug(String.format("[FileWatcher] [-] %s", filePath));
 
                         if(existingWatchKey != null) {
-                            Main.LOGGER.debug(String.format("[FileWatcher] Unregistering path %s", filePath));
+                            PWGUI.LOGGER.debug(String.format("[FileWatcher] Unregistering path %s", filePath));
                             existingWatchKey.cancel(); // Unregister our old entry
                             watchKeys.remove(path);
                         }
@@ -78,7 +78,7 @@ public class FileSystemWatcher {
                 wk.reset();
             }
         } catch (IOException e) {
-            Main.LOGGER.exception(e);
+            PWGUI.LOGGER.exception(e);
         } catch (InterruptedException ignored) {
         }
     }

@@ -1,7 +1,7 @@
 package com.lx862.pwgui.gui.panel.editing;
 
-import com.lx862.pwgui.Main;
-import com.lx862.pwgui.core.Modpack;
+import com.lx862.pwgui.PWGUI;
+import com.lx862.pwgui.pwcore.Modpack;
 import com.lx862.pwgui.data.model.file.*;
 import com.lx862.pwgui.gui.components.kui.KSplitPane;
 import com.lx862.pwgui.gui.panel.editing.filetype.*;
@@ -76,7 +76,7 @@ public class EditPanel extends JPanel {
             if(node instanceof PackwizIgnoreFileModel) panels.add(new NameTabPair("Packwiz Ignore", new PackwizIgnorePanel(context, (PackwizIgnoreFileModel) node)));
             if(node instanceof PackMetadataFileModel) panels.add(new NameTabPair("Packwiz Meta File", new PackwizMetaPanel(context, (PackMetadataFileModel) node)));
         } catch (Exception e) {
-            Main.LOGGER.exception(e);
+            PWGUI.LOGGER.exception(e);
         }
 
         return panels;

@@ -4,6 +4,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Locale;
 
+/**
+ * Reimplementation of Go's function in Java
+ */
 public class GoUtil {
     // https://github.com/golang/go/blob/40b3c0e58a0ae8dec4684a009bf3806769e0fc41/src/os/file.go#L474-L485
     /** A reimplementation of Go's UserCacheDir, which is used by packwiz to determine the cache location */

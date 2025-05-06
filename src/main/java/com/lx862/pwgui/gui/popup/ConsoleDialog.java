@@ -59,15 +59,11 @@ public class ConsoleDialog extends JDialog {
 
             @Override
             public void keyPressed(KeyEvent keyEvent) {
-                if(commandHistory.isEmpty()) return;
-                if(keyEvent.getKeyCode() == KeyEvent.VK_UP) {
-                    commandHistoryIndex--;
-                    if(commandHistoryIndex < 0) commandHistoryIndex = 0;
-                    inputField.setText(commandHistory.get(commandHistoryIndex));
-                } else if(keyEvent.getKeyCode() == KeyEvent.VK_DOWN) {
-                    commandHistoryIndex++;
-                    if(commandHistoryIndex >= commandHistory.size()) commandHistoryIndex = commandHistory.size() - 1;
-                    inputField.setText(commandHistory.get(commandHistoryIndex));
+                boolean arrowKeyPressed = keyEvent.getKeyCode() == KeyEvent.VK_UP || keyEvent.getKeyCode() == KeyEvent.VK_DOWN;
+                if(arrowKeyPressed) {
+                    String command = getCommandHistory(keyEvent.getKeyCode() == KeyEvent.VK_UP);
+                    if(command == null) return;
+                    inputField.setText(command);
                 }
             }
             @Override
@@ -87,6 +83,15 @@ public class ConsoleDialog extends JDialog {
         executeCommand("", true);
 
         add(rootPanel, BorderLayout.CENTER);
+    }
+
+    private String getCommandHistory(boolean prev) {
+        if(commandHistory.isEmpty()) return null;
+
+        commandHistoryIndex = commandHistoryIndex - (prev ? 1 : -1);
+        if(commandHistoryIndex < 0) commandHistoryIndex = 0;
+        if(commandHistoryIndex >= commandHistory.size()) commandHistoryIndex = commandHistory.size() - 1;
+        return commandHistory.get(commandHistoryIndex);
     }
 
     private void executeCommand(String args, boolean helpMessage) {

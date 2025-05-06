@@ -1,5 +1,6 @@
 package com.lx862.pwgui.util;
 
+import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.Main;
 import com.lx862.pwgui.data.model.ManualModInfo;
@@ -29,12 +30,12 @@ import java.util.regex.Pattern;
 
 public class Util {
     private static final Pattern MANUAL_DOWNLOAD_FILENAME_PATTERN = Pattern.compile("\\(([^()]*|\\((?:[^()]*|\\([^()]*\\))*\\))*\\)");
-    /** Returns a String with the format PROGRAM_NAME - TEXT */
+    /** Returns a String with the format "PROGRAM_NAME - TEXT" */
     public static String withTitlePrefix(String str) {
         return String.format("%s - %s", Constants.PROGRAM_NAME, str);
     }
 
-    /** Returns a String with the format [PROGRAM_NAME] TEXT */
+    /** Returns a String with the format "[PROGRAM_NAME] TEXT" */
     public static String withBracketPrefix(String str) {
         return String.format("[%s] %s", Constants.PROGRAM_NAME, str);
     }
@@ -51,7 +52,7 @@ public class Util {
         }
     }
 
-    /** Copy a string to a system clipboard */
+    /** Copy a string to the system clipboard */
     public static void copyToClipboard(String str) {
         StringSelection stringSelection = new StringSelection(str);
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -68,8 +69,14 @@ public class Util {
         }
     }
 
-    public static boolean withinDirectory(Path root, File file) {
-        File parent = file.toPath().normalize().toFile();
+    /**
+     * Returns whether path is subdirectory of a root directory
+     * @param root The root directory
+     * @param path The path to check against
+     * @return
+     */
+    public static boolean withinDirectory(Path root, Path path) {
+        File parent = path.normalize().toFile();
         boolean isWithinDirectory = false;
 
         while(parent != null) {
@@ -87,7 +94,7 @@ public class Util {
         try {
             Desktop.getDesktop().open(file);
         } catch (IOException e) {
-            Main.LOGGER.exception(e);
+            PWGUI.LOGGER.exception(e);
             JOptionPane.showMessageDialog(null, String.format("Failed to open file \"%s\":\n%s", file.getName(), e.getMessage()), withTitlePrefix("Open External Application"), JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -101,11 +108,11 @@ public class Util {
                 Process process = Runtime.getRuntime().exec(new String[]{"xdg-open", uri});
                 process.waitFor();
             } catch (Exception ex) {
-                Main.LOGGER.exception(e);
+                PWGUI.LOGGER.exception(e);
                 JOptionPane.showMessageDialog(null, String.format("Failed to open link \"%s\" with xdg-open:\n%s", uri, e.getMessage()), withTitlePrefix("Open External Link"), JOptionPane.ERROR_MESSAGE);
             }
         } catch (URISyntaxException | IOException e) {
-            Main.LOGGER.exception(e);
+            PWGUI.LOGGER.exception(e);
             JOptionPane.showMessageDialog(null, String.format("Failed to open link \"%s\":\n%s", uri, e.getMessage()), withTitlePrefix("Open External Link"), JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -156,7 +163,7 @@ public class Util {
             Path sourcePath = sourceDirectory.resolve(modInfo.fileName());
             Path destinationPath = cacheDirectory.resolve(modInfo.fileName());
             try {
-                Main.LOGGER.info(String.format("Moving manually downloaded file from \"%s\" to \"%s\"", sourcePath, destinationPath));
+                PWGUI.LOGGER.info(String.format("Moving manually downloaded file from \"%s\" to \"%s\"", sourcePath, destinationPath));
                 Files.move(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(parent, String.format("An error occured while moving manually downloaded files:\n%s\nPlease move %s manually to %s", e.getMessage(), modInfo.fileName(), cacheDirectory), Util.withTitlePrefix("Failed to Move Files!"), JOptionPane.ERROR_MESSAGE);

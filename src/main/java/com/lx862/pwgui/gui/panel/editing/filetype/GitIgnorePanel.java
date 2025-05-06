@@ -1,7 +1,6 @@
 package com.lx862.pwgui.gui.panel.editing.filetype;
 
-import com.lx862.pwgui.Main;
-import com.lx862.pwgui.core.Modpack;
+import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.gui.components.DocumentChangedListener;
 import com.lx862.pwgui.util.Util;
 import com.lx862.pwgui.data.model.GitIgnoreRules;
@@ -43,7 +42,7 @@ public class GitIgnorePanel extends FileTypePanel {
             this.initialContent = content;
             this.textArea.setText(content);
         } catch (Exception e) {
-            Main.LOGGER.exception(e);
+            PWGUI.LOGGER.exception(e);
             this.textArea.setText(Util.withBracketPrefix(String.format("Error: %s", e.getMessage())));
         }
         this.textArea.select(0, 0);

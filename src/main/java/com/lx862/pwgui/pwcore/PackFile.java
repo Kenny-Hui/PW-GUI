@@ -1,4 +1,4 @@
-package com.lx862.pwgui.core;
+package com.lx862.pwgui.pwcore;
 
 import com.lx862.pwgui.data.PackComponent;
 import com.lx862.pwgui.data.PackComponentVersion;
@@ -67,7 +67,7 @@ public class PackFile extends TomlFile {
         if(Files.notExists(resolveRelative(indexFile))) {
             throw new FileNotFoundException(String.format("%s says index file is at \"%s\", but is not found :(\nPlease double check %s.", getPath().getFileName(), this.indexFile, getPath().getFileName()));
         }
-        if(!Util.withinDirectory(path.getParent(), getIndexPath().toFile())) {
+        if(!Util.withinDirectory(path.getParent(), getIndexPath())) {
             throw new IllegalStateException("Pack index file must not be outside the modpack folder!");
         }
         this.packIndexFile = new Cache<>(() -> new PackIndexFile(getPath().getParent(), getIndexPath()));

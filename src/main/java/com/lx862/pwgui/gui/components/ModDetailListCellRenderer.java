@@ -1,6 +1,6 @@
 package com.lx862.pwgui.gui.components;
 
-import com.lx862.pwgui.core.PackwizMetaFile;
+import com.lx862.pwgui.pwcore.PackwizMetaFile;
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;

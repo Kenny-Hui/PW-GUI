@@ -1,6 +1,6 @@
 package com.lx862.pwgui.gui.panel.editing;
 
-import com.lx862.pwgui.Main;
+import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.gui.components.kui.KButton;
@@ -69,7 +69,7 @@ public class FileDetailPanel extends JPanel {
             try {
                 fileTypePanel.save();
             } catch (IOException e) {
-                Main.LOGGER.exception(e);
+                PWGUI.LOGGER.exception(e);
                 JOptionPane.showMessageDialog(this, String.format("Failed to save file!\n%s", e.getMessage()), Util.withTitlePrefix("Failed to Save!"), JOptionPane.ERROR_MESSAGE);
             }
             if(shouldRefresh) Executables.packwiz.refresh().execute(String.format("File modified by %s", Constants.PROGRAM_NAME));

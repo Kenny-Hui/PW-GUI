@@ -1,6 +1,6 @@
 package com.lx862.pwgui.gui.frame;
 
-import com.lx862.pwgui.core.Modpack;
+import com.lx862.pwgui.pwcore.Modpack;
 import com.lx862.pwgui.gui.action.*;
 import com.lx862.pwgui.gui.components.kui.KMenu;
 import com.lx862.pwgui.gui.components.kui.KMenuItem;

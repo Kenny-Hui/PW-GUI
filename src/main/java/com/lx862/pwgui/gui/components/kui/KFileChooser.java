@@ -1,6 +1,6 @@
 package com.lx862.pwgui.gui.components.kui;
 
-import com.lx862.pwgui.Main;
+import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
@@ -26,7 +26,7 @@ public class KFileChooser extends JFileChooser {
 
     public KFileChooser(String context, Path defaultPath) {
         this.context = context;
-        Path lastChosenPath = Main.getConfig().fileChooserLastPath.get(context);
+        Path lastChosenPath = PWGUI.getConfig().fileChooserLastPath.get(context);
 
         if(context != null && lastChosenPath != null && lastChosenPath.toFile().exists()) {
             setCurrentDirectory(lastChosenPath.toFile());
@@ -66,7 +66,7 @@ public class KFileChooser extends JFileChooser {
                     }
                 }
             } catch (IOException e) {
-                Main.LOGGER.exception(e);
+                PWGUI.LOGGER.exception(e);
             }
         }
         return showDialogResult;
@@ -92,13 +92,13 @@ public class KFileChooser extends JFileChooser {
 
     private void saveLastOpenRecord(File file) {
         File directory = file.isDirectory() ? file : file.getParentFile();
-        Path existingRecord = Main.getConfig().fileChooserLastPath.get(context);
+        Path existingRecord = PWGUI.getConfig().fileChooserLastPath.get(context);
         if(existingRecord == null || !existingRecord.equals(directory.toPath())) { // Changed
             try {
-                Main.getConfig().fileChooserLastPath.put(context, directory.toPath());
-                Main.getConfig().write("Save file picker location");
+                PWGUI.getConfig().fileChooserLastPath.put(context, directory.toPath());
+                PWGUI.getConfig().write("Save file picker location");
             } catch (IOException e) {
-                Main.LOGGER.exception(e);
+                PWGUI.LOGGER.exception(e);
             }
         }
     }

@@ -1,6 +1,6 @@
 package com.lx862.pwgui.gui.dialog;
 
-import com.lx862.pwgui.Main;
+import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
@@ -17,7 +17,7 @@ public class DownloadProgressDialog extends ProgressDialog {
     public DownloadProgressDialog(Window window, String title, String itemName, URL url, Path destination, Runnable callback) {
         super(window, title);
 
-        Main.LOGGER.info(String.format("Downloading %s from %s", itemName, url));
+        PWGUI.LOGGER.info(String.format("Downloading %s from %s", itemName, url));
         setStatus(String.format("Initiating download for %s...", itemName));
 
         SwingWorker<Boolean, Long> downloadWorker = new SwingWorker<>() {
@@ -54,10 +54,10 @@ public class DownloadProgressDialog extends ProgressDialog {
             protected void done() {
                 try {
                     get();
-                    Main.LOGGER.info(String.format("Finished downloading %s", itemName));
+                    PWGUI.LOGGER.info(String.format("Finished downloading %s", itemName));
                     callback.run();
                 } catch (Exception e) {
-                    Main.LOGGER.exception(e);
+                    PWGUI.LOGGER.exception(e);
                     String[] options = new String[]{"Copy URL", "OK"};
                     int result = JOptionPane.showOptionDialog(DownloadProgressDialog.this, String.format("An error occured while downloading %s:\n%s", itemName, e.getMessage()), Util.withTitlePrefix("Download Failed!"), JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[1]);
                     if(result == 0) {

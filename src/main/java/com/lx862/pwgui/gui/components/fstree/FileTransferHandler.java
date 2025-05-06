@@ -1,6 +1,6 @@
 package com.lx862.pwgui.gui.components.fstree;
 
-import com.lx862.pwgui.Main;
+import com.lx862.pwgui.PWGUI;
 import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
@@ -54,7 +54,7 @@ public class FileTransferHandler extends TransferHandler {
             } catch (UnsupportedFlavorException ignored) {
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(tree.getTopLevelAncestor(), "An error occured while copying file/folder:\n" + e.toString(), "Failed to copy!", JOptionPane.ERROR_MESSAGE);
-                Main.LOGGER.exception(e);
+                PWGUI.LOGGER.exception(e);
             }
 
             tree.expandPath(nodePath);

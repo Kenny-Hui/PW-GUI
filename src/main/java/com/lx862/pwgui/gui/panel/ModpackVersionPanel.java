@@ -5,7 +5,7 @@ import com.lx862.pwgui.gui.components.kui.KComboBox;
 import com.lx862.pwgui.gui.components.kui.KGridBagLayoutPanel;
 import com.lx862.pwgui.util.GUIHelper;
 import com.lx862.pwgui.data.Caches;
-import com.lx862.pwgui.core.PackFile;
+import com.lx862.pwgui.pwcore.PackFile;
 import com.lx862.pwgui.gui.components.WrapLayout;
 
 import javax.swing.*;

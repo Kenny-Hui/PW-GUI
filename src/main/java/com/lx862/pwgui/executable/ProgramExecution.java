@@ -1,7 +1,7 @@
 package com.lx862.pwgui.executable;
 
+import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.util.Util;
-import com.lx862.pwgui.Main;
 
 import javax.swing.*;
 import java.io.*;
@@ -26,7 +26,7 @@ public class ProgramExecution {
         this.exitListeners = new ArrayList<>();
 
         whenStdout((stdout) -> { // Display log when we got a new line
-            Main.LOGGER.info("[" + programDisplayName + "]", stdout.content());
+            PWGUI.LOGGER.info("[" + programDisplayName + "]", stdout.content());
         });
     }
 
@@ -45,7 +45,7 @@ public class ProgramExecution {
     }
 
     public void execute(String reason, ExecutorService executor) {
-        Main.LOGGER.info(String.format("Running command \"%s\" due to \"%s\"", String.join(" ", processBuilder.command()), reason));
+        PWGUI.LOGGER.info(String.format("Running command \"%s\" due to \"%s\"", String.join(" ", processBuilder.command()), reason));
 
         executor.submit(() -> {
             try {
@@ -73,7 +73,7 @@ public class ProgramExecution {
                 int exitValue = this.process.exitValue();
                 callExitListeners(exitValue);
             } catch (IOException e) {
-                Main.LOGGER.exception(e);
+                PWGUI.LOGGER.exception(e);
                 callStdoutListeners(new StdoutContext(Util.withBracketPrefix(String.format("Failed to execute %s:\n%s", programDisplayName, e.getMessage())), false));
                 callExitListeners(-2);
             } catch (InterruptedException ignored) {
@@ -90,7 +90,7 @@ public class ProgramExecution {
             PrintWriter pw = new PrintWriter(process.getOutputStream());
             pw.write(input + "\n");
             pw.flush();
-            Main.LOGGER.info(String.format("Input %s to %s", input, programDisplayName));
+            PWGUI.LOGGER.info(String.format("Input %s to %s", input, programDisplayName));
         }
     }
 

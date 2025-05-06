@@ -1,7 +1,7 @@
 package com.lx862.pwgui.gui.dialog;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
-import com.lx862.pwgui.Main;
+import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.data.model.ManualModInfo;
 import com.lx862.pwgui.gui.components.fstree.FileSystemWatcher;
 import com.lx862.pwgui.gui.components.kui.*;
@@ -101,7 +101,7 @@ public class ManualDownloadDialog extends JDialog {
     }
 
     private void startWatchDirectory(Path path) {
-        Main.LOGGER.info(String.format("Watching for manually downloaded mods in %s", path));
+        PWGUI.LOGGER.info(String.format("Watching for manually downloaded mods in %s", path));
         if(this.fileWatcherThread != null) {
             this.fileWatcherThread.interrupt();
         }

@@ -1,6 +1,6 @@
 package com.lx862.pwgui.executable;
 
-import com.lx862.pwgui.Main;
+import com.lx862.pwgui.PWGUI;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -38,24 +38,24 @@ public abstract class Executable {
     public String probe(String executableOverride) {
         if(executableOverride != null) {
             if(isOurIntendedProgram(executableOverride)) {
-                Main.LOGGER.info(String.format("%s executable is specified at %s", programName, executableOverride));
+                PWGUI.LOGGER.info(String.format("%s executable is specified at %s", programName, executableOverride));
                 return executableOverride;
             } else {
-                Main.LOGGER.info(String.format("%s executable specified at %s is not valid!", programName, executableOverride));
+                PWGUI.LOGGER.info(String.format("%s executable specified at %s is not valid!", programName, executableOverride));
             }
         }
 
         if(executableLocation == null) {
-            Main.LOGGER.info(String.format("Probing for %s executable...", programName));
+            PWGUI.LOGGER.info(String.format("Probing for %s executable...", programName));
             for(String potentialPath : potentialPaths) {
                 if(isOurIntendedProgram(potentialPath)) {
-                    Main.LOGGER.info(String.format("Found %s executable at %s", programName, potentialPath));
+                    PWGUI.LOGGER.info(String.format("Found %s executable at %s", programName, potentialPath));
                     return potentialPath;
                 }
             }
         }
 
-        Main.LOGGER.info(String.format("Cannot probe %s executable!", programName));
+        PWGUI.LOGGER.info(String.format("Cannot probe %s executable!", programName));
         return null;
     }
 
@@ -84,7 +84,7 @@ public abstract class Executable {
     }
 
     public void changeWorkingDirectory(Path newPath) {
-        Main.LOGGER.info(String.format("Working directory for %s changed to %s", programName, newPath.toString()));
+        PWGUI.LOGGER.info(String.format("Working directory for %s changed to %s", programName, newPath.toString()));
         this.workingDirectory = newPath;
     }
 

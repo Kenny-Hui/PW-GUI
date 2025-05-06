@@ -3,7 +3,7 @@ package com.lx862.pwgui.util;
 import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.Main;
-import com.lx862.pwgui.data.model.ManualModInfo;
+import com.lx862.pwgui.core.data.model.ManualModInfo;
 import com.lx862.pwgui.executable.ProgramExecution;
 import com.lx862.pwgui.gui.dialog.ExecutableProgressDialog;
 import com.lx862.pwgui.gui.dialog.ManualDownloadDialog;

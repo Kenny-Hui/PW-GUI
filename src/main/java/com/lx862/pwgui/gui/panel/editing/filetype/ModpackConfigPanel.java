@@ -1,8 +1,8 @@
 package com.lx862.pwgui.gui.panel.editing.filetype;
 
 import com.lx862.pwgui.core.Constants;
+import com.lx862.pwgui.core.data.model.file.ModpackConfigFileModel;
 import com.lx862.pwgui.pwcore.PackFile;
-import com.lx862.pwgui.data.model.file.*;
 import com.lx862.pwgui.gui.action.FullUpdateAction;
 import com.lx862.pwgui.gui.panel.ModpackExtraSettingPanel;
 import com.lx862.pwgui.gui.panel.ModpackInfoPanel;

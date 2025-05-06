@@ -3,7 +3,7 @@ package com.lx862.pwgui.gui.panel.editing;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.pwcore.PackFile;
-import com.lx862.pwgui.data.PackComponentVersion;
+import com.lx862.pwgui.pwcore.data.PackComponentVersion;
 import com.lx862.pwgui.util.GUIHelper;
 
 import javax.imageio.ImageIO;

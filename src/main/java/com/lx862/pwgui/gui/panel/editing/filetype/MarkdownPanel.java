@@ -4,7 +4,7 @@ import com.github.rjeschke.txtmark.Configuration;
 import com.github.rjeschke.txtmark.Processor;
 import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.util.Util;
-import com.lx862.pwgui.data.model.file.MarkdownFileModel;
+import com.lx862.pwgui.core.data.model.file.MarkdownFileModel;
 
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;

@@ -1,6 +1,6 @@
 package com.lx862.pwgui.gui.panel.editing.filetype;
 
-import com.lx862.pwgui.data.model.file.DirectoryModel;
+import com.lx862.pwgui.core.data.model.file.DirectoryModel;
 
 import javax.swing.*;
 

@@ -1,7 +1,7 @@
 package com.lx862.pwgui.gui.panel;
 
 import com.lx862.pwgui.pwcore.Modpack;
-import com.lx862.pwgui.data.PackComponent;
+import com.lx862.pwgui.pwcore.data.PackComponent;
 import com.lx862.pwgui.pwcore.PackFile;
 import com.lx862.pwgui.gui.components.DocumentChangedListener;
 import com.lx862.pwgui.gui.components.kui.*;

@@ -1,10 +1,10 @@
 package com.lx862.pwgui.gui.dialog;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
-import com.lx862.pwgui.data.Caches;
+import com.lx862.pwgui.core.data.Caches;
 import com.lx862.pwgui.core.Constants;
-import com.lx862.pwgui.data.PackComponent;
-import com.lx862.pwgui.data.VersionMetadata;
+import com.lx862.pwgui.pwcore.data.PackComponent;
+import com.lx862.pwgui.pwcore.data.VersionMetadata;
 import com.lx862.pwgui.executable.BatchedProgramExecution;
 import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.gui.action.CloseWindowAction;

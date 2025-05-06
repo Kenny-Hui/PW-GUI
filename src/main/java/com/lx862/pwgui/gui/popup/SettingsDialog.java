@@ -4,7 +4,7 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.core.Config;
 import com.lx862.pwgui.core.Constants;
-import com.lx862.pwgui.data.ApplicationTheme;
+import com.lx862.pwgui.core.data.ApplicationTheme;
 import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.gui.action.DownloadPackwizAction;
 import com.lx862.pwgui.gui.action.ResetProgramAction;

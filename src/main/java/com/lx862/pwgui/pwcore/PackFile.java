@@ -1,9 +1,9 @@
 package com.lx862.pwgui.pwcore;
 
-import com.lx862.pwgui.data.PackComponent;
-import com.lx862.pwgui.data.PackComponentVersion;
-import com.lx862.pwgui.data.Cache;
-import com.lx862.pwgui.data.exception.MissingKeyPropertyException;
+import com.lx862.pwgui.pwcore.data.PackComponent;
+import com.lx862.pwgui.pwcore.data.PackComponentVersion;
+import com.lx862.pwgui.core.data.Cache;
+import com.lx862.pwgui.core.data.exception.MissingKeyPropertyException;
 import com.lx862.pwgui.util.Util;
 import com.moandjiezana.toml.Toml;
 

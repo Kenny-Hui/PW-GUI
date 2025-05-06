@@ -6,7 +6,7 @@ import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.util.GUIHelper;
 import com.lx862.pwgui.core.Constants;
-import com.lx862.pwgui.data.IconNamePair;
+import com.lx862.pwgui.pwcore.data.IconNamePair;
 import com.lx862.pwgui.gui.components.kui.KFileChooser;
 import com.lx862.pwgui.executable.ProgramExecution;
 import com.lx862.pwgui.util.Util;

@@ -1,6 +1,6 @@
 package com.lx862.pwgui.gui.panel.editing.filetype;
 
-import com.lx862.pwgui.data.model.file.ModpackIndexFileModel;
+import com.lx862.pwgui.core.data.model.file.ModpackIndexFileModel;
 import com.lx862.pwgui.gui.action.RefreshPackAction;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.util.GUIHelper;

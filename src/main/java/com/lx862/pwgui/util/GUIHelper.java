@@ -2,7 +2,7 @@ package com.lx862.pwgui.util;
 
 import com.formdev.flatlaf.FlatLaf;
 import com.lx862.pwgui.PWGUI;
-import com.lx862.pwgui.data.ApplicationTheme;
+import com.lx862.pwgui.core.data.ApplicationTheme;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

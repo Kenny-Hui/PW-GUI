@@ -1,6 +1,6 @@
 package com.lx862.pwgui.gui.components.fstree;
 
-import com.lx862.pwgui.data.model.file.FileSystemEntityModel;
+import com.lx862.pwgui.core.data.model.file.FileSystemEntityModel;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;

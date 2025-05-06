@@ -3,9 +3,9 @@ package com.lx862.pwgui.gui.panel.editing.filetype;
 import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.gui.components.DocumentChangedListener;
 import com.lx862.pwgui.util.Util;
-import com.lx862.pwgui.data.model.GitIgnoreRules;
-import com.lx862.pwgui.data.model.file.GenericFileModel;
-import com.lx862.pwgui.data.model.file.GitIgnoreFileModel;
+import com.lx862.pwgui.core.data.model.GitIgnoreRules;
+import com.lx862.pwgui.core.data.model.file.GenericFileModel;
+import com.lx862.pwgui.core.data.model.file.GitIgnoreFileModel;
 
 import javax.swing.*;
 import java.io.FileWriter;

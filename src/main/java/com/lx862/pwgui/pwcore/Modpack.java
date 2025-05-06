@@ -1,7 +1,7 @@
 package com.lx862.pwgui.pwcore;
 
-import com.lx862.pwgui.data.Cache;
-import com.lx862.pwgui.data.model.GitIgnoreRules;
+import com.lx862.pwgui.core.data.Cache;
+import com.lx862.pwgui.core.data.model.GitIgnoreRules;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

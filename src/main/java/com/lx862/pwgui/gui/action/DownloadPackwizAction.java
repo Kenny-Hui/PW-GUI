@@ -63,10 +63,10 @@ public class DownloadPackwizAction extends AbstractAction {
         DownloadProgressDialog downloadProgressDialog = new DownloadProgressDialog(parent, "Downloading packwiz...", "packwiz", url, destination, success -> {
             if(!success) {
                 PWGUI.LOGGER.error("Failed to download from " + url + "!");
-                JOptionPane.showMessageDialog(parent, String.format("Failed to download from %s\nWill retry with another mirror.", url), Util.withTitlePrefix("Download Failed"), JOptionPane.WARNING_MESSAGE);
                 int newAttemptedMirror = i+1;
                 if(newAttemptedMirror < totalMirror) {
                     try {
+                        JOptionPane.showMessageDialog(parent, String.format("Failed to download from %s\nWill retry with another mirror.", url), Util.withTitlePrefix("Download Failed"), JOptionPane.WARNING_MESSAGE);
                         attemptDownload(totalMirror, newAttemptedMirror, parent, tempDirectory);
                     } catch (MalformedURLException ignored) {
                     }

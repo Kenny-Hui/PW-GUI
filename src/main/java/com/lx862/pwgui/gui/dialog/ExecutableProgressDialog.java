@@ -43,6 +43,11 @@ public class ExecutableProgressDialog extends ProgressDialog {
     }
 
     @Override
+    protected void onCancellation() {
+        programExecution.terminate();
+    }
+
+    @Override
     public void dispose() {
         programExecution.terminate();
         super.dispose();

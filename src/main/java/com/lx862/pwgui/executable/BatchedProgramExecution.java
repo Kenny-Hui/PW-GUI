@@ -2,6 +2,8 @@ package com.lx862.pwgui.executable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
@@ -12,6 +14,7 @@ public class BatchedProgramExecution {
     private final List<Consumer<Integer>> programExitCallbacks;
     private final List<Consumer<Boolean>> finishCallbacks;
     private boolean startedExecution = false;
+    private ExecutorService activeExecutor = null;
 
     public BatchedProgramExecution() {
         this.programExecutions = new ArrayList<>();
@@ -46,17 +49,21 @@ public class BatchedProgramExecution {
     }
 
     /**
-     * Terminate all subprocess
+     * Terminate process and shutdown executors
      */
     public void terminate() {
+        if(activeExecutor != null) activeExecutor.shutdownNow();
         programExecutions.forEach(ProgramExecution::terminate);
     }
 
     public void execute(String reason) {
         startedExecution = true;
         if(programExecutions.isEmpty()) { // Nothing to run
-            finishCallbacks.forEach(callback -> callback.accept(true));
+            invokeCallback(finishCallbacks, true);
+            return;
         }
+
+        activeExecutor = Executors.newSingleThreadExecutor();
 
         AtomicInteger erroredCommands = new AtomicInteger();
         AtomicInteger executedCommands = new AtomicInteger();
@@ -72,11 +79,12 @@ public class BatchedProgramExecution {
                 boolean allCommandExecuted = executedCommands.get() == totalCommands;
                 if(allCommandExecuted) {
                     invokeCallback(finishCallbacks, erroredCommands.get() == 0);
+                    activeExecutor.shutdown();
                 }
             });
 
             invokeCallback(programStartCallbacks, programExecution);
-            programExecution.execute(reason);
+            programExecution.execute(reason, activeExecutor);
         }
     }
 

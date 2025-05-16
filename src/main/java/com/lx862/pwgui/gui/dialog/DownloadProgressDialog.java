@@ -11,8 +11,10 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class DownloadProgressDialog extends ProgressDialog {
+    private boolean terminateDownload = false;
 
     public DownloadProgressDialog(Window window, String title, String itemName, URL url, Path destination, DownloadFinishCallback callback) {
         super(window, title);
@@ -34,6 +36,7 @@ public class DownloadProgressDialog extends ProgressDialog {
                     int bytesRead;
                     long downloaded = 0;
                     while ((bytesRead = in.read(buffer, 0, 1024)) != -1) {
+                        if(terminateDownload) throw new InterruptedException("Download cancelled by user");
                         fos.write(buffer, 0, bytesRead);
                         downloaded += 1024;
                         publish(downloaded);
@@ -57,13 +60,13 @@ public class DownloadProgressDialog extends ProgressDialog {
                     get();
                     PWGUI.LOGGER.info(String.format("Finished downloading %s", itemName));
                     callback.finishedDownloading(true);
-                } catch (Exception e) {
+                } catch (ExecutionException | InterruptedException e) {
                     PWGUI.LOGGER.exception(e);
                     boolean errorHandled = callback.finishedDownloading(false);
 
                     if(!errorHandled) {
                         String[] options = new String[]{"Copy URL", "OK"};
-                        int result = JOptionPane.showOptionDialog(DownloadProgressDialog.this, String.format("An error occured while downloading %s:\n%s", itemName, e.getMessage()), Util.withTitlePrefix("Download Failed!"), JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[1]);
+                        int result = JOptionPane.showOptionDialog(DownloadProgressDialog.this, String.format("Failed to download %s:\n%s", itemName, e.getMessage()), Util.withTitlePrefix("Download Failed!"), JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[1]);
                         if(result == 0) {
                             Util.copyToClipboard(url.toString());
                         }
@@ -74,6 +77,11 @@ public class DownloadProgressDialog extends ProgressDialog {
             }
         };
         downloadWorker.execute();
+    }
+
+    @Override
+    protected void onCancellation() {
+        terminateDownload = true;
     }
 
     public interface DownloadFinishCallback {

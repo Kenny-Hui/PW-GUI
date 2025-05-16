@@ -1,6 +1,7 @@
 package com.lx862.pwgui.gui.dialog;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.gui.components.kui.KCollapsibleToggle;
 import com.lx862.pwgui.util.GUIHelper;
 import com.lx862.pwgui.util.Util;
@@ -48,9 +49,21 @@ public abstract class ProgressDialog extends JDialog {
         logTextArea.setEditable(false);
         logTextArea.setAlignmentX(Component.LEFT_ALIGNMENT);
 
+        JPanel actionRow = new JPanel();
+        actionRow.setAlignmentX(Component.LEFT_ALIGNMENT);
+        actionRow.setLayout(new BoxLayout(actionRow, BoxLayout.LINE_AXIS));
+
         KCollapsibleToggle logToggle = new KCollapsibleToggle("Show Log", "Hide Log");
         logToggle.setAlignmentX(Component.LEFT_ALIGNMENT);
-        rootPanel.add(logToggle);
+        actionRow.add(logToggle);
+
+        actionRow.add(Box.createHorizontalGlue());
+
+        KButton cancelButton = new KButton("Cancel");
+        cancelButton.addActionListener((action) -> {
+            dispose();
+        });
+        actionRow.add(cancelButton);
 
         JScrollPane logWrapper = new JScrollPane(logTextArea);
         logWrapper.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -61,6 +74,7 @@ public abstract class ProgressDialog extends JDialog {
             setSize(getSize().width, getPreferredSize().height);
         });
 
+        rootPanel.add(actionRow);
         rootPanel.add(logWrapper);
         add(rootPanel);
     }
@@ -80,6 +94,14 @@ public abstract class ProgressDialog extends JDialog {
     protected void setProgress(int progress) {
         progressBar.setIndeterminate(false);
         progressBar.setValue(progress);
+    }
+
+    protected abstract void onCancellation();
+
+    @Override
+    public void dispose() {
+        onCancellation();
+        super.dispose();
     }
 
     protected void setStatus(String text) {

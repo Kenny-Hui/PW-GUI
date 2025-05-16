@@ -9,8 +9,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class BatchedExecutionProgressDialog extends ProgressDialog {
     private final BatchedProgramExecution batchedProgramExecution;
 
-    public BatchedExecutionProgressDialog(Window window, String title, String executionReason, BatchedProgramExecution batchedProgramExecution) {
-        super(window, title);
+    public BatchedExecutionProgressDialog(Window parent, String title, String executionReason, BatchedProgramExecution batchedProgramExecution) {
+        super(parent, title);
         this.batchedProgramExecution = batchedProgramExecution;
         int totalCommands = batchedProgramExecution.getTotalCommands();
 
@@ -31,6 +31,11 @@ public class BatchedExecutionProgressDialog extends ProgressDialog {
         });
         setStatus(String.format("Execute %d commands...", totalCommands));
         batchedProgramExecution.execute(executionReason);
+    }
+
+    @Override
+    protected void onCancellation() {
+        batchedProgramExecution.terminate();
     }
 
     @Override

@@ -124,7 +124,7 @@ public class ChangeAcceptableGameVersionDialog extends JDialog {
             batchedProgramExecution.add(Executables.packwiz.buildCommand("settings", "acceptable-versions", "--add", version));
         }
 
-        batchedProgramExecution.onFinish(callback);
+        batchedProgramExecution.onExit(callback);
         batchedProgramExecution.execute(Constants.REASON_TRIGGERED_BY_USER);
     }
 

@@ -76,7 +76,7 @@ public class FullUpdateAction extends UpdateAction {
                             execution = Executables.packwiz.buildCommand(prefix, "add", "--addon-id", String.valueOf(packwizMetaFile.updateCfProjectId), "--meta-folder", tempDirectory.getFileName().toString());
                         }
 
-                        execution.whenStdout(stdout -> {
+                        execution.onStdout(stdout -> {
                             if(stdout.isQuestion()) execution.enterInput("N");
 
                             if(stdout.content().contains("failed to get latest version: no valid versions found") || stdout.content().contains("mod not available for the configured Minecraft version(s)")) {
@@ -89,7 +89,7 @@ public class FullUpdateAction extends UpdateAction {
                         PWGUI.LOGGER.info(entry.file + " is unchanged, adding for check");
                     }
 
-                    batchedProgramExecution.onFinish(programErrored -> {
+                    batchedProgramExecution.onExit(programErrored -> {
                         PWGUI.LOGGER.info(String.format("Found %s incompatible item(s) under the current modpack configuration.", filesWithoutSuitableVersion.size()));
 
                         try {

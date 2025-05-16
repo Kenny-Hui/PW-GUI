@@ -17,7 +17,7 @@ public class ExecutableProgressDialog extends ProgressDialog {
         this.programExecution = programExecution;
 
         AtomicReference<String> lastOutput = new AtomicReference<>();
-        programExecution.whenStdout(stdout -> {
+        programExecution.onStdout(stdout -> {
             SwingUtilities.invokeLater(() -> {
                 lastOutput.set(stdout.content());
                 setStatus(stdout.content());

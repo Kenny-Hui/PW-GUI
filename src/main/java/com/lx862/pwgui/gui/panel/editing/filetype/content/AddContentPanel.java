@@ -44,7 +44,7 @@ public class AddContentPanel extends FileTypePanel {
         AtomicBoolean noValidVersion = new AtomicBoolean();
         AtomicBoolean cancelled = new AtomicBoolean();
 
-        programExecution.whenStdout((stdout) -> {
+        programExecution.onStdout((stdout) -> {
             String line = stdout.content();
             if((line.startsWith("Searching") && line.endsWith("...")) || line.startsWith("Dependencies found:")) {
                 recordedOutputs.clear();

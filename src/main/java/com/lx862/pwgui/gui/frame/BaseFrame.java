@@ -58,8 +58,12 @@ public abstract class BaseFrame extends JFrame {
 //        KMenuItem refreshMenuItem = new KMenuItem(new RefreshPackAction(this));
 //        toolMenu.add(refreshMenuItem);
 
+        KMenuItem reinstallMenuItem = new KMenuItem(new ReinstallAction(this, modpack));
+        toolMenu.add(reinstallMenuItem);
+
         KMenuItem updateAllMenuItem = new KMenuItem(new UpdateAction(this));
         toolMenu.add(updateAllMenuItem);
+
 
         KMenuItem generateModlistItem = new KMenuItem(new GenerateModlistAction(this, modpack.packFile.get()));
         toolMenu.add(generateModlistItem);

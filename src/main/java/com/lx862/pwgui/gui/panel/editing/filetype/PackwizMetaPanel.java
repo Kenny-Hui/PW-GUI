@@ -139,7 +139,7 @@ public class PackwizMetaPanel extends FileTypePanel {
         ExecutableProgressDialog dialog = new ExecutableProgressDialog((Window)getTopLevelAncestor(), String.format("Updating %s...", packwizMetaFile.name), Constants.REASON_TRIGGERED_BY_USER, programExecution);
 
         AtomicReference<String> updateString = new AtomicReference<>(null);
-        programExecution.whenStdout((stdout) -> {
+        programExecution.onStdout((stdout) -> {
             if(stdout.content().startsWith("Update available:")) {
                updateString.set(stdout.content().split("Update available: ")[1]);
             }

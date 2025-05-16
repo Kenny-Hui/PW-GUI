@@ -24,7 +24,7 @@ public class RefreshPackAction extends AbstractAction {
         AtomicReference<String> lastLine = new AtomicReference<>();
 
         Executables.packwiz.refresh()
-            .whenStdout((stdout) -> lastLine.set(stdout.content()))
+            .onStdout((stdout) -> lastLine.set(stdout.content()))
             .onExit(exitCode -> {
                 if(exitCode == 0) {
                     JOptionPane.showMessageDialog(parent, "Modpack index refreshed!", Util.withTitlePrefix("Refresh Modpack Index"), JOptionPane.INFORMATION_MESSAGE);

@@ -25,12 +25,12 @@ public class ProgramExecution {
         this.stdoutListeners = new ArrayList<>();
         this.exitListeners = new ArrayList<>();
 
-        whenStdout((stdout) -> { // Display log when we got a new line
+        onStdout((stdout) -> { // Display log when we got a new line
             PWGUI.LOGGER.info("[" + programDisplayName + "]", stdout.content());
         });
     }
 
-    public ProgramExecution whenStdout(Consumer<StdoutContext> consumer) {
+    public ProgramExecution onStdout(Consumer<StdoutContext> consumer) {
         this.stdoutListeners.add(consumer);
         return this;
     }

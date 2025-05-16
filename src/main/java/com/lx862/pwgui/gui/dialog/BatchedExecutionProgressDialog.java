@@ -15,11 +15,18 @@ public class BatchedExecutionProgressDialog extends ProgressDialog {
         int totalCommands = batchedProgramExecution.getTotalCommands();
 
         AtomicInteger executedCommands = new AtomicInteger();
-        batchedProgramExecution.onExit(exitCode -> {
+        batchedProgramExecution.onProgramStart(programExecution -> {
+            programExecution.onStdout((stdoutContext -> {
+                setStatus(stdoutContext.content());
+            }));
+        });
+
+        batchedProgramExecution.onProgramExit(exitCode -> {
             setStatus(String.format("Executed %d/%d commands", executedCommands.incrementAndGet(), totalCommands));
             setProgress((double)executedCommands.get() / totalCommands);
         });
-        batchedProgramExecution.onFinish(success -> {
+
+        batchedProgramExecution.onExit(success -> {
             SwingUtilities.invokeLater(this::dispose);
         });
         setStatus(String.format("Execute %d commands...", totalCommands));

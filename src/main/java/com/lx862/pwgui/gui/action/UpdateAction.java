@@ -52,7 +52,7 @@ public class UpdateAction extends AbstractAction {
         List<String> unsupportedMods = new ArrayList<>();
         AtomicBoolean startLogMods = new AtomicBoolean();
 
-        programExecution.whenStdout(stdout -> {
+        programExecution.onStdout(stdout -> {
             String line = stdout.content();
             if(line.startsWith("Updates found:")) {
                 startLogMods.set(true);

@@ -122,7 +122,7 @@ public class Util {
         AtomicBoolean captureManualDownloadMod = new AtomicBoolean();
         AtomicReference<String> cachePath = new AtomicReference<>();
 
-        programExecution.whenStdout((stdout) -> {
+        programExecution.onStdout((stdout) -> {
             String line = stdout.content();
             if(line.contains("and must be manually downloaded")) {
                 captureManualDownloadMod.set(true);

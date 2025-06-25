@@ -8,6 +8,10 @@ import com.lx862.pwgui.gui.components.kui.KFileChooser;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -26,13 +30,20 @@ public class ViewLogDialog extends JDialog {
         setLocationRelativeTo(frame);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        JTextArea logTextArea = new JTextArea();
+        JTextPane logTextArea = new JTextPane();
         logTextArea.setEditable(false);
         JScrollPane logTextAreaScrollPane = new JScrollPane(logTextArea);
         add(logTextAreaScrollPane);
 
+        Style style = logTextArea.addStyle("Log Style", null);
         this.appendLogCallback = (line, realtime) -> {
-            logTextArea.append(line + "\n");
+            Color logColor = line.contains("[WARN]") ? Color.ORANGE : line.contains("[ERROR]") ? Color.RED : Color.BLACK;
+            StyleConstants.setForeground(style, logColor);
+
+            Document doc = logTextArea.getDocument();
+            try {
+                doc.insertString(doc.getLength(), line + "\n", style);
+            } catch (BadLocationException ignored) {}
             logTextAreaScrollPane.getVerticalScrollBar().setValue(logTextAreaScrollPane.getVerticalScrollBar().getMaximum()); // Jump to bottom
         };
 
@@ -61,6 +72,11 @@ public class ViewLogDialog extends JDialog {
         actionRowPanel.add(closeButton);
 
         add(actionRowPanel, BorderLayout.PAGE_END);
+    }
+
+    private void addLine(JTextArea logTextArea, String str) {
+
+        logTextArea.append(str + "\n");
     }
 
     @Override

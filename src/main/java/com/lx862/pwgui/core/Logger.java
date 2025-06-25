@@ -2,6 +2,7 @@ package com.lx862.pwgui.core;
 
 import com.lx862.pwgui.PWGUI;
 
+import javax.swing.text.BadLocationException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;

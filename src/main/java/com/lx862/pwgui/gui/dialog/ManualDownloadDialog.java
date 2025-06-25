@@ -3,6 +3,7 @@ package com.lx862.pwgui.gui.dialog;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.core.data.model.ManualModInfo;
+import com.lx862.pwgui.gui.action.OKAction;
 import com.lx862.pwgui.gui.components.fstree.FileSystemWatcher;
 import com.lx862.pwgui.gui.components.kui.*;
 import com.lx862.pwgui.util.Util;
@@ -81,12 +82,10 @@ public class ManualDownloadDialog extends JDialog {
 
         JPanel actionRowPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         actionRowPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        this.okButton = new KButton("OK");
-        this.okButton.setMnemonic(KeyEvent.VK_O);
-        this.okButton.addActionListener(actionEvent -> {
+        this.okButton = new KButton(new OKAction(() -> {
             dispose();
             finishCallback.accept(watchingPath);
-        });
+        }));
         actionRowPanel.add(this.okButton);
 
         KButton cancelButton = new KButton("Cancel");

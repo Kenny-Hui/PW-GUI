@@ -74,11 +74,6 @@ public class ViewLogDialog extends JDialog {
         add(actionRowPanel, BorderLayout.PAGE_END);
     }
 
-    private void addLine(JTextArea logTextArea, String str) {
-
-        logTextArea.append(str + "\n");
-    }
-
     @Override
     public void dispose() {
         super.dispose();

@@ -63,8 +63,12 @@ public class GUIHelper {
         return new EmptyBorder(padding, padding, padding, padding);
     }
 
-    public static Border getSeparatorBorder() {
-        return new MatteBorder(0, 0, 1, 0, getBorderColor());
+    public static EmptyBorder getPaddedBorder(int top, int left, int bottom, int right) {
+        return new EmptyBorder(top, left, bottom, right);
+    }
+
+    public static Border getSeparatorBorder(boolean top, boolean bottom) {
+        return new MatteBorder(top ? 1 : 0, 0, bottom ? 1 : 0, 0, getBorderColor());
     }
 
     public static Color getBorderColor() {

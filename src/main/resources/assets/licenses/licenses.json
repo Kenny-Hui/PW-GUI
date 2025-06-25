@@ -1,0 +1,119 @@
+[
+  {
+    "name": "MIT License",
+    "file": "mit.txt",
+    "overview": {
+      "permissions": ["Commercial use", "Distribution", "Modification", "Private use"],
+      "conditions": ["License and copyright notice"],
+      "limitations": ["Liability", "Warranty"]
+    },
+    "crayon": false,
+    "editable": false
+  },
+  {
+    "name": "Mozilla Public License 2.0",
+    "file": "mpl2.txt",
+    "overview": {
+      "permissions": ["Commercial use", "Distribution", "Modification", "Patent use", "Private use"],
+      "conditions": ["Disclose source", "License and copyright notice"],
+      "limitations": ["Liability", "Trademark use", "Warranty"]
+    },
+    "crayon": false,
+    "editable": false
+  },
+  {
+    "name": "Apache License 2.0",
+    "file": "apache2.txt",
+    "overview": {
+      "permissions": ["Commercial use", "Distribution", "Modification", "Patent use", "Private use"],
+      "conditions": ["License and copyright notice", "State changes"],
+      "limitations": ["Liability", "Trademark use", "Warranty"]
+    },
+    "crayon": false,
+    "editable": false
+  },
+  {
+    "name": "GNU GPL License v2.0",
+    "file": "gplv2.txt",
+    "overview": {
+      "permissions": ["Commercial use", "Distribution", "Modification", "Private use"],
+      "conditions": ["Disclose source", "License and copyright notice", "Same license", "State changes"],
+      "limitations": ["Liability", "Warranty"]
+    },
+    "crayon": false,
+    "editable": false
+  },
+  {
+    "name": "GNU GPL License v3.0",
+    "file": "gplv3.txt",
+    "overview": {
+      "permissions": ["Commercial use", "Distribution", "Modification", "Patent use", "Private use"],
+      "conditions": ["Disclose source", "License and copyright notice", "Same license", "State changes"],
+      "limitations": ["Liability", "Warranty"]
+    },
+    "crayon": false,
+    "editable": false
+  },
+  {
+    "name": "GNU LGPL License v3.0",
+    "file": "lgplv3.txt",
+    "overview": {
+      "permissions": ["Commercial use", "Distribution", "Modification", "Patent use", "Private use"],
+      "conditions": ["Disclose source", "License and copyright notice", "Same license (library)", "State changes"],
+      "limitations": ["Liability", "Warranty"]
+    },
+    "crayon": false,
+    "editable": false
+  },
+  {
+    "name": "GNU AGPL License v3.0",
+    "file": "agplv3.txt",
+    "overview": {
+      "permissions": ["Commercial use", "Distribution", "Modification", "Patent use", "Private use"],
+      "conditions": ["Disclose source", "License and copyright notice", "Network use is distribution", "Same license", "State changes"],
+      "limitations": ["Liability", "Warranty"]
+    },
+    "crayon": false,
+    "editable": false
+  },
+  {
+    "name": "BSD Zero Clause License",
+    "file": "bsd0.txt",
+    "crayon": false,
+    "overview": {
+      "permissions": ["Commercial use", "Distribution", "Modification", "Private use"],
+      "conditions": [],
+      "limitations": ["Liability", "Warranty"]
+    },
+    "editable": false
+  },
+  {
+    "name": "BSD 3-Clause License",
+    "file": "bsd3.txt",
+    "crayon": false,
+    "overview": {
+      "permissions": ["Commercial use", "Distribution", "Modification", "Private use"],
+      "conditions": ["License and copyright notice"],
+      "limitations": ["Liability", "Warranty"]
+    },
+    "editable": false
+  },
+  {
+    "name": "zlib License",
+    "file": "zlib.txt",
+    "crayon": false,
+    "overview": {
+      "permissions": ["Commercial use", "Distribution", "Modification", "Private use"],
+      "conditions": ["License and copyright notice for source"],
+      "limitations": ["Liability", "Warranty"]
+    },
+    "editable": false
+  },
+  {
+    "name": "Custom/All Rights Reserved",
+    "file": "arr.txt",
+    "overview": null,
+    "crayon": false,
+    "editable": true
+  }
+]

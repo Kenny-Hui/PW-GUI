@@ -1,6 +1,7 @@
 package com.lx862.pwgui.gui.dialog;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.lx862.pwgui.gui.action.OKAction;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.gui.components.kui.KGridBagLayoutPanel;
 import com.lx862.pwgui.gui.components.kui.KListCellRenderer;
@@ -42,12 +43,10 @@ public class NumericSelectionDialog extends JDialog {
         jList.setAlignmentX(Component.LEFT_ALIGNMENT);
         panel.addRow(1, jList);
 
-        KButton okButton = new KButton("OK");
-        okButton.setMnemonic(KeyEvent.VK_O);
-        okButton.addActionListener(actionEvent -> {
+        KButton okButton = new KButton(new OKAction(() -> {
             callback.accept(jList.getSelectedIndex());
             dispose();
-        });
+        }));
 
         KButton cancelButton = new KButton("Cancel");
         cancelButton.setMnemonic(KeyEvent.VK_C);

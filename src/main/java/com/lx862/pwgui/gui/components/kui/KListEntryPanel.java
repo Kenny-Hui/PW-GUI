@@ -12,7 +12,7 @@ public class KListEntryPanel extends JPanel {
     }
 
     public KListEntryPanel(String title) {
-        setBorder(GUIHelper.borderWithPadding(4, GUIHelper.getSeparatorBorder()));
+        setBorder(GUIHelper.borderWithPadding(4, GUIHelper.getSeparatorBorder(false, true)));
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         setBackground(new JTextField().getBackground());
 

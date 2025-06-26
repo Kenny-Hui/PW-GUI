@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 
 public class OKAction extends AbstractAction {
     private final Runnable callback;
+
     public OKAction(Runnable callback) {
         super("OK");
         this.callback = callback;

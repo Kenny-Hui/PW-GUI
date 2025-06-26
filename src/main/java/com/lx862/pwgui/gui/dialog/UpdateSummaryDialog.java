@@ -2,13 +2,15 @@ package com.lx862.pwgui.gui.dialog;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.gui.components.ModUpdateListCellRenderer;
+import com.lx862.pwgui.gui.components.kui.KActionPanel;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.gui.components.kui.KCollapsibleToggle;
+import com.lx862.pwgui.gui.components.kui.KRootContentPanel;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.function.Consumer;
@@ -20,18 +22,17 @@ public class UpdateSummaryDialog extends JDialog {
         setSize(500, 400);
         setLocationRelativeTo(parent);
 
-        JPanel rootPanel = new JPanel();
-        rootPanel.setLayout(new BoxLayout(rootPanel, BoxLayout.PAGE_AXIS));
-        rootPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        KRootContentPanel contentPanel = new KRootContentPanel(10);
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.PAGE_AXIS));
 
         JLabel titleLabel = new JLabel("Update Summary");
         titleLabel.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h2.font")));
         titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        rootPanel.add(titleLabel);
+        contentPanel.add(titleLabel);
 
         JLabel descriptionLabel = new JLabel(String.format("%d item(s) can be updated:", newItems.size()));
         descriptionLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        rootPanel.add(descriptionLabel);
+        contentPanel.add(descriptionLabel);
 
         DefaultListModel<String> updateModListModel = new DefaultListModel<>();
         for(String str : newItems) {
@@ -43,7 +44,7 @@ public class UpdateSummaryDialog extends JDialog {
 
         JScrollPane updateItemsListScrollPane = new JScrollPane(updateItemsList);
         updateItemsListScrollPane.setAlignmentX(Component.LEFT_ALIGNMENT);
-        rootPanel.add(updateItemsListScrollPane);
+        contentPanel.add(updateItemsListScrollPane);
 
         if(!skippedItems.isEmpty()) {
             DefaultListModel<String> skippedItemsListModel = new DefaultListModel<>();
@@ -59,9 +60,9 @@ public class UpdateSummaryDialog extends JDialog {
             KCollapsibleToggle pinnedItemsToggle = new KCollapsibleToggle(String.format("Show pinned items (%d)", skippedItems.size()), "Hide pinned items");
             pinnedItemsToggle.setAlignmentX(Component.LEFT_ALIGNMENT);
             pinnedItemsToggle.addActionListener(actionEvent -> skippedItemsScrollPane.setVisible(!skippedItemsScrollPane.isVisible()));
-            rootPanel.add(pinnedItemsToggle);
+            contentPanel.add(pinnedItemsToggle);
 
-            rootPanel.add(skippedItemsScrollPane);
+            contentPanel.add(skippedItemsScrollPane);
         }
 
         if(!unsupportedItems.isEmpty()) {
@@ -78,35 +79,54 @@ public class UpdateSummaryDialog extends JDialog {
             KCollapsibleToggle unsupportedItemsToggle = new KCollapsibleToggle(String.format("Show unsupported items (%d)", unsupportedItems.size()), "Hide unsupported items");
             unsupportedItemsToggle.setAlignmentX(Component.LEFT_ALIGNMENT);
             unsupportedItemsToggle.addActionListener(actionEvent -> unsupportedItemsScrollPane.setVisible(!unsupportedItemsScrollPane.isVisible()));
-            rootPanel.add(unsupportedItemsToggle);
+            contentPanel.add(unsupportedItemsToggle);
 
-            rootPanel.add(unsupportedItemsScrollPane);
+            contentPanel.add(unsupportedItemsScrollPane);
         }
 
         JLabel updateConfirmLabel = new JLabel("Do you want to update?");
         updateConfirmLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        rootPanel.add(updateConfirmLabel);
+        contentPanel.add(updateConfirmLabel);
 
-        JPanel actionRowPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
-        actionRowPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        KButton yesButton = new KButton("Yes");
-        yesButton.setMnemonic(KeyEvent.VK_Y);
-        yesButton.addActionListener(actionEvent -> {
+        KButton yesButton = new KButton(new ConfirmUpdateAction(callback));
+        KButton noButton = new KButton(new CancelUpdateAction(callback));
+
+        JPanel actionPanel = new KActionPanel.Builder().setPositiveButton(yesButton).setNegativeButton(noButton).build();
+        actionPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        contentPanel.add(actionPanel);
+        add(contentPanel);
+    }
+
+    class ConfirmUpdateAction extends AbstractAction {
+        private final Consumer<Boolean> callback;
+
+        public ConfirmUpdateAction(Consumer<Boolean> callback) {
+            super("Yes");
+            putValue(MNEMONIC_KEY, KeyEvent.VK_Y);
+            this.callback = callback;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
             dispose();
             callback.accept(true);
-        });
-        actionRowPanel.add(yesButton);
+        }
+    }
 
-        KButton noButton = new KButton("No");
-        noButton.setMnemonic(KeyEvent.VK_N);
-        noButton.addActionListener(actionEvent -> {
+    class CancelUpdateAction extends AbstractAction {
+        private final Consumer<Boolean> callback;
+
+        public CancelUpdateAction(Consumer<Boolean> callback) {
+            super("No");
+            putValue(MNEMONIC_KEY, KeyEvent.VK_N);
+            this.callback = callback;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
             dispose();
             callback.accept(false);
-        });
-        actionRowPanel.add(noButton);
-
-        rootPanel.add(actionRowPanel);
-        add(rootPanel);
+        }
     }
 }
 

@@ -1,8 +1,10 @@
-package com.lx862.pwgui.gui.dialog;
+package com.lx862.pwgui.gui.popup;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.core.data.Caches;
 import com.lx862.pwgui.core.Constants;
+import com.lx862.pwgui.gui.components.kui.KActionPanel;
+import com.lx862.pwgui.gui.components.kui.KRootContentPanel;
 import com.lx862.pwgui.pwcore.data.PackComponent;
 import com.lx862.pwgui.pwcore.data.VersionMetadata;
 import com.lx862.pwgui.executable.BatchedProgramExecution;
@@ -14,7 +16,6 @@ import com.lx862.pwgui.gui.components.kui.KListCellRenderer;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -33,20 +34,19 @@ public class ChangeAcceptableGameVersionDialog extends JDialog {
 
         this.versions = new ArrayList<>();
 
-        JPanel rootPanel = new JPanel();
-        rootPanel.setLayout(new BoxLayout(rootPanel, BoxLayout.PAGE_AXIS));
-        rootPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        KRootContentPanel contentPanel = new KRootContentPanel(10);
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.PAGE_AXIS));
 
         JLabel selectedVersionLabel = new JLabel("Selected version(s): ???");
 
         JLabel titleLabel = new JLabel("Change Acceptable Version");
         titleLabel.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h3.font")));
         titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        rootPanel.add(titleLabel);
+        contentPanel.add(titleLabel);
 
         JLabel descriptionLabel = new JLabel("<html>Packwiz filters contents from Modrinth/CurseForge based on your Minecraft version.<br>Here, you can add additional versions that should be recognized.<br>This could be useful when including cross-compatible versions.<br>(e.g. 1.18, 1.18.1, 1.18.2)</html>");
         descriptionLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        rootPanel.add(descriptionLabel);
+        contentPanel.add(descriptionLabel);
 
         KButton okButton = new KButton("OK");
         okButton.setMnemonic(KeyEvent.VK_O);
@@ -64,7 +64,7 @@ public class ChangeAcceptableGameVersionDialog extends JDialog {
 
         JScrollPane versionListScrollPane = new JScrollPane(versionList);
         versionListScrollPane.setAlignmentX(Component.LEFT_ALIGNMENT);
-        rootPanel.add(versionListScrollPane);
+        contentPanel.add(versionListScrollPane);
 
         Caches.getVersionMetadata(PackComponent.MINECRAFT, (versions) -> {
             this.versions.clear();
@@ -74,11 +74,8 @@ public class ChangeAcceptableGameVersionDialog extends JDialog {
 
 
         snapshotCheckBox.addActionListener(actionEvent -> refreshVersionList(versionList, versionList.getSelectedValuesList(), snapshotCheckBox));
-        rootPanel.add(snapshotCheckBox);
-        rootPanel.add(selectedVersionLabel);
-
-        JPanel actionRowPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
-        actionRowPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        contentPanel.add(snapshotCheckBox);
+        contentPanel.add(selectedVersionLabel);
 
         okButton.addActionListener(actionEvent -> {
             okButton.setEnabled(false);
@@ -94,13 +91,15 @@ public class ChangeAcceptableGameVersionDialog extends JDialog {
                 }
             });
         });
-        actionRowPanel.add(okButton);
 
         KButton cancelButton = new KButton(new CloseWindowAction(this, true));
-        actionRowPanel.add(cancelButton);
-        rootPanel.add(actionRowPanel);
 
-        add(rootPanel);
+        KActionPanel actionPanel = new KActionPanel.Builder().setPositiveButton(okButton).setNegativeButton(cancelButton).build();
+        actionPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        contentPanel.add(actionPanel);
+
+        add(contentPanel);
     }
 
     private boolean containsSnapshot(List<String> selected, List<VersionMetadata> versions) {

@@ -30,7 +30,6 @@ public class FileSystemTree extends JTree {
     public boolean fsLock; // A slight hack to signal to others when a file is changed
 
     public FileSystemTree(Path root, Function<File, FileSystemEntityModel> getModel) {
-        super();
         this.getModel = getModel;
         this.fileNeedingUserAcknowledgement = new ArrayList<>();
         setModel(new DefaultTreeModel(generateRecursiveTree(root), false));

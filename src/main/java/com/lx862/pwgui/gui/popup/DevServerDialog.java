@@ -3,6 +3,7 @@ package com.lx862.pwgui.gui.popup;
 import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.gui.components.kui.KButton;
+import com.lx862.pwgui.gui.components.kui.KTextArea;
 import com.lx862.pwgui.util.Util;
 import com.lx862.pwgui.executable.ProgramExecution;
 
@@ -13,8 +14,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class DevServerDialog extends JDialog {
-    private final JTextArea logTextArea;
-    private final ExecutorService serverExecutor;
+    private final KTextArea logTextArea;
+    private ExecutorService serverExecutor;
     private ProgramExecution packwizServeProgram;
 
     public DevServerDialog(JFrame frame) {
@@ -24,12 +25,11 @@ public class DevServerDialog extends JDialog {
         setLocationRelativeTo(frame);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        this.serverExecutor = Executors.newSingleThreadExecutor();
-
         JLabel description = new JLabel("This runs a local HTTP server for development, allowing packwiz-installer to reference a local pack.");
         add(description);
 
-        logTextArea = new JTextArea();
+        logTextArea = new KTextArea();
+        logTextArea.useMonospacedFont();
         logTextArea.setEditable(false);
         add(new JScrollPane(logTextArea));
 
@@ -60,6 +60,7 @@ public class DevServerDialog extends JDialog {
     }
 
     private void startServer() {
+        this.serverExecutor = Executors.newSingleThreadExecutor();
         logTextArea.append("----- Development Server Started -----\n");
         packwizServeProgram = Executables.packwiz.buildCommand("serve")
             .onStdout((line) -> logTextArea.append(line.content() + "\n"));

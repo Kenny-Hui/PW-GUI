@@ -4,14 +4,14 @@ import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.executable.Executable;
 import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.executable.ProgramExecution;
-import com.lx862.pwgui.gui.components.kui.KButton;
-import com.lx862.pwgui.gui.components.kui.KGridBagLayoutPanel;
-import com.lx862.pwgui.gui.components.kui.KTextField;
+import com.lx862.pwgui.gui.components.kui.*;
+import com.lx862.pwgui.util.GUIHelper;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ import java.util.StringTokenizer;
 public class ConsoleDialog extends JDialog {
     private final List<String> commandHistory;
     private final Executable executable;
-    private final JTextArea logTextArea;
+    private final KTextArea logTextArea;
     private int commandHistoryIndex;
     private ProgramExecution currentExecution;
 
@@ -35,24 +35,23 @@ public class ConsoleDialog extends JDialog {
         this.commandHistory = new ArrayList<>();
         this.executable = executable;
 
-        JPanel rootPanel = new JPanel(new BorderLayout());
-        rootPanel.setBorder(new EmptyBorder(4, 10, 4, 10));
+        KRootContentPanel contentPanel = new KRootContentPanel(10);
 
-        JLabel description = new JLabel(String.format("Here you can directly run %s commands.", executable.getProgramName()));
-        rootPanel.add(description, BorderLayout.NORTH);
+        JLabel descriptionLabel = new JLabel(String.format("Here you can directly run %s commands.", executable.getProgramName()));
+        contentPanel.add(descriptionLabel, BorderLayout.NORTH);
 
-        logTextArea = new JTextArea();
+        logTextArea = new KTextArea();
+        logTextArea.useMonospacedFont();
         logTextArea.setEditable(false);
-        rootPanel.add(new JScrollPane(logTextArea));
+        contentPanel.add(new JScrollPane(logTextArea));
 
-        KGridBagLayoutPanel inputArea = new KGridBagLayoutPanel(4, 3);
-        KTextField inputField = new KTextField("help");
-        inputField.addActionListener(actionEvent -> {
-            executeCommand(inputField.getText(), false);
-            inputField.setText("");
-        });
+        KGridBagLayoutPanel actionPanel = new KGridBagLayoutPanel(4, 0, 3);
+        actionPanel.setBorder(GUIHelper.getPaddedBorder(6, 0, 0, 0));
 
-        inputField.addKeyListener(new KeyListener() {
+        KTextField commandInputField = new KTextField("help");
+        commandInputField.addActionListener(new RunCommandAction(commandInputField));
+
+        commandInputField.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent keyEvent) {
             }
@@ -63,7 +62,7 @@ public class ConsoleDialog extends JDialog {
                 if(arrowKeyPressed) {
                     String command = getCommandHistory(keyEvent.getKeyCode() == KeyEvent.VK_UP);
                     if(command == null) return;
-                    inputField.setText(command);
+                    commandInputField.setText(command);
                 }
             }
             @Override
@@ -71,18 +70,12 @@ public class ConsoleDialog extends JDialog {
             }
         });
 
-        KButton sendButton = new KButton("Send");
-        sendButton.addActionListener(actionEvent -> {
-            executeCommand(inputField.getText(), false);
-            inputField.setText("");
-        });
-
-        inputArea.addRow(1, 1, new JLabel(executable.getProgramName()), inputField, sendButton);
-
-        rootPanel.add(inputArea, BorderLayout.PAGE_END);
+        KButton runCommandButton = new KButton(new RunCommandAction(commandInputField));
+        actionPanel.addRow(1, 1, new JLabel(executable.getProgramName()), commandInputField, runCommandButton);
+        contentPanel.add(actionPanel, BorderLayout.PAGE_END);
         executeCommand("", true);
 
-        add(rootPanel, BorderLayout.CENTER);
+        add(contentPanel, BorderLayout.CENTER);
     }
 
     private String getCommandHistory(boolean prev) {
@@ -129,6 +122,21 @@ public class ConsoleDialog extends JDialog {
                 currentExecution = null;
             });
             programExecution.execute(helpMessage ? "Display help message" : Constants.REASON_TRIGGERED_BY_USER);
+        }
+    }
+
+    class RunCommandAction extends AbstractAction {
+        private final JTextField commandInputField;
+        public RunCommandAction(JTextField commandInputField) {
+            super("Run");
+            putValue(MNEMONIC_KEY, KeyEvent.VK_R);
+            this.commandInputField = commandInputField;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            executeCommand(commandInputField.getText(), false);
+            commandInputField.setText("");
         }
     }
 }

@@ -2,6 +2,7 @@ package com.lx862.pwgui.gui.dialog;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.PWGUI;
+import com.lx862.pwgui.gui.components.kui.KRootContentPanel;
 import com.lx862.pwgui.pwcore.PackwizMetaFile;
 import com.lx862.pwgui.gui.components.ModDetailListCellRenderer;
 import com.lx862.pwgui.gui.components.kui.KButton;
@@ -22,18 +23,17 @@ public class IncompatibleSummaryDialog extends JDialog {
         setSize(500, 400);
         setLocationRelativeTo(parent);
 
-        JPanel rootPanel = new JPanel();
-        rootPanel.setLayout(new BoxLayout(rootPanel, BoxLayout.PAGE_AXIS));
-        rootPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        KRootContentPanel contentPanel = new KRootContentPanel(10);
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.PAGE_AXIS));
 
         JLabel titleLabel = new JLabel("Compatibility Summary");
         titleLabel.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h2.font")));
         titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        rootPanel.add(titleLabel);
+        contentPanel.add(titleLabel);
 
         JLabel descriptionLabel = new JLabel(String.format("%d item(s) does not have a compatible version for the current modpack:", items.size()));
         descriptionLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        rootPanel.add(descriptionLabel);
+        contentPanel.add(descriptionLabel);
 
         DefaultListModel<PackwizMetaFile> updateModListModel = new DefaultListModel<>();
         for(PackwizMetaFile str : items) {
@@ -45,11 +45,11 @@ public class IncompatibleSummaryDialog extends JDialog {
 
         JScrollPane updateItemsListScrollPane = new JScrollPane(updateItemsList);
         updateItemsListScrollPane.setAlignmentX(Component.LEFT_ALIGNMENT);
-        rootPanel.add(updateItemsListScrollPane);
+        contentPanel.add(updateItemsListScrollPane);
 
         JLabel updateConfirmLabel = new JLabel("What would you like to do?");
         updateConfirmLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        rootPanel.add(updateConfirmLabel);
+        contentPanel.add(updateConfirmLabel);
 
         JPanel actionRowPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         actionRowPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -90,8 +90,8 @@ public class IncompatibleSummaryDialog extends JDialog {
         });
         actionRowPanel.add(ignoreButton);
 
-        rootPanel.add(actionRowPanel);
-        add(rootPanel);
+        contentPanel.add(actionRowPanel);
+        add(contentPanel);
     }
 
     private void copyToClipboard(List<PackwizMetaFile> metas) {

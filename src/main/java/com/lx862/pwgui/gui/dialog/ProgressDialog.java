@@ -3,6 +3,7 @@ package com.lx862.pwgui.gui.dialog;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.gui.components.kui.KCollapsibleToggle;
+import com.lx862.pwgui.gui.components.kui.KRootContentPanel;
 import com.lx862.pwgui.util.GUIHelper;
 import com.lx862.pwgui.util.Util;
 
@@ -21,29 +22,28 @@ public abstract class ProgressDialog extends JDialog {
         setSize(450, 160);
         setLocationRelativeTo(window);
 
-        JPanel rootPanel = new JPanel();
-        rootPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
-        rootPanel.setLayout(new BoxLayout(rootPanel, BoxLayout.Y_AXIS));
+        KRootContentPanel contentPanel = new KRootContentPanel(10);
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 
         JLabel titleLabel = new JLabel(title);
         titleLabel.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h2.font")));
         titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        rootPanel.add(titleLabel);
+        contentPanel.add(titleLabel);
 
-        rootPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        contentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         progressBar = new JProgressBar();
         progressBar.setIndeterminate(true);
         progressBar.setAlignmentX(Component.LEFT_ALIGNMENT);
-        rootPanel.add(progressBar);
+        contentPanel.add(progressBar);
 
-        rootPanel.add(GUIHelper.createVerticalPadding(10));
+        contentPanel.add(GUIHelper.createVerticalPadding(10));
 
         statusLabel = new JLabel("Status text");
         statusLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        rootPanel.add(statusLabel);
+        contentPanel.add(statusLabel);
 
-        rootPanel.add(GUIHelper.createVerticalPadding(10));
+        contentPanel.add(GUIHelper.createVerticalPadding(10));
 
         logTextArea = new JTextArea(10, 0);
         logTextArea.setEditable(false);
@@ -74,9 +74,9 @@ public abstract class ProgressDialog extends JDialog {
             setSize(getSize().width, getPreferredSize().height);
         });
 
-        rootPanel.add(actionRow);
-        rootPanel.add(logWrapper);
-        add(rootPanel);
+        contentPanel.add(actionRow);
+        contentPanel.add(logWrapper);
+        add(contentPanel);
     }
 
     /**

@@ -2,10 +2,7 @@ package com.lx862.pwgui.gui.panel.editing.filetype.content;
 
 import com.lx862.pwgui.gui.components.DocumentChangedListener;
 import com.lx862.pwgui.core.data.model.file.ContentDirectoryModel;
-import com.lx862.pwgui.gui.components.kui.KButton;
-import com.lx862.pwgui.gui.components.kui.KGridBagLayoutPanel;
-import com.lx862.pwgui.gui.components.kui.KHelpButton;
-import com.lx862.pwgui.gui.components.kui.KTextField;
+import com.lx862.pwgui.gui.components.kui.*;
 import com.lx862.pwgui.gui.panel.editing.filetype.FileEntryPaneContext;
 
 import javax.swing.*;
@@ -16,8 +13,8 @@ public class CurseForgePanel extends JPanel {
     public CurseForgePanel(FileEntryPaneContext context, ContentDirectoryModel fileEntry) {
         setLayout(new BorderLayout());
 
-        JPanel rootPanel = new JPanel();
-        rootPanel.setLayout(new BoxLayout(rootPanel, BoxLayout.PAGE_AXIS));
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
 
         KGridBagLayoutPanel formPanel = new KGridBagLayoutPanel(3, 2);
         formPanel.setAlignmentX(LEFT_ALIGNMENT);
@@ -58,9 +55,8 @@ public class CurseForgePanel extends JPanel {
 
         updateAddProjectButtonState(addButton, contentTextField);
 
-
-        rootPanel.add(formPanel);
-        add(rootPanel, BorderLayout.CENTER);
+        mainPanel.add(formPanel);
+        add(mainPanel, BorderLayout.CENTER);
     }
 
     private void updateAddProjectButtonState(KButton addButton, KTextField urlTextField) {

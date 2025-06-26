@@ -10,10 +10,7 @@ import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.gui.action.CloseWindowAction;
 import com.lx862.pwgui.gui.action.OKAction;
 import com.lx862.pwgui.gui.components.DocumentChangedListener;
-import com.lx862.pwgui.gui.components.kui.KButton;
-import com.lx862.pwgui.gui.components.kui.KListCellRenderer;
-import com.lx862.pwgui.gui.components.kui.KSplitPane;
-import com.lx862.pwgui.gui.components.kui.KTextField;
+import com.lx862.pwgui.gui.components.kui.*;
 import com.lx862.pwgui.util.GUIHelper;
 import com.lx862.pwgui.util.Util;
 import org.apache.commons.io.FileUtils;
@@ -22,6 +19,7 @@ import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.time.Year;
@@ -31,7 +29,7 @@ import java.util.List;
 public class ChangeLicenseDialog extends JDialog {
     private License selectedLicense = null;
     private JPanel overviewPanel = null;
-    private JTextArea licenseTextArea = null;
+    private KTextArea licenseTextArea = null;
 
     static ImageIcon licensePermissionsIcon = new ImageIcon(GUIHelper.convertImage(Util.getAssets("/assets/ui/license_permissions.png"), 12));
     static ImageIcon licenseConditionsIcon = new ImageIcon(GUIHelper.convertImage(Util.getAssets("/assets/ui/license_conditions.png"), 12));
@@ -45,20 +43,19 @@ public class ChangeLicenseDialog extends JDialog {
 
         List<License> licenses = getAvailableLicenses();
 
-        JPanel rootPanel = new JPanel();
-        rootPanel.setLayout(new BoxLayout(rootPanel, BoxLayout.PAGE_AXIS));
-        rootPanel.setBorder(new EmptyBorder(10, 10, 0, 10));
+        KRootContentPanel contentPanel = new KRootContentPanel(10);
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.PAGE_AXIS));
 
         JLabel titleLabel = new JLabel("Change License");
         titleLabel.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h2.font")));
         titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        rootPanel.add(titleLabel);
+        contentPanel.add(titleLabel);
 
         JLabel descriptionLabel = new JLabel("Here you may pick a license of your choice, or enter a custom one.");
         descriptionLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        rootPanel.add(descriptionLabel);
+        contentPanel.add(descriptionLabel);
 
-        rootPanel.add(GUIHelper.createVerticalPadding(5));
+        contentPanel.add(GUIHelper.createVerticalPadding(5));
 
         // Allow entering placeholder values
         JPanel placeholdersPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 4, 0));
@@ -83,8 +80,8 @@ public class ChangeLicenseDialog extends JDialog {
         placeholdersPanel.add(yearLabel);
         placeholdersPanel.add(yearTextField);
 
-        rootPanel.add(placeholdersPanel);
-        rootPanel.add(GUIHelper.createVerticalPadding(5));
+        contentPanel.add(placeholdersPanel);
+        contentPanel.add(GUIHelper.createVerticalPadding(5));
 
         // Left Pane
         JPanel leftPane = new JPanel(new BorderLayout());
@@ -114,8 +111,8 @@ public class ChangeLicenseDialog extends JDialog {
         rightTopPanel.add(overviewPanel, BorderLayout.SOUTH);
 
         JPanel rightPane = new JPanel(new BorderLayout());
-        licenseTextArea = new JTextArea();
-        licenseTextArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
+        licenseTextArea = new KTextArea();
+        licenseTextArea.useMonospacedFont();
 
         rightPane.add(new JScrollPane(licenseTextArea), BorderLayout.CENTER);
         rightPane.add(rightTopPanel, BorderLayout.NORTH);
@@ -123,25 +120,16 @@ public class ChangeLicenseDialog extends JDialog {
 
         JSplitPane splitPane = new KSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPane, rightPane, 0.35);
         splitPane.setAlignmentX(Component.LEFT_ALIGNMENT);
-        rootPanel.add(splitPane);
+        contentPanel.add(splitPane);
 
-        JPanel actionPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JButton changeLicenseButton = new KButton(new ChangeLicenseAction(licenseFile));
+        JButton cancelButton = new KButton(new CloseWindowAction(this, true));
+
+        KActionPanel actionPanel = new KActionPanel.Builder().setNegativeButton(cancelButton).setPositiveButton(changeLicenseButton).build();
         actionPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        actionPanel.add(new KButton(new CloseWindowAction(this, true)));
-        actionPanel.add(new KButton(new OKAction(() -> {
-            String licenseContent = licenseTextArea.getText();
-            try {
-                FileUtils.write(licenseFile, licenseContent, StandardCharsets.UTF_8);
-                JOptionPane.showMessageDialog(this, String.format("License changed to %s!", selectedLicense), Util.withTitlePrefix("Change License"), JOptionPane.INFORMATION_MESSAGE);
-            } catch (IOException e) {
-                PWGUI.LOGGER.exception(e);
-                JOptionPane.showMessageDialog(this, "Failed to save new license, see program log for detail!", Util.withTitlePrefix("Change License"), JOptionPane.ERROR_MESSAGE);
-            }
-            dispose();
-        })));
 
-        rootPanel.add(actionPanel);
-        add(rootPanel);
+        contentPanel.add(actionPanel);
+        add(contentPanel);
 
         setLicense(nameTextField.getText(), yearTextField.getText(), false);
     }
@@ -153,9 +141,7 @@ public class ChangeLicenseDialog extends JDialog {
         } else {
             if(!updateMetadata || !selectedLicense.editable()) {
                 String finalLicenseContent = selectedLicense.content().replace("[fullname]", name).replace("[year]", year);
-                licenseTextArea.setText(finalLicenseContent);
-                licenseTextArea.setSelectionStart(0);
-                licenseTextArea.setSelectionEnd(0);
+                licenseTextArea.setText(finalLicenseContent, true);
                 licenseTextArea.setEditable(selectedLicense.editable());
             }
             updateOverviewPanel(overviewPanel, selectedLicense.licenseOverview());
@@ -247,6 +233,28 @@ public class ChangeLicenseDialog extends JDialog {
             }
 
             return new LicenseOverview(permissions, conditions, limitations);
+        }
+    }
+
+    class ChangeLicenseAction extends OKAction {
+        private final File licenseFile;
+
+        public ChangeLicenseAction(File licenseFile) {
+            super(() -> {});
+            this.licenseFile = licenseFile;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            String licenseContent = licenseTextArea.getText();
+            try {
+                FileUtils.write(licenseFile, licenseContent, StandardCharsets.UTF_8);
+                JOptionPane.showMessageDialog(ChangeLicenseDialog.this, String.format("License changed to %s!", selectedLicense), Util.withTitlePrefix("Change License"), JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException e) {
+                PWGUI.LOGGER.exception(e);
+                JOptionPane.showMessageDialog(ChangeLicenseDialog.this, "Failed to save new license, see program log for detail!", Util.withTitlePrefix("Change License"), JOptionPane.ERROR_MESSAGE);
+            }
+            dispose();
         }
     }
 }

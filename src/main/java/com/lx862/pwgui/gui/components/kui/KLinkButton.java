@@ -16,7 +16,6 @@ public class KLinkButton extends JButton {
     }
 
     public KLinkButton(String name, String url, int swingConstants) {
-        super();
         setText(String.format("<html><a href=\"%s\">%s</a></html>", url == null ? "https://example.com" : url, name));
         setHorizontalAlignment(swingConstants);
         setBorderPainted(false);

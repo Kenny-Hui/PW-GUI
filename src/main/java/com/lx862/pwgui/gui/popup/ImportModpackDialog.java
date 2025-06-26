@@ -8,6 +8,7 @@ import com.lx862.pwgui.gui.components.filter.CurseForgeModpackFilter;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.gui.components.kui.KFileChooser;
 import com.lx862.pwgui.gui.dialog.ExecutableProgressDialog;
+import com.lx862.pwgui.util.GUIHelper;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
@@ -36,7 +37,7 @@ public class ImportModpackDialog extends JDialog {
         private final Window parent;
 
         public ImportModpackPanel(Window parent, boolean isCreate, Consumer<Path> importCallback) {
-            setBorder(new EmptyBorder(10, 10, 10, 10));
+            setBorder(GUIHelper.getPaddedBorder(8));
             setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
             this.parent = parent;

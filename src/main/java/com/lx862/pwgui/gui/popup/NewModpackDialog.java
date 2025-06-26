@@ -3,14 +3,13 @@ package com.lx862.pwgui.gui.popup;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.executable.Executables;
-import com.lx862.pwgui.gui.components.kui.KButton;
-import com.lx862.pwgui.gui.components.kui.KFileChooser;
+import com.lx862.pwgui.gui.components.kui.*;
 import com.lx862.pwgui.gui.dialog.ExecutableProgressDialog;
 import com.lx862.pwgui.gui.panel.ModpackInfoPanel;
 import com.lx862.pwgui.gui.panel.ModpackVersionPanel;
+import com.lx862.pwgui.util.GUIHelper;
 import com.lx862.pwgui.util.Util;
 import org.apache.commons.io.FileUtils;
-import com.lx862.pwgui.gui.components.kui.KSeparator;
 import com.lx862.pwgui.executable.ProgramExecution;
 
 import javax.swing.*;
@@ -33,13 +32,12 @@ public class NewModpackDialog extends JDialog {
         setLocationRelativeTo(frame);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        JPanel rootPanel = new JPanel(new BorderLayout());
-        rootPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        JPanel contentPanel = new KRootContentPanel(10);
 
         JLabel titleLabel = new JLabel("New Modpack...");
         titleLabel.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h2.font")));
-        titleLabel.setBorder(new EmptyBorder(0, 0, 10, 0)); // Bottom padding to compensate
-        rootPanel.add(titleLabel, BorderLayout.NORTH);
+        titleLabel.setBorder(GUIHelper.getPaddedBorder(0, 0, 10, 0)); // Bottom padding to compensate
+        contentPanel.add(titleLabel, BorderLayout.NORTH);
 
         JTabbedPane createImportTabPane = new JTabbedPane();
 
@@ -48,7 +46,7 @@ public class NewModpackDialog extends JDialog {
         createFormPanel.setLayout(new BoxLayout(createFormPanel, BoxLayout.Y_AXIS));
 
         JLabel descriptionLabel = new JLabel("Please fill the basic info about your (soon to be!) modpack.");
-        descriptionLabel.setBorder(new EmptyBorder(8, 8, 8, 8));
+        descriptionLabel.setBorder(GUIHelper.getPaddedBorder(10));
         descriptionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         createFormPanel.add(descriptionLabel);
 
@@ -67,21 +65,21 @@ public class NewModpackDialog extends JDialog {
         createFormPanel.add(new KSeparator());
         createPanel.add(createFormPanel, BorderLayout.CENTER);
 
-        JPanel actionRowPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         saveButton.addActionListener(actionEvent -> {
             createModpack(modpackInfoPanel, modpackVersionPanel, (path) -> {
                 doAftermath(path, modpackVersionPanel.getModloader() != null);
                 packCreatedCallback.accept(path.resolve("pack.toml"));
             });
         });
-        actionRowPanel.add(saveButton);
-        createPanel.add(actionRowPanel, BorderLayout.SOUTH);
+
+        KActionPanel actionPanel = new KActionPanel.Builder().setPositiveButton(saveButton).build();
+        createPanel.add(actionPanel, BorderLayout.SOUTH);
 
         createImportTabPane.add("Create", createPanel);
-        createImportTabPane.add("Import", new ImportModpackDialog.ImportModpackPanel(this,true, packCreatedCallback));
-        rootPanel.add(createImportTabPane, BorderLayout.CENTER);
+        createImportTabPane.add("Import", new ImportModpackDialog.ImportModpackPanel(this, true, packCreatedCallback));
+        contentPanel.add(createImportTabPane, BorderLayout.CENTER);
 
-        add(rootPanel);
+        add(contentPanel);
     }
 
     private void createModpack(ModpackInfoPanel modpackInfoPanel, ModpackVersionPanel modpackVersionPanel, Consumer<Path> finishCallback) {

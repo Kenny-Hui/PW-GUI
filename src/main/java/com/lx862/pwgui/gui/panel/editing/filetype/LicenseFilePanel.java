@@ -3,6 +3,7 @@ package com.lx862.pwgui.gui.panel.editing.filetype;
 import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.gui.action.EditLicenseAction;
 import com.lx862.pwgui.gui.components.kui.KButton;
+import com.lx862.pwgui.gui.components.kui.KTextArea;
 import com.lx862.pwgui.util.Util;
 import com.lx862.pwgui.core.data.model.file.PlainTextFileModel;
 
@@ -18,20 +19,17 @@ public class LicenseFilePanel extends FileTypePanel {
         changeLicenseButton.setAlignmentX(LEFT_ALIGNMENT);
         add(changeLicenseButton);
 
-        JTextArea textArea = new JTextArea();
+        KTextArea textArea = new KTextArea();
         textArea.setEditable(false);
-        textArea.setLineWrap(true);
-        textArea.setWrapStyleWord(true);
-        textArea.setTabSize(1);
+        textArea.wrapWord();
 
         try {
             String content = fileEntry.getContent();
-            textArea.setText(content);
+            textArea.setText(content, true);
         } catch (Exception e) {
             PWGUI.LOGGER.exception(e);
-            textArea.setText(Util.withBracketPrefix(String.format("Error trying to read file: %s", e.getMessage())));
+            textArea.setText(Util.withBracketPrefix(String.format("Error trying to read file: %s", e.getMessage())), true);
         }
-        textArea.select(0, 0);
 
         JScrollPane jScrollPane = new JScrollPane(textArea);
         jScrollPane.setAlignmentX(LEFT_ALIGNMENT);

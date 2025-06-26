@@ -3,8 +3,11 @@ package com.lx862.pwgui.gui.popup;
 import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.core.Logger;
 import com.lx862.pwgui.gui.action.CloseWindowAction;
+import com.lx862.pwgui.gui.components.kui.KActionPanel;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.gui.components.kui.KFileChooser;
+import com.lx862.pwgui.gui.components.kui.KRootContentPanel;
+import com.lx862.pwgui.gui.dialog.FileSavedDialog;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
@@ -13,6 +16,7 @@ import javax.swing.text.Document;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileWriter;
@@ -30,17 +34,22 @@ public class ViewLogDialog extends JDialog {
         setLocationRelativeTo(frame);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        JTextPane logTextArea = new JTextPane();
-        logTextArea.setEditable(false);
-        JScrollPane logTextAreaScrollPane = new JScrollPane(logTextArea);
-        add(logTextAreaScrollPane);
+        KRootContentPanel contentPanel = new KRootContentPanel(10);
 
-        Style style = logTextArea.addStyle("Log Style", null);
+        JLabel descriptionLabel = new JLabel("This displays the program log for PW-GUI, which may be useful for diagnosing issues");
+        contentPanel.add(descriptionLabel, BorderLayout.NORTH);
+
+        JTextPane logTextPane = new JTextPane();
+        logTextPane.setEditable(false);
+        JScrollPane logTextAreaScrollPane = new JScrollPane(logTextPane);
+        contentPanel.add(logTextAreaScrollPane, BorderLayout.CENTER);
+
+        Style style = logTextPane.addStyle("Log Style", null);
         this.appendLogCallback = (line, realtime) -> {
             Color logColor = line.contains("[WARN]") ? Color.ORANGE : line.contains("[ERROR]") ? Color.RED : Color.BLACK;
             StyleConstants.setForeground(style, logColor);
 
-            Document doc = logTextArea.getDocument();
+            Document doc = logTextPane.getDocument();
             try {
                 doc.insertString(doc.getLength(), line + "\n", style);
             } catch (BadLocationException ignored) {}
@@ -49,34 +58,42 @@ public class ViewLogDialog extends JDialog {
 
         PWGUI.LOGGER.addListener(appendLogCallback);
 
-        JPanel actionRowPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-
-        KButton saveAsButton = new KButton("Save As...");
-        saveAsButton.setMnemonic(KeyEvent.VK_S);
-        saveAsButton.addActionListener(actionEvent -> {
-            KFileChooser fileChooser = new KFileChooser("save-log");
-            if (fileChooser.openSaveAsDialog(this) == JFileChooser.APPROVE_OPTION) {
-                File file = fileChooser.getSelectedFile();
-                try(FileWriter fw = new FileWriter(file)) {
-                    for(String line : PWGUI.LOGGER.getLogHistory()) {
-                        fw.write(line + "\n");
-                    }
-                } catch (IOException e) {
-                    JOptionPane.showMessageDialog(this, String.format("Failed to save log:\n%s", e.getMessage()), Util.withTitlePrefix("Save Log"), JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
-        actionRowPanel.add(saveAsButton);
-
+        KButton saveAsButton = new KButton(new SaveLogAction());
         KButton closeButton = new KButton(new CloseWindowAction(this, false));
-        actionRowPanel.add(closeButton);
+        KActionPanel actionPanel = new KActionPanel.Builder().add(saveAsButton, closeButton).build();
 
-        add(actionRowPanel, BorderLayout.PAGE_END);
+        contentPanel.add(actionPanel, BorderLayout.PAGE_END);
+        add(contentPanel);
     }
 
     @Override
     public void dispose() {
         super.dispose();
         PWGUI.LOGGER.removeListener(appendLogCallback);
+    }
+
+    class SaveLogAction extends AbstractAction {
+        public SaveLogAction() {
+            super("Save As...");
+            putValue(MNEMONIC_KEY, KeyEvent.VK_S);
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            KFileChooser fileChooser = new KFileChooser("save-log");
+            if (fileChooser.openSaveAsDialog(ViewLogDialog.this) == JFileChooser.APPROVE_OPTION) {
+                File file = fileChooser.getSelectedFile();
+                try {
+                    try(FileWriter fw = new FileWriter(file)) {
+                        for(String line : PWGUI.LOGGER.getLogHistory()) {
+                            fw.write(line + "\n");
+                        }
+                    }
+                    new FileSavedDialog(ViewLogDialog.this, "Log Saved!", file).setVisible(true);
+                } catch (IOException e) {
+                    JOptionPane.showMessageDialog(ViewLogDialog.this, String.format("Failed to save log:\n%s", e.getMessage()), Util.withTitlePrefix("Save Log"), JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
     }
 }

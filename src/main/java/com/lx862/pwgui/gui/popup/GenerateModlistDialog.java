@@ -1,6 +1,10 @@
 package com.lx862.pwgui.gui.popup;
 
 import com.github.rjeschke.txtmark.Processor;
+import com.lx862.pwgui.PWGUI;
+import com.lx862.pwgui.gui.components.kui.KActionPanel;
+import com.lx862.pwgui.gui.components.kui.KRootContentPanel;
+import com.lx862.pwgui.gui.dialog.FileSavedDialog;
 import com.lx862.pwgui.pwcore.PackFile;
 import com.lx862.pwgui.pwcore.PackIndexFile;
 import com.lx862.pwgui.pwcore.PackwizMetaFile;
@@ -8,11 +12,11 @@ import com.lx862.pwgui.gui.action.CloseWindowAction;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.gui.components.kui.KFileChooser;
 import com.lx862.pwgui.gui.panel.editing.filetype.MarkdownPanel;
-import com.lx862.pwgui.util.GUIHelper;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileWriter;
@@ -37,18 +41,18 @@ public class GenerateModlistDialog extends JDialog {
 
     public GenerateModlistDialog(Window frame, PackFile packFile) {
         super(frame, Util.withTitlePrefix("Generate Modlist"));
-
         this.packFile = packFile;
 
         setSize(512, 400);
         setLocationRelativeTo(frame);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
+        KRootContentPanel contentPanel = new KRootContentPanel(10);
+
         JPanel headerRow = new JPanel();
         headerRow.setLayout(new BoxLayout(headerRow, BoxLayout.PAGE_AXIS));
-        headerRow.setBorder(GUIHelper.getPaddedBorder(2));
 
-        JPanel formatRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel formatRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 4, 0));
         formatRow.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JLabel formatLabel = new JLabel("Format:");
@@ -69,7 +73,7 @@ public class GenerateModlistDialog extends JDialog {
 
         headerRow.add(formatRow);
 
-        JPanel optionsRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel optionsRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 4, 4));
         optionsRow.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JLabel optionsLabel = new JLabel("Options:");
@@ -102,43 +106,62 @@ public class GenerateModlistDialog extends JDialog {
         optionsRow.add(fileNameCheckBox);
 
         headerRow.add(optionsRow);
-        add(headerRow, BorderLayout.NORTH);
+        contentPanel.add(headerRow, BorderLayout.NORTH);
 
         this.previewPane = new MarkdownPanel.MarkdownPane();
         JScrollPane previewScrollPane = new JScrollPane(previewPane);
-        add(previewScrollPane);
+        contentPanel.add(previewScrollPane, BorderLayout.CENTER);
 
         updateModlist();
 
-        JPanel actionRowPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        KButton saveAsButton = new KButton(new SaveModlistAction());
+        KButton copyButton = new KButton(new CopyModListAction());
+        KButton closeButton = new KButton(new CloseWindowAction(this, false));
 
-        KButton saveAsButton = new KButton("Save As...");
-        saveAsButton.setMnemonic(KeyEvent.VK_S);
-        saveAsButton.addActionListener(actionEvent -> {
+        KActionPanel actionPanel = new KActionPanel.Builder().add(saveAsButton, copyButton, closeButton).build();
+        contentPanel.add(actionPanel, BorderLayout.PAGE_END);
+
+        add(contentPanel);
+    }
+
+    class SaveModlistAction extends AbstractAction {
+        public SaveModlistAction() {
+            super("Save As...");
+            putValue(MNEMONIC_KEY, KeyEvent.VK_S);
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
             KFileChooser fileChooser = new KFileChooser();
             fileChooser.setCurrentDirectory(packFile.getPath().getParent().toFile());
             fileChooser.setSelectedFile(new File(markdownRadioButton.isSelected() ? "modlist.md" : "modlist.txt"));
-            if (fileChooser.openSaveAsDialog(this) == JFileChooser.APPROVE_OPTION) {
+            if (fileChooser.openSaveAsDialog(GenerateModlistDialog.this) == JFileChooser.APPROVE_OPTION) {
                 File file = fileChooser.getSelectedFile();
-                try(FileWriter fw = new FileWriter(file)) {
-                    fw.write(plainTextModlist);
+                try {
+                    try(FileWriter fw = new FileWriter(file)) {
+                        fw.write(plainTextModlist);
+                    }
+                    new FileSavedDialog(GenerateModlistDialog.this, "Modlist saved!", file).setVisible(true);
                 } catch (IOException e) {
-                    JOptionPane.showMessageDialog(this, String.format("Failed to save modlist:\n%s", e.getMessage()), Util.withTitlePrefix("Save Log"), JOptionPane.ERROR_MESSAGE);
+                    PWGUI.LOGGER.exception(e);
+                    JOptionPane.showMessageDialog(GenerateModlistDialog.this, String.format("Failed to save modlist:\n%s", e.getMessage()), Util.withTitlePrefix("Save Modlist"), JOptionPane.ERROR_MESSAGE);
                 }
+
                 dispose();
             }
-        });
-        actionRowPanel.add(saveAsButton);
+        }
+    }
 
-        KButton copyButton = new KButton("Copy");
-        copyButton.setMnemonic(KeyEvent.VK_O);
-        copyButton.addActionListener(e -> Util.copyToClipboard(plainTextModlist));
-        actionRowPanel.add(copyButton);
+    class CopyModListAction extends AbstractAction {
+        public CopyModListAction() {
+            super("Copy");
+            putValue(MNEMONIC_KEY, KeyEvent.VK_O);
+        }
 
-        KButton closeButton = new KButton(new CloseWindowAction(this, false));
-        actionRowPanel.add(closeButton);
-
-        add(actionRowPanel, BorderLayout.PAGE_END);
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            Util.copyToClipboard(plainTextModlist);
+        }
     }
 
     private void updateModlist() {
@@ -147,7 +170,7 @@ public class GenerateModlistDialog extends JDialog {
         previewPane.setInitialContent(useMarkdown ? Processor.process(this.plainTextModlist) : this.plainTextModlist.replace("\n", "<br>"));
     }
 
-    private String getModlist(PackFile packFile, boolean useMarkdown, boolean projectLink, boolean versionLink, boolean separateSides, boolean showFileName) {
+    private static String getModlist(PackFile packFile, boolean useMarkdown, boolean projectLink, boolean versionLink, boolean separateSides, boolean showFileName) {
         PackIndexFile indexFile = packFile.packIndexFile.get();
         List<PackwizMetaFile> metaFiles = new ArrayList<>();
         for(PackIndexFile.FileEntry fileEntry : indexFile.getFileEntries()) {
@@ -192,11 +215,11 @@ public class GenerateModlistDialog extends JDialog {
         return sb.toString();
     }
 
-    private String getSectionHeader(String str, boolean useMarkdown) {
+    private static String getSectionHeader(String str, boolean useMarkdown) {
         return useMarkdown ? "## " + str : "===== " + str + " =====";
     }
 
-    private String getMetaLine(PackwizMetaFile packwizMetaFile, boolean isMarkdown, boolean projectLink, boolean versionLink, boolean showFileName) {
+    private static String getMetaLine(PackwizMetaFile packwizMetaFile, boolean isMarkdown, boolean projectLink, boolean versionLink, boolean showFileName) {
         if(!isMarkdown) {
             String line = packwizMetaFile.name;
 

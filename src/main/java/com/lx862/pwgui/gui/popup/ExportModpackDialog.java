@@ -1,6 +1,9 @@
-package com.lx862.pwgui.gui.dialog;
+package com.lx862.pwgui.gui.popup;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.lx862.pwgui.gui.components.kui.KRootContentPanel;
+import com.lx862.pwgui.gui.dialog.ExecutableProgressDialog;
+import com.lx862.pwgui.gui.dialog.FileSavedDialog;
 import com.lx862.pwgui.pwcore.Modpack;
 import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.gui.components.kui.KButton;
@@ -30,12 +33,11 @@ public class ExportModpackDialog extends JDialog {
         setLocationRelativeTo(parentFrame);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
-        JPanel rootPanel = new JPanel(new BorderLayout());
-        rootPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        KRootContentPanel contentPanel = new KRootContentPanel(10);
 
         JLabel titleLabel = new JLabel("Export Modpack");
         titleLabel.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h2.font")));
-        rootPanel.add(titleLabel, BorderLayout.NORTH);
+        contentPanel.add(titleLabel, BorderLayout.NORTH);
 
         JTabbedPane formatTabPane = new JTabbedPane();
         formatTabPane.setBorder(new EmptyBorder(10, 0, 10, 0));
@@ -68,10 +70,10 @@ public class ExportModpackDialog extends JDialog {
         JPanel actionRow = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         actionRow.add(exportButton);
 
-        rootPanel.add(actionRow, BorderLayout.SOUTH);
+        contentPanel.add(actionRow, BorderLayout.SOUTH);
 
-        rootPanel.add(formatTabPane);
-        add(rootPanel);
+        contentPanel.add(formatTabPane);
+        add(contentPanel);
     }
 
     private void exportModpack(List<String> args, File destination) {

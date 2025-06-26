@@ -54,6 +54,16 @@ public class PackIndexFile extends TomlFile {
         return new ArrayList<>(this.fileEntries);
     }
 
+    /**
+     * Returns whether the specified file is marked as a metafile in the packwiz index file.
+     */
+    public boolean isMetafile(Path path) {
+        FileEntry fileEntry = getEntryByPath(path);
+        if(fileEntry == null) return false;
+
+        return fileEntry.metafile;
+    }
+
     public FileEntry getEntryByPath(Path path) {
         for(FileEntry entry : fileEntries) {
             if(entry.path.equals(path)) return entry;

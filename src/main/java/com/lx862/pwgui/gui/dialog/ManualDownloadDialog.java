@@ -11,6 +11,7 @@ import com.lx862.pwgui.util.Util;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.nio.file.*;
 import java.util.List;
@@ -31,18 +32,17 @@ public class ManualDownloadDialog extends JDialog {
         setSize(560, 400);
         setLocationRelativeTo(parentDialog);
 
-        JPanel rootPanel = new JPanel();
-        rootPanel.setLayout(new BoxLayout(rootPanel, BoxLayout.PAGE_AXIS));
-        rootPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        KRootContentPanel contentPanel = new KRootContentPanel(10);
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.PAGE_AXIS));
 
         JLabel titleLabel = new JLabel(String.format("%d file(s) to be manually downloaded", modList.size()));
         titleLabel.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h3.font")));
         titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        rootPanel.add(titleLabel);
+        contentPanel.add(titleLabel);
 
         JLabel descriptionLabel = new JLabel("Due to limitations imposed by API, you need to download the following file(s) manually:");
         descriptionLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        rootPanel.add(descriptionLabel);
+        contentPanel.add(descriptionLabel);
 
         this.modListPanel = new JPanel();
         this.modListPanel.setLayout(new BoxLayout(this.modListPanel, BoxLayout.PAGE_AXIS));
@@ -51,11 +51,11 @@ public class ManualDownloadDialog extends JDialog {
         JScrollPane modListScrollPane = new JScrollPane(this.modListPanel);
         modListScrollPane.setAlignmentX(Component.LEFT_ALIGNMENT);
         modListScrollPane.getVerticalScrollBar().setUnitIncrement(10); // Default is too slow
-        rootPanel.add(modListScrollPane);
+        contentPanel.add(modListScrollPane);
 
         JLabel watchingDescriptionLabel = new JLabel("We are watching for new files in the following folder:");
         watchingDescriptionLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        rootPanel.add(watchingDescriptionLabel);
+        contentPanel.add(watchingDescriptionLabel);
 
         KGridBagLayoutPanel monitorLocationPanel = new KGridBagLayoutPanel(2, 2);
         monitorLocationPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -74,27 +74,20 @@ public class ManualDownloadDialog extends JDialog {
 
         monitorLocationPanel.addVerticalFiller();
 
-        rootPanel.add(monitorLocationPanel);
+        contentPanel.add(monitorLocationPanel);
 
         JLabel afterMathLabel = new JLabel("Once all files are downloaded, you can then click \"OK\" and we'll take care the rest!");
         afterMathLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        rootPanel.add(afterMathLabel);
+        contentPanel.add(afterMathLabel);
 
-        JPanel actionRowPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
-        actionRowPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        this.okButton = new KButton(new OKAction(() -> {
-            dispose();
-            finishCallback.accept(watchingPath);
-        }));
-        actionRowPanel.add(this.okButton);
+        this.okButton = new KButton(new ContinueExportAction(finishCallback));
+        KButton cancelButton = new KButton(new AbortAction());
 
-        KButton cancelButton = new KButton("Cancel");
-        cancelButton.setMnemonic(KeyEvent.VK_C);
-        cancelButton.addActionListener(actionEvent -> dispose());
-        actionRowPanel.add(cancelButton);
+        KActionPanel actionPanel = new KActionPanel.Builder().setPositiveButton(okButton).setNegativeButton(cancelButton).build();
+        actionPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        rootPanel.add(actionRowPanel);
-        add(rootPanel);
+        contentPanel.add(actionPanel);
+        add(contentPanel);
 
         startWatchDirectory(getDefaultDownloadDirectory());
     }
@@ -145,5 +138,32 @@ public class ManualDownloadDialog extends JDialog {
     public void dispose() {
         super.dispose();
         if(this.fileWatcherThread != null) this.fileWatcherThread.interrupt();
+    }
+
+    class ContinueExportAction extends OKAction {
+        private final Consumer<Path> callback;
+
+        public ContinueExportAction(Consumer<Path> callback) {
+            super(() -> {});
+            this.callback = callback;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            dispose();
+            callback.accept(watchingPath);
+        }
+    }
+
+    class AbortAction extends AbstractAction {
+        public AbortAction() {
+            super("Cancel");
+            putValue(MNEMONIC_KEY, KeyEvent.VK_C);
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            dispose();
+        }
     }
 }

@@ -40,15 +40,13 @@ public class SettingsDialog extends JDialog {
         setLocationRelativeTo(parent);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
-        JPanel rootPanel = new JPanel(new BorderLayout());
-        rootPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
-
+        KRootContentPanel contentPanel = new KRootContentPanel(10);
         KGridBagLayoutPanel settingsPanel = new KGridBagLayoutPanel(0, 1);
 
         JLabel titleLabel = new JLabel("Settings");
         titleLabel.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h2.font")));
         titleLabel.setBorder(new EmptyBorder(0, 0, 10, 0)); // Bottom padding to compensate
-        rootPanel.add(titleLabel, BorderLayout.NORTH);
+        contentPanel.add(titleLabel, BorderLayout.NORTH);
 
         JPanel programPanel = new JPanel();
         programPanel.setLayout(new BoxLayout(programPanel, BoxLayout.PAGE_AXIS));
@@ -130,16 +128,16 @@ public class SettingsDialog extends JDialog {
         settingsPanel.addRow(1, packwizPanel);
         settingsPanel.addVerticalFiller();
 
-        rootPanel.add(settingsPanel, BorderLayout.CENTER);
+        contentPanel.add(settingsPanel, BorderLayout.CENTER);
 
-        JPanel actionRowPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         KButton saveButton = new KButton("Save");
         saveButton.setMnemonic(KeyEvent.VK_S);
         saveButton.addActionListener(actionEvent -> save());
-        actionRowPanel.add(saveButton);
 
-        rootPanel.add(actionRowPanel, BorderLayout.SOUTH);
-        add(rootPanel);
+        KActionPanel actionPanel = new KActionPanel.Builder().setPositiveButton(saveButton).build();
+        contentPanel.add(actionPanel, BorderLayout.SOUTH);
+
+        add(contentPanel);
 
         updatePackwizPath(PWGUI.getConfig().packwizExecutablePath.getValue());
     }

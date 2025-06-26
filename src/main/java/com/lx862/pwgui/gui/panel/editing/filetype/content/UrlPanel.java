@@ -31,8 +31,8 @@ public class UrlPanel extends JPanel {
     public UrlPanel(FileEntryPaneContext context, ContentDirectoryModel fileEntry) {
         setLayout(new BorderLayout());
 
-        JPanel rootPanel = new JPanel();
-        rootPanel.setLayout(new BoxLayout(rootPanel, BoxLayout.PAGE_AXIS));
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
 
         KGridBagLayoutPanel formPanel = new KGridBagLayoutPanel(3, 2);
         formPanel.setAlignmentX(LEFT_ALIGNMENT);
@@ -68,8 +68,8 @@ public class UrlPanel extends JPanel {
 
         addButton.addActionListener(actionEvent -> addProject(context, fileEntry, nameTextField.getText(), urlTextField.getText()));
 
-        rootPanel.add(formPanel);
-        add(rootPanel, BorderLayout.CENTER);
+        mainPanel.add(formPanel);
+        add(mainPanel, BorderLayout.CENTER);
     }
 
     private void addProject(FileEntryPaneContext context, ContentDirectoryModel fileEntry, String name, String urlString) {

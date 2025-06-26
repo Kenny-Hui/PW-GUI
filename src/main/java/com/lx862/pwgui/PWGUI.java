@@ -47,26 +47,10 @@ public class PWGUI {
             packwizLocated = Executables.packwiz.updateExecutableLocation(null);
         }
         // final boolean gitLocated = git.updateExecutableLocation(null); // We don't have git support yet
-
-        // Get modpack
-        Modpack modpack;
-        if(packFilePath != null) { // Pack specified via CLI or last opened
-            LOGGER.info(String.format("Pack File is specified at: %s", packFilePath));
-            File packFile = new File(packFilePath);
-            try {
-                modpack = new Modpack(packFile.toPath());
-            } catch (FileNotFoundException e) {
-                LOGGER.info("Specified Pack File does not exist!");
-                modpack = null;
-            }
-        } else {
-            modpack = null;
-        }
-
-        launchGUI(packwizLocated, modpack);
+        launchGUI(packFilePath, packwizLocated);
     }
 
-    private static void launchGUI(boolean packwizLocated, Modpack modpack) {
+    private static void launchGUI(String packFilePath, boolean packwizLocated) {
         Config config = getConfig();
         GUIHelper.setupApplicationTheme(config.applicationTheme.getValue(), config.useWindowDecoration.getValue(), null); // Initialize FlatLaf and it's config
 
@@ -78,6 +62,7 @@ public class PWGUI {
             return;
         }
 
+        Modpack modpack = openModpack(packFilePath);
         if(modpack != null) { // Pack specified via CLI or last opened
             SwingUtilities.invokeLater(() -> {
                 EditFrame editFrame = new EditFrame(null, modpack);
@@ -88,6 +73,19 @@ public class PWGUI {
                 WelcomeFrame welcomeFrame = new WelcomeFrame(null);
                 welcomeFrame.setVisible(true);
             });
+        }
+    }
+
+    private static Modpack openModpack(String path) {
+        if(path == null) return null;
+
+        File packFile = new File(path);
+        LOGGER.info(String.format("Pack File is specified at: %s", path));
+        try {
+            return new Modpack(packFile.toPath());
+        } catch (FileNotFoundException e) {
+            LOGGER.info("Specified Pack File does not exist!");
+            return null;
         }
     }
 

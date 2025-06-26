@@ -1,16 +1,16 @@
 package com.lx862.pwgui.gui.panel.editing.filetype;
 
+import com.lx862.pwgui.util.GUIHelper;
+
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.io.IOException;
 
 public abstract class FileTypePanel extends JPanel {
     private final FileEntryPaneContext context;
 
     public FileTypePanel(FileEntryPaneContext context) {
-        super();
         this.context = context;
-        setBorder(new EmptyBorder(6, 6, 6, 6));
+        setBorder(GUIHelper.getPaddedBorder(6));
     }
 
     public boolean shouldSave() {

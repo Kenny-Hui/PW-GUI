@@ -4,7 +4,7 @@ import com.lx862.pwgui.pwcore.Modpack;
 import com.lx862.pwgui.gui.action.*;
 import com.lx862.pwgui.gui.components.kui.KMenu;
 import com.lx862.pwgui.gui.components.kui.KMenuItem;
-import com.lx862.pwgui.gui.dialog.ExportModpackDialog;
+import com.lx862.pwgui.gui.popup.ExportModpackDialog;
 import com.lx862.pwgui.gui.popup.DevServerDialog;
 import com.lx862.pwgui.gui.popup.ImportModpackDialog;
 import com.lx862.pwgui.gui.popup.ViewLogDialog;
@@ -19,7 +19,6 @@ public abstract class BaseFrame extends JFrame {
     protected final JMenuBar jMenuBar;
 
     public BaseFrame() {
-        super();
         this.jMenuBar = new JMenuBar();
         setIconImage(GUIHelper.convertImage(Util.getAssets("/assets/icon.png")));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

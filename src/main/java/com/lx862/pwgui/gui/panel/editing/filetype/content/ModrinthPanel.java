@@ -16,8 +16,8 @@ public class ModrinthPanel extends JPanel {
     public ModrinthPanel(FileEntryPaneContext context, ContentDirectoryModel fileEntry) {
         setLayout(new BorderLayout());
 
-        JPanel rootPanel = new JPanel();
-        rootPanel.setLayout(new BoxLayout(rootPanel, BoxLayout.PAGE_AXIS));
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
 
         KGridBagLayoutPanel formPanel = new KGridBagLayoutPanel(3, 2);
         formPanel.setAlignmentX(LEFT_ALIGNMENT);
@@ -56,13 +56,12 @@ public class ModrinthPanel extends JPanel {
 
         updateAddProjectButtonState(addButton, contentTextField);
 
-        rootPanel.add(formPanel);
-        add(rootPanel, BorderLayout.CENTER);
+        mainPanel.add(formPanel);
+        add(mainPanel, BorderLayout.CENTER);
     }
 
     private void updateAddProjectButtonState(KButton addButton, KTextField urlTextField) {
         boolean shouldEnable = !urlTextField.getText().isEmpty();
-
         addButton.setEnabled(shouldEnable);
     }
 }

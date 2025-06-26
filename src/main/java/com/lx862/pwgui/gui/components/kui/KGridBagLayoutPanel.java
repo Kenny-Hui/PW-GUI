@@ -10,10 +10,14 @@ public class KGridBagLayoutPanel extends JPanel {
     private int y;
 
     public KGridBagLayoutPanel(int insets, int maxWidthSpan) {
+        this(insets, insets, maxWidthSpan);
+    }
+
+    public KGridBagLayoutPanel(int insetW, int insetH, int maxWidthSpan) {
         setLayout(new GridBagLayout());
         this.maxWidthSpan = maxWidthSpan;
         this.gbc = new GridBagConstraints();
-        this.gbc.insets = new Insets(insets, insets, insets, insets);
+        this.gbc.insets = new Insets(insetH, insetW, insetH, insetW);
         this.gbc.fill = GridBagConstraints.HORIZONTAL;
     }
 

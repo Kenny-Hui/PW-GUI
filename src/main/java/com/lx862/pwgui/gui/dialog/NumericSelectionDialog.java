@@ -2,9 +2,11 @@ package com.lx862.pwgui.gui.dialog;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.gui.action.OKAction;
+import com.lx862.pwgui.gui.components.kui.KActionPanel;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.gui.components.kui.KGridBagLayoutPanel;
 import com.lx862.pwgui.gui.components.kui.KListCellRenderer;
+import com.lx862.pwgui.util.GUIHelper;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
@@ -21,27 +23,24 @@ public class NumericSelectionDialog extends JDialog {
     }
 
     private <T> void init(Component component, String title, List<T> list, Consumer<Integer> callback) {
-        KGridBagLayoutPanel panel = new KGridBagLayoutPanel(3, 1);
-        panel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        KGridBagLayoutPanel contentPanel = new KGridBagLayoutPanel(3, 1);
+        contentPanel.setBorder(GUIHelper.getPaddedBorder(10));
 
         JLabel titleLabel = new JLabel(title);
         titleLabel.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h2.font")));
         titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        panel.addRow(1, titleLabel);
-        panel.addRow(1, new JLabel("<html>Multiple projects were found based on your search term<br>Please select which one you'd like to choose</html>"));
+        contentPanel.addRow(1, titleLabel);
+        contentPanel.addRow(1, new JLabel("<html>Multiple projects were found based on your search term<br>Please select which one you'd like to choose</html>"));
 
         DefaultListModel<T> defaultListModel = new DefaultListModel<>();
-
-        for(T obj : list) {
-            defaultListModel.addElement(obj);
-        }
+        defaultListModel.addAll(list);
 
         JList<T> jList = new JList<>(defaultListModel);
         jList.setSize(Integer.MAX_VALUE, getHeight());
         jList.setCellRenderer(new KListCellRenderer());
         jList.setSelectedIndex(0);
         jList.setAlignmentX(Component.LEFT_ALIGNMENT);
-        panel.addRow(1, jList);
+        contentPanel.addRow(1, jList);
 
         KButton okButton = new KButton(new OKAction(() -> {
             callback.accept(jList.getSelectedIndex());
@@ -55,13 +54,10 @@ public class NumericSelectionDialog extends JDialog {
             dispose();
         });
 
-        JPanel actionRowPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
-        actionRowPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        actionRowPanel.add(okButton);
-        actionRowPanel.add(cancelButton);
-
-        panel.addRow(1, actionRowPanel);
-        add(panel);
+        JPanel actionPanel = new KActionPanel.Builder().setPositiveButton(okButton).setNegativeButton(cancelButton).build();
+        actionPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        contentPanel.addRow(1, actionPanel);
+        add(contentPanel);
 
         pack();
         setLocationRelativeTo(component);

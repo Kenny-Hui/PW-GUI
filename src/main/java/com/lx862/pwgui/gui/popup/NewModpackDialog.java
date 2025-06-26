@@ -104,14 +104,15 @@ public class NewModpackDialog extends JDialog {
                         // Note: We use "folder already exists" because it's easier to get by. If a user have an empty directory, this won't prompt because no data will be loss.
                         if(JOptionPane.showConfirmDialog(this, String.format("\"%s\" folder already exists!\nDo you want to use that folder for your Modpack anyway?\nWARNING: This would remove EVERYTHING within the folder!", modpackDirectory.getName()), Util.withTitlePrefix("Create Modpack"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                             FileUtils.deleteDirectory(modpackDirectory);
+                            Files.createDirectory(modpackDirectory.toPath());
                         } else {
                             createModpack(modpackInfoPanel, modpackVersionPanel, finishCallback);
                             return;
                         }
                     }
+                } else {
+                    Files.createDirectory(modpackDirectory.toPath());
                 }
-
-                Files.createDirectory(modpackDirectory.toPath());
 
                 // Build arguments
                 final List<String> arguments = new ArrayList<>();

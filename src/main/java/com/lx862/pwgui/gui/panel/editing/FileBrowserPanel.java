@@ -59,13 +59,13 @@ class FileBrowserPanel extends JPanel {
                 return new ModpackConfigFileModel(file);
             } else if (file.toPath().equals(modpack.packFile.get().getIndexPath())) {
                 return new ModpackIndexFileModel(file);
-                /* ----- Start file extension matching ----- */
-            } else if (file.getName().endsWith(".pw.toml")) {
-                return new PackMetadataFileModel(file);
+            /* ----- Start file extension matching ----- */
             } else if (file.getName().endsWith(".md")) {
                 return new MarkdownFileModel(file);
             } else if (file.getName().endsWith(".mrpack")) {
                 return new ModrinthPackFileModel(file);
+            } else if(file.getName().endsWith(".pw.toml") || (file.getName().endsWith(".toml") && modpack.packFile.get().packIndexFile.get().isMetafile(file.toPath()))) {
+                return new PackMetadataFileModel(file);
             } else if (file.getName().equals(".gitattributes") || file.getName().endsWith(".txt") || file.getName().endsWith(".ini") || file.getName().endsWith(".cfg") || file.getName().endsWith(".json") || file.getName().endsWith(".json5") || file.getName().endsWith(".yml") || file.getName().endsWith(".yaml") || file.getName().endsWith(".toml") || file.getName().endsWith(".mcmeta") || file.getName().endsWith(".properties")) {
                 return new PlainTextFileModel(file);
             } else if (file.getName().endsWith(".png") || file.getName().endsWith(".jpg") || file.getName().endsWith(".jpeg") || file.getName().endsWith(".webp") || file.getName().endsWith(".bmp")) {

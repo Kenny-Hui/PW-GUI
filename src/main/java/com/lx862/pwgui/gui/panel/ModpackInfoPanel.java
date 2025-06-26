@@ -65,7 +65,7 @@ public class ModpackInfoPanel extends KGridBagLayoutPanel {
     }
 
     public boolean requiredInfoFilled() {
-        return !nameTextField.getText().isEmpty();
+        return !nameTextField.getText().isEmpty() && !versionTextField.getText().isEmpty(); // Packwiz specs does not mandate a modpack version, but is required for packwiz CLI when initing
     }
 
     public List<String> getInitArguments() {

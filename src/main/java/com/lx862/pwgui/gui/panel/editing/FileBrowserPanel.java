@@ -11,10 +11,11 @@ import com.lx862.pwgui.util.Util;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.nio.file.Files;
 
 class FileBrowserPanel extends JPanel {
-    public final FileSystemTree fileBrowserTree;
     private static final Color NEW_FILE_LIST_COLOR = new Color(0x44FFAA00, true);
+    public final FileSystemTree fileBrowserTree;
 
     public FileBrowserPanel(Modpack modpack) {
         setLayout(new GridBagLayout());
@@ -31,7 +32,6 @@ class FileBrowserPanel extends JPanel {
 
         KButton openDirectoryButton = new KButton("Open Containing Folder...", UIManager.getIcon("FileView.directoryIcon"));
         openDirectoryButton.addActionListener(actionEvent -> {
-            fileBrowserTree.repaint();
             Util.tryOpenFile(modpack.getRootPath().toFile());
         });
 
@@ -41,7 +41,9 @@ class FileBrowserPanel extends JPanel {
 
     private static FileSystemEntityModel getFileModel(Modpack modpack, File file) {
         try {
-            if (isFileFromModpackRoot(modpack, file, ".packwizignore")) {
+            if(!Files.exists(file.toPath())) return null;
+
+            if (isFileAtPackRoot(modpack, file, ".packwizignore")) {
                 return new PackwizIgnoreFileModel(file);
             } else if (file.getName().equals(".gitignore")) {
                 return new GitIgnoreFileModel(file);
@@ -49,11 +51,11 @@ class FileBrowserPanel extends JPanel {
                 return new GitDirectoryModel(file);
             } else if (file.getName().equals("LICENSE") || file.getName().equals("LICENSE.txt")) {
                 return new LicenseFileModel(file);
-            } else if (isFileFromModpackRoot(modpack, file, "options.txt")) {
+            } else if (isFileAtPackRoot(modpack, file, "options.txt")) {
                 return new MinecraftOptionsFileModel(file);
-            } else if (file.isDirectory() && isFileFromModpackRoot(modpack, file, "config")) {
+            } else if (file.isDirectory() && isFileAtPackRoot(modpack, file, "config")) {
                 return new ConfigDirectoryModel(file);
-            } else if (file.isDirectory() && (isFileFromModpackRoot(modpack, file, "mods") || isFileFromModpackRoot(modpack, file, "resourcepacks") || isFileFromModpackRoot(modpack, file, "shaderpacks") || isFileFromModpackRoot(modpack, file, "plugins"))) {
+            } else if (file.isDirectory() && (isFileAtPackRoot(modpack, file, "mods") || isFileAtPackRoot(modpack, file, "resourcepacks") || isFileAtPackRoot(modpack, file, "shaderpacks") || isFileAtPackRoot(modpack, file, "plugins"))) {
                 return new ContentDirectoryModel(file);
             } else if (file.toPath().equals(modpack.getPackFilePath())) {
                 return new ModpackConfigFileModel(file);
@@ -81,7 +83,7 @@ class FileBrowserPanel extends JPanel {
         }
     }
 
-    private static boolean isFileFromModpackRoot(Modpack modpack, File file, String fileNameFromRoot) {
+    private static boolean isFileAtPackRoot(Modpack modpack, File file, String fileNameFromRoot) {
         return modpack.getRootPath().resolve(fileNameFromRoot).equals(file.toPath());
     }
 }

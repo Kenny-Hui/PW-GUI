@@ -3,7 +3,7 @@ package com.lx862.pwgui.gui.action;
 import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.core.Config;
 import com.lx862.pwgui.executable.Executables;
-import com.lx862.pwgui.gui.dialog.DownloadProgressDialog;
+import com.lx862.pwgui.gui.prompt.DownloadProgressDialog;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;

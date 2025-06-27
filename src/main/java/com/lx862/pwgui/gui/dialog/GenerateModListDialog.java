@@ -1,10 +1,10 @@
-package com.lx862.pwgui.gui.popup;
+package com.lx862.pwgui.gui.dialog;
 
 import com.github.rjeschke.txtmark.Processor;
 import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.gui.components.kui.KActionPanel;
 import com.lx862.pwgui.gui.components.kui.KRootContentPanel;
-import com.lx862.pwgui.gui.dialog.FileSavedDialog;
+import com.lx862.pwgui.gui.prompt.FileSavedDialog;
 import com.lx862.pwgui.pwcore.PackFile;
 import com.lx862.pwgui.pwcore.PackIndexFile;
 import com.lx862.pwgui.pwcore.PackwizMetaFile;
@@ -24,8 +24,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Dialog to view the program's log */
-public class GenerateModlistDialog extends JDialog {
+public class GenerateModListDialog extends JDialog {
     private final PackFile packFile;
     private String plainTextModlist = null;
 
@@ -39,7 +38,7 @@ public class GenerateModlistDialog extends JDialog {
     private final JCheckBox separateSidesCheckBox;
 
 
-    public GenerateModlistDialog(Window frame, PackFile packFile) {
+    public GenerateModListDialog(Window frame, PackFile packFile) {
         super(frame, Util.withTitlePrefix("Generate Modlist"));
         this.packFile = packFile;
 
@@ -135,16 +134,16 @@ public class GenerateModlistDialog extends JDialog {
             KFileChooser fileChooser = new KFileChooser();
             fileChooser.setCurrentDirectory(packFile.getPath().getParent().toFile());
             fileChooser.setSelectedFile(new File(markdownRadioButton.isSelected() ? "modlist.md" : "modlist.txt"));
-            if (fileChooser.openSaveAsDialog(GenerateModlistDialog.this) == JFileChooser.APPROVE_OPTION) {
+            if (fileChooser.openSaveAsDialog(GenerateModListDialog.this) == JFileChooser.APPROVE_OPTION) {
                 File file = fileChooser.getSelectedFile();
                 try {
                     try(FileWriter fw = new FileWriter(file)) {
                         fw.write(plainTextModlist);
                     }
-                    new FileSavedDialog(GenerateModlistDialog.this, "Modlist saved!", file).setVisible(true);
+                    new FileSavedDialog(GenerateModListDialog.this, "Modlist saved!", file).setVisible(true);
                 } catch (IOException e) {
                     PWGUI.LOGGER.exception(e);
-                    JOptionPane.showMessageDialog(GenerateModlistDialog.this, String.format("Failed to save modlist:\n%s", e.getMessage()), Util.withTitlePrefix("Save Modlist"), JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(GenerateModListDialog.this, String.format("Failed to save modlist:\n%s", e.getMessage()), Util.withTitlePrefix("Save Modlist"), JOptionPane.ERROR_MESSAGE);
                 }
 
                 dispose();

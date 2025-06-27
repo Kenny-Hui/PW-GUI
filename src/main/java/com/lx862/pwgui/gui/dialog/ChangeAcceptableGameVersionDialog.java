@@ -1,4 +1,4 @@
-package com.lx862.pwgui.gui.popup;
+package com.lx862.pwgui.gui.dialog;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.core.data.Caches;

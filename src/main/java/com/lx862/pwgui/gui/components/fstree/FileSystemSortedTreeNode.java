@@ -26,6 +26,10 @@ public class FileSystemSortedTreeNode extends DefaultMutableTreeNode implements 
         sort();
     }
 
+    public boolean containsNode(MutableTreeNode node) {
+        return children != null && children.contains(node);
+    }
+
     public void sort() {
         if(this.children != null) {
             this.children.sort(null);

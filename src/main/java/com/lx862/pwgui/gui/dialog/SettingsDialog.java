@@ -1,4 +1,4 @@
-package com.lx862.pwgui.gui.popup;
+package com.lx862.pwgui.gui.dialog;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.PWGUI;
@@ -7,15 +7,15 @@ import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.core.data.ApplicationTheme;
 import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.gui.action.DownloadPackwizAction;
-import com.lx862.pwgui.gui.action.ResetProgramAction;
 import com.lx862.pwgui.gui.components.filter.PackwizExecutableFileFilter;
 import com.lx862.pwgui.gui.components.kui.*;
 import com.lx862.pwgui.util.GUIHelper;
 import com.lx862.pwgui.util.Util;
+import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -45,7 +45,7 @@ public class SettingsDialog extends JDialog {
 
         JLabel titleLabel = new JLabel("Settings");
         titleLabel.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h2.font")));
-        titleLabel.setBorder(new EmptyBorder(0, 0, 10, 0)); // Bottom padding to compensate
+        titleLabel.setBorder(GUIHelper.getPaddedBorder(0, 0, 10, 0)); // Bottom padding to compensate
         contentPanel.add(titleLabel, BorderLayout.NORTH);
 
         JPanel programPanel = new JPanel();
@@ -185,5 +185,35 @@ public class SettingsDialog extends JDialog {
             GUIHelper.setupApplicationTheme((ApplicationTheme) themeComboBox.getSelectedItem(), PWGUI.getConfig().useWindowDecoration.getValue(), null);
         }
         super.dispose();
+    }
+
+    static class ResetProgramAction extends AbstractAction {
+        private final Window[] parents;
+
+        public ResetProgramAction(Window... parents) {
+            super("Reset...");
+            this.parents = parents;
+            putValue(MNEMONIC_KEY, KeyEvent.VK_R);
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            if(JOptionPane.showConfirmDialog(parents[0], String.format("This will reset %s to it's initial state as if it's the first time the program is launched.\nAre you sure you want to continue?", Constants.PROGRAM_NAME), Util.withTitlePrefix("Reset Program?"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                PWGUI.LOGGER.info(String.format("Resetting %s!", Constants.PROGRAM_NAME));
+
+                try {
+                    FileUtils.deleteDirectory(Config.CONFIG_DIR_PATH.toFile());
+                } catch (IOException e) {
+                    PWGUI.LOGGER.exception(e);
+                    JOptionPane.showMessageDialog(parents[0], String.format("Failed to delete folder %s!\nCannot reset program!", Config.CONFIG_DIR_PATH), Util.withTitlePrefix("Reset Failed!"), JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                for(Window parent : parents) {
+                    parent.dispose();
+                }
+                PWGUI.init(null);
+            }
+        }
     }
 }

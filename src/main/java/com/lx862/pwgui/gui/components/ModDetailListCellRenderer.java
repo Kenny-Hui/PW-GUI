@@ -1,10 +1,10 @@
 package com.lx862.pwgui.gui.components;
 
 import com.lx862.pwgui.pwcore.PackwizMetaFile;
+import com.lx862.pwgui.util.GUIHelper;
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 import java.awt.*;
 
@@ -14,7 +14,7 @@ public class ModDetailListCellRenderer extends DefaultListCellRenderer {
         super.getListCellRendererComponent(jList, item, index, isSelected, cellHasFocus);
         setBorder(new CompoundBorder(
                 new MatteBorder(0, 0, 1, 0, new Color(128, 128, 128)),
-                new EmptyBorder(3, 3, 3, 3)
+                GUIHelper.getPaddedBorder(3)
         ));
 
         if (item instanceof PackwizMetaFile packwizMetaFile) {

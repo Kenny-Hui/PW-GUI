@@ -1,4 +1,4 @@
-package com.lx862.pwgui.gui.dialog;
+package com.lx862.pwgui.gui.prompt;
 
 import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.util.Util;

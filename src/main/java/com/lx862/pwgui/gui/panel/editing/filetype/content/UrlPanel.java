@@ -7,7 +7,7 @@ import com.lx862.pwgui.core.data.model.file.ContentDirectoryModel;
 import com.lx862.pwgui.executable.ProgramExecution;
 import com.lx862.pwgui.gui.components.kui.KGridBagLayoutPanel;
 import com.lx862.pwgui.gui.components.kui.KTextField;
-import com.lx862.pwgui.gui.dialog.ExecutableProgressDialog;
+import com.lx862.pwgui.gui.prompt.ExecutableProgressDialog;
 import com.lx862.pwgui.gui.panel.editing.filetype.FileEntryPaneContext;
 import com.lx862.pwgui.util.Util;
 

@@ -6,9 +6,9 @@ import com.lx862.pwgui.pwcore.*;
 import com.lx862.pwgui.executable.BatchedProgramExecution;
 import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.executable.ProgramExecution;
-import com.lx862.pwgui.gui.dialog.BatchedExecutionProgressDialog;
-import com.lx862.pwgui.gui.dialog.ExecutableProgressDialog;
-import com.lx862.pwgui.gui.dialog.IncompatibleSummaryDialog;
+import com.lx862.pwgui.gui.prompt.BatchedExecutionProgressDialog;
+import com.lx862.pwgui.gui.prompt.ExecutableProgressDialog;
+import com.lx862.pwgui.gui.prompt.IncompatibleSummaryDialog;
 import com.lx862.pwgui.util.Util;
 import org.apache.commons.io.FileUtils;
 
@@ -20,18 +20,20 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 public class FullUpdateAction extends UpdateAction {
     private final PackFile packFile;
 
-    public FullUpdateAction(Window parent, PackFile packFile) {
-        super(parent);
+    public FullUpdateAction(Supplier<Window> getParent, PackFile packFile) {
+        super(getParent);
         this.packFile = packFile;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        ProgramExecution updateExecution = getProgramExecution();
+        Window parent = getParent.get();
+        ProgramExecution updateExecution = getProgramExecution(parent);
 
         PackIndexFile packIndex = packFile.packIndexFile.get();
         List<PackIndexFile.FileEntry> originalEntries = packIndex.getFileEntries().stream().filter(f -> f.metafile).toList();

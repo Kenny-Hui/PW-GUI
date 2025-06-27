@@ -11,19 +11,20 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.List;
 
 /* The top section that displays the modpack's name and versions */
 public class HeaderPanel extends JPanel {
     public HeaderPanel(PackFile packFile) {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-        initialize(packFile);
+        refresh(packFile);
     }
 
-    public void initialize(PackFile packFile) {
+    public void refresh(PackFile newPackFile) {
         removeAll();
 
         // Prism / MMC seems to update this file to match the instance's icon on every launch
-        File iconFile = packFile.resolveRelative("icon.png").toFile();
+        File iconFile = newPackFile.resolveRelative("icon.png").toFile();
         if(iconFile.exists()) {
             try {
                 BufferedImage iconImage = ImageIO.read(iconFile);
@@ -38,39 +39,45 @@ public class HeaderPanel extends JPanel {
             }
         }
 
-        JPanel infoPanel = new JPanel();
-        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
-
-        JLabel modpackNameLabel = new JLabel(packFile.getName());
-        modpackNameLabel.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h2.font")));
-        infoPanel.add(modpackNameLabel);
-
-        if(!packFile.author.isEmpty() || !packFile.version.isEmpty()) {
-            JLabel modpackVersionAuthorLabel = new JLabel();
-            if(!packFile.version.isEmpty() && packFile.author.isEmpty()) {
-                modpackVersionAuthorLabel.setText(packFile.version);
-            } else if(!packFile.author.isEmpty() && packFile.version.isEmpty()) {
-                modpackVersionAuthorLabel.setText(String.format("by %s", packFile.author));
-            } else {
-                modpackVersionAuthorLabel.setText(String.format("%s by %s", packFile.version, packFile.author));
-            }
-            infoPanel.add(modpackVersionAuthorLabel);
-        }
-
+        JPanel infoPanel = new PackInfoPanel(newPackFile);
         add(infoPanel);
         add(Box.createHorizontalGlue());
-
-        JPanel componentsPanel = new JPanel();
-        componentsPanel.setLayout(new BoxLayout(componentsPanel, BoxLayout.Y_AXIS));
-
-        for (PackComponentVersion packComponentVersion : packFile.getComponents()) {
-            JLabel componentLabel = new JLabel(packComponentVersion.getComponent().iconName.name + " version: " + packComponentVersion.getVersion(), new ImageIcon(GUIHelper.clampImageSize(packComponentVersion.getComponent().iconName.image, 20)), SwingConstants.LEFT);
-            componentLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
-            componentsPanel.add(componentLabel);
-        }
-
+        JPanel componentsPanel = new PackComponentsPanel(newPackFile.getComponents());
         add(componentsPanel);
-        revalidate();
-        repaint();
+        updateUI();
+    }
+
+    static class PackInfoPanel extends JPanel {
+        public PackInfoPanel(PackFile packFile) {
+            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+            JLabel modpackNameLabel = new JLabel(packFile.getName());
+            modpackNameLabel.setFont(FlatUIUtils.nonUIResource(UIManager.getFont("h2.font")));
+            add(modpackNameLabel);
+
+            if(!packFile.author.isEmpty() || !packFile.version.isEmpty()) {
+                JLabel modpackVersionAuthorLabel = new JLabel();
+                if(!packFile.version.isEmpty() && packFile.author.isEmpty()) {
+                    modpackVersionAuthorLabel.setText(packFile.version);
+                } else if(!packFile.author.isEmpty() && packFile.version.isEmpty()) {
+                    modpackVersionAuthorLabel.setText(String.format("by %s", packFile.author));
+                } else {
+                    modpackVersionAuthorLabel.setText(String.format("%s by %s", packFile.version, packFile.author));
+                }
+                add(modpackVersionAuthorLabel);
+            }
+        }
+    }
+
+    static class PackComponentsPanel extends JPanel {
+        public PackComponentsPanel(List<PackComponentVersion> components) {
+            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+            for (PackComponentVersion packComponentVersion : components) {
+                JLabel componentLabel = new JLabel(packComponentVersion.getComponent().iconName.name + " version: " + packComponentVersion.getVersion(), new ImageIcon(GUIHelper.clampImageSize(packComponentVersion.getComponent().iconName.image, 20)), SwingConstants.LEFT);
+                componentLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
+                add(componentLabel);
+            }
+        }
     }
 }

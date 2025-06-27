@@ -55,15 +55,15 @@ public class GUIHelper {
         return Box.createRigidArea(new Dimension(0, height));
     }
 
-    public static CompoundBorder borderWithPadding(int padding, Border border) {
+    public static Border borderWithPadding(int padding, Border border) {
         return new CompoundBorder(border, getPaddedBorder(padding));
     }
 
-    public static EmptyBorder getPaddedBorder(int padding) {
+    public static Border getPaddedBorder(int padding) {
         return new EmptyBorder(padding, padding, padding, padding);
     }
 
-    public static EmptyBorder getPaddedBorder(int top, int left, int bottom, int right) {
+    public static Border getPaddedBorder(int top, int left, int bottom, int right) {
         return new EmptyBorder(top, left, bottom, right);
     }
 

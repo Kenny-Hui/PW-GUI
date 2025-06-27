@@ -1,9 +1,9 @@
-package com.lx862.pwgui.gui.popup;
+package com.lx862.pwgui.gui.dialog;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.gui.components.kui.KRootContentPanel;
-import com.lx862.pwgui.gui.dialog.ExecutableProgressDialog;
-import com.lx862.pwgui.gui.dialog.FileSavedDialog;
+import com.lx862.pwgui.gui.prompt.ExecutableProgressDialog;
+import com.lx862.pwgui.gui.prompt.FileSavedDialog;
 import com.lx862.pwgui.pwcore.Modpack;
 import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.gui.components.kui.KButton;
@@ -15,7 +15,6 @@ import com.lx862.pwgui.executable.ProgramExecution;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.io.File;
@@ -40,7 +39,7 @@ public class ExportModpackDialog extends JDialog {
         contentPanel.add(titleLabel, BorderLayout.NORTH);
 
         JTabbedPane formatTabPane = new JTabbedPane();
-        formatTabPane.setBorder(new EmptyBorder(10, 0, 10, 0));
+        formatTabPane.setBorder(GUIHelper.getPaddedBorder(10, 0, 10, 0));
         formatTabPane.addTab(IconNamePair.MODRINTH.name, new ImageIcon(GUIHelper.clampImageSize(IconNamePair.MODRINTH.image, 20)), new ModrinthExportPanel());
         formatTabPane.addTab(IconNamePair.CURSEFORGE.name, new ImageIcon(GUIHelper.clampImageSize(IconNamePair.CURSEFORGE.image, 20)), new CurseforgeExportPanel(this::setExportButtonState));
 
@@ -107,7 +106,7 @@ class ModrinthExportPanel extends ExportPanel {
     public ModrinthExportPanel() {
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         JLabel formatLabel = new JLabel("<html>Format: <b>" + getExtension() + "</b></html>");
-        formatLabel.setBorder(new EmptyBorder(4, 0, 4, 0));
+        formatLabel.setBorder(GUIHelper.getPaddedBorder(4, 0, 4, 0));
         add(formatLabel);
 
         restrictDomainCheckBox = new JCheckBox("Restricts domains to those allowed by modrinth.com");
@@ -146,7 +145,7 @@ class CurseforgeExportPanel extends ExportPanel {
         this.setExportButtonState = setExportButtonState;
 
         JLabel formatLabel = new JLabel("<html>Format: <b>" + getExtension() + "</b></html>");
-        formatLabel.setBorder(new EmptyBorder(4, 0, 4, 0));
+        formatLabel.setBorder(GUIHelper.getPaddedBorder(4, 0, 4, 0));
         formatLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         add(formatLabel);
 

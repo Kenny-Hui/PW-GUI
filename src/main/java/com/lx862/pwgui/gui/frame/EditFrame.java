@@ -16,14 +16,15 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.nio.file.Path;
 import java.nio.file.WatchEvent;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import static java.nio.file.StandardWatchEventKinds.*;
 
 /** The main Pack Editing UI */
 public class EditFrame extends BaseFrame {
+    private final HeaderPanel headerPanel;
     private final EditPanel editPanel;
+
     private Thread fileWatcherThread;
 
     public EditFrame(Component parent, Modpack modpack) {
@@ -35,25 +36,9 @@ public class EditFrame extends BaseFrame {
         Executables.packwiz.setPackFileLocation(modpack.getRootPath().relativize(modpack.getPackFilePath()).toString());
         Executables.packwiz.changeWorkingDirectory(modpack.getRootPath());
 
-        HeaderPanel headerPanel = new HeaderPanel(modpack.packFile.get());
-        EditPanel editPanel = new EditPanel(modpack);
-        this.editPanel = editPanel;
+        headerPanel = new HeaderPanel(modpack.packFile.get());
+        editPanel = new EditPanel(modpack);
 
-        initMenuBars(modpack, editPanel::saveChanges);
-
-        startWatchFile(modpack, (kind, path) -> {
-            editPanel.onFileChange(kind, path);
-
-            if(kind == ENTRY_CREATE || kind == ENTRY_MODIFY) {
-                if(path.equals(modpack.getPackFilePath())) {
-                    modpack.packFile.clearCache();
-                    headerPanel.initialize(modpack.packFile.get()); // Update header with new info
-                    setTitle(getTitle(modpack));
-                } else if(path.equals(modpack.packFile.get().getIndexPath())) {
-                    modpack.packFile.get().packIndexFile.clearCache();
-                }
-            }
-        });
 
         KRootContentPanel contentPanel = new KRootContentPanel(new BorderLayout(0, 10));
         contentPanel.setBorder(GUIHelper.getPaddedBorder(7, 14, 14, 14));
@@ -61,6 +46,10 @@ public class EditFrame extends BaseFrame {
         contentPanel.add(headerPanel, BorderLayout.NORTH);
         contentPanel.add(editPanel, BorderLayout.CENTER);
         add(contentPanel);
+
+        initMenuBars(modpack, editPanel::saveChanges);
+
+        startMonitorModpackDirectory(modpack);
     }
 
     private static String getTitle(Modpack modpack) {
@@ -80,15 +69,26 @@ public class EditFrame extends BaseFrame {
         }, KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK), JComponent.WHEN_IN_FOCUSED_WINDOW);
     }
 
-    private void startWatchFile(Modpack modpack, BiConsumer<WatchEvent.Kind<?>, Path> callback) {
+    private void startMonitorModpackDirectory(Modpack modpack) {
         this.fileWatcherThread = new Thread(() -> {
             FileSystemWatcher watcher = new FileSystemWatcher(modpack.getRootPath(), true, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
-            watcher.startWatching((watchKey, e) -> {
-                Path directory = (Path)watchKey.watchable();
+            watcher.startWatching((parentDir, e) -> {
+                final Path path = parentDir.resolve(((WatchEvent<Path>)e).context());
                 WatchEvent.Kind<?> kind = e.kind();
-                final Path path = directory.resolve(((WatchEvent<Path>)e).context());
 
-                SwingUtilities.invokeLater(() -> callback.accept(kind, path));
+                SwingUtilities.invokeLater(() -> {
+                    editPanel.onFileChange(kind, path);
+
+                    if(kind == ENTRY_CREATE || kind == ENTRY_MODIFY) {
+                        if(path.equals(modpack.getPackFilePath())) {
+                            modpack.packFile.clearCache();
+                            headerPanel.refresh(modpack.packFile.get()); // Update header with new info
+                            setTitle(getTitle(modpack));
+                        } else if(path.equals(modpack.packFile.get().getIndexPath())) {
+                            modpack.packFile.get().packIndexFile.clearCache();
+                        }
+                    }
+                });
             });
         });
         fileWatcherThread.start();

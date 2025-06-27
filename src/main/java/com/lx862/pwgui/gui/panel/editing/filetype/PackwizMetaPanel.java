@@ -8,11 +8,11 @@ import com.lx862.pwgui.gui.components.kui.*;
 import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.executable.ProgramExecution;
 import com.lx862.pwgui.pwcore.PackwizMetaFile;
-import com.lx862.pwgui.gui.dialog.ExecutableProgressDialog;
+import com.lx862.pwgui.gui.prompt.ExecutableProgressDialog;
+import com.lx862.pwgui.util.GUIHelper;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
@@ -53,7 +53,7 @@ public class PackwizMetaPanel extends FileTypePanel {
         add(new KSeparator());
 
         KGridBagLayoutPanel editableContentPanel = new KGridBagLayoutPanel(1, 2);
-        editableContentPanel.setBorder(new EmptyBorder(5, 0, 0, 0));
+        editableContentPanel.setBorder(GUIHelper.getPaddedBorder(5, 0, 0, 0));
 
         descriptionTextField = new KTextField("(None)", true);
         descriptionTextField.setText(packwizMetaFile.optionDescription);

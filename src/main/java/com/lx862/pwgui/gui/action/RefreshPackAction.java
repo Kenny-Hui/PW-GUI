@@ -9,18 +9,20 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Supplier;
 
 public class RefreshPackAction extends AbstractAction {
-    private final Component parent;
+    private final Supplier<Component> getParent;
 
-    public RefreshPackAction(Component parent) {
+    public RefreshPackAction(Supplier<Component> getParent) {
         super("Refresh Pack Index");
-        this.parent = parent;
+        this.getParent = getParent;
         putValue(MNEMONIC_KEY, KeyEvent.VK_R);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        Component parent = getParent.get();
         AtomicReference<String> lastLine = new AtomicReference<>();
 
         Executables.packwiz.refresh()

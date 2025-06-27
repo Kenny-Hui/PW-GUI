@@ -5,8 +5,8 @@ import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.Main;
 import com.lx862.pwgui.core.data.model.ManualModInfo;
 import com.lx862.pwgui.executable.ProgramExecution;
-import com.lx862.pwgui.gui.dialog.ExecutableProgressDialog;
-import com.lx862.pwgui.gui.dialog.ManualDownloadDialog;
+import com.lx862.pwgui.gui.prompt.ExecutableProgressDialog;
+import com.lx862.pwgui.gui.prompt.ManualDownloadDialog;
 
 import javax.swing.*;
 import java.awt.*;
@@ -70,10 +70,10 @@ public class Util {
     }
 
     /**
-     * Returns whether path is subdirectory of a root directory
+     * Check whether a path is subdirectory of a root directory
      * @param root The root directory
      * @param path The path to check against
-     * @return
+     * @return Returns true if path is a subdirectory of root, false if it is outside the root directory.
      */
     public static boolean withinDirectory(Path root, Path path) {
         File parent = path.normalize().toFile();

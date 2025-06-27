@@ -1,7 +1,7 @@
 package com.lx862.pwgui.gui.action;
 
 import com.lx862.pwgui.executable.Executables;
-import com.lx862.pwgui.gui.popup.ConsoleDialog;
+import com.lx862.pwgui.gui.dialog.ConsoleDialog;
 
 import javax.swing.*;
 import java.awt.*;

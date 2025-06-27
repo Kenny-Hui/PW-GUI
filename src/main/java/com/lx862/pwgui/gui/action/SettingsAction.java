@@ -1,6 +1,6 @@
 package com.lx862.pwgui.gui.action;
 
-import com.lx862.pwgui.gui.popup.SettingsDialog;
+import com.lx862.pwgui.gui.dialog.SettingsDialog;
 
 import javax.swing.*;
 import java.awt.*;

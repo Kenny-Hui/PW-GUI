@@ -3,8 +3,8 @@ package com.lx862.pwgui.gui.action;
 import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.executable.ProgramExecution;
-import com.lx862.pwgui.gui.dialog.ExecutableProgressDialog;
-import com.lx862.pwgui.gui.dialog.UpdateSummaryDialog;
+import com.lx862.pwgui.gui.prompt.ExecutableProgressDialog;
+import com.lx862.pwgui.gui.prompt.UpdateSummaryDialog;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
@@ -14,21 +14,23 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Supplier;
 
 public class UpdateAction extends AbstractAction {
-    protected final Window parent;
+    protected final Supplier<Window> getParent;
     protected AtomicBoolean alreadyUpToDate = new AtomicBoolean();
     protected AtomicBoolean modsUpdated = new AtomicBoolean();
 
-    public UpdateAction(Window parent) {
+    public UpdateAction(Supplier<Window> getParent) {
         super("Update All Items");
-        this.parent = parent;
+        this.getParent = getParent;
         putValue(MNEMONIC_KEY, KeyEvent.VK_U);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        ProgramExecution programExecution = getProgramExecution();
+        Window parent = getParent.get();
+        ProgramExecution programExecution = getProgramExecution(parent);
 
         programExecution.onExit(exitCode -> {
             if(exitCode == 0) {
@@ -45,7 +47,7 @@ public class UpdateAction extends AbstractAction {
         executableProgressDialog.setVisible(true);
     }
 
-    public ProgramExecution getProgramExecution() {
+    public ProgramExecution getProgramExecution(Window parent) {
         ProgramExecution programExecution = Executables.packwiz.buildCommand("update", "--all");
         List<String> updateMods = new ArrayList<>();
         List<String> skippedMods = new ArrayList<>();

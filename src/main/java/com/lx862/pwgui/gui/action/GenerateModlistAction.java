@@ -1,7 +1,7 @@
 package com.lx862.pwgui.gui.action;
 
 import com.lx862.pwgui.pwcore.PackFile;
-import com.lx862.pwgui.gui.popup.GenerateModlistDialog;
+import com.lx862.pwgui.gui.dialog.GenerateModListDialog;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,6 +21,6 @@ public class GenerateModlistAction extends AbstractAction {
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-        new GenerateModlistDialog(parent, currentPackFile).setVisible(true);
+        new GenerateModListDialog(parent, currentPackFile).setVisible(true);
     }
 }

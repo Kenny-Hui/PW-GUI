@@ -4,10 +4,10 @@ import com.lx862.pwgui.pwcore.Modpack;
 import com.lx862.pwgui.gui.action.*;
 import com.lx862.pwgui.gui.components.kui.KMenu;
 import com.lx862.pwgui.gui.components.kui.KMenuItem;
-import com.lx862.pwgui.gui.popup.ExportModpackDialog;
-import com.lx862.pwgui.gui.popup.DevServerDialog;
-import com.lx862.pwgui.gui.popup.ImportModpackDialog;
-import com.lx862.pwgui.gui.popup.ViewLogDialog;
+import com.lx862.pwgui.gui.dialog.ExportModpackDialog;
+import com.lx862.pwgui.gui.dialog.DevServerDialog;
+import com.lx862.pwgui.gui.dialog.ImportModpackDialog;
+import com.lx862.pwgui.gui.dialog.ViewLogDialog;
 import com.lx862.pwgui.util.GUIHelper;
 import com.lx862.pwgui.util.Util;
 
@@ -60,7 +60,7 @@ public abstract class BaseFrame extends JFrame {
         KMenuItem reinstallMenuItem = new KMenuItem(new ReinstallAction(this, modpack));
         toolMenu.add(reinstallMenuItem);
 
-        KMenuItem updateAllMenuItem = new KMenuItem(new UpdateAction(this));
+        KMenuItem updateAllMenuItem = new KMenuItem(new UpdateAction(() -> this));
         toolMenu.add(updateAllMenuItem);
 
 

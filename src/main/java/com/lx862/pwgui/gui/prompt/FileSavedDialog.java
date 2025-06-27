@@ -1,4 +1,4 @@
-package com.lx862.pwgui.gui.dialog;
+package com.lx862.pwgui.gui.prompt;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.gui.components.kui.KActionPanel;
@@ -7,7 +7,6 @@ import com.lx862.pwgui.gui.components.kui.KRootContentPanel;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;

@@ -1,5 +1,6 @@
 package com.lx862.pwgui.gui.components.fstree;
 
+import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.core.data.model.GitIgnoreRules;
 import com.lx862.pwgui.core.data.model.file.FileSystemEntityModel;
 
@@ -19,18 +20,18 @@ import static java.nio.file.StandardWatchEventKinds.*;
 
 /* A JTree representing a directory view/file browser. */
 public class FileSystemTree extends JTree {
-    private static final List<String> nonCapturedDirectories = Arrays.asList(
+    private static final List<String> excludedDirs = Arrays.asList(
             ".git", // Huge amount of files to walk through, not gonna bother
             ".pwgui-tmp" // Our temp directory, should be deleted shortly after. (Currently used for mod probing)
     );
 
-    private final Function<File, FileSystemEntityModel> getModel;
+    private final Function<File, FileSystemEntityModel> createFileModel;
     private final List<Path> fileNeedingUserAcknowledgement;
     private GitIgnoreRules ignorePattern;
     public boolean fsLock; // A slight hack to signal to others when a file is changed
 
-    public FileSystemTree(Path root, Function<File, FileSystemEntityModel> getModel) {
-        this.getModel = getModel;
+    public FileSystemTree(Path root, Function<File, FileSystemEntityModel> createFileModel) {
+        this.createFileModel = createFileModel;
         this.fileNeedingUserAcknowledgement = new ArrayList<>();
         setModel(new DefaultTreeModel(generateRecursiveTree(root), false));
         setRootVisible(false);
@@ -70,17 +71,17 @@ public class FileSystemTree extends JTree {
     }
 
     private FileSystemSortedTreeNode generateRecursiveTree(Path root) {
-        return generateRecursiveTree(new FileSystemSortedTreeNode(getModel.apply(root.toFile())));
+        return generateRecursiveTree(new FileSystemSortedTreeNode(createFileModel.apply(root.toFile())));
     }
 
     private FileSystemSortedTreeNode generateRecursiveTree(FileSystemSortedTreeNode rootNode) {
         File[] files = rootNode.path.toFile().listFiles();
         if(files != null) {
             for(File file : files) {
-                FileSystemEntityModel child = getModel.apply(file);
+                FileSystemEntityModel child = createFileModel.apply(file);
                 if(child == null) continue;
 
-                if(file.isDirectory() && !nonCapturedDirectories.contains(file.getName())) {
+                if(file.isDirectory() && !excludedDirs.contains(file.getName())) {
                     FileSystemSortedTreeNode node = generateRecursiveTree(new FileSystemSortedTreeNode(child));
                     rootNode.add(node);
                 } else {
@@ -96,15 +97,11 @@ public class FileSystemTree extends JTree {
     /* This is used to notify that a file has been created/modified/removed for live update purposes.
     * You are expected to bring your own FileWatcher to the table :) */
     public void onFileChange(WatchEvent.Kind<?> kind, Path filePath) {
-        for(String nonCapturedDirectory : nonCapturedDirectories) {
-            if(nonCapturedDirectory.contains(filePath.getFileName().toString())) return;
-        }
-
         if(kind == ENTRY_CREATE && Files.exists(filePath)) {
             addNode(filePath);
         } else if(kind == ENTRY_MODIFY) {
-            FileSystemEntityModel newNode = getModel.apply(filePath.toFile());
-            modifyNode(filePath, newNode);
+            FileSystemEntityModel newNode = createFileModel.apply(filePath.toFile());
+            if(newNode != null) modifyNode(filePath, newNode);
         } else {
             removeNode(filePath);
         }
@@ -116,9 +113,13 @@ public class FileSystemTree extends JTree {
 
         iterateTree((node) -> {
             if(node.path.equals(parent)) {
-                node.addAndSort(newNode);
-                int idx = node.getIndex(newNode);
-                ((DefaultTreeModel)getModel()).nodesWereInserted(node, new int[]{idx});
+                if(!node.containsNode(newNode)) {
+                    node.addAndSort(newNode);
+                    int insertedIndex = node.getIndex(newNode);
+                    ((DefaultTreeModel)getModel()).nodesWereInserted(node, new int[]{insertedIndex});
+                } else {
+                    PWGUI.LOGGER.warn(String.format("[FileSystemTree] Node %s already exists in tree!", newNode.path));
+                }
             }
         });
     }

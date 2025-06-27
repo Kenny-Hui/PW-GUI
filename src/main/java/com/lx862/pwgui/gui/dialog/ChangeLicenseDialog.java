@@ -1,4 +1,4 @@
-package com.lx862.pwgui.gui.popup;
+package com.lx862.pwgui.gui.dialog;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.google.gson.Gson;
@@ -17,7 +17,6 @@ import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.*;
@@ -27,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChangeLicenseDialog extends JDialog {
-    private License selectedLicense = null;
+    private LicenseModel selectedLicenseModel = null;
     private JPanel overviewPanel = null;
     private KTextArea licenseTextArea = null;
 
@@ -41,7 +40,7 @@ public class ChangeLicenseDialog extends JDialog {
         setLocationRelativeTo(parent);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        List<License> licenses = getAvailableLicenses();
+        List<LicenseModel> licenses = getAvailableLicenses();
 
         KRootContentPanel contentPanel = new KRootContentPanel(10);
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.PAGE_AXIS));
@@ -87,15 +86,15 @@ public class ChangeLicenseDialog extends JDialog {
         JPanel leftPane = new JPanel(new BorderLayout());
         leftPane.add(new JLabel("Selected License:"), BorderLayout.NORTH);
 
-        JList<License> licenseJList = new JList<>();
+        JList<LicenseModel> licenseJList = new JList<>();
         licenseJList.setCellRenderer(new KListCellRenderer());
 
-        DefaultListModel<License> licenseListModel = new DefaultListModel<>();
+        DefaultListModel<LicenseModel> licenseListModel = new DefaultListModel<>();
         licenseListModel.addAll(licenses);
 
         licenseJList.setModel(licenseListModel);
         licenseJList.addListSelectionListener(listSelectionEvent -> {
-            selectedLicense = licenseJList.getSelectedValue();
+            selectedLicenseModel = licenseJList.getSelectedValue();
             setLicense(nameTextField.getText(), yearTextField.getText(), false);
         });
 
@@ -135,21 +134,21 @@ public class ChangeLicenseDialog extends JDialog {
     }
 
     private void setLicense(String name, String year, boolean updateMetadata) {
-        if(selectedLicense == null) {
+        if(selectedLicenseModel == null) {
             licenseTextArea.setText("Please select a license from the left to preview them.\n<==============");
             licenseTextArea.setEditable(false);
         } else {
-            if(!updateMetadata || !selectedLicense.editable()) {
-                String finalLicenseContent = selectedLicense.content().replace("[fullname]", name).replace("[year]", year);
+            if(!updateMetadata || !selectedLicenseModel.editable()) {
+                String finalLicenseContent = selectedLicenseModel.content().replace("[fullname]", name).replace("[year]", year);
                 licenseTextArea.setText(finalLicenseContent, true);
-                licenseTextArea.setEditable(selectedLicense.editable());
+                licenseTextArea.setEditable(selectedLicenseModel.editable());
             }
-            updateOverviewPanel(overviewPanel, selectedLicense.licenseOverview());
+            updateOverviewPanel(overviewPanel, selectedLicenseModel.licenseOverview());
         }
     }
 
-    private List<License> getAvailableLicenses() {
-        List<License> licenses = new ArrayList<>();
+    private List<LicenseModel> getAvailableLicenses() {
+        List<LicenseModel> licenses = new ArrayList<>();
         try(InputStream is = Util.getAssets("/assets/licenses/licenses.json")) {
             if(is != null) {
                 JsonArray licensesArray = new Gson().fromJson(new JsonReader(new InputStreamReader(is)), JsonArray.class);
@@ -167,14 +166,14 @@ public class ChangeLicenseDialog extends JDialog {
                     }
 
                     LicenseOverview licenseOverview = LicenseOverview.fromJson(licenseObject.get("overview"));
-                    licenses.add(new License(name, content, licenseOverview, editable));
+                    licenses.add(new LicenseModel(name, content, licenseOverview, editable));
                 }
             } else {
-                licenses.add(new License("Error!", "Failed to find available licenses for display!\nThis is either a bug or a semi-corrupted installation of the program!", null, false));
+                licenses.add(new LicenseModel("Error!", "Failed to find available licenses for display!\nThis is either a bug or a semi-corrupted installation of the program!", null, false));
             }
         } catch (IOException e) {
             PWGUI.LOGGER.exception(e);
-            licenses.add(new License("Error!", "Failed to read available licenses!\nThis is either a bug or a semi-corrupted installation of the program!", null, false));
+            licenses.add(new LicenseModel("Error!", "Failed to read available licenses!\nThis is either a bug or a semi-corrupted installation of the program!", null, false));
         }
         return licenses;
     }
@@ -207,7 +206,7 @@ public class ChangeLicenseDialog extends JDialog {
         overviewPanel.add(panel);
     }
 
-    private record License(String name, String content, LicenseOverview licenseOverview, boolean editable) {
+    private record LicenseModel(String name, String content, LicenseOverview licenseOverview, boolean editable) {
         @Override
         public String toString() {
             return name;
@@ -249,7 +248,7 @@ public class ChangeLicenseDialog extends JDialog {
             String licenseContent = licenseTextArea.getText();
             try {
                 FileUtils.write(licenseFile, licenseContent, StandardCharsets.UTF_8);
-                JOptionPane.showMessageDialog(ChangeLicenseDialog.this, String.format("License changed to %s!", selectedLicense), Util.withTitlePrefix("Change License"), JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(ChangeLicenseDialog.this, String.format("License changed to %s!", selectedLicenseModel), Util.withTitlePrefix("Change License"), JOptionPane.INFORMATION_MESSAGE);
             } catch (IOException e) {
                 PWGUI.LOGGER.exception(e);
                 JOptionPane.showMessageDialog(ChangeLicenseDialog.this, "Failed to save new license, see program log for detail!", Util.withTitlePrefix("Change License"), JOptionPane.ERROR_MESSAGE);

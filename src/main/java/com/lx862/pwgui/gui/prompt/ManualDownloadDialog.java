@@ -1,4 +1,4 @@
-package com.lx862.pwgui.gui.dialog;
+package com.lx862.pwgui.gui.prompt;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.PWGUI;
@@ -9,7 +9,6 @@ import com.lx862.pwgui.gui.components.kui.*;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -99,7 +98,7 @@ public class ManualDownloadDialog extends JDialog {
         }
 
         this.fileWatcherThread = new Thread(() -> {
-            new FileSystemWatcher(path, false, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_DELETE).startWatching((wk, e) -> {
+            new FileSystemWatcher(path, false, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_DELETE).startWatching((parentDir, e) -> {
                 SwingUtilities.invokeLater(this::refreshMissingModList);
             });
         });

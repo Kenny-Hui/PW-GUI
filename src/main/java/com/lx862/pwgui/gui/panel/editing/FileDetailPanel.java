@@ -23,10 +23,10 @@ public class FileDetailPanel extends JPanel {
         this.saveButton = new KButton("Save");
         saveButton.setVisible(false);
 
-        saveButton.addActionListener(actionEvent -> saveTab((FileTypePanel) this.fileEntryTab.getSelectedComponent(), true));
+        saveButton.addActionListener(actionEvent -> saveTab((JPanel)this.fileEntryTab.getSelectedComponent(), true));
         fileEntryTab.addChangeListener(changeEvent -> {
-            saveButton.setEnabled(fileEntryTab.getSelectedComponent() != null && ((FileTypePanel)fileEntryTab.getSelectedComponent()).shouldSave());
-            saveButton.setVisible(fileEntryTab.getSelectedComponent() != null && ((FileTypePanel)fileEntryTab.getSelectedComponent()).savable());
+            saveButton.setEnabled(fileEntryTab.getSelectedComponent() instanceof FileTypePanel panel && panel.shouldSave());
+            saveButton.setVisible(fileEntryTab.getSelectedComponent() instanceof FileTypePanel panel && panel.savable());
         });
 
         JPanel fileEntryActionRow = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0 ,0));
@@ -64,8 +64,8 @@ public class FileDetailPanel extends JPanel {
         Executables.packwiz.refresh().execute(String.format("File modified by %s", Constants.PROGRAM_NAME));
     }
 
-    private void saveTab(FileTypePanel fileTypePanel, boolean shouldRefresh) {
-        if(fileTypePanel.shouldSave()) {
+    private void saveTab(JPanel panel, boolean shouldRefresh) {
+        if(panel instanceof FileTypePanel fileTypePanel && fileTypePanel.shouldSave()) {
             try {
                 fileTypePanel.save();
             } catch (IOException e) {

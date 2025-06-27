@@ -1,10 +1,10 @@
-package com.lx862.pwgui.gui.popup;
+package com.lx862.pwgui.gui.dialog;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.gui.components.kui.*;
-import com.lx862.pwgui.gui.dialog.ExecutableProgressDialog;
+import com.lx862.pwgui.gui.prompt.ExecutableProgressDialog;
 import com.lx862.pwgui.gui.panel.ModpackInfoPanel;
 import com.lx862.pwgui.gui.panel.ModpackVersionPanel;
 import com.lx862.pwgui.util.GUIHelper;
@@ -13,7 +13,6 @@ import org.apache.commons.io.FileUtils;
 import com.lx862.pwgui.executable.ProgramExecution;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;

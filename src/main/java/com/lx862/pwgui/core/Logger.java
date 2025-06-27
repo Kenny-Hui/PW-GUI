@@ -2,12 +2,11 @@ package com.lx862.pwgui.core;
 
 import com.lx862.pwgui.PWGUI;
 
-import javax.swing.text.BadLocationException;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 /** The logger used for the program */
 public class Logger {
@@ -37,7 +36,7 @@ public class Logger {
     }
 
     public void error(String prefix, String str) {
-        log(prefix + " [ERROR]", str);
+        log(prefix + " [ERROR]", str, System.err);
     }
 
     public void warn(String str) {
@@ -45,7 +44,7 @@ public class Logger {
     }
 
     public void warn(String prefix, String str) {
-        log(prefix + " [WARN]", str);
+        log(prefix + " [WARN]", str, System.out);
     }
 
     public void exception(Throwable t) {
@@ -59,7 +58,7 @@ public class Logger {
     }
 
     public void info(String prefix, String str) {
-        log(prefix + " [INFO]", str);
+        log(prefix + " [INFO]", str, System.out);
     }
 
     public void debug(String str) {
@@ -67,13 +66,13 @@ public class Logger {
     }
 
     public void debug(String prefix, String str) {
-        if(PWGUI.getConfig().debugMode.getValue()) log(prefix + " [DEBUG]", str);
+        if(PWGUI.getConfig().debugMode.getValue()) log(prefix + " [DEBUG]", str, System.out);
     }
 
-    private void log(String prefix, String str) {
+    private void log(String prefix, String str, PrintStream printStream) {
         String finalMessage = prefix + " " + str;
         lines.add(finalMessage);
-        System.out.println(finalMessage);
+        printStream.println(finalMessage);
         for(LogCallback logListener : logListeners) {
             logListener.onLog(finalMessage, true);
         }

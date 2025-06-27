@@ -8,7 +8,7 @@ import com.lx862.pwgui.gui.action.SettingsAction;
 import com.lx862.pwgui.gui.components.filter.PackFileFilter;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.gui.components.kui.KFileChooser;
-import com.lx862.pwgui.gui.popup.NewModpackDialog;
+import com.lx862.pwgui.gui.dialog.NewModpackDialog;
 import com.lx862.pwgui.util.GUIHelper;
 import com.lx862.pwgui.util.Util;
 import com.lx862.pwgui.core.Constants;

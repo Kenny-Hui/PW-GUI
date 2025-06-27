@@ -1,4 +1,4 @@
-package com.lx862.pwgui.gui.popup;
+package com.lx862.pwgui.gui.dialog;
 
 import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.core.Logger;
@@ -7,7 +7,7 @@ import com.lx862.pwgui.gui.components.kui.KActionPanel;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.gui.components.kui.KFileChooser;
 import com.lx862.pwgui.gui.components.kui.KRootContentPanel;
-import com.lx862.pwgui.gui.dialog.FileSavedDialog;
+import com.lx862.pwgui.gui.prompt.FileSavedDialog;
 import com.lx862.pwgui.util.Util;
 
 import javax.swing.*;
@@ -21,7 +21,6 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.function.Consumer;
 
 /** Dialog to view the program's log */
 public class ViewLogDialog extends JDialog {
@@ -46,7 +45,7 @@ public class ViewLogDialog extends JDialog {
 
         Style style = logTextPane.addStyle("Log Style", null);
         this.appendLogCallback = (line, realtime) -> {
-            Color logColor = line.contains("[WARN]") ? Color.ORANGE : line.contains("[ERROR]") ? Color.RED : Color.BLACK;
+            Color logColor = line.contains("[WARN]") ? new Color(0xFF8800) : line.contains("[ERROR]") ? Color.RED : Color.BLACK;
             StyleConstants.setForeground(style, logColor);
 
             Document doc = logTextPane.getDocument();

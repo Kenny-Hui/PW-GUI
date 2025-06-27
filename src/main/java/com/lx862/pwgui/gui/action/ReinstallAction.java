@@ -4,7 +4,7 @@ import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.executable.BatchedProgramExecution;
 import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.executable.ProgramExecution;
-import com.lx862.pwgui.gui.dialog.BatchedExecutionProgressDialog;
+import com.lx862.pwgui.gui.prompt.BatchedExecutionProgressDialog;
 import com.lx862.pwgui.pwcore.Modpack;
 import com.lx862.pwgui.pwcore.PackFile;
 import com.lx862.pwgui.pwcore.PackIndexFile;

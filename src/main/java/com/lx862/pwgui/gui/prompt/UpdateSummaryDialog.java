@@ -1,4 +1,4 @@
-package com.lx862.pwgui.gui.dialog;
+package com.lx862.pwgui.gui.prompt;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.gui.components.ModUpdateListCellRenderer;

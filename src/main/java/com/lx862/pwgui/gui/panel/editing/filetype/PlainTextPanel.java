@@ -26,14 +26,17 @@ public class PlainTextPanel extends FileTypePanel {
         textArea.wrapWord();
         textArea.onChange(this::updateSaveState);
 
+        String content;
+
         try {
-            String content = fileEntry.getContent();
-            this.initialContent = content;
-            textArea.setText(content, true);
+            content = fileEntry.getContent();
         } catch (Exception e) {
             PWGUI.LOGGER.exception(e);
-            textArea.setText(Util.withBracketPrefix(String.format("Error trying to read file: %s", e.getMessage())), true);
+            content = Util.withBracketPrefix(String.format("Error trying to read file: %s", e.getMessage()));
         }
+
+        this.initialContent = content;
+        textArea.setText(content, true);
 
         JScrollPane jScrollPane = new JScrollPane(textArea);
         jScrollPane.setAlignmentX(LEFT_ALIGNMENT);

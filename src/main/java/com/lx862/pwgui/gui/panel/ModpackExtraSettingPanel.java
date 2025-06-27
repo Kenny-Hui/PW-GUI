@@ -5,7 +5,7 @@ import com.lx862.pwgui.pwcore.data.PackComponent;
 import com.lx862.pwgui.pwcore.PackFile;
 import com.lx862.pwgui.gui.components.DocumentChangedListener;
 import com.lx862.pwgui.gui.components.kui.*;
-import com.lx862.pwgui.gui.popup.ChangeAcceptableGameVersionDialog;
+import com.lx862.pwgui.gui.dialog.ChangeAcceptableGameVersionDialog;
 import com.lx862.pwgui.gui.panel.editing.filetype.FileEntryPaneContext;
 import com.lx862.pwgui.util.Util;
 

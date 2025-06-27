@@ -11,7 +11,7 @@ public class ModpackIndexFilePanel extends FileTypePanel {
     public ModpackIndexFilePanel(FileEntryPaneContext context, ModpackIndexFileModel fileEntry) {
         super(context);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        
+
         JLabel descriptionLabel = new JLabel("<html>The index file helps packwiz keep track of each file in the pack, including its hashes to ensure file integrity.</html>");
         descriptionLabel.setAlignmentX(LEFT_ALIGNMENT);
         add(descriptionLabel);
@@ -30,7 +30,7 @@ public class ModpackIndexFilePanel extends FileTypePanel {
 
         add(GUIHelper.createVerticalPadding(10));
 
-        KButton refreshButton = new KButton(new RefreshPackAction(getTopLevelAncestor()));
+        KButton refreshButton = new KButton(new RefreshPackAction(this::getTopLevelAncestor));
         refreshButton.setAlignmentX(LEFT_ALIGNMENT);
         add(refreshButton);
     }

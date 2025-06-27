@@ -1,9 +1,8 @@
 package com.lx862.pwgui.gui.action;
 
-import com.lx862.pwgui.gui.popup.ChangeLicenseDialog;
+import com.lx862.pwgui.gui.dialog.ChangeLicenseDialog;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;

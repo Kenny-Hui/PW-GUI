@@ -1,0 +1,27 @@
+[versions]
+shadow = "9.0.0-beta17"
+flatlaf = "3.6"
+toml4j = "0.7.2"
+common-io = "2.18.0"
+common-cli = "1.9.0"
+imageio = "3.12.0"
+gson = "2.13.1"
+txtmark = "0.13"
+
+[plugins]
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
+
+[libraries]
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+flatlaf = { group = "com.formdev", name = "flatlaf", version.ref = "flatlaf" }
+flatlaf-ij-themes = { group = "com.formdev", name = "flatlaf-intellij-themes", version.ref = "flatlaf" }
+toml4j = { group = "com.moandjiezana.toml", name = "toml4j", version.ref = "toml4j" }
+common-io = { group = "commons-io", name = "commons-io", version.ref = "common-io" }
+common-cli = { group = "commons-cli", name = "commons-cli", version.ref = "common-cli" }
+imageio-bmp = { group = "com.twelvemonkeys.imageio", name = "imageio-bmp", version.ref = "imageio" }
+imageio-webp = { group = "com.twelvemonkeys.imageio", name = "imageio-webp", version.ref = "imageio" }
+txtmark = { group = "com.github.rjeschke", name = "txtmark", version.ref = "txtmark" }
+
+[bundles]
+flatlaf = ["flatlaf", "flatlaf-ij-themes"]
+imageio-ext = ["imageio-bmp", "imageio-webp"]

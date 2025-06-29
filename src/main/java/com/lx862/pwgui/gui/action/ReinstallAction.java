@@ -51,7 +51,7 @@ public class ReinstallAction extends AbstractAction {
             // Remove
             BatchedProgramExecution removeExecution = new BatchedProgramExecution();
             for(PackwizMetaFile packwizMetaFile : metas) {
-                ProgramExecution programExecution = Executables.packwiz.buildCommand("remove", packwizMetaFile.getSlug());
+                ProgramExecution programExecution = Executables.packwiz.remove(packwizMetaFile.getSlug()).build();
                 removeExecution.add(programExecution);
             }
             removeExecution.execute("Re-installation requested by user");
@@ -65,11 +65,11 @@ public class ReinstallAction extends AbstractAction {
 
                 ProgramExecution execution;
                 if(prefix.equals("mr")) {
-                    execution = Executables.packwiz.buildCommand(prefix, "add", packwizMetaFile.updateMrModId, "--meta-folder", metaFolder, "--yes");
+                    execution = Executables.packwiz.buildCommand("mr", "add", packwizMetaFile.updateMrModId).metaFolder(metaFolder).yes().build();
                 } else if(prefix.equals("cf")) {
-                    execution = Executables.packwiz.buildCommand(prefix, "add", "--addon-id", String.valueOf(packwizMetaFile.updateCfProjectId), "--meta-folder", metaFolder, "--yes");
+                    execution = Executables.packwiz.buildCommand("cf", "add", "--addon-id", String.valueOf(packwizMetaFile.updateCfProjectId)).metaFolder(metaFolder).yes().build();
                 } else {
-                    execution = Executables.packwiz.buildCommand(prefix, "add", packwizMetaFile.getSlug(), String.valueOf(packwizMetaFile.downloadUrl), "--meta-folder", metaFolder, "--yes");
+                    execution = Executables.packwiz.url().add(packwizMetaFile.getSlug(), String.valueOf(packwizMetaFile.downloadUrl), metaFolder, false).yes().build();
                 }
 
                 addExecution.add(execution);

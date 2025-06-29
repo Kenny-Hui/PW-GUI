@@ -4,6 +4,7 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.executable.Executables;
+import com.lx862.pwgui.executable.PackwizExecutable;
 import com.lx862.pwgui.gui.components.kui.*;
 import com.lx862.pwgui.gui.prompt.TaskProgressDialog;
 import com.lx862.pwgui.gui.panel.ModpackInfoPanel;
@@ -113,16 +114,13 @@ public class NewModpackDialog extends JDialog {
                 }
 
                 // Build arguments
-                final List<String> arguments = new ArrayList<>();
-                arguments.add(0, "init"); // Prepend our action
-                arguments.addAll(modpackInfoPanel.getInitArguments());
-                arguments.addAll(modpackVersionPanel.getInitArguments());
-
-                String[] argsStr = arguments.toArray(new String[0]);
+                PackwizExecutable.PackwizArgumentBuilder arguments = Executables.packwiz.init();
+                arguments.append(modpackInfoPanel.getInitArguments());
+                arguments.append(modpackVersionPanel.getInitArguments());
 
                 Executables.packwiz.changeWorkingDirectory(modpackDirectory.toPath());
 
-                ProgramExecution processExecution = Executables.packwiz.buildCommand(argsStr);
+                ProgramExecution processExecution = arguments.build();
                 processExecution.onExit(exitCode -> {
                     if(exitCode == 0) {
                         dispose();

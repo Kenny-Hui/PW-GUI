@@ -25,7 +25,7 @@ public class RefreshPackAction extends AbstractAction {
         Component parent = getParent.get();
         AtomicReference<String> lastLine = new AtomicReference<>();
 
-        Executables.packwiz.refresh()
+        Executables.packwiz.refresh().build()
             .onOutput((stdout) -> lastLine.set(stdout.content()))
             .onExit(exitCode -> {
                 if(exitCode == 0) {

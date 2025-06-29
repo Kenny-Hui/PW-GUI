@@ -108,7 +108,7 @@ public class ConsoleDialog extends JDialog {
                 splitArgs[i] = argsTokenizer.nextToken();
             }
 
-            ProgramExecution programExecution = Executables.packwiz.buildCommand(splitArgs);
+            ProgramExecution programExecution = Executables.packwiz.buildCommand(splitArgs).build();
             currentExecution = programExecution;
             programExecution.onOutput(line -> {
                 logTextArea.append(line.content() + "\n");

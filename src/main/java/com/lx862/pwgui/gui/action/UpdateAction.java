@@ -48,7 +48,7 @@ public class UpdateAction extends AbstractAction {
     }
 
     public ProgramExecution getProgramExecution(Window parent) {
-        ProgramExecution programExecution = Executables.packwiz.buildCommand("update", "--all");
+        ProgramExecution programExecution = Executables.packwiz.updateAll().build();
         List<String> updateMods = new ArrayList<>();
         List<String> skippedMods = new ArrayList<>();
         List<String> unsupportedMods = new ArrayList<>();

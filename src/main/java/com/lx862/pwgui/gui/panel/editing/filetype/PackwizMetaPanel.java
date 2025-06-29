@@ -202,12 +202,12 @@ public class PackwizMetaPanel extends FileTypePanel {
 
     private void removeMod() {
         if(JOptionPane.showConfirmDialog(getTopLevelAncestor(), String.format("Are you sure you want to remove %s?", packwizMetaFile.name), Util.withTitlePrefix("Remove Confirmation"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-            Executables.packwiz.buildCommand("remove", packwizMetaFile.getSlug()).run(Constants.REASON_TRIGGERED_BY_USER);
+            Executables.packwiz.remove(packwizMetaFile.getSlug()).build().run(Constants.REASON_TRIGGERED_BY_USER);
         }
     }
 
     private void checkForUpdate(Component parent) {
-        ProgramExecution programExecution = Executables.packwiz.buildCommand("update", packwizMetaFile.getSlug());
+        ProgramExecution programExecution = Executables.packwiz.update(packwizMetaFile.getSlug()).build();
         TaskProgressDialog dialog = new TaskProgressDialog((Window)getTopLevelAncestor(), String.format("Updating %s...", packwizMetaFile.name), Constants.REASON_TRIGGERED_BY_USER, programExecution);
 
         AtomicReference<String> updateString = new AtomicReference<>(null);

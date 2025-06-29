@@ -71,7 +71,7 @@ public class DevServerDialog extends JDialog {
         private void startServer() {
             serverExecutor = Executors.newSingleThreadExecutor();
             logTextArea.append("----- Development Server Started -----\n");
-            packwizServeProgram = Executables.packwiz.buildCommand("serve");
+            packwizServeProgram = Executables.packwiz.serve().build();
             packwizServeProgram.onOutput((line) -> logTextArea.append(line.content() + "\n"));
 
             try {

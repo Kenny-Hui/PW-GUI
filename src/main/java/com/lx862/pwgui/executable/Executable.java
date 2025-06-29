@@ -88,17 +88,8 @@ public abstract class Executable {
         this.workingDirectory = newPath;
     }
 
-    public ProgramExecution buildCommand(String... args) {
-        String[] fullCommand = new String[args.length + 1];
-        fullCommand[0] = executableLocation; // Insert our executable path at the front
-        System.arraycopy(args, 0, fullCommand, 1, args.length);
-
-        ProcessBuilder processBuilder = new ProcessBuilder(fullCommand);
-        processBuilder.directory(this.workingDirectory.toFile());
-
-        if(executor == null || executor.isShutdown()) this.executor = Executors.newSingleThreadExecutor();
-
-        return new ProgramExecution(programName, processBuilder, executor);
+    public ProgramArgumentBuilder buildCommand(String... args) {
+        return new ProgramArgumentBuilder(args);
     }
 
     public String getProgramName() {
@@ -107,5 +98,35 @@ public abstract class Executable {
 
     public void dispose() {
         executor.shutdownNow();
+    }
+
+    public class ProgramArgumentBuilder {
+        protected final List<String> args;
+
+        public ProgramArgumentBuilder(String... existingArgs) {
+            args = new ArrayList<>(List.of(existingArgs));
+        }
+
+        public ProgramArgumentBuilder append(String... strs) {
+            for(String str : strs) {
+                args.add(str);
+            }
+            return this;
+        }
+
+        public ProgramArgumentBuilder append(List<String> strs) {
+            args.addAll(strs);
+            return this;
+        }
+
+        public ProgramExecution build() {
+            args.add(0, executableLocation);
+            ProcessBuilder processBuilder = new ProcessBuilder(args.toArray(new String[0]));
+            processBuilder.directory(workingDirectory.toFile());
+
+            if(executor == null || executor.isShutdown()) executor = Executors.newSingleThreadExecutor();
+
+            return new ProgramExecution(programName, processBuilder, executor);
+        }
     }
 }

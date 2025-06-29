@@ -76,11 +76,11 @@ public class ExportModpackDialog extends JDialog {
     }
 
     private void exportModpack(List<String> args, File destination) {
-        ProgramExecution programRefresh = Executables.packwiz.refresh();
+        ProgramExecution programRefresh = Executables.packwiz.refresh().build();
         programRefresh.onExit(refreshExitCode -> {
             if(refreshExitCode != 0) return;
 
-            ProgramExecution program = Executables.packwiz.buildCommand(args.toArray(new String[0]));
+            ProgramExecution program = Executables.packwiz.buildCommand(args.toArray(new String[0])).build();
             TaskProgressDialog dialog = new TaskProgressDialog(this, "Exporting Modpack...", Constants.REASON_TRIGGERED_BY_USER, program);
             Util.addManualDownloadPrompt(this, program, dialog, () -> {
                 exportModpack(args, destination);

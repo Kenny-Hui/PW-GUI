@@ -117,10 +117,10 @@ public class ChangeAcceptableGameVersionDialog extends JDialog {
         BatchedProgramExecution batchedProgramExecution = new BatchedProgramExecution();
 
         for(String version : toBeRemoved) {
-            batchedProgramExecution.add(Executables.packwiz.buildCommand("settings", "acceptable-versions", "--remove", version));
+            batchedProgramExecution.add(Executables.packwiz.settings().removeAcceptableVersions(version).build());
         }
         for(String version : toBeAdded) {
-            batchedProgramExecution.add(Executables.packwiz.buildCommand("settings", "acceptable-versions", "--add", version));
+            batchedProgramExecution.add(Executables.packwiz.settings().addAcceptableVersions(version).build());
         }
 
         batchedProgramExecution.onExit(callback);

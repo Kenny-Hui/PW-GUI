@@ -34,7 +34,7 @@ public class AddContentPanel extends FileTypePanel {
     }
 
     public static void addProjectFromContentPlatform(Window parent, Modpack modpack, String... args) {
-        ProgramExecution programExecution = Executables.packwiz.buildCommand(args);
+        ProgramExecution programExecution = Executables.packwiz.buildCommand(args).build();
         TaskProgressDialog dialog = new TaskProgressDialog(parent, "Adding mod...", Constants.REASON_TRIGGERED_BY_USER, programExecution);
 
         List<String> recordedOutputs = new ArrayList<>();

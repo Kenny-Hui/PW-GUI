@@ -73,9 +73,9 @@ public class FullUpdateAction extends UpdateAction {
                         String prefix = packwizMetaFile.updateMrVersion != null ? "mr" : "cf";
                         ProgramExecution execution;
                         if(prefix.equals("mr")) {
-                            execution = Executables.packwiz.buildCommand(prefix, "add", packwizMetaFile.updateMrModId, "--meta-folder", tempDirectory.getFileName().toString());
+                            execution = Executables.packwiz.buildCommand("mr", "add", packwizMetaFile.updateMrModId).metaFolder(tempDirectory.getFileName().toString()).build();
                         } else {
-                            execution = Executables.packwiz.buildCommand(prefix, "add", "--addon-id", String.valueOf(packwizMetaFile.updateCfProjectId), "--meta-folder", tempDirectory.getFileName().toString());
+                            execution = Executables.packwiz.buildCommand("cf", "add", "--addon-id", String.valueOf(packwizMetaFile.updateCfProjectId)).metaFolder(tempDirectory.getFileName().toString()).build();
                         }
 
                         execution.onOutput(stdout -> {
@@ -107,7 +107,7 @@ public class FullUpdateAction extends UpdateAction {
                             new IncompatibleSummaryDialog(parent, filesWithoutSuitableVersion).setVisible(true);
                         }
 
-                        Executables.packwiz.refresh().run("Clean-up after content compatibility check");
+                        Executables.packwiz.refresh().build().run("Clean-up after content compatibility check");
                     });
 
                     BatchedExecutionProgressDialog modCompatDialog = new BatchedExecutionProgressDialog(parent, "Checking content compatibility...", "Check content compatibility after update", batchedProgramExecution);

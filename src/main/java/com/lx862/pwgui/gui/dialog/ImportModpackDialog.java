@@ -104,7 +104,7 @@ public class ImportModpackDialog extends JDialog {
         }
 
         private void runImportCommand(File sourceFile, Runnable callback) {
-            ProgramExecution programExecution = Executables.packwiz.buildCommand("curseforge", "import", sourceFile.toString());
+            ProgramExecution programExecution = Executables.packwiz.curseForge().importPack(sourceFile.toString()).build();
             programExecution.onExit(exitCode -> {
                 if(exitCode == 0) {
                     callback.run();

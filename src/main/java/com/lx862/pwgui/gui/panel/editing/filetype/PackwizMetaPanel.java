@@ -109,19 +109,91 @@ public class PackwizMetaPanel extends FileTypePanel {
         wrapperPanel.add(editableContentPanel, BorderLayout.NORTH);
         wrapperPanel.setAlignmentX(LEFT_ALIGNMENT);
 
-        KCollapsibleToggle showDetailButton = new KCollapsibleToggle("Show Detail", "Hide Detail");
-
-        JPanel detailPanel = new JPanel();
-        detailPanel.setLayout(new BorderLayout());
-        detailPanel.add(showDetailButton, BorderLayout.NORTH);
-
-        JScrollPane scrollPane = new JScrollPane(new DetailPanel(packwizMetaFile));
-        detailPanel.add(scrollPane, BorderLayout.CENTER);
-        scrollPane.setVisible(false);
-
-        showDetailButton.addItemListener(actionEvent -> scrollPane.setVisible(!scrollPane.isVisible()));
+        JPanel detailPanel = new DetailPanel(packwizMetaFile);
         wrapperPanel.add(detailPanel, BorderLayout.CENTER);
         add(wrapperPanel);
+    }
+
+    static class DetailPanel extends JPanel {
+        private static boolean metaDetailExpanded = false;
+
+        public DetailPanel(PackwizMetaFile packwizMetaFile) {
+            setLayout(new BorderLayout());
+            KCollapsibleToggle showDetailButton = new KCollapsibleToggle("Show Detail", "Hide Detail");
+            add(showDetailButton, BorderLayout.NORTH);
+
+            JScrollPane detailContentPanel = new JScrollPane(new DetailContentPanel(packwizMetaFile));
+            add(detailContentPanel, BorderLayout.CENTER);
+
+            showDetailButton.setSelected(metaDetailExpanded);
+            detailContentPanel.setVisible(metaDetailExpanded);
+
+            showDetailButton.addItemListener(actionEvent -> {
+                metaDetailExpanded = !metaDetailExpanded;
+                detailContentPanel.setVisible(metaDetailExpanded);
+            });
+        }
+
+        static class DetailContentPanel extends KGridBagLayoutPanel {
+            public DetailContentPanel(PackwizMetaFile packwizMetaFile) {
+                super(0, 1);
+                setMinimumSize(new Dimension(0, 0));
+
+                KListEntryPanel downloadPanel = new KListEntryPanel("Download");
+
+                if(packwizMetaFile.downloadUrl != null) {
+                    JPanel urlPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+                    urlPanel.setOpaque(false);
+                    urlPanel.add(new JLabel("URL: "));
+                    urlPanel.add(new KLinkButton(packwizMetaFile.downloadUrl));
+                    downloadPanel.add(urlPanel);
+                }
+                downloadPanel.add(new JLabel(String.format("Hash (%s): %s", packwizMetaFile.downloadHashFormat, packwizMetaFile.downloadHash)));
+
+                addRow(1, downloadPanel);
+
+                if(packwizMetaFile.updateMrModId != null && packwizMetaFile.updateMrVersion != null) {
+                    JPanel updatePanel = new KListEntryPanel("Updates - Modrinth");
+                    updatePanel.add(new JLabel(String.format("Project ID: %s", packwizMetaFile.updateMrModId)));
+                    updatePanel.add(new JLabel(String.format("Version ID: %s", packwizMetaFile.updateMrVersion)));
+
+                    KLinkButton browseProjectPageLink = new KLinkButton("Browse Project Page", packwizMetaFile.getProjectPageURL());
+                    KLinkButton browseVersionPageLink = new KLinkButton("Browse Version Page", packwizMetaFile.getVersionPageURL());
+
+                    updatePanel.add(browseProjectPageLink);
+                    updatePanel.add(browseVersionPageLink);
+
+                    addRow(1, updatePanel);
+                }
+
+                if(packwizMetaFile.updateCfFileId != -1 && packwizMetaFile.updateCfProjectId != -1) {
+                    JPanel updatePanel = new KListEntryPanel("Updates - CurseForge");
+                    updatePanel.add(new JLabel(String.format("Project ID: %s", packwizMetaFile.updateCfProjectId)));
+                    updatePanel.add(new JLabel(String.format("File ID: %s", packwizMetaFile.updateCfFileId)));
+
+                    KLinkButton browseProjectPageLink = new KLinkButton("Browse Project Page", packwizMetaFile.getProjectPageURL());
+                    KLinkButton browseVersionPageLink = new KLinkButton("Browse Version Page", packwizMetaFile.getVersionPageURL());
+                    updatePanel.add(browseProjectPageLink);
+                    updatePanel.add(browseVersionPageLink);
+
+                    addRow(1, updatePanel);
+                }
+
+                if(packwizMetaFile.updateGhSlug != null) {
+                    JPanel updatePanel = new KListEntryPanel("Updates - GitHub");
+                    updatePanel.add(new JLabel(String.format("Repository: %s", packwizMetaFile.updateGhSlug)));
+                    updatePanel.add(new JLabel(String.format("Branch: %s", packwizMetaFile.updateGhBranch)));
+                    updatePanel.add(new JLabel(String.format("Tag: %s", packwizMetaFile.updateGhTag)));
+
+                    KLinkButton browseProjectPageLink = new KLinkButton("Browse Repository", packwizMetaFile.getProjectPageURL());
+                    updatePanel.add(browseProjectPageLink);
+
+                    addRow(1, updatePanel);
+                }
+
+                addVerticalFiller();
+            }
+        }
     }
 
     private void updateUpdateButtonState(KButton updateButton, JCheckBox pinnedCheckbox) {
@@ -186,66 +258,5 @@ public class PackwizMetaPanel extends FileTypePanel {
         packwizMetaFile.optionDescription = descriptionTextField.getText().isEmpty() ? null : descriptionTextField.getText();
 
         packwizMetaFile.write(Constants.REASON_TRIGGERED_BY_USER);
-    }
-
-    static class DetailPanel extends KGridBagLayoutPanel {
-        public DetailPanel(PackwizMetaFile packwizMetaFile) {
-            super(0, 1);
-            setMinimumSize(new Dimension(0, 0));
-
-            KListEntryPanel downloadPanel = new KListEntryPanel("Download");
-
-            if(packwizMetaFile.downloadUrl != null) {
-                JPanel urlPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-                urlPanel.setOpaque(false);
-                urlPanel.add(new JLabel("URL: "));
-                urlPanel.add(new KLinkButton(packwizMetaFile.downloadUrl));
-                downloadPanel.add(urlPanel);
-            }
-            downloadPanel.add(new JLabel(String.format("Hash (%s): %s", packwizMetaFile.downloadHashFormat, packwizMetaFile.downloadHash)));
-
-            addRow(1, downloadPanel);
-
-            if(packwizMetaFile.updateMrModId != null && packwizMetaFile.updateMrVersion != null) {
-                JPanel updatePanel = new KListEntryPanel("Updates - Modrinth");
-                updatePanel.add(new JLabel(String.format("Project ID: %s", packwizMetaFile.updateMrModId)));
-                updatePanel.add(new JLabel(String.format("Version ID: %s", packwizMetaFile.updateMrVersion)));
-
-                KLinkButton browseProjectPageLink = new KLinkButton("Browse Project Page", packwizMetaFile.getProjectPageURL());
-                KLinkButton browseVersionPageLink = new KLinkButton("Browse Version Page", packwizMetaFile.getVersionPageURL());
-
-                updatePanel.add(browseProjectPageLink);
-                updatePanel.add(browseVersionPageLink);
-
-                addRow(1, updatePanel);
-            }
-
-            if(packwizMetaFile.updateCfFileId != -1 && packwizMetaFile.updateCfProjectId != -1) {
-                JPanel updatePanel = new KListEntryPanel("Updates - CurseForge");
-                updatePanel.add(new JLabel(String.format("Project ID: %s", packwizMetaFile.updateCfProjectId)));
-                updatePanel.add(new JLabel(String.format("File ID: %s", packwizMetaFile.updateCfFileId)));
-
-                KLinkButton browseProjectPageLink = new KLinkButton("Browse Project Page", packwizMetaFile.getProjectPageURL());
-                KLinkButton browseVersionPageLink = new KLinkButton("Browse Version Page", packwizMetaFile.getVersionPageURL());
-                updatePanel.add(browseProjectPageLink);
-                updatePanel.add(browseVersionPageLink);
-
-                addRow(1, updatePanel);
-            }
-
-            if(packwizMetaFile.updateGhSlug != null) {
-                JPanel updatePanel = new KListEntryPanel("Updates - GitHub");
-                updatePanel.add(new JLabel(String.format("Repository: %s", packwizMetaFile.updateGhSlug)));
-                updatePanel.add(new JLabel(String.format("Branch: %s", packwizMetaFile.updateGhBranch)));
-                updatePanel.add(new JLabel(String.format("Tag: %s", packwizMetaFile.updateGhTag)));
-
-                KLinkButton browseProjectPageLink = new KLinkButton("Browse Repository", packwizMetaFile.getProjectPageURL());
-                updatePanel.add(browseProjectPageLink);
-
-                addRow(1, updatePanel);
-            }
-
-            addVerticalFiller();
-        }
     }
 }

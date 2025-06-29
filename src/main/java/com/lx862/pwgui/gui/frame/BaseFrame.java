@@ -86,9 +86,9 @@ public abstract class BaseFrame extends JFrame {
         KMenu addMissingMenu = new KMenu("Add Missing...");
 
         KMenuItem modsDirectoryMenuItem = new KMenuItem(new CreateMissingDirectoryAction(this, modpack.getRootPath(), "mods", "Mods Folder"));
+        KMenuItem configDirectoryMenuItem = new KMenuItem(new CreateMissingDirectoryAction(this, modpack.getRootPath(), "config", "Mod Config Folder"));
         KMenuItem resourcePacksDirectoryMenuItem = new KMenuItem(new CreateMissingDirectoryAction(this, modpack.getRootPath(), "resourcepacks", "Resource Packs Folder"));
         KMenuItem shaderPacksDirectoryMenuItem = new KMenuItem(new CreateMissingDirectoryAction(this, modpack.getRootPath(), "shaderpacks", "Shader Packs Folder"));
-        KMenuItem configDirectoryMenuItem = new KMenuItem(new CreateMissingDirectoryAction(this, modpack.getRootPath(), "config", "Mods Config Folder"));
         KMenuItem pluginsDirectoryMenuItem = new KMenuItem(new CreateMissingDirectoryAction(this, modpack.getRootPath(), "plugins", "Plugins Folder"));
 
         addMissingMenu.add(modsDirectoryMenuItem);

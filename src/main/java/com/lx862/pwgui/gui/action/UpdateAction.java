@@ -3,7 +3,7 @@ package com.lx862.pwgui.gui.action;
 import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.executable.ProgramExecution;
-import com.lx862.pwgui.gui.prompt.ExecutableProgressDialog;
+import com.lx862.pwgui.gui.prompt.TaskProgressDialog;
 import com.lx862.pwgui.gui.prompt.UpdateSummaryDialog;
 import com.lx862.pwgui.util.Util;
 
@@ -43,8 +43,8 @@ public class UpdateAction extends AbstractAction {
                 }
             }
         });
-        ExecutableProgressDialog executableProgressDialog = new ExecutableProgressDialog(parent, "Checking for update...", Constants.REASON_TRIGGERED_BY_USER, programExecution);
-        executableProgressDialog.setVisible(true);
+        TaskProgressDialog taskProgressDialog = new TaskProgressDialog(parent, "Checking for update...", Constants.REASON_TRIGGERED_BY_USER, programExecution);
+        taskProgressDialog.setVisible(true);
     }
 
     public ProgramExecution getProgramExecution(Window parent) {
@@ -54,7 +54,7 @@ public class UpdateAction extends AbstractAction {
         List<String> unsupportedMods = new ArrayList<>();
         AtomicBoolean startLogMods = new AtomicBoolean();
 
-        programExecution.onStdout(stdout -> {
+        programExecution.onOutput(stdout -> {
             String line = stdout.content();
             if(line.startsWith("Updates found:")) {
                 startLogMods.set(true);

@@ -71,11 +71,11 @@ public class DevServerDialog extends JDialog {
         private void startServer() {
             serverExecutor = Executors.newSingleThreadExecutor();
             logTextArea.append("----- Development Server Started -----\n");
-            packwizServeProgram = Executables.packwiz.buildCommand("serve")
-                    .onStdout((line) -> logTextArea.append(line.content() + "\n"));
+            packwizServeProgram = Executables.packwiz.buildCommand("serve");
+            packwizServeProgram.onOutput((line) -> logTextArea.append(line.content() + "\n"));
 
             try {
-                packwizServeProgram.execute("Launched by user", serverExecutor);
+                packwizServeProgram.run("Launched by user", serverExecutor);
             } catch (Exception e) {
                 PWGUI.LOGGER.exception(e);
                 logTextArea.append(Util.withBracketPrefix(String.format("ERROR: %s", e.getMessage())));

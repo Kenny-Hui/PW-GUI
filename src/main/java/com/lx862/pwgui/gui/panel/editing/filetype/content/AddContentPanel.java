@@ -4,7 +4,7 @@ import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.pwcore.Modpack;
 import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.executable.ProgramExecution;
-import com.lx862.pwgui.gui.prompt.ExecutableProgressDialog;
+import com.lx862.pwgui.gui.prompt.TaskProgressDialog;
 import com.lx862.pwgui.gui.prompt.NumericSelectionDialog;
 import com.lx862.pwgui.gui.panel.editing.filetype.FileEntryPaneContext;
 import com.lx862.pwgui.gui.panel.editing.filetype.FileTypePanel;
@@ -35,7 +35,7 @@ public class AddContentPanel extends FileTypePanel {
 
     public static void addProjectFromContentPlatform(Window parent, Modpack modpack, String... args) {
         ProgramExecution programExecution = Executables.packwiz.buildCommand(args);
-        ExecutableProgressDialog dialog = new ExecutableProgressDialog(parent, "Adding mod...", Constants.REASON_TRIGGERED_BY_USER, programExecution);
+        TaskProgressDialog dialog = new TaskProgressDialog(parent, "Adding mod...", Constants.REASON_TRIGGERED_BY_USER, programExecution);
 
         List<String> recordedOutputs = new ArrayList<>();
 
@@ -44,7 +44,7 @@ public class AddContentPanel extends FileTypePanel {
         AtomicBoolean noValidVersion = new AtomicBoolean();
         AtomicBoolean cancelled = new AtomicBoolean();
 
-        programExecution.onStdout((stdout) -> {
+        programExecution.onOutput((stdout) -> {
             String line = stdout.content();
             if((line.startsWith("Searching") && line.endsWith("...")) || line.startsWith("Dependencies found:")) {
                 recordedOutputs.clear();

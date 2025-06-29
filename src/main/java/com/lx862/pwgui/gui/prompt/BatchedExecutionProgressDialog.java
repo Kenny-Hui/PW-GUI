@@ -16,7 +16,7 @@ public class BatchedExecutionProgressDialog extends ProgressDialog {
 
         AtomicInteger executedCommands = new AtomicInteger();
         batchedProgramExecution.onProgramStart(programExecution -> {
-            programExecution.onStdout((stdoutContext -> {
+            programExecution.onOutput((stdoutContext -> {
                 setStatus(stdoutContext.content());
             }));
         });

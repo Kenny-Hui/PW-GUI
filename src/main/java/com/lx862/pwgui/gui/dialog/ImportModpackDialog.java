@@ -7,7 +7,7 @@ import com.lx862.pwgui.executable.ProgramExecution;
 import com.lx862.pwgui.gui.components.filter.CurseForgeModpackFilter;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.gui.components.kui.KFileChooser;
-import com.lx862.pwgui.gui.prompt.ExecutableProgressDialog;
+import com.lx862.pwgui.gui.prompt.TaskProgressDialog;
 import com.lx862.pwgui.util.GUIHelper;
 import com.lx862.pwgui.util.Util;
 
@@ -111,7 +111,7 @@ public class ImportModpackDialog extends JDialog {
                 }
             });
 
-            new ExecutableProgressDialog(parent, "Importing Modpack...", Constants.REASON_TRIGGERED_BY_USER, programExecution).setVisible(true);
+            new TaskProgressDialog(parent, "Importing Modpack...", Constants.REASON_TRIGGERED_BY_USER, programExecution).setVisible(true);
         }
     }
 }

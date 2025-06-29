@@ -84,7 +84,7 @@ public class BatchedProgramExecution {
             });
 
             invokeCallback(programStartCallbacks, programExecution);
-            programExecution.execute(reason, activeExecutor);
+            programExecution.run(reason, activeExecutor);
         }
     }
 

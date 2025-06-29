@@ -3,48 +3,24 @@ package com.lx862.pwgui.executable;
 import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.util.Util;
 
-import javax.swing.*;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
-import java.util.function.Consumer;
 
-public class ProgramExecution {
+public class ProgramExecution extends Task {
     private final ProcessBuilder processBuilder;
-    private final List<Consumer<StdoutContext>> stdoutListeners;
-    private final List<Consumer<Integer>> exitListeners;
-    private final String programDisplayName;
-    private final ExecutorService defaultExecutor;
     private Process process;
 
-    public ProgramExecution(String programDisplayName, ProcessBuilder processBuilder, ExecutorService defaultExecutor) {
-        this.programDisplayName = programDisplayName;
+    public ProgramExecution(String taskName, ProcessBuilder processBuilder, ExecutorService defaultExecutor) {
+        super(taskName, defaultExecutor);
         this.processBuilder = processBuilder;
-        this.defaultExecutor = defaultExecutor;
-        this.stdoutListeners = new ArrayList<>();
-        this.exitListeners = new ArrayList<>();
 
-        onStdout((stdout) -> { // Display log when we got a new line
-            PWGUI.LOGGER.info("[" + programDisplayName + "]", stdout.content());
+        onOutput((stdout) -> { // Display log when we got a new line
+            PWGUI.LOGGER.info("[" + taskName + "]", stdout.content());
         });
     }
 
-    public ProgramExecution onStdout(Consumer<StdoutContext> consumer) {
-        this.stdoutListeners.add(consumer);
-        return this;
-    }
-
-    public ProgramExecution onExit(Consumer<Integer> consumer) {
-        this.exitListeners.add(consumer);
-        return this;
-    }
-
-    public void execute(String reason) {
-        execute(reason, this.defaultExecutor);
-    }
-
-    public void execute(String reason, ExecutorService executor) {
+    @Override
+    public void run(String reason, ExecutorService executor) {
         PWGUI.LOGGER.info(String.format("Running command \"%s\" due to \"%s\"", String.join(" ", processBuilder.command()), reason));
 
         executor.submit(() -> {
@@ -57,13 +33,13 @@ public class ProgramExecution {
                     while ((c = reader.read()) != -1) {
                         if(c == '\n' || c == '\r') { // Newline character
                             String line = sb.toString();
-                            callStdoutListeners(new StdoutContext(line, false));
+                            callOutputListeners(new OutputMessage(line, false));
                             sb = new StringBuilder(); // Clear current line
                         } else {
                             sb.append((char)c);
                             String line = sb.toString();
                             if(line.endsWith("[Y/n]: ")) { // Inline prompt
-                                callStdoutListeners(new StdoutContext(line, true));
+                                callOutputListeners(new OutputMessage(line, true));
                             }
                         }
                     }
@@ -74,15 +50,16 @@ public class ProgramExecution {
                 callExitListeners(exitValue);
             } catch (IOException e) {
                 PWGUI.LOGGER.exception(e);
-                callStdoutListeners(new StdoutContext(Util.withBracketPrefix(String.format("Failed to execute %s:\n%s", programDisplayName, e.getMessage())), false));
+                callOutputListeners(new OutputMessage(Util.withBracketPrefix(String.format("Failed to execute %s:\n%s", getTaskName(), e.getMessage())), false));
                 callExitListeners(-2);
             } catch (InterruptedException ignored) {
             }
         });
     }
 
-    public String getProgramDisplayName() {
-        return programDisplayName;
+    @Override
+    public void terminate() {
+        if(this.process != null && this.process.isAlive()) this.process.destroy();
     }
 
     public void enterInput(String input) {
@@ -90,28 +67,7 @@ public class ProgramExecution {
             PrintWriter pw = new PrintWriter(process.getOutputStream());
             pw.write(input + "\n");
             pw.flush();
-            PWGUI.LOGGER.info(String.format("Input %s to %s", input, programDisplayName));
+            PWGUI.LOGGER.info(String.format("Input %s to %s", input, getTaskName()));
         }
-    }
-
-    public void terminate() {
-        if(this.process != null && this.process.isAlive()) this.process.destroy();
-    }
-
-    private void callStdoutListeners(StdoutContext stdoutContext) {
-        for(Consumer<StdoutContext> outputListener : stdoutListeners) {
-            SwingUtilities.invokeLater(() -> {
-                outputListener.accept(stdoutContext);
-            });
-        }
-    }
-
-    private void callExitListeners(int exitCode) {
-        for(Consumer<Integer> listener : exitListeners) {
-            SwingUtilities.invokeLater(() -> listener.accept(exitCode));
-        }
-    }
-
-    public record StdoutContext(String content, boolean isQuestion) {
     }
 }

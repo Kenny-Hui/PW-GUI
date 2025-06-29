@@ -78,7 +78,7 @@ public class FilePanel extends FileTypePanel {
                 try {
                     Files.delete(fileEntry.path);
                     PWGUI.LOGGER.info(String.format("Deleted file %s", fileEntry.path));
-                    Executables.packwiz.refresh().execute("File deleted by user");
+                    Executables.packwiz.refresh().run("File deleted by user");
                 } catch (IOException e) {
                     PWGUI.LOGGER.error(String.format("Failed to deleted file %s due to %s", fileEntry.path, e.getMessage()));
                     JOptionPane.showMessageDialog(getTopLevelAncestor(), String.format("Failed to delete file: \n%s\nYou may try doing it from an external file manager.", e.getMessage()), Util.withTitlePrefix("Failed to Delete File!"), JOptionPane.ERROR_MESSAGE);

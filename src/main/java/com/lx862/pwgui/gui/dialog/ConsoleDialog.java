@@ -108,7 +108,7 @@ public class ConsoleDialog extends JDialog {
 
             ProgramExecution programExecution = Executables.packwiz.buildCommand(splitArgs);
             currentExecution = programExecution;
-            programExecution.onStdout(line -> {
+            programExecution.onOutput(line -> {
                 logTextArea.append(line.content() + "\n");
                 logTextArea.setCaretPosition(logTextArea.getDocument().getLength());
             });
@@ -120,7 +120,7 @@ public class ConsoleDialog extends JDialog {
                 }
                 currentExecution = null;
             });
-            programExecution.execute(helpMessage ? "Display help message" : Constants.REASON_TRIGGERED_BY_USER);
+            programExecution.run(helpMessage ? "Display help message" : Constants.REASON_TRIGGERED_BY_USER);
         }
     }
 

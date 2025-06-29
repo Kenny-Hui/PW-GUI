@@ -7,7 +7,7 @@ import com.lx862.pwgui.core.data.model.file.ContentDirectoryModel;
 import com.lx862.pwgui.executable.ProgramExecution;
 import com.lx862.pwgui.gui.components.kui.KGridBagLayoutPanel;
 import com.lx862.pwgui.gui.components.kui.KTextField;
-import com.lx862.pwgui.gui.prompt.ExecutableProgressDialog;
+import com.lx862.pwgui.gui.prompt.TaskProgressDialog;
 import com.lx862.pwgui.gui.panel.editing.filetype.FileEntryPaneContext;
 import com.lx862.pwgui.util.Util;
 
@@ -91,7 +91,7 @@ public class UrlPanel extends JPanel {
             }
         });
 
-        new ExecutableProgressDialog((Window)getTopLevelAncestor(), "Adding item...", "Triggered by user", programExecution).setVisible(true);
+        new TaskProgressDialog((Window)getTopLevelAncestor(), "Adding item...", "Triggered by user", programExecution).setVisible(true);
     }
 
     private void updateInstallButtonState(KButton addButton, KTextField nameTextField, KTextField urlTextField, JLabel urlInvalidLabel) {

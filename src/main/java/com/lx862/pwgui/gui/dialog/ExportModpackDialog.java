@@ -2,7 +2,7 @@ package com.lx862.pwgui.gui.dialog;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.gui.components.kui.KRootContentPanel;
-import com.lx862.pwgui.gui.prompt.ExecutableProgressDialog;
+import com.lx862.pwgui.gui.prompt.TaskProgressDialog;
 import com.lx862.pwgui.gui.prompt.FileSavedDialog;
 import com.lx862.pwgui.pwcore.Modpack;
 import com.lx862.pwgui.executable.Executables;
@@ -81,7 +81,7 @@ public class ExportModpackDialog extends JDialog {
             if(refreshExitCode != 0) return;
 
             ProgramExecution program = Executables.packwiz.buildCommand(args.toArray(new String[0]));
-            ExecutableProgressDialog dialog = new ExecutableProgressDialog(this, "Exporting Modpack...", Constants.REASON_TRIGGERED_BY_USER, program);
+            TaskProgressDialog dialog = new TaskProgressDialog(this, "Exporting Modpack...", Constants.REASON_TRIGGERED_BY_USER, program);
             Util.addManualDownloadPrompt(this, program, dialog, () -> {
                 exportModpack(args, destination);
             });
@@ -92,7 +92,7 @@ public class ExportModpackDialog extends JDialog {
             });
             dialog.setVisible(true);
         });
-        new ExecutableProgressDialog(this, "Refreshing Modpack...", "Refresh before export to ensure consistency.", programRefresh).setVisible(true);
+        new TaskProgressDialog(this, "Refreshing Modpack...", "Refresh before export to ensure consistency.", programRefresh).setVisible(true);
     }
 
     private void setExportButtonState(boolean active) {

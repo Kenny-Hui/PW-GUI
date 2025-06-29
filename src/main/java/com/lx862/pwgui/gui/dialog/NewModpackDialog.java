@@ -2,9 +2,10 @@ package com.lx862.pwgui.gui.dialog;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.lx862.pwgui.PWGUI;
+import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.gui.components.kui.*;
-import com.lx862.pwgui.gui.prompt.ExecutableProgressDialog;
+import com.lx862.pwgui.gui.prompt.TaskProgressDialog;
 import com.lx862.pwgui.gui.panel.ModpackInfoPanel;
 import com.lx862.pwgui.gui.panel.ModpackVersionPanel;
 import com.lx862.pwgui.util.GUIHelper;
@@ -121,13 +122,15 @@ public class NewModpackDialog extends JDialog {
 
                 Executables.packwiz.changeWorkingDirectory(modpackDirectory.toPath());
 
-                ProgramExecution processExecution = Executables.packwiz.buildCommand(argsStr).onExit(exitCode -> {
+                ProgramExecution processExecution = Executables.packwiz.buildCommand(argsStr);
+                processExecution.onExit(exitCode -> {
                     if(exitCode == 0) {
                         dispose();
                         if(finishCallback != null) finishCallback.accept(modpackDirectory.toPath());
                     }
                 });
-                new ExecutableProgressDialog(this, "Creating Modpack...", "Requested by user", processExecution).setVisible(true);
+
+                new TaskProgressDialog(this, "Creating Modpack...", Constants.REASON_TRIGGERED_BY_USER, processExecution).setVisible(true);
             }
         } catch (Exception e) {
             PWGUI.LOGGER.exception(e);

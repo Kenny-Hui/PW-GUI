@@ -7,7 +7,7 @@ import com.lx862.pwgui.executable.BatchedProgramExecution;
 import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.executable.ProgramExecution;
 import com.lx862.pwgui.gui.prompt.BatchedExecutionProgressDialog;
-import com.lx862.pwgui.gui.prompt.ExecutableProgressDialog;
+import com.lx862.pwgui.gui.prompt.TaskProgressDialog;
 import com.lx862.pwgui.gui.prompt.IncompatibleSummaryDialog;
 import com.lx862.pwgui.util.Util;
 import org.apache.commons.io.FileUtils;
@@ -78,8 +78,8 @@ public class FullUpdateAction extends UpdateAction {
                             execution = Executables.packwiz.buildCommand(prefix, "add", "--addon-id", String.valueOf(packwizMetaFile.updateCfProjectId), "--meta-folder", tempDirectory.getFileName().toString());
                         }
 
-                        execution.onStdout(stdout -> {
-                            if(stdout.isQuestion()) execution.enterInput("N");
+                        execution.onOutput(stdout -> {
+                            if(stdout.isPrompt()) execution.enterInput("N");
 
                             if(stdout.content().contains("failed to get latest version: no valid versions found") || stdout.content().contains("mod not available for the configured Minecraft version(s)")) {
                                 filesWithoutSuitableVersion.add(packwizMetaFile);
@@ -106,7 +106,7 @@ public class FullUpdateAction extends UpdateAction {
                             new IncompatibleSummaryDialog(parent, filesWithoutSuitableVersion).setVisible(true);
                         }
 
-                        Executables.packwiz.refresh().execute("Clean-up after content compatibility check");
+                        Executables.packwiz.refresh().run("Clean-up after content compatibility check");
                     });
 
                     BatchedExecutionProgressDialog modCompatDialog = new BatchedExecutionProgressDialog(parent, "Checking content compatibility...", "Check content compatibility after update", batchedProgramExecution);
@@ -114,7 +114,7 @@ public class FullUpdateAction extends UpdateAction {
                 }
             }
         });
-        ExecutableProgressDialog updateProgressDialog = new ExecutableProgressDialog(parent, "Checking for update...", Constants.REASON_TRIGGERED_BY_USER, updateExecution);
+        TaskProgressDialog updateProgressDialog = new TaskProgressDialog(parent, "Checking for update...", Constants.REASON_TRIGGERED_BY_USER, updateExecution);
         updateProgressDialog.setVisible(true);
     }
 }

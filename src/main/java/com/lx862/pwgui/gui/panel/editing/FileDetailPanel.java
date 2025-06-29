@@ -84,6 +84,7 @@ public class FileDetailPanel extends JPanel {
             } catch (IOException e) {
                 PWGUI.LOGGER.exception(e);
                 JOptionPane.showMessageDialog(this, String.format("Failed to save file!\n%s", e.getMessage()), Util.withTitlePrefix("Failed to Save!"), JOptionPane.ERROR_MESSAGE);
+                return;
             }
             if(shouldRefresh) Executables.packwiz.refresh().run(String.format("File modified by %s", Constants.PROGRAM_NAME));
         }

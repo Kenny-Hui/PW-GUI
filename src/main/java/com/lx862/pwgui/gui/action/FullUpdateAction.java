@@ -58,7 +58,7 @@ public class FullUpdateAction extends UpdateAction {
                         Files.createDirectories(tempDirectory);
                     } catch (Exception ex) {
                         PWGUI.LOGGER.exception(ex);
-                        JOptionPane.showMessageDialog(parent, "Cannot create a temporary folder for version compatibility checking!\nSome content may not have a version that supports the current modloader/minecraft version.", Util.withTitlePrefix("Compatibility checking failed!"), JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(parent, "Failed to create a temporary folder to check for version compatibility!\nNote that some content may not have a version that supports the current modloader/minecraft version.", Util.withTitlePrefix("Compatibility checking failed!"), JOptionPane.ERROR_MESSAGE);
                         return;
                     }
 
@@ -98,6 +98,7 @@ public class FullUpdateAction extends UpdateAction {
                             FileUtils.deleteDirectory(tempDirectory.toFile());
                         } catch (Exception ex) {
                             PWGUI.LOGGER.exception(ex);
+                            PWGUI.LOGGER.warn("Failed to remove temporary folder for compatibility check!");
                         }
 
                         if(filesWithoutSuitableVersion.isEmpty()) {

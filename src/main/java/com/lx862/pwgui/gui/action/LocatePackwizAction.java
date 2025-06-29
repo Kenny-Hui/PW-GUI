@@ -47,7 +47,8 @@ public class LocatePackwizAction extends AbstractAction {
             try {
                 PWGUI.getConfig().write("Update packwiz executable path");
             } catch (IOException e) {
-                JOptionPane.showMessageDialog(parent, String.format("Failed to write configuration file:\n%s", e.getMessage()), Util.withTitlePrefix("Failed to Write Config"), JOptionPane.ERROR_MESSAGE);
+                PWGUI.LOGGER.exception(e);
+                JOptionPane.showMessageDialog(parent, String.format("Failed to write configuration file:\n%s\nSee program logs for detail!", e.getMessage()), Util.withTitlePrefix("Failed to Write Config"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
 

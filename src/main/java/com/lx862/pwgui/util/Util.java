@@ -166,6 +166,7 @@ public class Util {
                 PWGUI.LOGGER.info(String.format("Moving manually downloaded file from \"%s\" to \"%s\"", sourcePath, destinationPath));
                 Files.move(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
+                PWGUI.LOGGER.exception(e);
                 JOptionPane.showMessageDialog(parent, String.format("An error occured while moving manually downloaded files:\n%s\nPlease move %s manually to %s", e.getMessage(), modInfo.fileName(), cacheDirectory), Util.withTitlePrefix("Failed to Move Files!"), JOptionPane.ERROR_MESSAGE);
             }
         }

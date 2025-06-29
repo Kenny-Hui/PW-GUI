@@ -65,12 +65,14 @@ public class AboutDialog extends JDialog {
 
         static class FileTabPane extends MarkdownPanel.MarkdownPane {
             public FileTabPane(String resource) {
+                String textToShow;
                 try {
-                    setInitialContent(Processor.process(Util.getAssets("/assets/about/" + resource)));
+                    textToShow = Processor.process(Util.getAssets("/assets/about/" + resource));
                 } catch (IOException e) {
                     PWGUI.LOGGER.exception(e);
-                    setInitialContent(String.format("Error trying to read file: %s", e.getMessage()));
+                    textToShow = String.format("Error trying to read file: %s", e.getMessage());
                 }
+                setInitialContent(textToShow);
             }
         }
     }

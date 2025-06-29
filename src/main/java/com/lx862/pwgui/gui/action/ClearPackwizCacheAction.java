@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class ClearPackwizCacheAction extends AbstractAction {
@@ -24,7 +25,7 @@ public class ClearPackwizCacheAction extends AbstractAction {
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         Path packwizCacheDir = GoUtil.getUserCacheDir().resolve("packwiz");
-        if(!packwizCacheDir.toFile().exists()) {
+        if(!Files.exists(packwizCacheDir)) {
             JOptionPane.showMessageDialog(parent, "There are currently no packwiz cache yet, nothing to clear~", Util.withTitlePrefix("No Cache Found"), JOptionPane.INFORMATION_MESSAGE);
         } else {
             if(JOptionPane.showConfirmDialog(parent, "Are you sure you want to clear packwiz cache?\nThis is generally not necessary unless you are running out of disk space or encountered some corruption.", Util.withTitlePrefix("Clear Packwiz Cache?"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {

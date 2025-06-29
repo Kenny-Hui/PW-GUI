@@ -5,8 +5,10 @@ import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.core.data.ApplicationTheme;
 import com.lx862.pwgui.pwcore.WritableFile;
 import com.lx862.pwgui.util.GoUtil;
+import org.apache.commons.io.FileUtils;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -34,8 +36,10 @@ public class Config extends WritableFile {
         super(CONFIG_PATH);
     }
 
-    public void read() throws FileNotFoundException {
-        JsonObject configJson = JsonParser.parseReader(new FileReader(CONFIG_PATH.toFile())).getAsJsonObject();
+    public void read() throws IOException {
+        if(!Files.exists(CONFIG_PATH)) throw new FileNotFoundException();
+
+        JsonObject configJson = JsonParser.parseString(FileUtils.readFileToString(CONFIG_PATH.toFile(), StandardCharsets.UTF_8)).getAsJsonObject();
         if(configJson.has("executables")) {
             JsonObject executableObject = configJson.getAsJsonObject("executables");
             this.packwizExecutablePath.read(executableObject);
@@ -95,11 +99,12 @@ public class Config extends WritableFile {
     }
 
     public void setLastModpackPath(Path newValue) {
-        if(!Objects.equals(newValue, this.lastModpackPath)) {
+        if(!Objects.equals(newValue, this.lastModpackPath.getValue())) {
             this.lastModpackPath.setValue(newValue);
             try { // Write if changed
                 write("Save last opened modpack path");
             } catch (IOException e) {
+                PWGUI.LOGGER.error("Failed to save last opened modpack path!");
                 PWGUI.LOGGER.exception(e);
             }
         }

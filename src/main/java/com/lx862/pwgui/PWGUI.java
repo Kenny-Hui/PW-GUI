@@ -19,7 +19,7 @@ import java.io.FileNotFoundException;
 
 public class PWGUI {
     public static final Logger LOGGER = new Logger();
-    private static Config config = new Config();
+    private static final Config config = new Config();
 
     /**
      * Initialize/re-initialize the program
@@ -29,9 +29,11 @@ public class PWGUI {
         try {
             config.read();
         } catch (Exception e) {
-            if(!(e instanceof FileNotFoundException)) { // Missing file is expected on first launch, nothing notable that needs logging
+            if(e instanceof FileNotFoundException) {
+                LOGGER.info("Config file does not exists.");
+            } else {
                 LOGGER.exception(e);
-                LOGGER.error("Failed to read config file!");
+                LOGGER.warn("Failed to read config file, using default!");
             }
         }
 

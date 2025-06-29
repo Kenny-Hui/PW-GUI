@@ -5,13 +5,13 @@ import com.lx862.pwgui.core.Config;
 import com.lx862.pwgui.executable.Executables;
 import com.lx862.pwgui.gui.prompt.DownloadProgressDialog;
 import com.lx862.pwgui.util.Util;
+import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -45,29 +45,29 @@ public class DownloadPackwizAction extends AbstractAction {
         try {
             tempDirectory = Files.createTempDirectory("pwgui");
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(parent, "Failed to create temp folder!", Util.withTitlePrefix("Download Failed"), JOptionPane.INFORMATION_MESSAGE);
+            PWGUI.LOGGER.exception(e);
+            JOptionPane.showMessageDialog(parent, "Failed to create temporary folder, see program logs for detail!", Util.withTitlePrefix("Download Failed"), JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         try {
-            int totalMirror = downloadMirror.length;
-            attemptDownload(totalMirror, 0, parent, tempDirectory);
+            attemptDownload(downloadMirror, 0, parent, tempDirectory);
         } catch (MalformedURLException ignored) {
         }
     }
 
-    private void attemptDownload(int totalMirror, int i, Window parent, Path tempDirectory) throws MalformedURLException {
-        Path destination = tempDirectory.resolve("packwiz_executable.zip");
-        URL url = URI.create(String.format(downloadMirror[i], getArtifactName())).toURL();
+    private void attemptDownload(String[] mirrors, int mirrorIdx, Window parent, Path destinationPath) throws MalformedURLException {
+        Path destination = destinationPath.resolve("packwiz_executable.zip");
+        URL url = URI.create(String.format(mirrors[mirrorIdx], getArtifactName())).toURL();
 
         DownloadProgressDialog downloadProgressDialog = new DownloadProgressDialog(parent, "Downloading packwiz...", "packwiz", url, destination, success -> {
             if(!success) {
                 PWGUI.LOGGER.error("Failed to download from " + url + "!");
-                int newAttemptedMirror = i+1;
-                if(newAttemptedMirror < totalMirror) {
+                int newAttemptedMirror = mirrorIdx+1;
+                if(newAttemptedMirror < mirrors.length) {
                     try {
                         JOptionPane.showMessageDialog(parent, String.format("Failed to download from %s\nWill retry with another mirror.", url), Util.withTitlePrefix("Download Failed"), JOptionPane.WARNING_MESSAGE);
-                        attemptDownload(totalMirror, newAttemptedMirror, parent, tempDirectory);
+                        attemptDownload(mirrors, newAttemptedMirror, parent, destinationPath);
                     } catch (MalformedURLException ignored) {
                     }
                     return true;
@@ -75,40 +75,41 @@ public class DownloadPackwizAction extends AbstractAction {
                     return false;
                 }
             } else {
-                Path packwizBinaryDestination = null;
+                Path packwizExecutablePath = null;
 
                 Path binDirectory = Config.CONFIG_DIR_PATH.resolve("bin");
-                binDirectory.toFile().mkdirs();
+                try {
+                    Files.createDirectories(binDirectory);
+                } catch (IOException e) {
+                    PWGUI.LOGGER.exception(e);
+                    JOptionPane.showMessageDialog(parent, "Failed to create the folder containing the packwiz executable, see program logs for detail!", Util.withTitlePrefix("Setup Failed"), JOptionPane.ERROR_MESSAGE);
+                    return false;
+                }
 
-                byte[] buffer = new byte[1024];
                 try(FileInputStream fis = new FileInputStream(destination.toFile()); ZipInputStream zis = new ZipInputStream(fis)) {
                     ZipEntry zipEntry;
                     while((zipEntry = zis.getNextEntry()) != null) {
                         if(zipEntry.getName().equals("packwiz") || zipEntry.getName().equals("packwiz.exe")) {
-                            packwizBinaryDestination = binDirectory.resolve(zipEntry.getName());
-                            try(FileOutputStream fos = new FileOutputStream(binDirectory.resolve(zipEntry.getName()).toFile())) {
-                                int len;
-                                while ((len = zis.read(buffer)) > 0) {
-                                    fos.write(buffer, 0, len);
-                                }
-                            }
+                            packwizExecutablePath = binDirectory.resolve(zipEntry.getName());
+                            FileUtils.copyToFile(zis, packwizExecutablePath.toFile());
                             break;
                         }
                     }
                 } catch (Exception e) {
                     PWGUI.LOGGER.exception(e);
-                    JOptionPane.showMessageDialog(parent, String.format("Failed to extract packwiz from zip file:\n%s", e.getMessage()), Util.withTitlePrefix("Setup Failed"), JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(parent, String.format("Failed to extract packwiz from zip file:\n%s\nSee program logs for detail!", e.getMessage()), Util.withTitlePrefix("Setup Failed"), JOptionPane.ERROR_MESSAGE);
+                    return false;
                 }
 
                 try {
                     Files.delete(destination);
-                    Files.delete(tempDirectory);
+                    Files.delete(destinationPath);
                 } catch (IOException ignored) { // Not important
                 }
 
-                boolean configureSuccessful = tryConfigurePackwiz(packwizBinaryDestination);
+                boolean configureSuccessful = configurePackwiz(packwizExecutablePath);
                 if(configureSuccessful) {
-                    finishCallback.accept(packwizBinaryDestination);
+                    finishCallback.accept(packwizExecutablePath);
                 }
                 return true;
             }
@@ -142,7 +143,7 @@ public class DownloadPackwizAction extends AbstractAction {
         return artifactName;
     }
 
-    private boolean tryConfigurePackwiz(Path path) {
+    private boolean configurePackwiz(Path path) {
         PWGUI.getConfig().packwizExecutablePath.setValue(path);
 
         try {
@@ -158,11 +159,10 @@ public class DownloadPackwizAction extends AbstractAction {
             }
 
             PWGUI.getConfig().write("Update packwiz executable path");
-
             return true;
         } catch (IOException e) {
             PWGUI.LOGGER.exception(e);
-            JOptionPane.showMessageDialog(parent, "Failed to write config file!", Util.withTitlePrefix("Setup Failed"), JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(parent, "Failed to save config file, see program logs for detail!", Util.withTitlePrefix("Setup Failed"), JOptionPane.INFORMATION_MESSAGE);
             return false;
         }
     }

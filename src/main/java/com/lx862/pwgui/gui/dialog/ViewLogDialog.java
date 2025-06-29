@@ -9,6 +9,7 @@ import com.lx862.pwgui.gui.components.kui.KFileChooser;
 import com.lx862.pwgui.gui.components.kui.KRootContentPanel;
 import com.lx862.pwgui.gui.prompt.FileSavedDialog;
 import com.lx862.pwgui.util.Util;
+import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
@@ -21,10 +22,12 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /** Dialog to view the program's log */
 public class ViewLogDialog extends JDialog {
     private final Logger.LogCallback appendLogCallback;
+    private final StringBuilder logHistory;
 
     public ViewLogDialog(JFrame frame) {
         super(frame, Util.withTitlePrefix("View Program Log"));
@@ -32,6 +35,7 @@ public class ViewLogDialog extends JDialog {
         setSize(600, 400);
         setLocationRelativeTo(frame);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.logHistory = new StringBuilder();
 
         KRootContentPanel contentPanel = new KRootContentPanel(10);
 
@@ -51,6 +55,7 @@ public class ViewLogDialog extends JDialog {
             Document doc = logTextPane.getDocument();
             try {
                 doc.insertString(doc.getLength(), line + "\n", style);
+                logHistory.append(line).append("\n");
             } catch (BadLocationException ignored) {}
             logTextAreaScrollPane.getVerticalScrollBar().setValue(logTextAreaScrollPane.getVerticalScrollBar().getMaximum()); // Jump to bottom
         };
@@ -83,11 +88,7 @@ public class ViewLogDialog extends JDialog {
             if (fileChooser.openSaveAsDialog(ViewLogDialog.this) == JFileChooser.APPROVE_OPTION) {
                 File file = fileChooser.getSelectedFile();
                 try {
-                    try(FileWriter fw = new FileWriter(file)) {
-                        for(String line : PWGUI.LOGGER.getLogHistory()) {
-                            fw.write(line + "\n");
-                        }
-                    }
+                    FileUtils.writeStringToFile(file, logHistory.toString(), StandardCharsets.UTF_8);
                     new FileSavedDialog(ViewLogDialog.this, "Log Saved!", file).setVisible(true);
                 } catch (IOException e) {
                     JOptionPane.showMessageDialog(ViewLogDialog.this, String.format("Failed to save log:\n%s", e.getMessage()), Util.withTitlePrefix("Save Log"), JOptionPane.ERROR_MESSAGE);

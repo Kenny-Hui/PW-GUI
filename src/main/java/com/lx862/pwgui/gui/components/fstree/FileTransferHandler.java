@@ -53,8 +53,8 @@ public class FileTransferHandler extends TransferHandler {
                 }
             } catch (UnsupportedFlavorException ignored) {
             } catch (IOException e) {
-                JOptionPane.showMessageDialog(tree.getTopLevelAncestor(), "An error occured while copying file/folder:\n" + e.toString(), "Failed to copy!", JOptionPane.ERROR_MESSAGE);
                 PWGUI.LOGGER.exception(e);
+                JOptionPane.showMessageDialog(tree.getTopLevelAncestor(), "An error occured while copying file/folder:\n" + e, "Failed to Copy!", JOptionPane.ERROR_MESSAGE);
             }
 
             tree.expandPath(nodePath);

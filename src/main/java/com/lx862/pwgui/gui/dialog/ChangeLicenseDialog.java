@@ -162,6 +162,7 @@ public class ChangeLicenseDialog extends JDialog {
                     try(InputStream licenseIS = Util.getAssets(String.format("/assets/licenses/%s", file))) {
                         content = new String(licenseIS.readAllBytes());
                     } catch (NullPointerException | IOException e) {
+                        PWGUI.LOGGER.exception(e);
                         content = String.format("Failed to read license file %s:\n%s", file, e.getMessage());
                     }
 
@@ -251,7 +252,7 @@ public class ChangeLicenseDialog extends JDialog {
                 JOptionPane.showMessageDialog(ChangeLicenseDialog.this, String.format("License changed to %s!", selectedLicenseModel), Util.withTitlePrefix("Change License"), JOptionPane.INFORMATION_MESSAGE);
             } catch (IOException e) {
                 PWGUI.LOGGER.exception(e);
-                JOptionPane.showMessageDialog(ChangeLicenseDialog.this, "Failed to save new license, see program log for detail!", Util.withTitlePrefix("Change License"), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(ChangeLicenseDialog.this, "Failed to save new license, see program logs for detail!", Util.withTitlePrefix("Change License"), JOptionPane.ERROR_MESSAGE);
             }
             dispose();
         }

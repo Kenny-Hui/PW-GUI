@@ -143,7 +143,7 @@ public class GenerateModListDialog extends JDialog {
                     new FileSavedDialog(GenerateModListDialog.this, "Modlist saved!", file).setVisible(true);
                 } catch (IOException e) {
                     PWGUI.LOGGER.exception(e);
-                    JOptionPane.showMessageDialog(GenerateModListDialog.this, String.format("Failed to save modlist:\n%s", e.getMessage()), Util.withTitlePrefix("Save Modlist"), JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(GenerateModListDialog.this, String.format("Failed to save modlist:\n%s\nSee program logs for detail!", e.getMessage()), Util.withTitlePrefix("Save Modlist"), JOptionPane.ERROR_MESSAGE);
                 }
 
                 dispose();

@@ -3,6 +3,7 @@ package com.lx862.pwgui.gui.panel.editing;
 import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.executable.Executables;
+import com.lx862.pwgui.gui.components.NameTabPair;
 import com.lx862.pwgui.gui.components.kui.KButton;
 import com.lx862.pwgui.gui.components.kui.KTabbedPane;
 import com.lx862.pwgui.gui.panel.editing.filetype.*;
@@ -11,35 +12,47 @@ import com.lx862.pwgui.util.Util;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 
 public class FileDetailPanel extends JPanel {
-    public final KTabbedPane fileEntryTab;
+    private final KTabbedPane fileTabPane;
     public final KButton saveButton;
 
     public FileDetailPanel() {
         setLayout(new BorderLayout());
 
-        this.fileEntryTab = new KTabbedPane();
+        this.fileTabPane = new KTabbedPane();
         this.saveButton = new KButton("Save");
         saveButton.setVisible(false);
 
-        saveButton.addActionListener(actionEvent -> saveTab((JPanel)this.fileEntryTab.getSelectedComponent(), true));
-        fileEntryTab.addChangeListener(changeEvent -> {
-            saveButton.setEnabled(fileEntryTab.getSelectedComponent() instanceof FileTypePanel panel && panel.shouldSave());
-            saveButton.setVisible(fileEntryTab.getSelectedComponent() instanceof FileTypePanel panel && panel.savable());
+        saveButton.addActionListener(actionEvent -> saveTab((JPanel)this.fileTabPane.getSelectedComponent(), true));
+        fileTabPane.addChangeListener(changeEvent -> {
+            saveButton.setEnabled(fileTabPane.getSelectedComponent() instanceof FileTypePanel panel && panel.shouldSave());
+            saveButton.setVisible(fileTabPane.getSelectedComponent() instanceof FileTypePanel panel && panel.savable());
         });
 
         JPanel fileEntryActionRow = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0 ,0));
         fileEntryActionRow.add(saveButton);
-        add(fileEntryTab, BorderLayout.CENTER);
+        add(fileTabPane, BorderLayout.CENTER);
         add(fileEntryActionRow, BorderLayout.SOUTH);
+        setTabs(Collections.emptyList());
+    }
+
+    public void setTabs(List<NameTabPair> tabs) {
+        if(tabs.isEmpty()) {
+            JPanel noSelectionPanel1 = new NoSelectionPanel();
+            fileTabPane.setTabs(List.of(new NameTabPair("No item selected", noSelectionPanel1)));
+        } else {
+            fileTabPane.setTabs(tabs);
+        }
     }
 
     public void saveAllTabs(boolean showUnsavedPrompt) {
         boolean haveUnsaved = false;
 
-        for(int i = 0; i < fileEntryTab.getTabCount(); i++) {
-            Component component = fileEntryTab.getComponent(i);
+        for(int i = 0; i < fileTabPane.getTabCount(); i++) {
+            Component component = fileTabPane.getComponent(i);
             if(component instanceof FileTypePanel) {
                 if(((FileTypePanel) component).shouldSave()) haveUnsaved = true;
             }
@@ -53,8 +66,8 @@ public class FileDetailPanel extends JPanel {
             }
         }
 
-        for(int i = 0; i < fileEntryTab.getTabCount(); i++) {
-            Component component = fileEntryTab.getComponent(i);
+        for(int i = 0; i < fileTabPane.getTabCount(); i++) {
+            Component component = fileTabPane.getComponent(i);
             if(component instanceof FileTypePanel filePanel) {
                 saveTab(filePanel, false);
             }
@@ -73,6 +86,15 @@ public class FileDetailPanel extends JPanel {
                 JOptionPane.showMessageDialog(this, String.format("Failed to save file!\n%s", e.getMessage()), Util.withTitlePrefix("Failed to Save!"), JOptionPane.ERROR_MESSAGE);
             }
             if(shouldRefresh) Executables.packwiz.refresh().execute(String.format("File modified by %s", Constants.PROGRAM_NAME));
+        }
+    }
+
+    static class NoSelectionPanel extends JPanel {
+        public NoSelectionPanel() {
+            super(new BorderLayout());
+            JLabel emptyLabel = new JLabel("<html><p style=\"text-align: center\">No items selected!<br>Select an item on the left to view & perform operations.</p></html>");
+            emptyLabel.setHorizontalAlignment(SwingConstants.HORIZONTAL);
+            add(emptyLabel, BorderLayout.CENTER);
         }
     }
 }

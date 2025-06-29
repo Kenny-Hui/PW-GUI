@@ -34,18 +34,19 @@ public class EditPanel extends JPanel {
                 saveChanges(true);
             }
 
-            FileSystemSortedTreeNode node = (FileSystemSortedTreeNode) fileBrowserPanel.fileBrowserTree.getLastSelectedPathComponent();
-            if(node == null) {
-                fileDetailPanel.fileEntryTab.removeAll();
-                return;
-            }
-
             fileBrowserPanel.fileBrowserTree.setIgnorePattern(null);
 
-            FileSystemEntityModel entry = (FileSystemEntityModel) node.getUserObject();
-            List<NameTabPair> inspectPanels = getViews(new FileEntryPaneContext(modpack, fileBrowserPanel.fileBrowserTree::setIgnorePattern, fileDetailPanel.saveButton::setEnabled, () -> saveChanges(true)), entry);
-            Collections.reverse(inspectPanels);
-            fileDetailPanel.fileEntryTab.setTabs(inspectPanels);
+            FileSystemSortedTreeNode node = (FileSystemSortedTreeNode) fileBrowserPanel.fileBrowserTree.getLastSelectedPathComponent();
+
+            List<NameTabPair> filePanels;
+            if(node == null) {
+                filePanels = Collections.emptyList();
+            } else {
+                FileSystemEntityModel entry = (FileSystemEntityModel) node.getUserObject();
+                filePanels = getViews(new FileEntryPaneContext(modpack, fileBrowserPanel.fileBrowserTree::setIgnorePattern, fileDetailPanel.saveButton::setEnabled, () -> saveChanges(true)), entry);
+                Collections.reverse(filePanels);
+            }
+            fileDetailPanel.setTabs(filePanels);
         });
 
         KSplitPane splitPane = new KSplitPane(JSplitPane.HORIZONTAL_SPLIT, fileBrowserPanel, fileDetailPanel, 0.5);

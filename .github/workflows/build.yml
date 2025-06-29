@@ -4,7 +4,7 @@
 # against bad commits.
 
 name: build
-on: [pull_request, push]
+on: [workflow_dispatch]
 
 jobs:
   build:
@@ -23,16 +23,6 @@ jobs:
         run: chmod +x ./gradlew
       - name: Build with Gradle
         run: ./gradlew build
-      - name: Download Launch4j
-        run: |
-          curl https://jaist.dl.sourceforge.net/project/launch4j/launch4j-3/3.50/launch4j-3.50-linux-x64.tgz -o launch4j.tgz
-          tar -xzvf launch4j.tgz
-          
-      - name: Run Launch4j
-        run: |
-          cd assets/launch4j
-          java -jar $GITHUB_WORKSPACE/launch4j/launch4j.jar launch4j.xml
-          cp PW-GUI.exe $GITHUB_WORKSPACE/build/libs/
       - name: Upload Artifacts to GitHub
         uses: actions/upload-artifact@v4
         with:

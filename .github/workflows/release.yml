@@ -1,0 +1,54 @@
+# Automatically build the project and run any configured tests for every push
+# and submitted pull request. This can help catch issues that only occur on
+# certain platforms or Java versions, and provides a first line of defence
+# against bad commits.
+
+# Adopted from https://github.com/ModFest/glowcase/blob/1.21/.github/workflows/release.yml
+
+name: Release Build
+on: [pull_request, push]
+
+on:
+  release:
+    types:
+      - published
+
+permissions:
+  id-token: write
+  attestations: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 17
+      - name: Validate gradle wrapper
+        uses: gradle/actions/wrapper-validation@v4
+      - name: Make Gradle wrapper executable
+        run: chmod +x ./gradlew
+      - name: Build with Gradle
+        run: ./gradlew build
+      - name: Download Launch4j
+        run: |
+          curl https://jaist.dl.sourceforge.net/project/launch4j/launch4j-3/3.50/launch4j-3.50-linux-x64.tgz -o launch4j.tgz
+          tar -xzvf launch4j.tgz
+      - name: Run Launch4j
+        run: |
+          cd assets/launch4j
+          java -jar $GITHUB_WORKSPACE/launch4j/launch4j.jar launch4j.xml
+          cp PW-GUI.exe $GITHUB_WORKSPACE/build/libs/
+      - name: Generate artifact attestation
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: 'build/libs/*-all.jar, build/libs/*.exe'
+      - name: Upload GitHub release
+        uses: AButler/upload-release-assets@v2.0
+        with:
+          files: 'build/libs/*-all.jar;build/libs/*.exe'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}

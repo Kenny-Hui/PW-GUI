@@ -27,6 +27,9 @@ jobs:
         run: |
           curl https://jaist.dl.sourceforge.net/project/launch4j/launch4j-3/3.50/launch4j-3.50-linux-x64.tgz -o launch4j.tgz
           tar -xzvf launch4j.tgz
+          
+      - name: Run Launch4j
+        run: |
           cd assets/launch4j
           java -jar $GITHUB_WORKSPACE/launch4j/launch4j.jar launch4j.xml
       - name: Upload Artifacts to GitHub

@@ -2,7 +2,7 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>../../build/libs/PW-GUI-1.1.0-all.jar</jar>
+  <jar>../../build/libs/PW-GUI-1.2.0-all.jar</jar>
   <outfile>PW-GUI.exe</outfile>
   <errTitle>This program requires at least Java 17 to run</errTitle>
   <cmdLine></cmdLine>
@@ -22,12 +22,12 @@
     <maxVersion></maxVersion>
   </jre>
   <versionInfo>
-    <fileVersion>1.1.0.0</fileVersion>
+    <fileVersion>1.2.0.0</fileVersion>
     <txtFileVersion>1.1</txtFileVersion>
     <fileDescription>Lightweight GUI Wrapper around packwiz, a Minecraft modpack tool.</fileDescription>
     <copyright>LX86</copyright>
-    <productVersion>1.1.0.0</productVersion>
-    <txtProductVersion>1.1</txtProductVersion>
+    <productVersion>1.2.0.0</productVersion>
+    <txtProductVersion>1.2</txtProductVersion>
     <productName>PW-GUI</productName>
     <companyName></companyName>
     <internalName>PW-GUI</internalName>

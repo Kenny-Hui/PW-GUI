@@ -15,6 +15,7 @@ import java.util.List;
 
 /* The top section that displays the modpack's name and versions */
 public class HeaderPanel extends JPanel {
+    private final static int PACK_ICON_SIZE = 36;
     public HeaderPanel(PackFile packFile) {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         refresh(packFile);
@@ -29,12 +30,13 @@ public class HeaderPanel extends JPanel {
             try {
                 BufferedImage iconImage = ImageIO.read(iconFile);
                 if(iconImage != null) {
-                    JLabel iconLabel = new JLabel();
-                    iconLabel.setIcon(new ImageIcon(GUIHelper.resizeImage(iconImage, 36, 36, Image.SCALE_FAST), "icon.png from modpack"));
+                    int iconScaleMode = iconImage.getWidth() <= PACK_ICON_SIZE && iconImage.getHeight() <= PACK_ICON_SIZE ? Image.SCALE_FAST : Image.SCALE_SMOOTH;
+                    JLabel iconLabel = new JLabel(new ImageIcon(GUIHelper.resizeImage(iconImage, PACK_ICON_SIZE, PACK_ICON_SIZE, iconScaleMode), "icon.png from modpack"));
                     add(iconLabel);
                     add(GUIHelper.createHorizontalPadding(8));
                 }
             } catch (Exception e) {
+                PWGUI.LOGGER.error("Failed to read pack icon image!");
                 PWGUI.LOGGER.exception(e);
             }
         }

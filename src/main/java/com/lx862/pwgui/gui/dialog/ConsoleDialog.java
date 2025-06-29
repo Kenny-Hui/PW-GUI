@@ -75,6 +75,8 @@ public class ConsoleDialog extends JDialog {
         executeCommand("", true);
 
         add(contentPanel, BorderLayout.CENTER);
+
+        SwingUtilities.invokeLater(commandInputField::requestFocus); // Focus on command input right away
     }
 
     private String getCommandHistory(boolean prev) {

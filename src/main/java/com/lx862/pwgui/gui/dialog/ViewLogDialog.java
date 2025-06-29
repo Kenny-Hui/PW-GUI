@@ -1,6 +1,7 @@
 package com.lx862.pwgui.gui.dialog;
 
 import com.lx862.pwgui.PWGUI;
+import com.lx862.pwgui.core.Constants;
 import com.lx862.pwgui.core.Logger;
 import com.lx862.pwgui.gui.action.CloseWindowAction;
 import com.lx862.pwgui.gui.components.kui.KActionPanel;
@@ -39,7 +40,7 @@ public class ViewLogDialog extends JDialog {
 
         KRootContentPanel contentPanel = new KRootContentPanel(10);
 
-        JLabel descriptionLabel = new JLabel("This displays the program log for PW-GUI, which may be useful for diagnosing issues");
+        JLabel descriptionLabel = new JLabel(String.format("This displays the program log for %s, which may be useful for diagnosing issues", Constants.PROGRAM_NAME));
         contentPanel.add(descriptionLabel, BorderLayout.NORTH);
 
         JTextPane logTextPane = new JTextPane();

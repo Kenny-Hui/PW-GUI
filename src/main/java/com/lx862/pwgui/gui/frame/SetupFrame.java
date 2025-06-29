@@ -48,7 +48,7 @@ public class SetupFrame extends BaseFrame {
 
             add(GUIHelper.createVerticalPadding(8));
 
-            JLabel descriptionLabel = new JLabel("<html><div style=\"text-align:center\">PW-GUI aims to simplify modpack management by providing a GUI around the command-line program packwiz.</div></html>", SwingConstants.CENTER);
+            JLabel descriptionLabel = new JLabel(String.format("<html><div style=\"text-align:center\">%s aims to simplify modpack management by providing a GUI around the command-line program packwiz.</div></html>", Constants.PROGRAM_NAME), SwingConstants.CENTER);
             descriptionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             add(descriptionLabel);
 

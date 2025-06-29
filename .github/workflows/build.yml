@@ -32,6 +32,7 @@ jobs:
         run: |
           cd assets/launch4j
           java -jar $GITHUB_WORKSPACE/launch4j/launch4j.jar launch4j.xml
+          cp PW-GUI.exe $GITHUB_WORKSPACE/build/libs/
       - name: Upload Artifacts to GitHub
         uses: actions/upload-artifact@v4
         with:

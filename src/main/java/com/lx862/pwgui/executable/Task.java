@@ -19,10 +19,6 @@ public abstract class Task {
         this.defaultExecutor = defaultExecutor;
         this.outputListeners = new ArrayList<>();
         this.exitListeners = new ArrayList<>();
-
-        onOutput((output) -> { // Display log when we got a new line
-            PWGUI.LOGGER.info("[" + taskName + "]", output.content());
-        });
     }
 
     public Task onOutput(Consumer<OutputMessage> consumer) {

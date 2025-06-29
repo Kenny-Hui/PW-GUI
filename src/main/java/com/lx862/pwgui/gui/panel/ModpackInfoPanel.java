@@ -1,5 +1,6 @@
 package com.lx862.pwgui.gui.panel;
 
+import com.lx862.pwgui.PWGUI;
 import com.lx862.pwgui.gui.components.DocumentChangedListener;
 import com.lx862.pwgui.gui.components.kui.KGridBagLayoutPanel;
 import com.lx862.pwgui.pwcore.PackFile;
@@ -22,7 +23,7 @@ public class ModpackInfoPanel extends KGridBagLayoutPanel {
     public ModpackInfoPanel(PackFile existingFile, Runnable updateSaveState) {
         super(3, 2);
         this.initialName = existingFile == null ? "" : existingFile.name;
-        this.initialAuthor = existingFile == null ? "" : existingFile.author;
+        this.initialAuthor = existingFile == null ? PWGUI.getConfig().authorName.getValue() == null ? "" : PWGUI.getConfig().authorName.getValue() : existingFile.author;
         this.initialVersion = existingFile == null ? "" : existingFile.version;
 
         nameTextField = new KTextField("My Epic Modpack!", true);

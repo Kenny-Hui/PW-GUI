@@ -62,7 +62,7 @@ public class ChangeLicenseDialog extends JDialog {
         placeholdersPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         JLabel nameLabel = new JLabel("Your name: ");
         JTextField nameTextField = new KTextField();
-        nameTextField.setText("<Your name>");
+        nameTextField.setText(PWGUI.getConfig().authorName.getValue() == null ? "<Your name>" : PWGUI.getConfig().authorName.getValue());
 
         JLabel yearLabel = new JLabel("Copyright year: ");
         JTextField yearTextField = new KTextField();
@@ -131,6 +131,7 @@ public class ChangeLicenseDialog extends JDialog {
         add(contentPanel);
 
         setLicense(nameTextField.getText(), yearTextField.getText(), false);
+        SwingUtilities.invokeLater(splitPane::requestFocus);
     }
 
     private void setLicense(String name, String year, boolean updateMetadata) {

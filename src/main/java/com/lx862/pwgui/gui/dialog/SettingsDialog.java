@@ -21,20 +21,19 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 public class SettingsDialog extends JDialog {
-    private final JCheckBox relaunchModpackCheckbox;
-    private final JCheckBox debugModeCheckBox;
-    private final JCheckBox showPackwizMetaFileNameCheckbox;
-    private final KComboBox<ApplicationTheme> themeComboBox;
-    private final JLabel packwizLocationLabel;
+    private final ProgramPanel programPanel;
+    private final PackwizPanel packwizPanel;
+    private final Config config;
 
     private final ApplicationTheme initialTheme;
-    private Path packwizLocationPath;
+
     private boolean saved;
 
-    public SettingsDialog(Window parent) {
+    public SettingsDialog(Config config, Window parent) {
         super(parent, Util.withTitlePrefix("Settings"), ModalityType.DOCUMENT_MODAL);
+        this.config = PWGUI.getConfig();
 
-        this.initialTheme = PWGUI.getConfig().applicationTheme.getValue();
+        this.initialTheme = config.applicationTheme.getValue();
 
         setSize(400, 500);
         setLocationRelativeTo(parent);
@@ -48,81 +47,12 @@ public class SettingsDialog extends JDialog {
         titleLabel.setBorder(GUIHelper.getPaddedBorder(0, 0, 10, 0)); // Bottom padding to compensate
         contentPanel.add(titleLabel, BorderLayout.NORTH);
 
-        JPanel programPanel = new JPanel();
-        programPanel.setLayout(new BoxLayout(programPanel, BoxLayout.PAGE_AXIS));
-        programPanel.setBorder(BorderFactory.createTitledBorder(Constants.PROGRAM_NAME));
+        this.programPanel = new ProgramPanel(config, parent);
+        this.programPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        settingsPanel.add(programPanel);
 
-        JPanel themePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 0));
-        themePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        themePanel.add(new JLabel("Theme:"));
-
-
-        this.themeComboBox = new KComboBox<>();
-        this.themeComboBox.setRenderer(new KListCellRenderer());
-        for(ApplicationTheme applicationTheme : ApplicationTheme.values()) {
-            themeComboBox.addItem(applicationTheme);
-        }
-        themeComboBox.setSelectedItem(initialTheme);
-
-        themeComboBox.addItemListener(actionEvent -> {
-            ApplicationTheme t = (ApplicationTheme)themeComboBox.getSelectedItem();
-            GUIHelper.setupApplicationTheme(t, PWGUI.getConfig().useWindowDecoration.getValue(), this);
-        });
-        themePanel.add(themeComboBox);
-        programPanel.add(themePanel);
-
-        programPanel.add(GUIHelper.createVerticalPadding(4));
-
-        relaunchModpackCheckbox = new JCheckBox("Open last modpack on launch");
-        relaunchModpackCheckbox.setSelected(PWGUI.getConfig().openLastModpackOnLaunch.getValue());
-        this.relaunchModpackCheckbox.setAlignmentX(Component.LEFT_ALIGNMENT);
-        programPanel.add(relaunchModpackCheckbox);
-
-        showPackwizMetaFileNameCheckbox = new JCheckBox("Show packwiz metafile name (.pw.toml)");
-        showPackwizMetaFileNameCheckbox.setSelected(PWGUI.getConfig().showMetaFileName.getValue());
-        this.showPackwizMetaFileNameCheckbox.setAlignmentX(Component.LEFT_ALIGNMENT);
-        programPanel.add(showPackwizMetaFileNameCheckbox);
-
-        this.debugModeCheckBox = new JCheckBox("Enable Debug Log");
-        debugModeCheckBox.setSelected(PWGUI.getConfig().debugMode.getValue());
-        debugModeCheckBox.setAlignmentX(Component.LEFT_ALIGNMENT);
-        programPanel.add(debugModeCheckBox);
-
-        programPanel.add(GUIHelper.createVerticalPadding(4));
-
-        KButton resetButton = new KButton(new ResetProgramAction(this, parent));
-        resetButton.setAlignmentX(Component.LEFT_ALIGNMENT);
-        programPanel.add(resetButton);
-
-        JPanel packwizPanel = new JPanel();
-        packwizPanel.setLayout(new BoxLayout(packwizPanel, BoxLayout.PAGE_AXIS));
-        packwizPanel.setBorder(BorderFactory.createTitledBorder("Packwiz"));
-
-        KGridBagLayoutPanel packwizLocationPanel = new KGridBagLayoutPanel(3, 2);
-        packwizLocationPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        this.packwizLocationLabel = new JLabel("Location: ???");
-
-        KButton changePackwizLocationButton = new KButton("Change...");
-        changePackwizLocationButton.addActionListener(actionEvent -> {
-            KFileChooser fileChooser = new KFileChooser("locate-pw");
-            fileChooser.setFileFilter(new PackwizExecutableFileFilter());
-
-            if(fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-                updatePackwizPath(fileChooser.getSelectedFile().toPath());
-            }
-        });
-
-        packwizLocationPanel.addRow(1, 0, packwizLocationLabel, changePackwizLocationButton);
-
-        packwizPanel.add(packwizLocationPanel);
-
-        KButton downloadPackwizButton = new KButton(new DownloadPackwizAction("Re-download packwiz", this, (path) -> {
-            updatePackwizPath(path);
-            JOptionPane.showMessageDialog(this, "Packwiz has been downloaded!", Util.withTitlePrefix("Packwiz Downloaded!"), JOptionPane.INFORMATION_MESSAGE);
-        }));
-
-        downloadPackwizButton.setAlignmentX(Component.LEFT_ALIGNMENT);
-        packwizPanel.add(downloadPackwizButton);
+        packwizPanel = new PackwizPanel();
+        settingsPanel.add(packwizPanel);
 
         settingsPanel.addRow(1, programPanel);
         settingsPanel.addRow(1, packwizPanel);
@@ -138,38 +68,16 @@ public class SettingsDialog extends JDialog {
         contentPanel.add(actionPanel, BorderLayout.SOUTH);
 
         add(contentPanel);
-
-        updatePackwizPath(PWGUI.getConfig().packwizExecutablePath.getValue());
-    }
-
-    private void updatePackwizPath(Path newPath) {
-        Path oldPath = PWGUI.getConfig().lastModpackPath.getValue();
-
-        PWGUI.getConfig().lastModpackPath.setValue(newPath);
-        boolean located = Executables.packwiz.probe(null) != null;
-        PWGUI.getConfig().lastModpackPath.setValue(oldPath); // restore
-
-        if(!located) {
-            JOptionPane.showMessageDialog(this, "The specified packwiz executable is not valid!", Util.withTitlePrefix("Invalid Executable"), JOptionPane.ERROR_MESSAGE);
-        } else {
-            packwizLocationLabel.setText(String.format("Location: %s", newPath.toString()));
-            packwizLocationLabel.setToolTipText(newPath.toString());
-            this.packwizLocationPath = newPath;
-        }
     }
 
     private void save() {
         this.saved = true;
-        Config configInstance = PWGUI.getConfig();
-        configInstance.applicationTheme.setValue((ApplicationTheme) themeComboBox.getSelectedItem());
-        configInstance.openLastModpackOnLaunch.setValue(relaunchModpackCheckbox.isSelected());
-        configInstance.debugMode.setValue(debugModeCheckBox.isSelected());
-        configInstance.showMetaFileName.setValue(showPackwizMetaFileNameCheckbox.isSelected());
-        configInstance.packwizExecutablePath.setValue(packwizLocationPath);
+        programPanel.save();
+        packwizPanel.save();
         Executables.packwiz.updateExecutableLocation(null);
 
         try {
-            configInstance.write(Constants.REASON_TRIGGERED_BY_USER);
+            config.write(Constants.REASON_TRIGGERED_BY_USER);
             dispose();
         } catch (IOException e) {
             PWGUI.LOGGER.exception(e);
@@ -180,11 +88,158 @@ public class SettingsDialog extends JDialog {
     @Override
     public void dispose() {
         if(!saved) {
-            GUIHelper.setupApplicationTheme(initialTheme, PWGUI.getConfig().useWindowDecoration.getValue(), null);
+            GUIHelper.setupApplicationTheme(initialTheme, config.useWindowDecoration.getValue(), null);
         } else {
-            GUIHelper.setupApplicationTheme((ApplicationTheme) themeComboBox.getSelectedItem(), PWGUI.getConfig().useWindowDecoration.getValue(), null);
+            programPanel.applyTheme();
         }
         super.dispose();
+    }
+
+    class ProgramPanel extends JPanel {
+        private final JCheckBox relaunchModpackCheckbox;
+        private final JCheckBox debugModeCheckBox;
+        private final JCheckBox showPackwizMetaFileNameCheckbox;
+        private final KComboBox<ApplicationTheme> themeComboBox;
+
+        private final AuthorNamePanel authorNamePanel;
+
+        public ProgramPanel(Config config, Window windowParent) {
+            setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+            setBorder(BorderFactory.createTitledBorder(Constants.PROGRAM_NAME));
+
+            JPanel themePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 0));
+            themePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+            themePanel.add(new JLabel("Theme:"));
+
+            this.themeComboBox = new KComboBox<>();
+            this.themeComboBox.setRenderer(new KListCellRenderer());
+            for(ApplicationTheme applicationTheme : ApplicationTheme.values()) {
+                themeComboBox.addItem(applicationTheme);
+            }
+            themeComboBox.setSelectedItem(initialTheme);
+
+            themeComboBox.addItemListener(actionEvent -> {
+                ApplicationTheme t = (ApplicationTheme)themeComboBox.getSelectedItem();
+                GUIHelper.setupApplicationTheme(t, config.useWindowDecoration.getValue(), SettingsDialog.this);
+            });
+            themePanel.add(themeComboBox);
+            add(themePanel);
+
+            add(GUIHelper.createVerticalPadding(4));
+
+            this.authorNamePanel = new AuthorNamePanel();
+            authorNamePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+            add(authorNamePanel);
+
+            add(GUIHelper.createVerticalPadding(4));
+
+            relaunchModpackCheckbox = new JCheckBox("Open last modpack on launch");
+            relaunchModpackCheckbox.setSelected(config.openLastModpackOnLaunch.getValue());
+            this.relaunchModpackCheckbox.setAlignmentX(Component.LEFT_ALIGNMENT);
+            add(relaunchModpackCheckbox);
+
+            showPackwizMetaFileNameCheckbox = new JCheckBox("Show packwiz metafile name (.pw.toml)");
+            showPackwizMetaFileNameCheckbox.setSelected(config.showMetaFileName.getValue());
+            this.showPackwizMetaFileNameCheckbox.setAlignmentX(Component.LEFT_ALIGNMENT);
+            add(showPackwizMetaFileNameCheckbox);
+
+            this.debugModeCheckBox = new JCheckBox("Enable Debug Log");
+            debugModeCheckBox.setSelected(config.debugMode.getValue());
+            debugModeCheckBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+            add(debugModeCheckBox);
+
+            add(GUIHelper.createVerticalPadding(4));
+
+            KButton resetButton = new KButton(new ResetProgramAction(SettingsDialog.this, windowParent));
+            resetButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+            add(resetButton);
+        }
+
+        public void save() {
+            config.applicationTheme.setValue((ApplicationTheme) themeComboBox.getSelectedItem());
+            config.openLastModpackOnLaunch.setValue(relaunchModpackCheckbox.isSelected());
+            config.debugMode.setValue(debugModeCheckBox.isSelected());
+            config.showMetaFileName.setValue(showPackwizMetaFileNameCheckbox.isSelected());
+            authorNamePanel.save();
+        }
+
+        public void applyTheme() {
+            GUIHelper.setupApplicationTheme((ApplicationTheme) themeComboBox.getSelectedItem(), config.useWindowDecoration.getValue(), null);
+        }
+
+        class AuthorNamePanel extends KGridBagLayoutPanel {
+            private final KTextField nameTextField;
+
+            public AuthorNamePanel() {
+                super(6, 3, 3);
+                this.nameTextField = new KTextField("Name here");
+                if(config.authorName.getValue() != null) this.nameTextField.setText(config.authorName.getValue());
+                addRow(1, 1, new JLabel("Author pack as:"), this.nameTextField, new KHelpButton("This field is used to automatically fill the \"author\" field when creating a modpack, as well as the name field when changing the LICENSE file."));
+                setAlignmentX(Component.LEFT_ALIGNMENT);
+            }
+
+            public void save() {
+                config.authorName.setValue(this.nameTextField.getText().isEmpty() ? null : this.nameTextField.getText());
+            }
+        }
+    }
+
+    class PackwizPanel extends JPanel {
+        private final JLabel packwizLocationLabel;
+        private Path packwizLocationPath;
+
+        public PackwizPanel() {
+            setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+            setBorder(BorderFactory.createTitledBorder("Packwiz"));
+
+            KGridBagLayoutPanel packwizLocationPanel = new KGridBagLayoutPanel(3, 2);
+            packwizLocationPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+            this.packwizLocationLabel = new JLabel("Location: ???");
+
+            KButton changePackwizLocationButton = new KButton("Change...");
+            changePackwizLocationButton.addActionListener(actionEvent -> {
+                KFileChooser fileChooser = new KFileChooser("locate-pw");
+                fileChooser.setFileFilter(new PackwizExecutableFileFilter());
+
+                if(fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                    updatePackwizPath(fileChooser.getSelectedFile().toPath());
+                }
+            });
+
+            packwizLocationPanel.addRow(1, 0, packwizLocationLabel, changePackwizLocationButton);
+
+            add(packwizLocationPanel);
+
+            KButton downloadPackwizButton = new KButton(new DownloadPackwizAction("Re-download packwiz", SettingsDialog.this, (path) -> {
+                updatePackwizPath(path);
+                JOptionPane.showMessageDialog(this, "Packwiz has been downloaded!", Util.withTitlePrefix("Packwiz Downloaded!"), JOptionPane.INFORMATION_MESSAGE);
+            }));
+
+            downloadPackwizButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+            add(downloadPackwizButton);
+
+            updatePackwizPath(config.packwizExecutablePath.getValue());
+        }
+
+        private void updatePackwizPath(Path newPath) {
+            Path oldPath = config.lastModpackPath.getValue();
+
+            config.lastModpackPath.setValue(newPath);
+            boolean located = Executables.packwiz.probe(null) != null;
+            config.lastModpackPath.setValue(oldPath); // restore
+
+            if(!located) {
+                JOptionPane.showMessageDialog(this, "The specified packwiz executable is not valid!", Util.withTitlePrefix("Invalid Executable"), JOptionPane.ERROR_MESSAGE);
+            } else {
+                packwizLocationLabel.setText(String.format("Location: %s", newPath.toString()));
+                packwizLocationLabel.setToolTipText(newPath.toString());
+                this.packwizLocationPath = newPath;
+            }
+        }
+
+        public void save() {
+            config.packwizExecutablePath.setValue(packwizLocationPath);
+        }
     }
 
     static class ResetProgramAction extends AbstractAction {

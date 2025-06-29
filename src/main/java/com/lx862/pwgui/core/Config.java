@@ -25,8 +25,9 @@ public class Config extends WritableFile {
     public final Map<String, Path> fileChooserLastPath = new HashMap<>();
 
     public final ConfigEntry<ApplicationTheme> applicationTheme = new ConfigEntry<>("applicationTheme", ApplicationTheme.LIGHT, (jsonElement -> ApplicationTheme.valueOf(jsonElement.getAsString())));
-    public final ConfigEntry<Boolean> openLastModpackOnLaunch = new ConfigEntry<>("openLastModpackOnLaunch", true, (jsonElement -> jsonElement.getAsBoolean()));
+    public final ConfigEntry<String> authorName = new ConfigEntry<>("authorName", null, (jsonElement -> jsonElement.getAsString()));
     public final ConfigEntry<Boolean> debugMode = new ConfigEntry<>("debugMode", false, (jsonElement -> jsonElement.getAsBoolean()));
+    public final ConfigEntry<Boolean> openLastModpackOnLaunch = new ConfigEntry<>("openLastModpackOnLaunch", true, (jsonElement -> jsonElement.getAsBoolean()));
     public final ConfigEntry<Boolean> useWindowDecoration = new ConfigEntry<>("useWindowDecoration", false, (jsonElement -> jsonElement.getAsBoolean()));
     public final ConfigEntry<Boolean> showMetaFileName = new ConfigEntry<>("showMetaFileName", false, (jsonElement -> jsonElement.getAsBoolean()));
     public final ConfigEntry<Path> lastModpackPath = new ConfigEntry<>("lastModpackPath", null, (jsonElement -> Paths.get(jsonElement.getAsString())));
@@ -56,12 +57,13 @@ public class Config extends WritableFile {
             }
         }
 
-        this.lastModpackPath.read(configJson);
-        this.openLastModpackOnLaunch.read(configJson);
         this.applicationTheme.read(configJson);
+        this.authorName.read(configJson);
         this.debugMode.read(configJson);
+        this.openLastModpackOnLaunch.read(configJson);
         this.useWindowDecoration.read(configJson);
         this.showMetaFileName.read(configJson);
+        this.lastModpackPath.read(configJson);
     }
 
     public void write(String reason) throws IOException {
@@ -80,8 +82,9 @@ public class Config extends WritableFile {
         if(lastModpackPath.valueNotNull()) {
             jsonObject.addProperty(lastModpackPath.getKey(), lastModpackPath.getValue().toString());
         }
-        jsonObject.addProperty(openLastModpackOnLaunch.getKey(), openLastModpackOnLaunch.getValue());
         jsonObject.addProperty(applicationTheme.getKey(), applicationTheme.getValue().name());
+        jsonObject.addProperty(authorName.getKey(), authorName.getValue());
+        jsonObject.addProperty(openLastModpackOnLaunch.getKey(), openLastModpackOnLaunch.getValue());
         jsonObject.addProperty(debugMode.getKey(), debugMode.getValue());
         jsonObject.addProperty(useWindowDecoration.getKey(), useWindowDecoration.getValue());
         jsonObject.addProperty(showMetaFileName.getKey(), showMetaFileName.getValue());

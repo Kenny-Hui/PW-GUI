@@ -6,7 +6,6 @@
 # Adopted from https://github.com/ModFest/glowcase/blob/1.21/.github/workflows/release.yml
 
 name: Release Build
-on: [pull_request, push]
 
 on:
   release:

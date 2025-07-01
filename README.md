@@ -46,7 +46,7 @@ While this is only a hobby project and I can't guarantee everything can and will
 
 Optionally you can also join the [Discord Server](https://discord.gg/jzbhWEBFPx) if you like chatting back-and-fourth better~
 
-Or if you'd like to send some love, feel free to contact me via the above Discord Server, or send email to `lx86(at)lx862.com`, or even create a new [issue](https://github.com/Kenny-Hui/PW-GUI/issues)!.
+Or if you'd like to send some love, feel free to contact me via the above Discord Server, or email `amberfrost(at)lx862.com`, or even create a new [issue](https://github.com/Kenny-Hui/PW-GUI/issues)!.
 
 ## License
 This project is licensed under the [MIT License](./LICENSE).

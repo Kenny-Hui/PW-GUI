@@ -2,9 +2,9 @@
     <img src="./assets/pwgui_logo.svg" width="256" alt="PW-GUI Logo">    
     <h1>PW-GUI</h1>
     <p>A lightweight GUI Wrapper around <a href="https://github.com/packwiz/packwiz">packwiz</a>, a tool for managing Minecraft modpacks.</p>
-    <img alt="GitHub Build Status Badge" src="https://github.com/Kenny-Hui/PW-GUI/actions/workflows/build.yml/badge.svg">
-    <img alt="MIT License" src="https://img.shields.io/github/license/Kenny-Hui/PW-GUI">
-    <a href="https://github.com/Kenny-Hui/PW-GUI/releases"><img alt="Latest Release" src="https://img.shields.io/github/v/release/Kenny-Hui/PW-GUI"></a>
+    <img alt="GitHub Build Status Badge" src="https://github.com/AmberIsFrozen/PW-GUI/actions/workflows/build.yml/badge.svg">
+    <img alt="MIT License" src="https://img.shields.io/github/license/AmberIsFrozen/PW-GUI">
+    <a href="https://github.com/AmberIsFrozen/PW-GUI/releases"><img alt="Latest Release" src="https://img.shields.io/github/v/release/AmberIsFrozen/PW-GUI"></a>
     <a href="https://discord.gg/jzbhWEBFPx"><img alt="Join Discord Server" src="https://img.shields.io/discord/1257225868292653087"></a>
 </div>
 
@@ -33,7 +33,7 @@ The end goal is that newcomers should be able to get started authoring their own
 PW-GUI requires **Java 17 or above** to run.  
 If you don't have Java yet, you can download them at [Adoptium](https://adoptium.net) (Or any other Java distributions)
 
-After that, you can head to the [Release](https://github.com/Kenny-Hui/PW-GUI/releases) page and download the latest release, run it and follow the instructions on screen.  
+After that, you can head to the [Release](https://github.com/AmberIsFrozen/PW-GUI/releases) page and download the latest release, run it and follow the instructions on screen.  
 
 For detailed instructions, you can refer to the [Usage](./docs/Usage.md) page for details.
 
@@ -41,12 +41,12 @@ For detailed instructions, you can refer to the [Usage](./docs/Usage.md) page fo
 See [Roadmap](./docs/Roadmap.md)
 
 ## Contact / Support
-If you are having issues when using the program or have some suggestions, feel free to open a new issue in the [Issues](https://github.com/Kenny-Hui/PW-GUI/issues) page.  
+If you are having issues when using the program or have some suggestions, feel free to open a new issue in the [Issues](https://github.com/AmberIsFrozen/PW-GUI/issues) page.  
 While this is only a hobby project and I can't guarantee everything can and will be fixed/implemented, at the very least you are bring potential ideas to light, which may be useful for future users/contributors :)
 
 Optionally you can also join the [Discord Server](https://discord.gg/jzbhWEBFPx) if you like chatting back-and-fourth better~
 
-Or if you'd like to send some love, feel free to contact me via the above Discord Server, or email `amberfrost(at)lx862.com`, or even create a new [issue](https://github.com/Kenny-Hui/PW-GUI/issues)!.
+Or if you'd like to send some love, feel free to contact me via the above Discord Server, or email `amberfrost(at)lx862.com`, or even create a new [issue](https://github.com/AmberIsFrozen/PW-GUI/issues)!.
 
 ## License
 This project is licensed under the [MIT License](./LICENSE).

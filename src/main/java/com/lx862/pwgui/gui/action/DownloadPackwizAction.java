@@ -29,7 +29,7 @@ public class DownloadPackwizAction extends AbstractAction {
     private final Consumer<Path> finishCallback;
     private static final String[] downloadMirror = {
             "https://nightly.link/packwiz/packwiz/workflows/go/main/%s.zip", // https://github.com/packwiz/packwiz/tree/main
-            "https://nightly.link/Kenny-Hui/packwiz/workflows/go/artifact/%s.zip" // https://github.com/Kenny-Hui/packwiz/tree/artifact
+            "https://nightly.link/AmberIsFrozen/packwiz/workflows/go/artifact/%s.zip" // https://github.com/AmberIsFrozen/packwiz/tree/artifact
     };
 
     public DownloadPackwizAction(String title, Window parent, Consumer<Path> finishCallback) {
